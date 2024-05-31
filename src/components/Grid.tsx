@@ -56,7 +56,7 @@ export default async function Grid({
                     </div>
                 )
             })}
-            <Pagination countOfPages={count / CITIES_PER_PAGE} searchParams={searchParams} paramKey="page" />
+            <Pagination countOfPages={count / CITIES_PER_PAGE} searchParams={searchParams} />
         </section>
     )
 }

@@ -7,17 +7,15 @@ import {
     PaginationNext,
     PaginationPrevious,
 } from "@/components/ui/pagination"
-import { getCurrentPageNumber, getNextSearchParams } from "@/utils/link.utils"
+import { getCurrentPageNumber, getNextSearchParams, SEARCH_PARAM_KEY_PAGINATION } from "@/utils/link.utils"
 
 type PaginationProps = {
     countOfPages: number
-    paramKey: string
     searchParams: URLSearchParams
 }
   
 export function Pagination({
   countOfPages: countOfPagesRaw,
-  paramKey,
   searchParams,
 }: PaginationProps) {
     const countOfPages = Math.ceil(countOfPagesRaw)
@@ -28,12 +26,12 @@ export function Pagination({
             <PaginationContent>
                 {currentPage > 1 &&
                     <PaginationItem>
-                        <PaginationPrevious href={getNextSearchParams(searchParams, paramKey, currentPage - 1)} />
+                        <PaginationPrevious href={getNextSearchParams(searchParams, SEARCH_PARAM_KEY_PAGINATION, currentPage - 1)} />
                     </PaginationItem>
                 }
                 {currentPage - 1 > 0 &&
                     <PaginationItem>
-                        <PaginationLink href={getNextSearchParams(searchParams, paramKey, 1)}>1</PaginationLink>
+                        <PaginationLink href={getNextSearchParams(searchParams, SEARCH_PARAM_KEY_PAGINATION, 1)}>1</PaginationLink>
                     </PaginationItem>
                 }
                 {currentPage - 2 > 0 &&
@@ -42,7 +40,7 @@ export function Pagination({
                     </PaginationItem>
                 }
                 <PaginationItem>
-                    <PaginationLink href={getNextSearchParams(searchParams, paramKey, currentPage)} isActive>
+                    <PaginationLink href={getNextSearchParams(searchParams, SEARCH_PARAM_KEY_PAGINATION, currentPage)} isActive>
                       {currentPage}
                     </PaginationLink>
                 </PaginationItem>
@@ -53,12 +51,12 @@ export function Pagination({
                 }
                 {currentPage + 1 <= countOfPages &&
                     <PaginationItem>
-                        <PaginationLink href={getNextSearchParams(searchParams, paramKey, countOfPages)}>{countOfPages}</PaginationLink>
+                        <PaginationLink href={getNextSearchParams(searchParams, SEARCH_PARAM_KEY_PAGINATION, countOfPages)}>{countOfPages}</PaginationLink>
                     </PaginationItem>
                 }
                 {currentPage < countOfPages && 
                     <PaginationItem>
-                        <PaginationNext href={getNextSearchParams(searchParams, paramKey, currentPage + 1)} />
+                        <PaginationNext href={getNextSearchParams(searchParams, SEARCH_PARAM_KEY_PAGINATION, currentPage + 1)} />
                     </PaginationItem>
                 }
             </PaginationContent>

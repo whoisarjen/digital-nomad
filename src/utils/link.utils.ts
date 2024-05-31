@@ -1,10 +1,12 @@
+export const SEARCH_PARAM_KEY_PAGINATION = 'page'
+
 export const getSearchParam = (searchParams: URLSearchParams, paramKey: string) => {
     const result = new URLSearchParams(searchParams)
     return result.get(paramKey)
 }
 
-export const getCurrentPageNumber = (searchParams: URLSearchParams, paramKey = 'page') => {
-    return Number(getSearchParam(searchParams, paramKey) ?? "1")
+export const getCurrentPageNumber = (searchParams: URLSearchParams) => {
+    return Number(getSearchParam(searchParams, SEARCH_PARAM_KEY_PAGINATION) ?? "1")
 }
 
 export const getNextSearchParams = (searchParams: URLSearchParams, paramKey: string, value: string | number) => {
