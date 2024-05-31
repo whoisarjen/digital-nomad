@@ -1,40 +1,91 @@
-import db from '@/../db.json'
-import Image from 'next/image'
+import Grid from '@/components/Grid'
 
-import { AspectRatio } from "@/components/ui/aspect-ratio"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
+import { getNextSearchParams } from '@/utils/link.utils'
 
-export default function Home() {
+export function PopoverDemo() {
   return (
-    <main>
-      {/* <section className="flex min-h-screen bg-red-100 w-full">
-        Main
-      </section>
-
-      <section className="w-full bg-yellow-100">
-        {db.cities.length}
-      </section> */}
-
-      <section className="flex flex-wrap gap-4 bg-green-100 justify-center p-4">
-        {db.cities.map(city => {
-          return (
-            <div key={city.slug} className="flex w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/5 bg-red-100 relative">
-              <AspectRatio ratio={16 / 9} className="bg-muted">
-                <Image
-                  fill
-                  alt={city.name}
-                  src={city.image}
-                  className="rounded-md object-cover"
-                />
-                <div className="absolute inset-0 bg-black bg-opacity-15 rounded-md" />
-                <div className="text-white absolute inset-0 flex flex-col items-center justify-center bg-opacity-50">
-                  <h2 className="text-2xl font-bold">{city.name}</h2>
-                  <p className="text-lg">{city.country}</p>
-                </div>
-              </AspectRatio>
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button variant="outline">Open popover</Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-80">
+        <div className="grid gap-4">
+          <div className="space-y-2">
+            <h4 className="font-medium leading-none">Dimensions</h4>
+            <p className="text-sm text-muted-foreground">
+              Set the dimensions for the layer.
+            </p>
+          </div>
+          <div className="grid gap-2">
+            <div className="grid grid-cols-3 items-center gap-4">
+              <Label htmlFor="width">Width</Label>
+              <Input
+                id="width"
+                defaultValue="100%"
+                className="col-span-2 h-8"
+              />
             </div>
-          )
-        })}
-      </section>
-    </main>
-  );
+            <div className="grid grid-cols-3 items-center gap-4">
+              <Label htmlFor="maxWidth">Max. width</Label>
+              <Input
+                id="maxWidth"
+                defaultValue="300px"
+                className="col-span-2 h-8"
+              />
+            </div>
+            <div className="grid grid-cols-3 items-center gap-4">
+              <Label htmlFor="height">Height</Label>
+              <Input
+                id="height"
+                defaultValue="25px"
+                className="col-span-2 h-8"
+              />
+            </div>
+            <div className="grid grid-cols-3 items-center gap-4">
+              <Label htmlFor="maxHeight">Max. height</Label>
+              <Input
+                id="maxHeight"
+                defaultValue="none"
+                className="col-span-2 h-8"
+              />
+            </div>
+          </div>
+        </div>
+      </PopoverContent>
+    </Popover>
+  )
+}
+
+type HomeProps = {
+  searchParams: URLSearchParams
+}
+
+export default function Home({
+  searchParams,
+}: HomeProps) {
+    return (
+      <main>
+        <section className="flex flex-col w-full min-h-screen">
+          <div className="flex flex-1 bg-black">
+            
+          </div>
+          <div className="flex p-4 gap-4">
+            {PopoverDemo()}
+            {PopoverDemo()}
+            {PopoverDemo()}
+            {PopoverDemo()}
+            {PopoverDemo()}
+          </div>
+        </section>
+        <Grid searchParams={searchParams} />
+      </main>
+    )
 }
