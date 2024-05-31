@@ -12,6 +12,7 @@ import {
 import { getNextSearchParams, getNextSearchParamsWithoutSelectedKey } from "@/utils/link.utils"
 import { useRouter, useSearchParams } from "next/navigation"
 
+const PICKER_CONTINENTS_KEY = 'region'
 const DEFAULT_REGION = 'All Regions'
 
 const REGIONS = [
@@ -32,15 +33,15 @@ export const PickerContinent = () => {
 
     const handleOnValueChange = (option: string) => {
         if (option === DEFAULT_REGION) {
-            router.push(getNextSearchParamsWithoutSelectedKey(searchParams, 'region'), { scroll: false })
+            router.push(getNextSearchParamsWithoutSelectedKey(searchParams, PICKER_CONTINENTS_KEY), { scroll: false })
             return
         }
 
-        router.push(getNextSearchParams(searchParams, 'region', option), { scroll: false })
+        router.push(getNextSearchParams(searchParams, PICKER_CONTINENTS_KEY, option), { scroll: false })
     }
 
     return (
-        <Select onValueChange={handleOnValueChange} defaultValue={searchParams.get('region') ?? DEFAULT_REGION}>
+        <Select onValueChange={handleOnValueChange} defaultValue={searchParams.get(PICKER_CONTINENTS_KEY) ?? DEFAULT_REGION}>
             <SelectTrigger className="w-[180px]">
                 <SelectValue placeholder="Select a region" />
             </SelectTrigger>
