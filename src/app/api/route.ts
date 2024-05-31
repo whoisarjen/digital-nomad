@@ -14,9 +14,10 @@ export async function GET() {
         data: db.cities.map(city => ({
             name: city.name,
             image: city.image,
+            region: city.region,
             country: city.country,
-            nameChinese: city.name_chinese,
             score: city.total_score,
+            nameChinese: city.name_chinese,
         })),
     })
     return Response.json({ createdMany })

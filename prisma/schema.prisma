@@ -17,4 +17,5 @@ model City {
   country String
   nameChinese String? // @unique
   score Float
+  region String
 }

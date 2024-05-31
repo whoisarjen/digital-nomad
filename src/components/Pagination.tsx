@@ -7,7 +7,7 @@ import {
     PaginationNext,
     PaginationPrevious,
 } from "@/components/ui/pagination"
-import { getCurrentPageNumber, getNextSearchParams, SEARCH_PARAM_KEY_PAGINATION } from "@/utils/link.utils"
+import { getCurrentPageNumber, getNextSearchParams, getNextSearchParamsWithoutSelectedKey, SEARCH_PARAM_KEY_PAGINATION } from "@/utils/link.utils"
 
 type PaginationProps = {
     countOfPages: number
@@ -26,12 +26,16 @@ export function Pagination({
             <PaginationContent>
                 {currentPage > 1 &&
                     <PaginationItem>
-                        <PaginationPrevious href={getNextSearchParams(searchParams, SEARCH_PARAM_KEY_PAGINATION, currentPage - 1)} />
+                        <PaginationPrevious
+                            href={currentPage - 1 === 1
+                                ? getNextSearchParamsWithoutSelectedKey(searchParams, 'page')
+                                : getNextSearchParams(searchParams, SEARCH_PARAM_KEY_PAGINATION, currentPage - 1)}
+                        />
                     </PaginationItem>
                 }
                 {currentPage - 1 > 0 &&
                     <PaginationItem>
-                        <PaginationLink href={getNextSearchParams(searchParams, SEARCH_PARAM_KEY_PAGINATION, 1)}>1</PaginationLink>
+                        <PaginationLink href={getNextSearchParamsWithoutSelectedKey(searchParams, 'page')}>1</PaginationLink>
                     </PaginationItem>
                 }
                 {currentPage - 2 > 0 &&
