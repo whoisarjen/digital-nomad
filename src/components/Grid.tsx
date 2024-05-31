@@ -4,6 +4,7 @@ import { prisma } from '@/utils/prisma.utils'
 import { AspectRatio } from "@/components/ui/aspect-ratio"
 import { Pagination } from './Pagination'
 import { getCurrentPageNumber } from '@/utils/link.utils'
+import { notFound } from 'next/navigation'
 
 const CITIES_PER_PAGE = 16
 
@@ -29,6 +30,10 @@ export default async function Grid({
         }),
         prisma.city.count(),
     ])
+
+    if (!response.length) {
+        notFound()
+    }
 
     return (
         <section className="flex flex-wrap gap-4 justify-center p-4">
