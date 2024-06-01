@@ -1,6 +1,7 @@
 import Grid from '@/components/Grid'
 import { PickerContinent } from '@/components/PickerContinents'
 import { PickerMonth } from '@/components/PickerMonths'
+import { PickerPopulation } from '@/components/PickerPopulation'
 import { PickerTemperatures } from '@/components/PickerTemperatures'
 
 type HomeProps = {
@@ -16,10 +17,11 @@ export default function Home({
           <div className="flex flex-1 bg-black">
             
           </div>
-          <div className="flex p-4 gap-4">
+          <div className="flex p-4 gap-4 justify-center">
             <PickerContinent />
             <PickerMonth />
             <PickerTemperatures />
+            <PickerPopulation />
           </div>
         </section>
         <Grid searchParams={searchParams} />

@@ -4,9 +4,9 @@ import { prisma } from '@/utils/prisma.utils'
 import { AspectRatio } from "@/components/ui/aspect-ratio"
 import { Pagination } from './Pagination'
 import { getCurrentPageNumber, getSearchParam } from '@/utils/link.utils'
-import { notFound } from 'next/navigation'
 import { getCurrentMonth } from '@/utils/date.utils'
 import { getCurrentTemperatureMin, getCurrentTemperatureMax } from '@/utils/temperature.utils'
+import { getCurrentPopulationMax, getCurrentPopulationMin } from '@/utils/population.utils'
 
 const CITIES_PER_PAGE = 16
 
@@ -18,27 +18,30 @@ export default async function Grid({
     searchParams,
 }: GridProps) {
     const currentPage = getCurrentPageNumber(searchParams)
+
+    const where = {
+        region: getSearchParam(searchParams, 'region'),
+        [`temperature${getCurrentMonth()}`]: {
+            gte: getCurrentTemperatureMin(searchParams),
+            lte: getCurrentTemperatureMax(searchParams),
+        },
+        population: {
+            gte: getCurrentPopulationMin(searchParams),
+            lte: getCurrentPopulationMax(searchParams),
+        }
+    }
+
     const [response, count] = await Promise.all([
         prisma.city.findMany({
-            where: {
-                region: getSearchParam(searchParams, 'region'),
-                [`temperature${getCurrentMonth()}`]: {
-                    gte: getCurrentTemperatureMin(searchParams),
-                    lte: getCurrentTemperatureMax(searchParams),
-                }
-            },
+            where,
             take: CITIES_PER_PAGE,
             skip: CITIES_PER_PAGE * (currentPage - 1),
             orderBy: {
                 score: 'desc',
-            }
+            },
         }),
-        prisma.city.count(),
+        prisma.city.count({ where }),
     ])
-
-    if (!response.length) {
-        notFound()
-    }
 
     return (
         <section className="flex flex-wrap gap-4 justify-center p-4">

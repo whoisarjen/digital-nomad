@@ -21,6 +21,10 @@ export function Pagination({
     const countOfPages = Math.ceil(countOfPagesRaw)
     const currentPage = getCurrentPageNumber(searchParams)
 
+    if (countOfPages < 2) {
+        return null
+    }
+
     return (
         <PaginationRaw>
             <PaginationContent>

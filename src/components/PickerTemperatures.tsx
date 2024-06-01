@@ -79,7 +79,7 @@ const Slider = React.forwardRef(
                     }}
                     >
                     <span className="text-sm">
-                        {formatLabel ? formatLabel(value) : value}
+                        {formatLabel ? formatLabel(value) : value}°C
                     </span>
                     </div>
                     <SliderPrimitive.Thumb className="block h-4 w-4 rounded-full border border-primary/50 bg-background shadow transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50" />
@@ -97,15 +97,15 @@ export const PickerTemperatures = () => {
     const ref = useRef<HTMLButtonElement | null>(null)
     const router = useRouter()
     const searchParams = useSearchParams()
-    const [temperaturesRaw, setTemperaturesRaw] = useState([
+    const [temperature, setTemperature] = useState([
         getCurrentTemperatureMin(searchParams),
         getCurrentTemperatureMax(searchParams),
     ])
 
     const handleOnClick = () => {
         const result = new URLSearchParams(searchParams)
-        result.set(PICKER_TEMPERATURE_MIN_KEY, temperaturesRaw[0].toString())
-        result.set(PICKER_TEMPERATURE_MAX_KEY, temperaturesRaw[1].toString())
+        result.set(PICKER_TEMPERATURE_MIN_KEY, temperature[0].toString())
+        result.set(PICKER_TEMPERATURE_MAX_KEY, temperature[1].toString())
 
         router.push(
             `?${result.toString()}`,
@@ -118,7 +118,7 @@ export const PickerTemperatures = () => {
     return (
         <Popover>
             <PopoverTrigger asChild>
-                <Button variant="outline" ref={ref}>
+                <Button variant="outline" className="text-sm font-normal" ref={ref}>
                     Temperature ({getCurrentTemperatureMin(searchParams)}°C-{getCurrentTemperatureMax(searchParams)}°C)
                 </Button>
             </PopoverTrigger>
@@ -132,11 +132,11 @@ export const PickerTemperatures = () => {
                 </div>
                 <Slider
                     step={1}
-                    value={temperaturesRaw}
+                    value={temperature}
                     minStepsBetweenThumbs={0}
                     min={DEFAULT_TEMPERATURE_MIN}
                     max={DEFAULT_TEMPERATURE_MAX}
-                    onValueChange={setTemperaturesRaw}
+                    onValueChange={setTemperature}
                 />
                 <div className="grid gap-2">
                     <div className="grid grid-cols-3 items-center gap-4">
@@ -144,7 +144,7 @@ export const PickerTemperatures = () => {
                         <Input
                             disabled
                             id="temperature"
-                            value={`${temperaturesRaw[0]}°C`}
+                            value={`${temperature[0]}°C`}
                             className="col-span-2 h-8"
                         />
                     </div>
@@ -153,7 +153,7 @@ export const PickerTemperatures = () => {
                         <Input
                             disabled
                             id="maxTemperature"
-                            value={`${temperaturesRaw[1]}°C`}
+                            value={`${temperature[1]}°C`}
                             className="col-span-2 h-8"
                         />
                     </div>

@@ -30,4 +30,5 @@ model City {
   temperatureOctober Float
   temperatureNovember Float
   temperatureDecember Float
+  population Int
 }

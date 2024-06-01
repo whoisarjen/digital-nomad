@@ -18,6 +18,7 @@ export async function GET() {
             country: city.country,
             score: city.total_score,
             nameChinese: city.name_chinese,
+            population: Number(city.population),
             temperatureJanuary: Number(city.temperatureC),
             temperatureFebruary: Number(city.temperatureC),
             temperatureMarch: Number(city.temperatureC),
