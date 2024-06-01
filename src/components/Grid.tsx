@@ -7,6 +7,8 @@ import { getCurrentPageNumber, getSearchParam } from '@/utils/link.utils'
 import { getCurrentMonth } from '@/utils/date.utils'
 import { getCurrentTemperatureMin, getCurrentTemperatureMax } from '@/utils/temperature.utils'
 import { getCurrentPopulationMax, getCurrentPopulationMin } from '@/utils/population.utils'
+import { Sun, Wifi } from 'lucide-react'
+import { getCurrentWifi } from '@/utils/wifi.utils'
 
 const CITIES_PER_PAGE = 16
 
@@ -28,7 +30,10 @@ export default async function Grid({
         population: {
             gte: getCurrentPopulationMin(searchParams),
             lte: getCurrentPopulationMax(searchParams),
-        }
+        },
+        wifi: {
+            gte: getCurrentWifi(searchParams),
+        },
     }
 
     const [response, count] = await Promise.all([
@@ -60,6 +65,8 @@ export default async function Grid({
                             <div className="text-white absolute inset-0 flex flex-col items-center justify-center bg-opacity-50">
                                 <h2 className="text-2xl font-bold">{city.name}</h2>
                                 <p className="text-lg text-center">{city.country}</p>
+                                <div className="flex items-center gap-1 absolute top-0 right-0 p-3 text-xs"><Wifi size={18} /><span>{city.wifi}Mb/s</span></div>
+                                <div className="flex items-center gap-1 absolute bottom-0 left-0 p-3 text-xs"><Sun size={18} /><span>{city[`temperature${getCurrentMonth()}` as keyof typeof city]}°C</span></div>
                             </div>
                         </AspectRatio>
                     </div>

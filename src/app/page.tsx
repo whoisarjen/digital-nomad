@@ -1,5 +1,6 @@
 import Grid from '@/components/Grid'
 import { PickerContinent } from '@/components/PickerContinents'
+import { PickerWifi } from '@/components/PickerWifi'
 import { PickerMonth } from '@/components/PickerMonths'
 import { PickerPopulation } from '@/components/PickerPopulation'
 import { PickerTemperatures } from '@/components/PickerTemperatures'
@@ -22,6 +23,7 @@ export default function Home({
             <PickerMonth />
             <PickerTemperatures />
             <PickerPopulation />
+            <PickerWifi />
           </div>
         </section>
         <Grid searchParams={searchParams} />

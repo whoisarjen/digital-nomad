@@ -31,6 +31,7 @@ export async function GET() {
             temperatureOctober: Number(city.temperatureC),
             temperatureNovember: Number(city.temperatureC),
             temperatureDecember: Number(city.temperatureC),
+            wifi: Number(city.internet_speed),
         })),
     })
     return Response.json({ createdMany })

@@ -31,4 +31,5 @@ model City {
   temperatureNovember Float
   temperatureDecember Float
   population Int
+  wifi Int
 }
