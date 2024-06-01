@@ -1,6 +1,7 @@
 import Grid from '@/components/Grid'
 import { PickerContinent } from '@/components/PickerContinents'
 import { PickerMonth } from '@/components/PickerMonths'
+import { PickerTemperatures } from '@/components/PickerTemperatures'
 
 type HomeProps = {
   searchParams: URLSearchParams
@@ -18,6 +19,7 @@ export default function Home({
           <div className="flex p-4 gap-4">
             <PickerContinent />
             <PickerMonth />
+            <PickerTemperatures />
           </div>
         </section>
         <Grid searchParams={searchParams} />

@@ -5,6 +5,8 @@ import { AspectRatio } from "@/components/ui/aspect-ratio"
 import { Pagination } from './Pagination'
 import { getCurrentPageNumber, getSearchParam } from '@/utils/link.utils'
 import { notFound } from 'next/navigation'
+import { getCurrentMonth } from '@/utils/date.utils'
+import { getCurrentTemperatureMin, getCurrentTemperatureMax } from '@/utils/temperature.utils'
 
 const CITIES_PER_PAGE = 16
 
@@ -20,6 +22,10 @@ export default async function Grid({
         prisma.city.findMany({
             where: {
                 region: getSearchParam(searchParams, 'region'),
+                [`temperature${getCurrentMonth()}`]: {
+                    gte: getCurrentTemperatureMin(searchParams),
+                    lte: getCurrentTemperatureMax(searchParams),
+                }
             },
             take: CITIES_PER_PAGE,
             skip: CITIES_PER_PAGE * (currentPage - 1),
@@ -42,6 +48,7 @@ export default async function Grid({
                         <AspectRatio ratio={16 / 9} className="bg-muted">
                             <Image
                                 fill
+                                sizes="375px"
                                 alt={city.name}
                                 src={city.image}
                                 className="rounded-md object-cover"
@@ -49,7 +56,7 @@ export default async function Grid({
                             <div className="absolute inset-0 bg-black bg-opacity-15 rounded-md" />
                             <div className="text-white absolute inset-0 flex flex-col items-center justify-center bg-opacity-50">
                                 <h2 className="text-2xl font-bold">{city.name}</h2>
-                                <p className="text-lg">{city.country}</p>
+                                <p className="text-lg text-center">{city.country}</p>
                             </div>
                         </AspectRatio>
                     </div>

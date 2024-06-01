@@ -18,4 +18,16 @@ model City {
   nameChinese String? // @unique
   score Float
   region String
+  temperatureJanuary Float
+  temperatureFebruary Float
+  temperatureMarch Float
+  temperatureApril Float
+  temperatureMay Float
+  temperatureJune Float
+  temperatureJuly Float
+  temperatureAugust Float
+  temperatureSeptember Float
+  temperatureOctober Float
+  temperatureNovember Float
+  temperatureDecember Float
 }
