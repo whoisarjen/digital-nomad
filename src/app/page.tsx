@@ -4,6 +4,7 @@ import { PickerWifi } from '@/components/PickerWifi'
 import { PickerMonth } from '@/components/PickerMonths'
 import { PickerPopulation } from '@/components/PickerPopulation'
 import { PickerTemperatures } from '@/components/PickerTemperatures'
+import { PickerSortBy } from '@/components/PickerOrderBy'
 
 type HomeProps = {
   searchParams: URLSearchParams
@@ -24,6 +25,7 @@ export default function Home({
             <PickerTemperatures />
             <PickerPopulation />
             <PickerWifi />
+            <PickerSortBy />
           </div>
         </section>
         <Grid searchParams={searchParams} />

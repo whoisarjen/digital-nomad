@@ -7,8 +7,9 @@ import { getCurrentPageNumber, getSearchParam } from '@/utils/link.utils'
 import { getCurrentMonth } from '@/utils/date.utils'
 import { getCurrentTemperatureMin, getCurrentTemperatureMax } from '@/utils/temperature.utils'
 import { getCurrentPopulationMax, getCurrentPopulationMin } from '@/utils/population.utils'
-import { Sun, Wifi } from 'lucide-react'
+import { Star, Sun, Wifi } from 'lucide-react'
 import { getCurrentWifi } from '@/utils/wifi.utils'
+import { getCurrentOrderBy } from '@/utils/orderBy.utils'
 
 const CITIES_PER_PAGE = 16
 
@@ -36,13 +37,14 @@ export default async function Grid({
         },
     }
 
+    const orderBy = getCurrentOrderBy(searchParams)
     const [response, count] = await Promise.all([
         prisma.city.findMany({
             where,
             take: CITIES_PER_PAGE,
             skip: CITIES_PER_PAGE * (currentPage - 1),
             orderBy: {
-                score: 'desc',
+                [orderBy.slice(0, orderBy.indexOf('_'))]: orderBy.slice(orderBy.indexOf('_') + 1, orderBy.length),
             },
         }),
         prisma.city.count({ where }),
@@ -65,6 +67,7 @@ export default async function Grid({
                             <div className="text-white absolute inset-0 flex flex-col items-center justify-center bg-opacity-50">
                                 <h2 className="text-2xl font-bold">{city.name}</h2>
                                 <p className="text-lg text-center">{city.country}</p>
+                                <div className="flex items-center gap-1 absolute top-0 left-0 p-3 text-xs"><Star size={18} /><span>{parseInt(`${city.score / 5 * 100}`)}%</span></div>
                                 <div className="flex items-center gap-1 absolute top-0 right-0 p-3 text-xs"><Wifi size={18} /><span>{city.wifi}Mb/s</span></div>
                                 <div className="flex items-center gap-1 absolute bottom-0 left-0 p-3 text-xs"><Sun size={18} /><span>{city[`temperature${getCurrentMonth()}` as keyof typeof city]}°C</span></div>
                             </div>
