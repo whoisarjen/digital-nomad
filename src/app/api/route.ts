@@ -32,6 +32,9 @@ export async function GET() {
             temperatureNovember: Number(city.temperatureC),
             temperatureDecember: Number(city.temperatureC),
             wifi: Number(city.internet_speed),
+            latitude: city.latitude.toString(),
+            longitude: city.longitude.toString(),
+            cost: city.cost_for_nomad_in_usd,
         })),
     })
     return Response.json({ createdMany })

@@ -1,3 +1,5 @@
+export const PICKER_MONTHS_KEY = 'month'
+
 export const MONTHS = [
     'January',
     'February',
@@ -13,6 +15,9 @@ export const MONTHS = [
     'December',
 ]
 
-export const getCurrentMonth = () => {
-    return MONTHS[new Date().getMonth()]
+export const getMonth = () => MONTHS[new Date().getMonth()]
+
+export const getCurrentMonth = (searchParams: URLSearchParams) => {
+    const params = new URLSearchParams(searchParams)
+    return params.get(PICKER_MONTHS_KEY) ?? getMonth()
 }

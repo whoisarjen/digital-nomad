@@ -12,12 +12,12 @@ export const OPTIONS_ORDER_BY = [
         value: 'score_asc',
     },
     {
-        label: 'Name DESC',
-        value: 'name_desc',
+        label: 'Cost DESC',
+        value: 'cost_desc',
     },
     {
-        label: 'Name ASC',
-        value: 'name_asc',
+        label: 'Cost ASC',
+        value: 'cost_asc',
     },
     {
         label: 'WiFi DESC',
@@ -26,6 +26,14 @@ export const OPTIONS_ORDER_BY = [
     {
         label: 'WiFi ASC',
         value: 'wifi_asc',
+    },
+    {
+        label: 'Name DESC',
+        value: 'name_desc',
+    },
+    {
+        label: 'Name ASC',
+        value: 'name_asc',
     },
 ]
 

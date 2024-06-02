@@ -9,24 +9,26 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { getCurrentMonth, MONTHS } from "@/utils/date.utils"
-import { getNextSearchParams } from "@/utils/link.utils"
+import { getCurrentMonth, getMonth, MONTHS, PICKER_MONTHS_KEY } from "@/utils/date.utils"
+import { getNextSearchParams, getNextSearchParamsWithoutSelectedKey } from "@/utils/link.utils"
 import { useRouter, useSearchParams } from "next/navigation"
-
-const PICKER_MONTHS_KEY = 'month'
 
 export const PickerMonth = () => {
     const router = useRouter()
     const searchParams = useSearchParams()
 
-    const handleOnValueChange = (option: string) => {
-        router.push(getNextSearchParams(searchParams, PICKER_MONTHS_KEY, option), { scroll: false })
+    const handleOnValueChange = (value: string) => {
+        if (value === getMonth()) {
+            router.push(getNextSearchParamsWithoutSelectedKey(searchParams, PICKER_MONTHS_KEY), { scroll: false })
+            return 
+        }
+        router.push(getNextSearchParams(searchParams, PICKER_MONTHS_KEY, value), { scroll: false })
     }
 
     return (
-        <Select onValueChange={handleOnValueChange} defaultValue={searchParams.get(PICKER_MONTHS_KEY) ?? getCurrentMonth()}>
+        <Select onValueChange={handleOnValueChange}>
             <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Select a month" />
+                <SelectValue placeholder={searchParams.get(PICKER_MONTHS_KEY) ?? getCurrentMonth(searchParams)} />
             </SelectTrigger>
             <SelectContent>
                 <SelectGroup>

@@ -12,11 +12,11 @@ import {
 import { getNextSearchParams, getNextSearchParamsWithoutSelectedKey } from "@/utils/link.utils"
 import { useRouter, useSearchParams } from "next/navigation"
 
-const PICKER_CONTINENTS_KEY = 'region'
-const DEFAULT_REGION = 'All Regions'
+const PICKER_CONTINENTS_KEY = 'continent'
+const DEFAULT_CONTINENT = 'All Continents'
 
-const REGIONS = [
-    DEFAULT_REGION,
+const CONTINENTS = [
+    DEFAULT_CONTINENT,
     'Africa',
     'Antarctica',
     'Asia',
@@ -32,7 +32,7 @@ export const PickerContinent = () => {
     const searchParams = useSearchParams()
 
     const handleOnValueChange = (option: string) => {
-        if (option === DEFAULT_REGION) {
+        if (option === DEFAULT_CONTINENT) {
             router.push(getNextSearchParamsWithoutSelectedKey(searchParams, PICKER_CONTINENTS_KEY), { scroll: false })
             return
         }
@@ -41,15 +41,15 @@ export const PickerContinent = () => {
     }
 
     return (
-        <Select onValueChange={handleOnValueChange} defaultValue={searchParams.get(PICKER_CONTINENTS_KEY) ?? DEFAULT_REGION}>
+        <Select onValueChange={handleOnValueChange}>
             <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Select a region" />
+                <SelectValue placeholder={searchParams.get(PICKER_CONTINENTS_KEY) ?? DEFAULT_CONTINENT} />
             </SelectTrigger>
             <SelectContent>
                 <SelectGroup>
-                    <SelectLabel>Region</SelectLabel>
-                    {REGIONS.map(region => (
-                        <SelectItem key={region} value={region}>{region}</SelectItem>
+                    <SelectLabel>Continent</SelectLabel>
+                    {CONTINENTS.map(continent => (
+                        <SelectItem key={continent} value={continent}>{continent}</SelectItem>
                     ))}
                 </SelectGroup>
             </SelectContent>

@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "predev": "npx prisma db push",
     "dev": "next dev",
+    "prebuild": "npx prisma db push",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -18,6 +20,7 @@
     "@radix-ui/react-slot": "^1.0.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "lodash": "^4.17.21",
     "lucide-react": "^0.380.0",
     "next": "14.2.3",
     "react": "^18",
@@ -26,6 +29,7 @@
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
+    "@types/lodash": "^4.17.4",
     "@types/node": "^20.12.13",
     "@types/react": "^18",
     "@types/react-dom": "^18",

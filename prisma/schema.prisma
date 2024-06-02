@@ -32,4 +32,7 @@ model City {
   temperatureDecember Float
   population Int
   wifi Int
+  latitude String
+  longitude String
+  cost Int
 }
