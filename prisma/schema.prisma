@@ -11,28 +11,51 @@ datasource db {
 }
 
 model City {
-  id    Int     @id @default(autoincrement())
-  name String // @unique
-  image String // @unique
-  country String
+  id          Int       @id @default(autoincrement())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  name        String // @unique
+  image       String // @unique
+  country     String
   nameChinese String? // @unique
-  score Float
-  region String
-  temperatureJanuary Float
-  temperatureFebruary Float
-  temperatureMarch Float
-  temperatureApril Float
-  temperatureMay Float
-  temperatureJune Float
-  temperatureJuly Float
-  temperatureAugust Float
-  temperatureSeptember Float
-  temperatureOctober Float
-  temperatureNovember Float
-  temperatureDecember Float
-  population Int
-  wifi Int
-  latitude String
-  longitude String
-  cost Int
+  score       Float
+  region      String
+  slug        String // @unique
+  population  Int
+  wifi        Int
+  latitude    String
+  longitude   String
+  cost        Int
+  weathers    Weather[]
+}
+
+model Weather {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  city      City     @relation(fields: [cityId], references: [id], onDelete: Cascade)
+  cityId    Int
+  when      DateTime
+  weatherCode Int?
+  temperatureMax Float?
+  temperatureMin Float?
+  temperatureMean Float?
+  apparentTemperatureMax Float?
+  apparentTemperatureMin Float?
+  apparentTemperatureMean Float?
+  sunrise DateTime?
+  sunset DateTime?
+  daylightDuration Float?
+  sunshineDuration Float?
+  precipitationSum Float?
+  rainSum Float?
+  snowfallSum Float?
+  precipitationHours Float?
+  windSpeed10mMax Float?
+  windGusts10mMax Float?
+  windDirection10mDominant Float?
+  shortwaveRadiationSum Float?
+  et0FaoEvapotranspiration Float?
+
+  @@unique([cityId, when])
 }
