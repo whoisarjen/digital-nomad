@@ -2,14 +2,14 @@ export const PICKER_ORDER_BY_KEY = 'orderBy'
 
 export const DEFAULT_ORDER_BY = {
     label: 'Score DESC',
-    value: 'score_desc',
+    value: 'totalScore_desc',
 }
 
 export const OPTIONS_ORDER_BY = [
     DEFAULT_ORDER_BY,
     {
         label: 'Score ASC',
-        value: 'score_asc',
+        value: 'totalScore_asc',
     },
     {
         label: 'Cost DESC',

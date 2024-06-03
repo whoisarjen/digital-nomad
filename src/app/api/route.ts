@@ -60,7 +60,7 @@ export async function GET() {
         }
     })
 
-    const citiesRaw = [...db.cities].slice(0, 8)
+    const citiesRaw = [...db.cities].slice(0, 4)
 
     await prisma.city.createMany({
         data: citiesRaw.map(city => ({
@@ -68,14 +68,21 @@ export async function GET() {
             image: city.image,
             region: city.region,
             country: city.country,
-            score: city.total_score,
             nameChinese: city.name_chinese,
             population: Number(city.population),
             wifi: Number(city.internet_speed),
             latitude: city.latitude.toString(),
             longitude: city.longitude.toString(),
-            cost: city.cost_for_nomad_in_usd,
             slug: city.slug,
+            costForNomadInUSD: city.cost_for_nomad_in_usd,
+            costForExpatInUSD: city.cost_for_expat_in_usd,
+            costForLocalInUSD: city.cost_for_local_in_usd,
+            costForFamilyInUSD: city.cost_for_family_in_usd,
+            totalScore: city.total_score,
+            costScore: city.cost_score,
+            internetScore: city.internet_score,
+            likesScore: city.likes_score,
+            safetyLevel: city.safety_level,
         })),
     })
 

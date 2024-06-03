@@ -21,14 +21,18 @@ export const GridBox = async ({ city, searchParams }: GridBoxProps) => {
     const [todayWeather, previousWeather, weathers] = await Promise.all([
         prisma.weather.findUnique({
             where: {
-                cityId: city.id,
-                when: new Date(today).toISOString(),
+                cityId_when: {
+                    cityId: city.id,
+                    when: new Date(today).toISOString(), 
+                }
             },
         }),
         prisma.weather.findUnique({
             where: {
-                cityId: city.id,
-                when: new Date(previousDay).toISOString(),
+                cityId_when: {
+                    cityId: city.id,
+                    when: new Date(previousDay).toISOString(),
+                },
             },
         }),
         prisma.weather.findMany({
@@ -67,7 +71,7 @@ export const GridBox = async ({ city, searchParams }: GridBoxProps) => {
                     <p className="text-lg text-center">{city.country}</p>
                     <div className="flex items-center gap-1 absolute top-0 left-0 p-3 text-xs">
                         <ThumbsUp size={18} />
-                        <span>{parseInt(`${city.score / 5 * 100}`)}%</span>
+                        <span>{parseInt(`${city.totalScore / 5 * 100}`)}%</span>
                     </div>
                     <div className="flex items-center gap-1 absolute top-0 right-0 p-3 text-xs">
                         <Wifi size={18} />
@@ -95,7 +99,7 @@ export const GridBox = async ({ city, searchParams }: GridBoxProps) => {
                         }
                     </div>
                     <div className="flex items-center gap-1 absolute bottom-0 right-0 p-3 text-md">
-                        {city.cost}$/mo
+                        {city.costForNomadInUSD}$/mo
                     </div>
                 </div>
             </AspectRatio>

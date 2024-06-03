@@ -18,14 +18,21 @@ model City {
   image       String // @unique
   country     String
   nameChinese String? // @unique
-  score       Float
   region      String
   slug        String // @unique
   population  Int
   wifi        Int
   latitude    String
   longitude   String
-  cost        Int
+  costForNomadInUSD Float
+  costForExpatInUSD Float
+  costForLocalInUSD Float
+  costForFamilyInUSD Float
+  totalScore Float
+  costScore Float
+  internetScore Float
+  likesScore Float
+  safetyLevel Float
   weathers    Weather[]
 }
 
