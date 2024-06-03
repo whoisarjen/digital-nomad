@@ -60,7 +60,7 @@ export async function GET() {
         }
     })
 
-    const citiesRaw = [...db.cities].slice(0, 4)
+    const citiesRaw = [...db.cities].slice(0, 16)
 
     await prisma.city.createMany({
         data: citiesRaw.map(city => ({

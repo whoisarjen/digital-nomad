@@ -2,7 +2,8 @@
 const nextConfig = {
     images: {
         domains: [
-            'nomadlist.com',
+            'nomadlist.com', // TODO Remove
+            'dspncdn.com', // TODO Remove
         ]
     }
 };
