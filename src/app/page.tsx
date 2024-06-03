@@ -7,6 +7,7 @@ import { PickerTemperatures } from '@/components/PickerTemperatures'
 import { PickerSortBy } from '@/components/PickerOrderBy'
 import Image from 'next/image'
 import { Navbar } from '@/components/Navbar'
+import { PickerWeather } from '@/components/PickerWeather'
 
 type HomeProps = {
   searchParams: URLSearchParams
@@ -36,6 +37,7 @@ export default function Home({
             <PickerContinent />
             <PickerMonth />
             <PickerTemperatures />
+            <PickerWeather />
             <PickerPopulation />
             <PickerWifi />
             <PickerSortBy />

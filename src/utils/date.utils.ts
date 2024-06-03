@@ -62,5 +62,17 @@ export const getBeginningAndEndOfSupportedMonth = (monthName: string) => {
     const beginningOfMonth = new Date(targetYear, monthIndex, 1).toISOString().split('T')[0];
     const endOfMonth = new Date(targetYear, monthIndex + 1, 0).toISOString().split('T')[0];
 
-    return { beginning: beginningOfMonth, end: endOfMonth };
+    const numberOfDaysInMonth = new Date(targetYear, monthIndex + 1, 0).getDate();
+
+    return { beginning: beginningOfMonth, end: endOfMonth, numberOfDaysInMonth };
 };
+
+export const isToday = (date: Date) => {
+    const today = new Date();
+
+    if (today.toDateString() === date.toDateString()) {
+        return true;
+    }
+  
+    return false;
+}

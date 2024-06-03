@@ -119,13 +119,13 @@ export const PickerTemperatures = () => {
         <Popover>
             <PopoverTrigger asChild>
                 <Button variant="outline" className="text-sm font-normal" ref={ref}>
-                    Temperature ({getCurrentTemperatureMin(searchParams)}°C-{getCurrentTemperatureMax(searchParams)}°C)
+                    Avg. Temperature ({getCurrentTemperatureMin(searchParams)}°C-{getCurrentTemperatureMax(searchParams)}°C)
                 </Button>
             </PopoverTrigger>
             <PopoverContent className="w-80 flex flex-col justify-center gap-4">
                 <div className="grid gap-4">
                 <div className="space-y-2">
-                    <h4 className="font-medium leading-none">Temperature</h4>
+                    <h4 className="font-medium leading-none">Avg. Temperature</h4>
                     <p className="text-sm text-muted-foreground">
                         Temperature of the dreamed destination.
                     </p>
