@@ -145,7 +145,7 @@ export default async function Grid({ searchParams }: GridProps) {
 
     return (
         <section className="flex flex-col p-4 gap-4">
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 justify-center">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 justify-center">
                 {citiesIds.slice((currentPage - 1) * CITIES_PER_PAGE, currentPage * CITIES_PER_PAGE).map(cityId => <GridBox key={cityId} cityId={cityId} searchParams={searchParams} />)}
             </div>
             <Pagination countOfPages={citiesIds.length / CITIES_PER_PAGE} searchParams={searchParams} />
