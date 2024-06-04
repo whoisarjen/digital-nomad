@@ -6,63 +6,62 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL") // uses connection pooling
   directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
 }
 
 model City {
-  id          Int       @id @default(autoincrement())
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  name        String // @unique
-  image       String // @unique
-  country     String
-  nameChinese String? // @unique
-  region      String
-  slug        String // @unique
-  population  Int
-  wifi        Int
-  latitude    String
-  longitude   String
-  costForNomadInUSD Float
-  costForExpatInUSD Float
-  costForLocalInUSD Float
+  id                 Int       @id @default(autoincrement())
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+  name               String    @unique
+  image              String    @unique
+  country            String
+  region             String
+  slug               String    @unique
+  population         Int
+  wifi               Int
+  latitude           String
+  longitude          String
+  costForNomadInUSD  Float
+  costForExpatInUSD  Float
+  costForLocalInUSD  Float
   costForFamilyInUSD Float
-  totalScore Float
-  costScore Float
-  internetScore Float
-  likesScore Float
-  safetyLevel Float
-  weathers    Weather[]
+  totalScore         Float
+  costScore          Float
+  internetScore      Float
+  likesScore         Float
+  safetyLevel        Float
+  weathers           Weather[]
 }
 
 model Weather {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  city      City     @relation(fields: [cityId], references: [id], onDelete: Cascade)
-  cityId    Int
-  when      DateTime
-  weatherCode Int?
-  temperatureMax Float?
-  temperatureMin Float?
-  temperatureMean Float?
-  apparentTemperatureMax Float?
-  apparentTemperatureMin Float?
-  apparentTemperatureMean Float?
-  sunrise DateTime?
-  sunset DateTime?
-  daylightDuration Float?
-  sunshineDuration Float?
-  precipitationSum Float?
-  rainSum Float?
-  snowfallSum Float?
-  precipitationHours Float?
-  windSpeed10mMax Float?
-  windGusts10mMax Float?
+  id                       Int       @id @default(autoincrement())
+  createdAt                DateTime  @default(now())
+  updatedAt                DateTime  @updatedAt
+  city                     City      @relation(fields: [cityId], references: [id], onDelete: Cascade)
+  cityId                   Int
+  when                     DateTime  @db.Date
+  weatherCode              Int?
+  temperatureMax           Float?
+  temperatureMin           Float?
+  temperatureMean          Float?
+  apparentTemperatureMax   Float?
+  apparentTemperatureMin   Float?
+  apparentTemperatureMean  Float?
+  sunrise                  DateTime?
+  sunset                   DateTime?
+  daylightDuration         Float?
+  sunshineDuration         Float?
+  precipitationSum         Float?
+  rainSum                  Float?
+  snowfallSum              Float?
+  precipitationHours       Float?
+  windSpeed10mMax          Float?
+  windGusts10mMax          Float?
   windDirection10mDominant Float?
-  shortwaveRadiationSum Float?
+  shortwaveRadiationSum    Float?
   et0FaoEvapotranspiration Float?
 
   @@unique([cityId, when])

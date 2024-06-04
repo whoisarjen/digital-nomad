@@ -69,7 +69,7 @@ export async function GET() {
         return days.map((when, i) => {
             return {
                 cityId: cities[index].id,
-                when: new Date(when),
+                when: new Date(when).toJSON(),
                 ...transformOpenMeteoToDB(data.daily, i),
             }
         })
@@ -78,6 +78,6 @@ export async function GET() {
     const weathers = await prisma.weather.createMany({
         data: weatherRecords,
     })
-
+console.log({ weathers })
     return Response.json({ length: cities.length, weathers })
 }

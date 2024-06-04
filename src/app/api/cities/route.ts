@@ -1,5 +1,6 @@
 import db from '@/../db.json'
 import { prisma } from '@/utils/prisma.utils'
+import { uniqBy } from 'lodash'
 
 export async function GET() {
     await prisma.city.deleteMany({
@@ -11,12 +12,11 @@ export async function GET() {
     })
 
     await prisma.city.createMany({
-        data: db.cities.map(city => ({
+        data: uniqBy(db.cities, city => city.name).map(city => ({
             name: city.name,
             image: city.image,
             region: city.region,
             country: city.country,
-            nameChinese: city.name_chinese,
             population: Number(city.population),
             wifi: Number(city.internet_speed),
             latitude: city.latitude.toString(),

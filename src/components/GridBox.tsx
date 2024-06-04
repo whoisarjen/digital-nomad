@@ -56,7 +56,7 @@ export const GridBox = async ({ cityId, searchParams }: GridBoxProps) => {
         <Link
             key={city.id}
             href={`/cities/${city.slug}`}
-            className="flex w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/5 relative shadow group"
+            className="flex w-full relative shadow group"
         >
             <AspectRatio ratio={16 / 9} className="bg-muted">
                 <Image
