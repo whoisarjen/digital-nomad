@@ -7,6 +7,7 @@ import { PickerTemperatures } from '@/components/PickerTemperatures'
 import { PickerSortBy } from '@/components/PickerOrderBy'
 import Image from 'next/image'
 import { PickerWeather } from '@/components/PickerWeather'
+import { Suspense } from 'react'
 
 type HomeProps = {
   searchParams: URLSearchParams
@@ -32,13 +33,15 @@ export default function Home({
             </div>
           </div>
           <div className="flex p-4 gap-4 justify-center">
-            <PickerContinent />
-            <PickerMonth />
-            <PickerTemperatures />
-            <PickerWeather />
-            <PickerPopulation />
-            <PickerWifi />
-            <PickerSortBy />
+            <Suspense>
+              <PickerContinent />
+              <PickerMonth />
+              <PickerTemperatures />
+              <PickerWeather />
+              <PickerPopulation />
+              <PickerWifi />
+              <PickerSortBy />
+            </Suspense>
           </div>
         </section>
         <Grid searchParams={searchParams} />
