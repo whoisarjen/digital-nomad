@@ -6,7 +6,6 @@ import { PickerPopulation } from '@/components/PickerPopulation'
 import { PickerTemperatures } from '@/components/PickerTemperatures'
 import { PickerSortBy } from '@/components/PickerOrderBy'
 import Image from 'next/image'
-import { Navbar } from '@/components/Navbar'
 import { PickerWeather } from '@/components/PickerWeather'
 
 type HomeProps = {
@@ -19,7 +18,6 @@ export default function Home({
     return (
       <main>
         <section className="flex flex-col w-full min-h-screen">
-          <Navbar />
           <div className="flex flex-1">
             <div className="flex flex-1 items-center justify-between container">
               <div className="max-w-96 text-7xl gap-16 flex flex-col font-bold capitalize">

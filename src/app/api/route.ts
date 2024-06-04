@@ -60,7 +60,7 @@ export async function GET() {
         }
     })
 
-    const citiesRaw = [...db.cities].slice(0, 16)
+    const citiesRaw = [...db.cities].slice(0, 32)
 
     await prisma.city.createMany({
         data: citiesRaw.map(city => ({
@@ -78,11 +78,11 @@ export async function GET() {
             costForExpatInUSD: city.cost_for_expat_in_usd,
             costForLocalInUSD: city.cost_for_local_in_usd,
             costForFamilyInUSD: city.cost_for_family_in_usd,
-            totalScore: city.total_score,
-            costScore: city.cost_score,
-            internetScore: city.internet_score,
-            likesScore: city.likes_score,
-            safetyLevel: city.safety_level,
+            totalScore: Number(city.total_score) ?? 0,
+            costScore: Number(city.cost_score) ?? 0,
+            internetScore: Number(city.internet_score) ?? 0,
+            likesScore: Number(city.likes_score) ?? 0,
+            safetyLevel: Number(city.safety_level) ?? 0,
         })),
     })
 
@@ -98,7 +98,7 @@ export async function GET() {
     })
 
     const weatherData = await Promise.all(promises);
-    const weatherRecords = weatherData.flatMap((data, index) => {
+    const weatherRecords = weatherData.filter(data => data.daily).flatMap((data, index) => {
         const days = [...data.daily.time]
 
         return days.map((when, i) => {
