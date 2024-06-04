@@ -25,8 +25,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <div className="flex justify-between items-center p-4 box-border sticky top-0 bg-white z-50">
-          <div className="container">
+        <div className="sticky top-0 bg-white z-50">
+          <div className="container flex justify-between items-center p-4 box-border">
+              <Link href="/">
+                  <Avatar>
+                      <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+                      <AvatarFallback>CN</AvatarFallback>
+                  </Avatar>
+              </Link>
               <Link href="/">
                   <Avatar>
                       <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />

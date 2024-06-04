@@ -1,4 +1,3 @@
-import db from '@/../db.json'
 import { prisma } from '@/utils/prisma.utils'
 
 const getTodayAndPreviousYearDate = () => {
@@ -45,48 +44,14 @@ const transformOpenMeteoToDB = (data: any, index: number) => {
 }
 
 export async function GET() {
-    await prisma.city.deleteMany({
+    const cities = await prisma.city.findMany({
         where: {
-            id: {
-                gt: 0,
-            }
-        }
+            weathers: {
+                none: {}
+            },
+        },
+        take: 20,
     })
-    await prisma.weather.deleteMany({
-        where: {
-            id: {
-                gt: 0,
-            }
-        }
-    })
-
-    const citiesRaw = [...db.cities].slice(0, 32)
-
-    await prisma.city.createMany({
-        data: citiesRaw.map(city => ({
-            name: city.name,
-            image: city.image,
-            region: city.region,
-            country: city.country,
-            nameChinese: city.name_chinese,
-            population: Number(city.population),
-            wifi: Number(city.internet_speed),
-            latitude: city.latitude.toString(),
-            longitude: city.longitude.toString(),
-            slug: city.slug,
-            costForNomadInUSD: city.cost_for_nomad_in_usd,
-            costForExpatInUSD: city.cost_for_expat_in_usd,
-            costForLocalInUSD: city.cost_for_local_in_usd,
-            costForFamilyInUSD: city.cost_for_family_in_usd,
-            totalScore: Number(city.total_score) ?? 0,
-            costScore: Number(city.cost_score) ?? 0,
-            internetScore: Number(city.internet_score) ?? 0,
-            likesScore: Number(city.likes_score) ?? 0,
-            safetyLevel: Number(city.safety_level) ?? 0,
-        })),
-    })
-
-    const cities = await prisma.city.findMany()
 
     const { today, previousYear } = getTodayAndPreviousYearDate()
     const promises = cities.map(async ({ latitude, longitude }) => {
@@ -113,5 +78,6 @@ export async function GET() {
     const weathers = await prisma.weather.createMany({
         data: weatherRecords,
     })
-    return Response.json({ weathers, weatherRecords })
+
+    return Response.json({ length: cities.length, weathers })
 }
