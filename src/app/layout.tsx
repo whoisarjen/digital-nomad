@@ -25,7 +25,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <div className="sticky top-0 bg-white z-50">
+        {/* <div className="sticky top-0 bg-white z-50">
           <div className="container flex justify-between items-center p-4 box-border">
               <Link href="/">
                   <Avatar>
@@ -40,7 +40,7 @@ export default function RootLayout({
                   </Avatar>
               </Link>
             </div>
-        </div>
+        </div> */}
         {children}
         {modal}
       </body>

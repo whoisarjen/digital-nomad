@@ -8,6 +8,9 @@ import { PickerSortBy } from '@/components/PickerOrderBy'
 import Image from 'next/image'
 import { PickerWeather } from '@/components/PickerWeather'
 import { Suspense } from 'react'
+import { SheetSide } from '@/components/SheetSide'
+import { Input } from '@/components/ui/input'
+import { PickerOrder } from '@/components/PickerOrder'
 
 type HomeProps = {
   searchParams: URLSearchParams
@@ -32,15 +35,18 @@ export default function Home({
               />
             </div>
           </div>
-          <div className="flex p-4 gap-4 justify-center">
+          <div className="flex p-4 gap-4 justify-center items-end">
             <Suspense>
+              <SheetSide />
+              <Input placeholder='Bangkok, Chiang Mai, Mexico City...' />
               <PickerContinent />
               <PickerMonth />
-              <PickerTemperatures />
+              {/* <PickerTemperatures /> */}
               <PickerWeather />
-              <PickerPopulation />
-              <PickerWifi />
+              {/* <PickerPopulation /> */}
+              {/* <PickerWifi /> */}
               <PickerSortBy />
+              <PickerOrder />
             </Suspense>
           </div>
         </section>

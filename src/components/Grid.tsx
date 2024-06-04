@@ -11,6 +11,7 @@ import type { City, Weather } from '@prisma/client'
 import { DEFAULT_WEATHER, getCurrentWeatherCodes } from '@/utils/weather.utils'
 import { isNil, uniq } from 'lodash'
 import { GridBox } from './GridBox'
+import { getCurrentOrder } from '@/utils/order.utils'
 
 const CITIES_PER_PAGE = 16
 
@@ -24,6 +25,7 @@ class CitiesIdsBuilder {
 
     constructor(searchParams: URLSearchParams) {
         return (async (): Promise<CitiesIdsBuilder> => {
+            const order = getCurrentOrder(searchParams)
             const orderBy = getCurrentOrderBy(searchParams)
             const { beginning, end } = getBeginningAndEndOfSupportedMonth(getCurrentMonth(searchParams));
     
@@ -31,7 +33,7 @@ class CitiesIdsBuilder {
             this.weathers = await prisma.weather.findMany({
                 orderBy: {
                     city: {
-                        [orderBy.slice(0, orderBy.indexOf('_'))]: orderBy.slice(orderBy.indexOf('_') + 1, orderBy.length),
+                        [orderBy]: order,
                     }
                 },
                 where: {

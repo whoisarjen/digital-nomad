@@ -5,13 +5,13 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
 import { getNextSearchParams, getNextSearchParamsWithoutSelectedKey } from "@/utils/link.utils"
 import { DEFAULT_WEATHER, PICKER_WEATHER_KEY, WEATHERS } from "@/utils/weather.utils"
 import { useRouter, useSearchParams } from "next/navigation"
+import { Label } from "./ui/label"
 
 export const PickerWeather = () => {
     const router = useRouter()
@@ -27,12 +27,14 @@ export const PickerWeather = () => {
 
     return (
         <Select onValueChange={handleOnValueChange}>
-            <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder={(WEATHERS.find(({ value }) => value === searchParams.get(PICKER_WEATHER_KEY)) ?? DEFAULT_WEATHER).label} />
-            </SelectTrigger>
+            <div className="grid max-w-sm items-center gap-1.5">
+                <Label className="text-xs">Weather</Label>
+                <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder={(WEATHERS.find(({ value }) => value === searchParams.get(PICKER_WEATHER_KEY)) ?? DEFAULT_WEATHER).label} />
+                </SelectTrigger>
+            </div>
             <SelectContent>
                 <SelectGroup>
-                    <SelectLabel>Weather</SelectLabel>
                     {WEATHERS.map(weather => (
                         <SelectItem key={weather.value} value={weather.value}>{weather.label}</SelectItem>
                     ))}

@@ -5,12 +5,12 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
 import { getNextSearchParams, getNextSearchParamsWithoutSelectedKey } from "@/utils/link.utils"
 import { useRouter, useSearchParams } from "next/navigation"
+import { Label } from "./ui/label"
 
 const PICKER_CONTINENTS_KEY = 'continent'
 const DEFAULT_CONTINENT = 'All Continents'
@@ -42,12 +42,14 @@ export const PickerContinent = () => {
 
     return (
         <Select onValueChange={handleOnValueChange}>
-            <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder={searchParams.get(PICKER_CONTINENTS_KEY) ?? DEFAULT_CONTINENT} />
-            </SelectTrigger>
+            <div className="grid max-w-sm items-center gap-1.5">
+                <Label className="text-xs">Continent</Label>
+                <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder={searchParams.get(PICKER_CONTINENTS_KEY) ?? DEFAULT_CONTINENT} />
+                </SelectTrigger>
+            </div>
             <SelectContent>
                 <SelectGroup>
-                    <SelectLabel>Continent</SelectLabel>
                     {CONTINENTS.map(continent => (
                         <SelectItem key={continent} value={continent}>{continent}</SelectItem>
                     ))}

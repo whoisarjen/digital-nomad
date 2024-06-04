@@ -1,43 +1,27 @@
 export const PICKER_ORDER_BY_KEY = 'orderBy'
 
-export const DEFAULT_ORDER_BY = {
-    label: 'Score DESC',
-    value: 'totalScore_desc',
+export const PICKER_ORDER_BY_DEFAULT = {
+    label: 'Score',
+    value: 'totalScore',
 }
 
-export const OPTIONS_ORDER_BY = [
-    DEFAULT_ORDER_BY,
+export const PICKER_ORDER_BY_OPTIONS = [
+    PICKER_ORDER_BY_DEFAULT,
     {
-        label: 'Score ASC',
-        value: 'totalScore_asc',
+        label: 'Cost',
+        value: 'cost',
     },
     {
-        label: 'Cost DESC',
-        value: 'cost_desc',
+        label: 'WiFi',
+        value: 'wifi',
     },
     {
-        label: 'Cost ASC',
-        value: 'cost_asc',
-    },
-    {
-        label: 'WiFi DESC',
-        value: 'wifi_desc',
-    },
-    {
-        label: 'WiFi ASC',
-        value: 'wifi_asc',
-    },
-    {
-        label: 'Name DESC',
-        value: 'name_desc',
-    },
-    {
-        label: 'Name ASC',
-        value: 'name_asc',
+        label: 'Name',
+        value: 'name',
     },
 ]
 
 export const getCurrentOrderBy = (searchParams: URLSearchParams) => {
     const params = new URLSearchParams(searchParams)
-    return params.get(PICKER_ORDER_BY_KEY) ?? DEFAULT_ORDER_BY.value
+    return params.get(PICKER_ORDER_BY_KEY) ?? PICKER_ORDER_BY_DEFAULT.value
 }
