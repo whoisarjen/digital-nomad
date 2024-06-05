@@ -4,14 +4,17 @@ import { Pagination } from './Pagination'
 import { getCurrentPageNumber, getSearchParam } from '@/utils/link.utils'
 import { DEFAULT_POPULATION_MIN, getCurrentPopulationMax, getCurrentPopulationMin } from '@/utils/population.utils'
 import { DEFAULT_WIFI, getCurrentWifi } from '@/utils/wifi.utils'
-import { getCurrentOrderBy } from '@/utils/orderBy.utils'
+import { getCurrentSortBy } from '@/utils/sortBy.utils'
 import { getBeginningAndEndOfSupportedMonth, getCurrentMonth } from '@/utils/date.utils'
 import { DEFAULT_TEMPERATURE_MAX, DEFAULT_TEMPERATURE_MIN, getCurrentTemperatureMax, getCurrentTemperatureMin } from '@/utils/temperature.utils'
 import type { City, Weather } from '@prisma/client'
-import { DEFAULT_WEATHER, getCurrentWeatherCodes } from '@/utils/weather.utils'
+import { PICKER_WEATHER_DEFAULT, getCurrentWeatherCodes } from '@/utils/weather.utils'
 import { isNil, uniq } from 'lodash'
 import { GridBox } from './GridBox'
 import { getCurrentOrder } from '@/utils/order.utils'
+import { Suspense } from 'react'
+import { Skeleton } from './ui/skeleton'
+import { AspectRatio } from './ui/aspect-ratio'
 
 const CITIES_PER_PAGE = 16
 
@@ -26,14 +29,14 @@ class CitiesIdsBuilder {
     constructor(searchParams: URLSearchParams) {
         return (async (): Promise<CitiesIdsBuilder> => {
             const order = getCurrentOrder(searchParams)
-            const orderBy = getCurrentOrderBy(searchParams)
+            const sortBy = getCurrentSortBy(searchParams)
             const { beginning, end } = getBeginningAndEndOfSupportedMonth(getCurrentMonth(searchParams));
-    
+
             this.searchParams = searchParams
             this.weathers = await prisma.weather.findMany({
                 orderBy: {
                     city: {
-                        [orderBy]: order,
+                        [sortBy]: order,
                     }
                 },
                 where: {
@@ -114,7 +117,7 @@ class CitiesIdsBuilder {
     applyWeatherCodeFilter(){
         const { value, codes } = getCurrentWeatherCodes(this.searchParams)
 
-        if (value === DEFAULT_WEATHER.value) {
+        if (value === PICKER_WEATHER_DEFAULT.value) {
             return this
         }
 
@@ -148,7 +151,18 @@ export default async function Grid({ searchParams }: GridProps) {
     return (
         <section className="flex flex-col p-4 gap-4">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 justify-center">
-                {citiesIds.slice((currentPage - 1) * CITIES_PER_PAGE, currentPage * CITIES_PER_PAGE).map(cityId => <GridBox key={cityId} cityId={cityId} searchParams={searchParams} />)}
+                {citiesIds.slice((currentPage - 1) * CITIES_PER_PAGE, currentPage * CITIES_PER_PAGE).map(cityId => 
+                    <Suspense
+                        key={cityId}
+                        fallback={
+                            <Skeleton className="w-full">
+                                <AspectRatio ratio={16 / 9} className="bg-muted" />
+                            </Skeleton>
+                        }
+                    >
+                        <GridBox cityId={cityId} searchParams={searchParams} />
+                    </Suspense>
+                )}
             </div>
             <Pagination countOfPages={citiesIds.length / CITIES_PER_PAGE} searchParams={searchParams} />
         </section>

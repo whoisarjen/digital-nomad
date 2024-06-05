@@ -14,8 +14,14 @@ export const RAIN_CODES = [
 ]
 export const SNOW_CODES = [22, 26, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 85, 86, 93, 94]
 
+export type WeatherOption = {
+    label: string
+    value: 'all' | 'sunny' | 'cloudy' | 'windy' | 'rainy' | 'snowy'
+    codes: number[]
+}
+
 export const PICKER_WEATHER_KEY = 'weather'
-export const DEFAULT_WEATHER = {
+export const PICKER_WEATHER_DEFAULT = {
     label: 'All weathers',
     value: 'all',
     codes: [
@@ -25,10 +31,10 @@ export const DEFAULT_WEATHER = {
         ...RAIN_CODES,
         ...SNOW_CODES,
     ],
-}
+} as const satisfies WeatherOption
 
-export const WEATHERS = [
-    DEFAULT_WEATHER,
+export const PICKER_WEATHER_OPTIONS = [
+    PICKER_WEATHER_DEFAULT,
     {
         label: 'Sunny',
         value: 'sunny',
@@ -54,11 +60,11 @@ export const WEATHERS = [
         value: 'snowy',
         codes: SNOW_CODES,
     },
-]
+] as const satisfies WeatherOption[]
 
 export const getCurrentWeatherCodes = (searchParams: ReadonlyURLSearchParams | URLSearchParams) => {
     const params = new URLSearchParams(searchParams)
-    return WEATHERS.find(({ value }) => value === params.get(PICKER_WEATHER_KEY)) ?? DEFAULT_WEATHER
+    return PICKER_WEATHER_OPTIONS.find(({ value }) => value === params.get(PICKER_WEATHER_KEY)) ?? PICKER_WEATHER_DEFAULT
 }
 
 export const getMostCommonWeatherCode = (weathers: Weather[]) => {

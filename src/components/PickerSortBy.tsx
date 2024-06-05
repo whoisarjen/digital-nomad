@@ -7,42 +7,41 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { getNextSearchParams, getNextSearchParamsWithoutSelectedKey } from "@/utils/link.utils"
-import { redirect } from "next/navigation"
+import { PICKER_SORT_BY_DEFAULT, PICKER_SORT_BY_OPTIONS, PICKER_SORT_BY_KEY, type SortByOption } from "@/utils/sortBy.utils"
 import { Label } from "./ui/label"
-import { PICKER_ORDER_DEFAULT, PICKER_ORDER_KEY, PICKER_ORDER_OPTIONS } from "@/utils/order.utils"
-import type { OrderOption } from '@/utils/order.utils'
+import { redirect } from "next/navigation"
 import type { HomeSearchParams } from "@/app/page"
 
 type PickerOrderProps = {
     searchParams: HomeSearchParams
 }
 
-export const PickerOrder = ({
+export const PickerSortBy = ({
     searchParams,
 }: PickerOrderProps) => {
-    const action = async (value: OrderOption['value']) => {
+    const action = async (value: SortByOption['value']) => {
         'use server'
 
-        if (value === PICKER_ORDER_DEFAULT.value) {
-            redirect(getNextSearchParamsWithoutSelectedKey(searchParams, PICKER_ORDER_KEY))
+        if (value === PICKER_SORT_BY_DEFAULT.value) {
+            redirect(getNextSearchParamsWithoutSelectedKey(searchParams, PICKER_SORT_BY_KEY))
         } else {
-            redirect(getNextSearchParams(searchParams, PICKER_ORDER_KEY, value))
+            redirect(getNextSearchParams(searchParams, PICKER_SORT_BY_KEY, value))
         }
     }
 
-    const selected = PICKER_ORDER_OPTIONS.find(({ value }) => value === searchParams.sort) ?? PICKER_ORDER_DEFAULT
+    const selected = PICKER_SORT_BY_OPTIONS.find(({ value }) => value === searchParams.sortBy) ?? PICKER_SORT_BY_DEFAULT
 
     return (
         <Select onValueChange={action}>
             <div className="grid max-w-sm items-center gap-1.5">
-                <Label className="text-xs">Order</Label>
+                <Label className="text-xs">Sort by</Label>
                 <SelectTrigger className="w-[180px]">
                     <SelectValue placeholder={selected.label} />
                 </SelectTrigger>
             </div>
             <SelectContent>
                 <SelectGroup>
-                    {PICKER_ORDER_OPTIONS.map(option => (
+                    {PICKER_SORT_BY_OPTIONS.map(option => (
                         <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
                     ))}
                 </SelectGroup>

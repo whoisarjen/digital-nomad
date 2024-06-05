@@ -78,6 +78,6 @@ export async function GET() {
     const weathers = await prisma.weather.createMany({
         data: weatherRecords,
     })
-console.log({ weathers })
+
     return Response.json({ length: cities.length, weathers })
 }
