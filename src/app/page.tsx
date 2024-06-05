@@ -12,6 +12,8 @@ import type { SortByOption } from '@/utils/sortBy.utils'
 import type { WeatherOption } from '@/utils/weather.utils'
 import type { MonthOption } from '@/utils/month.utils'
 import type { ContinentOption } from '@/utils/continent.utils'
+import { Button } from '@/components/ui/button'
+import { Label } from '@/components/ui/label'
 
 export type HomeSearchParams = {
   month?: MonthOption
@@ -47,7 +49,10 @@ export default function Home({
           <div className="flex p-4 gap-4 justify-center items-end">
             <Suspense>
               <SheetSide />
-              <Input placeholder='Bangkok, Chiang Mai, Mexico City...' />
+              <div className="flex w-full flex-row items-end space-x-2">
+                <Input type="text" placeholder='Bangkok, Chiang Mai, Mexico City...' />
+                <Button type="submit">Search</Button>
+              </div>
               <PickerContinent searchParams={searchParams} />
               <PickerMonth searchParams={searchParams} />
               <PickerWeather searchParams={searchParams} />

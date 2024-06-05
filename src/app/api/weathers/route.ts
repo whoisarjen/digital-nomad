@@ -51,6 +51,7 @@ export async function GET() {
             },
         },
         take: 20,
+        skip: 10,
     })
 
     const { today, previousYear } = getTodayAndPreviousYearDate()
