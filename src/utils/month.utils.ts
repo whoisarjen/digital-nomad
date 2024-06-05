@@ -1,6 +1,6 @@
-export const PICKER_MONTHS_KEY = 'month'
+export const PICKER_MONTH_KEY = 'month'
 
-export const MONTHS = [
+export const PICKER_MONTH_OPTIONS = [
     'January',
     'February',
     'March',
@@ -13,13 +13,15 @@ export const MONTHS = [
     'October',
     'November',
     'December',
-]
+] as const
 
-export const getMonth = () => MONTHS[new Date().getMonth()]
+export type MonthOption = typeof PICKER_MONTH_OPTIONS[number]
+
+export const PICKER_MONTH_DEFAULT = PICKER_MONTH_OPTIONS[new Date().getMonth()]
 
 export const getCurrentMonth = (searchParams: URLSearchParams) => {
     const params = new URLSearchParams(searchParams)
-    return params.get(PICKER_MONTHS_KEY) ?? getMonth()
+    return params.get(PICKER_MONTH_KEY) ?? PICKER_MONTH_DEFAULT
 }
 
 export const getTodayAndPreviousDayDate = () => {
@@ -47,7 +49,7 @@ export const getBeginningAndEndOfSupportedMonth = (monthName: string) => {
     const currentDay = currentDate.getDate();
 
     // Find the index of the given month name
-    const monthIndex = MONTHS.findIndex(m => m.toLowerCase() === monthName.toLowerCase());
+    const monthIndex = PICKER_MONTH_OPTIONS.findIndex(m => m.toLowerCase() === monthName.toLowerCase());
     if (monthIndex === -1) {
         throw new Error('Invalid month name provided.');
     }

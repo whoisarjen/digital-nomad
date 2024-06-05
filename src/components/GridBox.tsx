@@ -1,4 +1,4 @@
-import { getBeginningAndEndOfSupportedMonth, getCurrentMonth, getTodayAndPreviousDayDate, isToday } from "@/utils/date.utils"
+import { getBeginningAndEndOfSupportedMonth, getCurrentMonth, getTodayAndPreviousDayDate, isToday } from "@/utils/month.utils"
 import { BarChart, HandCoins, Shield, ThumbsUp, Wifi } from "lucide-react"
 import { IconWeather } from "./IconWeather"
 import Link from "next/link"

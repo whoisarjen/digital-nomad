@@ -1,6 +1,6 @@
 import Grid from '@/components/Grid'
-import { PickerContinent } from '@/components/PickerContinents'
-import { PickerMonth } from '@/components/PickerMonths'
+import { PickerContinent } from '@/components/PickerContinent'
+import { PickerMonth } from '@/components/PickerMonth'
 import { PickerSortBy } from '@/components/PickerSortBy'
 import { PickerWeather } from '@/components/PickerWeather'
 import { Suspense } from 'react'
@@ -10,8 +10,12 @@ import { PickerOrder } from '@/components/PickerOrder'
 import type { OrderOption } from '@/utils/order.utils'
 import type { SortByOption } from '@/utils/sortBy.utils'
 import type { WeatherOption } from '@/utils/weather.utils'
+import type { MonthOption } from '@/utils/month.utils'
+import type { ContinentOption } from '@/utils/continent.utils'
 
 export type HomeSearchParams = {
+  month?: MonthOption
+  continent?: ContinentOption
   sort?: OrderOption['value']
   sortBy?: SortByOption['value']
   weather?: WeatherOption['value']
@@ -44,8 +48,8 @@ export default function Home({
             <Suspense>
               <SheetSide />
               <Input placeholder='Bangkok, Chiang Mai, Mexico City...' />
-              <PickerContinent />
-              <PickerMonth />
+              <PickerContinent searchParams={searchParams} />
+              <PickerMonth searchParams={searchParams} />
               <PickerWeather searchParams={searchParams} />
               <PickerSortBy searchParams={searchParams} />
               <PickerOrder searchParams={searchParams} />
