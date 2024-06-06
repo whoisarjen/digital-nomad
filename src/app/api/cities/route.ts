@@ -26,5 +26,5 @@ export async function GET() {
     //         safetyLevel: Number(city.safety_level) ?? 0,
     //     })))
 
-    // return Response.json({ res })
+    return Response.json({ message: 'Successful' })
 }
