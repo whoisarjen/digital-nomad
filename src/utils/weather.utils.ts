@@ -1,5 +1,5 @@
-import type { Weather } from "@prisma/client"
 import type { ReadonlyURLSearchParams } from "next/navigation"
+import { Tables } from "../../database.types"
 
 export const SUN_CODES = [0, 1, 2, 3]
 export const CLOUDY_CODES = [
@@ -67,7 +67,7 @@ export const getCurrentWeatherCodes = (searchParams: ReadonlyURLSearchParams | U
     return PICKER_WEATHER_OPTIONS.find(({ value }) => value === params.get(PICKER_WEATHER_KEY)) ?? PICKER_WEATHER_DEFAULT
 }
 
-export const getMostCommonWeatherCode = (weathers: Weather[]) => {
+export const getMostCommonWeatherCode = (weathers: Tables<'weathers'>[]) => {
     const weatherCodes = weathers.map(({ weatherCode }) => weatherCode);
     const counts = {
         SUN: 0,

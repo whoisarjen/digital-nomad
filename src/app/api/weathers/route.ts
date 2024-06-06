@@ -1,4 +1,4 @@
-import { prisma } from '@/utils/prisma.utils'
+import { supabase } from "@/utils/supabase.utils";
 
 const getTodayAndPreviousYearDate = () => {
     const today = new Date();
@@ -27,8 +27,8 @@ const transformOpenMeteoToDB = (data: any, index: number) => {
         apparentTemperatureMax: data.apparent_temperature_max[index],
         apparentTemperatureMin: data.apparent_temperature_min[index],
         apparentTemperatureMean: data.apparent_temperature_mean[index],
-        sunrise: new Date(data.sunrise[index]),
-        sunset: new Date(data.sunset[index]),
+        sunrise: data.sunrise[index].slice(-5),
+        sunset: data.sunset[index].slice(-5),
         daylightDuration: data.daylight_duration[index],
         sunshineDuration: data.sunshine_duration[index],
         precipitationSum: data.precipitation_sum[index],
@@ -44,41 +44,38 @@ const transformOpenMeteoToDB = (data: any, index: number) => {
 }
 
 export async function GET() {
-    const cities = await prisma.city.findMany({
-        where: {
-            weathers: {
-                none: {}
-            },
-        },
-        take: 20,
-        skip: 10,
-    })
+    const { data: cities } = await supabase
+        .from('cities')
+        .select('*, weathers(id)')
+
+    const citiesWithoutWeathers = cities?.filter(({ weathers }) => !weathers.length) ?? []
+    const selectedCity = citiesWithoutWeathers[Math.floor(Math.random() * citiesWithoutWeathers.length)]
+
+    if (!selectedCity) {
+        return Response.json({ message: 'No selectedCity' })
+    }
 
     const { today, previousYear } = getTodayAndPreviousYearDate()
-    const promises = cities.map(async ({ latitude, longitude }) => {
-        const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&daily=weather_code&daily=temperature_2m_max&daily=temperature_2m_min&daily=temperature_2m_mean&daily=apparent_temperature_max&daily=apparent_temperature_min&daily=apparent_temperature_mean&daily=sunrise&daily=sunset&daily=daylight_duration&daily=sunshine_duration&daily=precipitation_sum&daily=rain_sum&daily=snowfall_sum&daily=precipitation_hours&daily=wind_speed_10m_max&daily=wind_gusts_10m_max&daily=wind_direction_10m_dominant&daily=shortwave_radiation_sum&daily=et0_fao_evapotranspiration&start_date=${previousYear}&end_date=${today}`;
 
-        const response = await fetch(url);
-        const data = await response.json();
-        return data;
-    })
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${selectedCity.latitude}&longitude=${selectedCity.longitude}&daily=weather_code&daily=temperature_2m_max&daily=temperature_2m_min&daily=temperature_2m_mean&daily=apparent_temperature_max&daily=apparent_temperature_min&daily=apparent_temperature_mean&daily=sunrise&daily=sunset&daily=daylight_duration&daily=sunshine_duration&daily=precipitation_sum&daily=rain_sum&daily=snowfall_sum&daily=precipitation_hours&daily=wind_speed_10m_max&daily=wind_gusts_10m_max&daily=wind_direction_10m_dominant&daily=shortwave_radiation_sum&daily=et0_fao_evapotranspiration&start_date=${previousYear}&end_date=${today}`;
+    const response = await fetch(url);
+    const data = await response.json();
 
-    const weatherData = await Promise.all(promises);
-    const weatherRecords = weatherData.filter(data => data.daily).flatMap((data, index) => {
-        const days = [...data.daily.time]
+    if (!data.daily) {
+        return Response.json({ message: 'data.daily not existing' })
+    }
 
-        return days.map((when, i) => {
-            return {
-                cityId: cities[index].id,
-                when: new Date(when).toJSON(),
-                ...transformOpenMeteoToDB(data.daily, i),
-            }
-        })
-    })
+    const weathers = await supabase
+        .from('weathers')
+        .upsert(
+            data.daily.time.map((when: string, i: number) => {
+                return {
+                    cityId: selectedCity.id,
+                    when,
+                    ...transformOpenMeteoToDB(data.daily, i),
+                }
+            }))
+        .select()
 
-    const weathers = await prisma.weather.createMany({
-        data: weatherRecords,
-    })
-
-    return Response.json({ length: cities.length, weathers })
+    return Response.json({ weathers })
 }

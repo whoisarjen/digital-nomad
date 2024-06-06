@@ -13,7 +13,15 @@ import type { WeatherOption } from '@/utils/weather.utils'
 import type { MonthOption } from '@/utils/month.utils'
 import type { ContinentOption } from '@/utils/continent.utils'
 import { Button } from '@/components/ui/button'
-import { Label } from '@/components/ui/label'
+
+// setInterval(async () => {
+//   const res = await fetch('http://localhost:3000/api/weathers', {
+//     next: {
+//       revalidate: 0,
+//     }
+//   })
+//   console.log(await res.json())
+// }, 5000)
 
 export type HomeSearchParams = {
   month?: MonthOption

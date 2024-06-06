@@ -1,10 +1,10 @@
-import { City } from "@prisma/client"
+import type { Tables } from "../../database.types"
 
 export const PICKER_SORT_BY_KEY = 'sortBy'
 
 export type SortByOption = {
     label: string
-    value: keyof City
+    value: keyof Tables<'cities'>
 }
 
 export const PICKER_SORT_BY_DEFAULT = {
