@@ -86,6 +86,7 @@ export type Database = {
           apparentTemperatureMax: number | null
           apparentTemperatureMean: number | null
           apparentTemperatureMin: number | null
+          cityId: number
           createdAt: string
           daylightDuration: number | null
           et0FaoEvapotranspiration: number | null
@@ -102,7 +103,6 @@ export type Database = {
           temperatureMean: number | null
           temperatureMin: number | null
           updatedAt: string
-          userId: number
           weatherCode: number | null
           when: string
           windDirection10mDominant: number | null
@@ -113,6 +113,7 @@ export type Database = {
           apparentTemperatureMax?: number | null
           apparentTemperatureMean?: number | null
           apparentTemperatureMin?: number | null
+          cityId: number
           createdAt?: string
           daylightDuration?: number | null
           et0FaoEvapotranspiration?: number | null
@@ -129,7 +130,6 @@ export type Database = {
           temperatureMean?: number | null
           temperatureMin?: number | null
           updatedAt?: string
-          userId: number
           weatherCode?: number | null
           when: string
           windDirection10mDominant?: number | null
@@ -140,6 +140,7 @@ export type Database = {
           apparentTemperatureMax?: number | null
           apparentTemperatureMean?: number | null
           apparentTemperatureMin?: number | null
+          cityId?: number
           createdAt?: string
           daylightDuration?: number | null
           et0FaoEvapotranspiration?: number | null
@@ -156,7 +157,6 @@ export type Database = {
           temperatureMean?: number | null
           temperatureMin?: number | null
           updatedAt?: string
-          userId?: number
           weatherCode?: number | null
           when?: string
           windDirection10mDominant?: number | null
@@ -166,7 +166,7 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "weathers_userId_fkey"
-            columns: ["userId"]
+            columns: ["cityId"]
             isOneToOne: false
             referencedRelation: "cities"
             referencedColumns: ["id"]
