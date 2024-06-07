@@ -8,10 +8,12 @@ import { Suspense } from 'react'
 import { Skeleton } from './ui/skeleton'
 import { AspectRatio } from './ui/aspect-ratio'
 import { BarChart, HandCoins, Shield, ThumbsUp, Wifi } from "lucide-react"
-import Link from "next/link"
 import { Progress } from "./ui/progress"
 import { supabase } from '@/utils/supabase.utils'
 import Image from "next/image"
+import { IconWeather } from './IconWeather'
+import { getCurrentMonth, isToday, PICKER_MONTH_OPTIONS } from '@/utils/month.utils'
+import { round, isNil } from 'lodash'
 
 const CITIES_PER_PAGE = 16
 
@@ -21,13 +23,17 @@ type GridProps = {
 
 export default async function Grid({ searchParams }: GridProps) {
     const currentPage = getCurrentPageNumber(searchParams)
-    // const { beginning, end } = getBeginningAndEndOfSupportedMonth(getCurrentMonth(searchParams))
 
     let query = supabase
         .from('cities')
-        .select('*', { count: 'exact' })
+        .select('*, cities_weathers_averages(*), weathers(*)', { count: 'exact' })
         .range((currentPage - 1) * CITIES_PER_PAGE, currentPage * CITIES_PER_PAGE - 1)
+        .order('when', { referencedTable: 'weathers', ascending: false })
+        .order('year', { referencedTable: 'cities_weathers_averages', ascending: false })
         .order(getCurrentSortBy(searchParams), { ascending: getCurrentOrder(searchParams) })
+        .eq('cities_weathers_averages.month', Number(getCurrentMonth(searchParams)))
+        .limit(1, { foreignTable: 'weathers '})
+        .limit(1, { foreignTable: 'cities_weathers_averages '})
 
     const currentPopulationMin =  Number(getCurrentPopulationMin(searchParams))
     const currentPopulationMax =  Number(getCurrentPopulationMax(searchParams))
@@ -109,27 +115,27 @@ export default async function Grid({ searchParams }: GridProps) {
                                     <Wifi size={18} />
                                     <span>{city.wifi}Mb/s</span>
                                 </div>
-                                {/* <div className="flex items-center gap-1 absolute bottom-0 left-0 p-3 text-xs">
+                                <div className="flex items-center gap-1 absolute bottom-0 left-0 p-3 text-xs">
                                     <div className="flex items-center gap-1">
-                                        <IconWeather weatherCode={latestWeather.weatherCode} size={18} />
+                                        <IconWeather weatherCode={city.weathers[0]?.weatherCode} size={18} />
                                         <div className="flex flex-col">
-                                            <span>{!isNil(latestWeather.temperatureMax) && round(latestWeather.temperatureMax, 1)}°C</span>
-                                            <span>{isToday(latestWeather.when) ? 'Today' : 'Yesterday'}</span>
+                                            <span>{!isNil(city.weathers[0]?.temperatureMax) && round(city.weathers[0]?.temperatureMax, 1)}°C</span>
+                                            <span>{isToday(city.weathers[0]?.when) ? 'Today' : 'Yesterday'}</span>
                                         </div>
                                     </div>
-                                    {!weathers.some(({ temperatureMax }) => isNil(temperatureMax)) &&
+                                    {city.cities_weathers_averages[0] && !isNil(city.cities_weathers_averages[0].weatherCode) && !isNil(city.cities_weathers_averages[0].temperatureMax) && !isNil(city.cities_weathers_averages[0].month) &&
                                         <>
                                             <div>|</div>
                                             <div className="flex items-center gap-1">
-                                                <IconWeather weatherCode={getMostCommonWeatherCode(weathers)} size={18} />
+                                                <IconWeather weatherCode={city.cities_weathers_averages[0].weatherCode} size={18} />
                                                 <div className="flex flex-col">
-                                                    <span>{round(mean(weathers.map(({ temperatureMax }) => temperatureMax)), 1)}°C</span>
-                                                    <span>avg. {getCurrentMonth(searchParams)}</span>
+                                                    <span>{round(city.cities_weathers_averages[0].temperatureMax, 1)}°C</span>
+                                                    <span>avg. {PICKER_MONTH_OPTIONS.find(({ value }) => Number(value) === city.cities_weathers_averages[0].month)?.label}</span>
                                                 </div>
                                             </div>
                                         </>
                                     }
-                                </div> */}
+                                </div>
                                 <div className="flex items-center gap-1 absolute bottom-0 right-0 p-3 text-md">
                                     {city.costForNomadInUSD}$/mo
                                 </div>

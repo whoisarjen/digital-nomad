@@ -81,6 +81,101 @@ export type Database = {
         }
         Relationships: []
       }
+      cities_weathers_averages: {
+        Row: {
+          apparentTemperatureMax: number | null
+          apparentTemperatureMean: number | null
+          apparentTemperatureMin: number | null
+          cityId: number
+          createdAt: string
+          daylightDuration: number | null
+          et0FaoEvapotranspiration: number | null
+          id: number
+          month: number
+          precipitationHours: number | null
+          precipitationSum: number | null
+          rainSum: number | null
+          shortwaveRadiationSum: number | null
+          snowfallSum: number | null
+          sunrise: string | null
+          sunset: string | null
+          sunshineDuration: number | null
+          temperatureMax: number | null
+          temperatureMean: number | null
+          temperatureMin: number | null
+          updatedAt: string
+          weatherCode: number | null
+          windDirection10mDominant: number | null
+          windGusts10mMax: number | null
+          windSpeed10mMax: number | null
+          year: number
+        }
+        Insert: {
+          apparentTemperatureMax?: number | null
+          apparentTemperatureMean?: number | null
+          apparentTemperatureMin?: number | null
+          cityId: number
+          createdAt?: string
+          daylightDuration?: number | null
+          et0FaoEvapotranspiration?: number | null
+          id?: number
+          month: number
+          precipitationHours?: number | null
+          precipitationSum?: number | null
+          rainSum?: number | null
+          shortwaveRadiationSum?: number | null
+          snowfallSum?: number | null
+          sunrise?: string | null
+          sunset?: string | null
+          sunshineDuration?: number | null
+          temperatureMax?: number | null
+          temperatureMean?: number | null
+          temperatureMin?: number | null
+          updatedAt?: string
+          weatherCode?: number | null
+          windDirection10mDominant?: number | null
+          windGusts10mMax?: number | null
+          windSpeed10mMax?: number | null
+          year: number
+        }
+        Update: {
+          apparentTemperatureMax?: number | null
+          apparentTemperatureMean?: number | null
+          apparentTemperatureMin?: number | null
+          cityId?: number
+          createdAt?: string
+          daylightDuration?: number | null
+          et0FaoEvapotranspiration?: number | null
+          id?: number
+          month?: number
+          precipitationHours?: number | null
+          precipitationSum?: number | null
+          rainSum?: number | null
+          shortwaveRadiationSum?: number | null
+          snowfallSum?: number | null
+          sunrise?: string | null
+          sunset?: string | null
+          sunshineDuration?: number | null
+          temperatureMax?: number | null
+          temperatureMean?: number | null
+          temperatureMin?: number | null
+          updatedAt?: string
+          weatherCode?: number | null
+          windDirection10mDominant?: number | null
+          windGusts10mMax?: number | null
+          windSpeed10mMax?: number | null
+          year?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "weathers__cityId_fkey"
+            columns: ["cityId"]
+            isOneToOne: false
+            referencedRelation: "cities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       weathers: {
         Row: {
           apparentTemperatureMax: number | null

@@ -22,14 +22,14 @@ export const PickerMonth = ({
     const action = async (value: MonthOption) => {
         'use server'
 
-        if (value === PICKER_MONTH_DEFAULT) {
+        if (value === PICKER_MONTH_DEFAULT.value) {
             redirect(getNextSearchParamsWithoutSelectedKey(searchParams, PICKER_MONTH_KEY))
         } else {
             redirect(getNextSearchParams(searchParams, PICKER_MONTH_KEY, value))
         }
     }
 
-    const selected = PICKER_MONTH_OPTIONS.find(value => value === searchParams.month) ?? PICKER_MONTH_DEFAULT
+    const selected = PICKER_MONTH_OPTIONS.find(({ value }) => value === searchParams.month)?.label ?? PICKER_MONTH_DEFAULT.label
 
     return (
         <Select onValueChange={action}>
@@ -42,7 +42,7 @@ export const PickerMonth = ({
             <SelectContent>
                 <SelectGroup>
                     {PICKER_MONTH_OPTIONS.map(option => (
-                        <SelectItem key={option} value={option}>{option}</SelectItem>
+                        <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
                     ))}
                 </SelectGroup>
             </SelectContent>

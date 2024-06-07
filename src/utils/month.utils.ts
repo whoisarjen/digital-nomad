@@ -1,78 +1,69 @@
 export const PICKER_MONTH_KEY = 'month'
 
 export const PICKER_MONTH_OPTIONS = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
+    {
+        label: 'January',
+        value: '1',
+    },
+    {
+        label: 'February',
+        value: '2',
+    },
+    {
+        label: 'March',
+        value: '3',
+    },
+    {
+        label: 'April',
+        value: '4',
+    },
+    {
+        label: 'May',
+        value: '5',
+    },
+    {
+        label: 'June',
+        value: '6',
+    },
+    {
+        label: 'July',
+        value: '7',
+    },
+    {
+        label: 'August',
+        value: '8',
+    },
+    {
+        label: 'September',
+        value: '9',
+    },
+    {
+        label: 'October',
+        value: '10',
+    },
+    {
+        label: 'November',
+        value: '11',
+    },
+    {
+        label: 'December',
+        value: '12',
+    },
 ] as const
 
-export type MonthOption = typeof PICKER_MONTH_OPTIONS[number]
+export type MonthOption = typeof PICKER_MONTH_OPTIONS[number]['value']
 
 export const PICKER_MONTH_DEFAULT = PICKER_MONTH_OPTIONS[new Date().getMonth()]
 
 export const getCurrentMonth = (searchParams: URLSearchParams) => {
     const params = new URLSearchParams(searchParams)
-    return params.get(PICKER_MONTH_KEY) ?? PICKER_MONTH_DEFAULT
+    return params.get(PICKER_MONTH_KEY) ?? PICKER_MONTH_DEFAULT.value
 }
 
-export const getTodayAndPreviousDayDate = () => {
-    const today: Date = new Date();
-    const previousDay: Date = new Date(today);
-    previousDay.setDate(today.getDate() - 1);
-
-    const format = (date: Date) => {
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const day = String(date.getDate()).padStart(2, '0');
-        return `${year}-${month}-${day}`;
-    };
-
-    const todayString = format(today);
-    const previousDayString = format(previousDay);
-
-    return { today: todayString, previousDay: previousDayString };
-}
-
-export const getBeginningAndEndOfSupportedMonth = (monthName: string) => {
-    const currentDate = new Date();
-    const currentYear = currentDate.getFullYear();
-    const currentMonthIndex = currentDate.getMonth();
-    const currentDay = currentDate.getDate();
-
-    // Find the index of the given month name
-    const monthIndex = PICKER_MONTH_OPTIONS.findIndex(m => m.toLowerCase() === monthName.toLowerCase());
-    if (monthIndex === -1) {
-        throw new Error('Invalid month name provided.');
-    }
-
-    // Check if the current date is before the end of the current month
-    const isMonthFullyOccurred = currentMonthIndex > monthIndex ||
-                                  (currentMonthIndex === monthIndex && currentDay > new Date(currentYear, monthIndex + 1, 0).getDate());
-
-    // Determine target year based on whether the month is fully occurred in the current year
-    const targetYear = isMonthFullyOccurred ? currentYear : currentYear - 1;
-
-    const beginningOfMonth = new Date(targetYear, monthIndex, 1).toISOString().split('T')[0];
-    const endOfMonth = new Date(targetYear, monthIndex + 1, 0).toISOString().split('T')[0];
-
-    const numberOfDaysInMonth = new Date(targetYear, monthIndex + 1, 0).getDate();
-
-    return { beginning: beginningOfMonth, end: endOfMonth, numberOfDaysInMonth };
-};
-
-export const isToday = (date: Date) => {
+export const isToday = (date = '') => {
     const today = new Date();
 
-    if (today.toDateString() === date.toDateString()) {
+    if (today.toDateString() === new Date(date)?.toDateString()) {
         return true;
     }
   
