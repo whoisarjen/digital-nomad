@@ -5,14 +5,13 @@ import { PickerSortBy } from '@/components/PickerSortBy'
 import { PickerWeather } from '@/components/PickerWeather'
 import { Suspense } from 'react'
 import { SheetSide } from '@/components/SheetSide'
-import { Input } from '@/components/ui/input'
 import { PickerOrder } from '@/components/PickerOrder'
 import type { OrderOption } from '@/utils/order.utils'
 import type { SortByOption } from '@/utils/sortBy.utils'
 import type { WeatherOption } from '@/utils/weather.utils'
 import type { MonthOption } from '@/utils/month.utils'
 import type { ContinentOption } from '@/utils/continent.utils'
-import { Button } from '@/components/ui/button'
+import { PickerName } from '@/components/PickerName'
 
 // setInterval(async () => {
 //   const res = await fetch('http://localhost:3000/api/weathers', {
@@ -21,7 +20,7 @@ import { Button } from '@/components/ui/button'
 //     }
 //   })
 //   console.log(await res.json())
-// }, 10000)
+// }, 20000)
 
 export type HomeSearchParams = {
   month?: MonthOption
@@ -29,6 +28,8 @@ export type HomeSearchParams = {
   sort?: OrderOption['value']
   sortBy?: SortByOption['value']
   weather?: WeatherOption['value']
+  name?: string
+  wifi?: string
 } & URLSearchParams
 
 type HomeProps = {
@@ -54,13 +55,10 @@ export default function Home({
               />
             </div>
           </div> */}
-          <div className="flex p-4 gap-4 justify-center items-end">
+          <div className="flex p-4 gap-4 justify-center items-end sticky top-0 bg-white z-50">
             <Suspense>
               <SheetSide />
-              <div className="flex w-full flex-row items-end space-x-2">
-                <Input type="text" placeholder='Bangkok, Chiang Mai, Mexico City...' />
-                <Button type="submit">Search</Button>
-              </div>
+              <PickerName searchParams={searchParams} />
               <PickerContinent searchParams={searchParams} />
               <PickerMonth searchParams={searchParams} />
               <PickerWeather searchParams={searchParams} />

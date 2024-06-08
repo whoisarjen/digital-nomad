@@ -1,23 +1,5 @@
 import { supabase } from "@/utils/supabase.utils";
 
-const getTodayAndPreviousYearDate = () => {
-    const today = new Date();
-    const previousYear = new Date(today);
-    previousYear.setFullYear(previousYear.getFullYear() - 1);
-
-    const format = (date: Date) => {
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const day = String(date.getDate()).padStart(2, '0');
-        return `${year}-${month}-${day}`;
-    };
-
-    const todayString = format(today);
-    const previousYearString = format(previousYear);
-
-    return { today: todayString, previousYear: previousYearString };
-}
-
 const transformOpenMeteoToDB = (data: any, index: number) => {
     return {
         weatherCode: data.weather_code[index],
@@ -55,14 +37,12 @@ export async function GET() {
         return Response.json({ message: 'No selectedCity' })
     }
 
-    const { today, previousYear } = getTodayAndPreviousYearDate()
-
-    const url = `https://api.open-meteo.com/v1/forecast?latitude=${selectedCity.latitude}&longitude=${selectedCity.longitude}&daily=weather_code&daily=temperature_2m_max&daily=temperature_2m_min&daily=temperature_2m_mean&daily=apparent_temperature_max&daily=apparent_temperature_min&daily=apparent_temperature_mean&daily=sunrise&daily=sunset&daily=daylight_duration&daily=sunshine_duration&daily=precipitation_sum&daily=rain_sum&daily=snowfall_sum&daily=precipitation_hours&daily=wind_speed_10m_max&daily=wind_gusts_10m_max&daily=wind_direction_10m_dominant&daily=shortwave_radiation_sum&daily=et0_fao_evapotranspiration&start_date=${previousYear}&end_date=${today}`;
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${selectedCity.latitude}&longitude=${selectedCity.longitude}&daily=weather_code&daily=temperature_2m_max&daily=temperature_2m_min&daily=temperature_2m_mean&daily=apparent_temperature_max&daily=apparent_temperature_min&daily=apparent_temperature_mean&daily=sunrise&daily=sunset&daily=daylight_duration&daily=sunshine_duration&daily=precipitation_sum&daily=rain_sum&daily=snowfall_sum&daily=precipitation_hours&daily=wind_speed_10m_max&daily=wind_gusts_10m_max&daily=wind_direction_10m_dominant&daily=shortwave_radiation_sum&daily=et0_fao_evapotranspiration&start_date=2023-06-07&end_date=2024-06-07`;
     const response = await fetch(url);
     const data = await response.json();
 
     if (!data.daily) {
-        return Response.json({ message: 'data.daily not existing' })
+        return Response.json({ message: 'data.daily not existing', data })
     }
 
     const weathers = await supabase

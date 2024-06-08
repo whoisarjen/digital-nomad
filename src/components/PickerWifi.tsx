@@ -1,5 +1,4 @@
-'use client'
-
+import type { HomeSearchParams } from "@/app/page"
 import {
   Select,
   SelectContent,
@@ -11,24 +10,29 @@ import {
 } from "@/components/ui/select"
 import { getNextSearchParams, getNextSearchParamsWithoutSelectedKey } from "@/utils/link.utils"
 import { DEFAULT_WIFI, PICKER_WIFI_KEY, WIFI } from "@/utils/wifi.utils"
-import { useRouter, useSearchParams } from "next/navigation"
+import { redirect } from "next/navigation"
 
 const getLabel = (label: string) => `${label}Mb/s+`
 
-export const PickerWifi = () => {
-    const router = useRouter()
-    const searchParams = useSearchParams()
+type PickerWifiProps = {
+    searchParams: HomeSearchParams
+}
 
-    const handleOnValueChange = (option: string) => {
-        if (option === DEFAULT_WIFI) {
-            router.push(getNextSearchParamsWithoutSelectedKey(searchParams, PICKER_WIFI_KEY), { scroll: false })
-            return 
+export const PickerWifi = ({
+    searchParams,
+}: PickerWifiProps) => {
+    const action = async (value: string) => {
+        'use server'
+
+        if (value === DEFAULT_WIFI) {
+            redirect(getNextSearchParamsWithoutSelectedKey(searchParams, PICKER_WIFI_KEY))
+        } else {
+            redirect(getNextSearchParams(searchParams, PICKER_WIFI_KEY, value))
         }
-        router.push(getNextSearchParams(searchParams, PICKER_WIFI_KEY, option), { scroll: false })
     }
 
     return (
-        <Select onValueChange={handleOnValueChange}>
+        <Select onValueChange={action}>
             <SelectTrigger className="w-[180px]">
                 <SelectValue placeholder={getLabel(searchParams.get(PICKER_WIFI_KEY) ?? DEFAULT_WIFI)} />
             </SelectTrigger>

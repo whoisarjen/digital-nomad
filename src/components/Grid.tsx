@@ -14,8 +14,9 @@ import Image from "next/image"
 import { IconWeather } from './IconWeather'
 import { getCurrentMonth, isToday, PICKER_MONTH_OPTIONS } from '@/utils/month.utils'
 import { round, isNil } from 'lodash'
+import { getCurrentName } from '@/utils/name.utils'
 
-const CITIES_PER_PAGE = 16
+const CITIES_PER_PAGE = 20
 
 type GridProps = {
     searchParams: URLSearchParams
@@ -42,6 +43,11 @@ export default async function Grid({ searchParams }: GridProps) {
         query.lte('population', getCurrentPopulationMax(searchParams))
     }
 
+    const name = getCurrentName(searchParams)
+    if (name) {
+        query.ilike('name', `%${name}%`)
+    }
+
     const wifi = getCurrentWifi(searchParams)
     if (wifi !== DEFAULT_WIFI) {
         query.gte('wifi', Number(wifi))
@@ -56,7 +62,7 @@ export default async function Grid({ searchParams }: GridProps) {
 
     return (
         <section className="flex flex-col p-4 gap-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 justify-center">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 justify-center">
                 {cities?.map(city => 
                     <Suspense
                         key={city.id}
@@ -69,7 +75,6 @@ export default async function Grid({ searchParams }: GridProps) {
                         <AspectRatio ratio={16 / 9} key={city.id} className="flex w-full relative shadow group">
                             <Image
                                 fill
-                                sizes="375px"
                                 alt={city.name}
                                 src={city.image}
                                 className="rounded-md object-cover"
@@ -120,7 +125,7 @@ export default async function Grid({ searchParams }: GridProps) {
                                         <IconWeather weatherCode={city.weathers[0]?.weatherCode} size={18} />
                                         <div className="flex flex-col">
                                             <span>{!isNil(city.weathers[0]?.temperatureMax) && round(city.weathers[0]?.temperatureMax, 1)}°C</span>
-                                            <span>{isToday(city.weathers[0]?.when) ? 'Today' : 'Yesterday'}</span>
+                                            <span>{isToday(city.weathers[0]?.when) ? 'Today' : city.weathers[0]?.when}</span>
                                         </div>
                                     </div>
                                     {city.cities_weathers_averages[0] && !isNil(city.cities_weathers_averages[0].weatherCode) && !isNil(city.cities_weathers_averages[0].temperatureMax) && !isNil(city.cities_weathers_averages[0].month) &&
