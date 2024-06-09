@@ -14,13 +14,13 @@ import type { ContinentOption } from '@/utils/continent.utils'
 import { PickerName } from '@/components/PickerName'
 
 // setInterval(async () => {
-//   const res = await fetch('http://localhost:3000/api/weathers', {
+//   const res = await fetch('http://localhost:3000/api/cities', {
 //     next: {
 //       revalidate: 0,
 //     }
 //   })
 //   console.log(await res.json())
-// }, 20000)
+// }, 10000)
 
 export type HomeSearchParams = {
   month?: MonthOption

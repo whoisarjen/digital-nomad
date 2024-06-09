@@ -19,7 +19,7 @@ export type Database = {
           country: string
           createdAt: string
           id: number
-          image: string
+          image: string | null
           internetScore: number
           latitude: string
           likesScore: number
@@ -42,7 +42,7 @@ export type Database = {
           country: string
           createdAt?: string
           id?: number
-          image: string
+          image?: string | null
           internetScore: number
           latitude: string
           likesScore: number
@@ -65,7 +65,7 @@ export type Database = {
           country?: string
           createdAt?: string
           id?: number
-          image?: string
+          image?: string | null
           internetScore?: number
           latitude?: string
           likesScore?: number

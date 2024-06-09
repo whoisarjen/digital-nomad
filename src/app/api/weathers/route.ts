@@ -1,5 +1,7 @@
 import { supabase } from "@/utils/supabase.utils";
 
+export const dynamic = 'force-dynamic'
+
 const transformOpenMeteoToDB = (data: any, index: number) => {
     return {
         weatherCode: data.weather_code[index],

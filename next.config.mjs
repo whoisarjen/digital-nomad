@@ -6,7 +6,13 @@ const nextConfig = {
                 protocol: "https",
                 hostname: "**",
             },
+            {
+                protocol: "http",
+                hostname: "**",
+            },
         ],
+        loader: 'custom',
+        loaderFile: './supabase-image-loader.js',
     },
     experimental: {
         serverActions: {
