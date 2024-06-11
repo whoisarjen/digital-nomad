@@ -20,7 +20,7 @@ import { PickerName } from '@/components/PickerName'
 //     }
 //   })
 //   console.log(await res.json())
-// }, 10000)
+// }, 8000)
 
 export type HomeSearchParams = {
   month?: MonthOption

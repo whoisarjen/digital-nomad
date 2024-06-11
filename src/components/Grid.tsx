@@ -78,7 +78,7 @@ export default async function Grid({ searchParams }: GridProps) {
                                 height={225}
                                 quality={25}
                                 alt={city.name}
-                                src={`/cities/${city.id}.jpg`}
+                                src={`/cities/mini/${city.id}.jpg`}
                                 className="rounded-md object-cover"
                             />
                             <div className="hidden group-hover:flex flex-1 justify-center absolute inset-0 bg-black ease-in-out duration-700 bg-opacity-75 z-10 text-white items-center">

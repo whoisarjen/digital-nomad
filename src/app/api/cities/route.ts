@@ -6,6 +6,8 @@ import path from 'path';
 
 export const dynamic = 'force-dynamic'
 
+// let lastId = 861
+
 export async function GET() {
     // const res = await supabase
     //     .from('cities')
@@ -44,51 +46,61 @@ export async function GET() {
 //         return cleanedUrl
 //     }
 
-//     const city = await supabase
-//         .from('cities')
-//         .select('*')
-//         .not('image', 'is', null)
-//         .limit(1)
-//         .single()
+    // const { data } = await supabase
+    //     .from('cities')
+    //     .select('*')
+    //     .gt('id', lastId)
+    //     .order('id', { ascending: true })
+    //     .limit(1)
+    //     .single()
 
-//     if (!city) {
-//         return Response.json({ message: 'OK' })
-//     }
+    // if (!data) {
+    //     return Response.json({ message: 'OK' })
+    // }
 
-//     const currentImageURL = removeParams(city.data.image, ['width', 'height', 'quality'])
+    // const city = {
+    //     ...data,
+    //     image: db.cities.find(({ name }) => name == data.name)?.image,
+    // }
 
-//     // const fetchImage = async (url: string): Promise<Buffer> => {
-//     //     const response = await fetch(url, {
-//     //         next: {
-//     //             revalidate: 0,
-//     //         }
-//     //     })
+    // if (!city.image) {
+    //     return Response.json({ message: `No image for ${city.id} -> ${city.image}` })
+    // }
 
-//     //     if (!response.ok) {
-//     //       throw new Error(`Failed to fetch image: ${response.statusText}`)
-//     //     }
+    // const currentImageURL = removeParams(city.image, [])
 
-//     //     const buffer = await response.arrayBuffer()
-//     //     return buffer
-//     // }
+    // const fetchImage = async (url: string): Promise<Buffer> => {
+    //     const response = await fetch(url, {
+    //         next: {
+    //             revalidate: 0,
+    //         }
+    //     })
 
-//     // Fetch and convert the image to a buffer
-//     // const imageBuffer = await fetchImage(currentImageURL);
+    //     if (!response.ok) {
+    //       throw new Error(`Failed to fetch image: ${response.statusText}`)
+    //     }
 
-//     // const uploadImageToBucket = async (imageBuffer: Buffer, fileName: string) => {
-//     //     const { data, error } = await supabase.storage
-//     //       .from('images')
-//     //       .upload(fileName, imageBuffer, {
-//     //         cacheControl: '3600',
-//     //         upsert: true,
-//     //       });
+    //     const buffer = await response.arrayBuffer()
+    //     return buffer
+    // }
+
+    // Fetch and convert the image to a buffer
+    // const imageBuffer = await fetchImage(currentImageURL);
+
+    // const uploadImageToBucket = async (imageBuffer: Buffer, fileName: string) => {
+    //     const { data, error } = await supabase.storage
+    //       .from('images')
+    //       .upload(fileName, imageBuffer, {
+    //         cacheControl: '3600',
+    //         upsert: true,
+    //       });
       
-//     //     if (error) {
-//     //       throw new Error(`Failed to upload image to bucket: ${error.message}`);
-//     //     }
+    //     if (error) {
+    //       throw new Error(`Failed to upload image to bucket: ${error.message}`);
+    //     }
       
-//     //     return data;
-//     //   }
+    //     return data;
+    //   }
 
 //     async function fetchAndSaveImage(url: string, fileName: string) {
 //         console.log({ url })
@@ -97,10 +109,10 @@ export async function GET() {
 //             const error = await response.text()
 //             if (error.includes('ERROR 9413')) {
 //                 console.log('ERROR 9413 skipping')
-//                 await supabase
-//                     .from('cities')
-//                     .update({ image: null })
-//                     .eq('id', city.data.id)
+//                 // await supabase
+//                 //     .from('cities')
+//                 //     .update({ image: null })
+//                 //     .eq('id', city.id)
 
 //                 return 'skipped'
 //             } else {
@@ -109,20 +121,21 @@ export async function GET() {
 //         }
 //         const arrayBuffer = await response.arrayBuffer();
 //         const buffer = Buffer.from(arrayBuffer);
-//         const filePath = path.join(process.cwd(), 'public', 'images', 'cities', fileName);
+//         const filePath = path.join(process.cwd(), 'public', fileName);
 //         await fs.writeFile(filePath, buffer);
 //         console.log(`Image saved to ${filePath}`);
 //     }
-// console.log(city.data.image, city.data.id)
-//     const result = await fetchAndSaveImage(currentImageURL, `${city.data.id}.jpg`)
-//     await supabase
-//         .from('cities')
-//         .update({ image: null })
-//         .eq('id', city.data.id)
+// console.log(city.image, city.id)
+//     const result = await fetchAndSaveImage(city.image, `${city.id}.jpg`)
+//     // await supabase
+//     //     .from('cities')
+//     //     .update({ image: null })
+//     //     .eq('id', city.id)
+//     lastId = data.id
 
 //     // const result = await uploadImageToBucket(imageBuffer, `cities/${city.id}.jpg`);
 
-//     return Response.json({ currentImageURL, result, city })
+//     return Response.json({ currentImageURL: city.image, result, city })
 
     return Response.json({ message: 'Successful' })
 }
