@@ -31,15 +31,16 @@ export async function GET() {
     const { data: cities } = await supabase
         .from('cities')
         .select('*, weathers(id)')
+        .order('totalScore', { ascending: false })
 
     const citiesWithoutWeathers = cities?.filter(({ weathers }) => !weathers.length) ?? []
-    const selectedCity = citiesWithoutWeathers[Math.floor(Math.random() * citiesWithoutWeathers.length)]
+    const selectedCity = citiesWithoutWeathers[0]
 
     if (!selectedCity) {
         return Response.json({ message: 'No selectedCity' })
     }
 
-    const url = `https://api.open-meteo.com/v1/forecast?latitude=${selectedCity.latitude}&longitude=${selectedCity.longitude}&daily=weather_code&daily=temperature_2m_max&daily=temperature_2m_min&daily=temperature_2m_mean&daily=apparent_temperature_max&daily=apparent_temperature_min&daily=apparent_temperature_mean&daily=sunrise&daily=sunset&daily=daylight_duration&daily=sunshine_duration&daily=precipitation_sum&daily=rain_sum&daily=snowfall_sum&daily=precipitation_hours&daily=wind_speed_10m_max&daily=wind_gusts_10m_max&daily=wind_direction_10m_dominant&daily=shortwave_radiation_sum&daily=et0_fao_evapotranspiration&start_date=2023-06-07&end_date=2024-06-07`;
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${selectedCity.latitude}&longitude=${selectedCity.longitude}&daily=weather_code&daily=temperature_2m_max&daily=temperature_2m_min&daily=temperature_2m_mean&daily=apparent_temperature_max&daily=apparent_temperature_min&daily=apparent_temperature_mean&daily=sunrise&daily=sunset&daily=daylight_duration&daily=sunshine_duration&daily=precipitation_sum&daily=rain_sum&daily=snowfall_sum&daily=precipitation_hours&daily=wind_speed_10m_max&daily=wind_gusts_10m_max&daily=wind_direction_10m_dominant&daily=shortwave_radiation_sum&daily=et0_fao_evapotranspiration&start_date=2023-06-07&end_date=2024-06-15`;
     const response = await fetch(url);
     const data = await response.json();
 
@@ -59,5 +60,5 @@ export async function GET() {
             }))
         .select()
 
-    return Response.json({ weathers })
+    return Response.json({ left: citiesWithoutWeathers?.length, weathers })
 }
