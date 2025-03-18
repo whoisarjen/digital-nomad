@@ -1,8 +1,8 @@
-import { cities } from '../../../../data.json'
+// import { cities } from '../../../../data.json'
 import { Prisma } from '@prisma/client'
 
 export default defineEventHandler(async () => {
-  await processInBatches(cities, async option => {
+  await processInBatches([] as any[], async option => {
     const data = {
       slug: option.slug,
       name: option.name,
@@ -26,10 +26,13 @@ export default defineEventHandler(async () => {
       stateCode: option.state_code,
       stateChinese: option.state_chinese,
       state: option.state,
+      internetSpeed: option.internet_speed,
       internetScoreDigitalNomad: option.internet_score,
       internetSpeedDigitalNomad: option.internet_speed,
       internetSpeedCity: 0,
+      internetSpeedCityRanking: 0,
       internetSpeedCountry: 0,
+      internetSpeedCountryRanking: 0,
       airQualityScore: option.air_quality_score,
       airQualityNowScore: option.air_quality_now_score,
       humidity: option.humidity,
@@ -53,5 +56,5 @@ export default defineEventHandler(async () => {
     })
   })
 
-  return cities
+  return
 })

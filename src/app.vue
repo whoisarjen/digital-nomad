@@ -35,7 +35,7 @@
             <div class="flex justify-between text-sm">
               <span class="text-blue-500">☀️ {{ city.temperatureC }}°C</span>
               <span class="text-green-500">💰 ${{ city.costForNomadInUsd }}/mo</span>
-              <span class="text-yellow-500">🌐 {{ city.internet.value }} Mbps</span>
+              <span class="text-yellow-500">🌐 {{ city.internetSpeed }} Mbps</span>
             </div>
           </div>
         </div>

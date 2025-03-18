@@ -23,21 +23,6 @@ export default defineEventHandler(async () => {
   const medianSpeedCity = data.filter(({ country }) => country.includes(','))
   const medianSpeedCountry = data.filter(({ country }) => !country.includes(','))
 
-  await processInBatches(medianSpeedCity, async city => {
-    await prisma.city.updateMany({
-      where: {
-        name: {
-          contains: city.country.split(',')[0].toLowerCase(),
-          mode: 'insensitive',
-        }
-      },
-      data: {
-        internetSpeedCity: city.speed,
-        internetSpeedCityRanking: city.ranking,
-      },
-    })
-  })
-
   await processInBatches(medianSpeedCountry, async country => {
     await prisma.city.updateMany({
       where: {
@@ -47,8 +32,25 @@ export default defineEventHandler(async () => {
         }
       },
       data: {
+        internetSpeed: country.speed,
         internetSpeedCountry: country.speed,
         internetSpeedCountryRanking: country.ranking,
+      },
+    })
+  })
+
+  await processInBatches(medianSpeedCity, async city => {
+    await prisma.city.updateMany({
+      where: {
+        name: {
+          contains: city.country.split(',')[0].toLowerCase(),
+          mode: 'insensitive',
+        }
+      },
+      data: {
+        internetSpeed: city.speed,
+        internetSpeedCity: city.speed,
+        internetSpeedCityRanking: city.ranking,
       },
     })
   })

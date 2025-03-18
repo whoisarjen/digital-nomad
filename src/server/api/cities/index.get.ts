@@ -1,16 +1,13 @@
-import { City, Prisma } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import _ from 'lodash';
 import { z } from 'zod';
 
 const getOptions = (array: number[], numOptionsRaw: number) => {
-    const numOptions = numOptionsRaw + 1 // we need one more to drop 0 later (we already have 0 as all options)
-    const sortedArray = [...new Set([
-        0, // add 0 as value to avoid later
-        ...array,
-    ])].sort((a, b) => a - b);
+    const numOptions = numOptionsRaw + 2 // we need one more to drop 0 later (we already have 0 as all options)
+    const sortedArray = [...new Set([...array])].sort((a, b) => a - b);
 
     if (sortedArray.length <= numOptions) {
-      return sortedArray.slice(1, sortedArray.length);
+      return sortedArray.slice(1, sortedArray.length - 1);
     }
 
     const result = [sortedArray[0], sortedArray[sortedArray.length - 1]];
@@ -22,7 +19,7 @@ const getOptions = (array: number[], numOptionsRaw: number) => {
         result.splice(i, 0, sortedArray[index]);
     }
 
-    return result.slice(1, result.length);
+    return result.slice(1, result.length - 1);
 }
 
 const MAX_LIMIT_OF_ITEMS_TO_LOAD = 100
@@ -67,41 +64,6 @@ const getCityPrismaQuery = (query: z.infer<typeof getCitiesSchema>) => {
     return prismaQuery
 }
 
-const mapInternet = <T extends Pick<City, 'internetSpeedCity' | 'internetSpeedCountry' | 'internetSpeedDigitalNomad'>>({
-    internetSpeedCity,
-    internetSpeedCountry,
-    internetSpeedDigitalNomad,
-    ...option
-}: T) => {
-    if (internetSpeedCity) {
-        return {
-            ...option,
-            internet: {
-                value: internetSpeedCity,
-                level: 'city',
-            },
-        }
-    }
-
-    if (internetSpeedCountry) {
-        return {
-            ...option,
-            internet: {
-                value: internetSpeedCountry,
-                level: 'country',
-            },
-        }
-    }
-
-    return {
-        ...option,
-        internet: {
-            value: internetSpeedDigitalNomad,
-            level: 'dirty',
-        },
-    }
-}
-
 export default defineEventHandler(async (event) => {
     const validatedQuery = await getValidatedQuery(event, (body) => getCitiesSchema.parse(body));
     const where = getCityPrismaQuery(validatedQuery)
@@ -127,18 +89,14 @@ export default defineEventHandler(async (event) => {
                 temperatureC: true,
                 population: true,
                 image: true,
-                internetSpeedCity: true,
-                internetSpeedCountry: true,
-                internetSpeedDigitalNomad: true,
+                internetSpeed: true,
             },
         }),
         prisma.city.findMany({
             select: {
                 region: true,
                 population: true,
-                internetSpeedCity: true,
-                internetSpeedCountry: true,
-                internetSpeedDigitalNomad: true,
+                internetSpeed: true,
             },
         }),
     ])
@@ -151,7 +109,7 @@ export default defineEventHandler(async (event) => {
     allCities.forEach(city => {
         regions.add(city.region)
         populations.add(city.population)
-        internetSpeed.add(mapInternet(city).internet.value)
+        internetSpeed.add(city.internetSpeed)
     })
 
     return {
@@ -177,7 +135,7 @@ export default defineEventHandler(async (event) => {
                 options: getOptions([...internetSpeed], 5),
             }
         },
-        cities: cities.map(mapInternet),
+        cities,
         count,
         pagesCount: Math.ceil(count / limit),
     }
