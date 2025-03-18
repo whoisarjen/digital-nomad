@@ -1,0 +1,72 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model City {
+  slug         String  @unique
+  name         String
+  country      String
+  image        String
+  population   Int
+  temperatureC Decimal @db.Decimal(4, 1)
+  latitude     Decimal @db.Decimal(9, 6)
+  longitude    Decimal @db.Decimal(9, 6)
+  region       String
+
+  // descriptionFromReview     String? 
+  // shortSlug                 String
+  // usersCount                Int
+  // usersCountEst             Int
+  // usersCountBeen            Int
+  // usersCountBeenEst         Int
+  // boost                     Float?
+  // last2YearGrowth           Decimal @db.Decimal
+  // weatherIcon               String
+
+  nameChinese    String
+  countryChinese String
+  airQualityNow  Int
+  airQuality     Float?
+  countryCode    String
+  countrySlug    String
+  stateCode      String?
+  stateChinese   String?
+  state          String?
+
+  internetScoreDigitalNomad   Decimal @db.Decimal
+  internetSpeedDigitalNomad   Int
+  internetSpeedCity           Int
+  internetSpeedCityRanking    Int?
+  internetSpeedCountry        Int
+  internetSpeedCountryRanking Int?
+
+  airQualityScore       Int
+  airQualityNowScore    Decimal @db.Decimal
+  humidity              String
+  rank                  Int
+  // weatherEmoji              String
+  temperatureF          Decimal @db.Decimal
+  temperatureCFeelsLike Decimal @db.Decimal
+  temperatureFFeelsLike Decimal @db.Decimal
+  costForNomadInUsd     Decimal @db.Decimal
+  costForExpatInUsd     Decimal @db.Decimal
+  costForLocalInUsd     Decimal @db.Decimal
+  costForFamilyInUsd    Decimal @db.Decimal
+  totalScore            Decimal @db.Decimal
+  overallScore          Decimal @db.Decimal
+  costScore             Int
+  likesScore            Decimal @db.Decimal
+  safetyLevel           Decimal @db.Decimal
+}
