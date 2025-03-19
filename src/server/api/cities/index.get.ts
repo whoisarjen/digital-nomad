@@ -181,6 +181,7 @@ export default defineEventHandler(async (event) => {
                 temperatureC: true,
                 weathersAverage: {
                     select: {
+                        weatherCode: true,
                         temperature2mMax: true,
                     },
                     where: {

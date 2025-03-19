@@ -9,7 +9,7 @@ export default defineEventHandler(async () => {
     },
   })
 
-  await processInBatches(cities, async city => {
+  for (const city of cities) {
     // Group weather data by month (extract month from date)
     const monthlyTemps = Array(12).fill(0).map(() => ({
       weatherCodeMap: {} as any,
@@ -123,7 +123,7 @@ export default defineEventHandler(async () => {
         update: data,
       })
     }, 20, false)
-  })
+  }
 
   return 'Hello Nitro'
 })
