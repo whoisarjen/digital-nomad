@@ -40,7 +40,7 @@
                 <h3 class="text-xl font-semibold text-gray-900">{{ city.name }}, {{ city.country }}</h3>
                 <p class="text-sm text-gray-600">Population: {{ city.population }}</p>
                 <div class="flex justify-between text-sm">
-                  <span class="text-blue-500">☀️ {{ city.weathersAverage[0]?.avgTemperatureC }}°C</span>
+                  <span class="text-blue-500">☀️ {{ Number(city.temperature).toFixed(1) }}°C</span>
                   <span class="text-green-500">💰 ${{ city.costForNomadInUsd }}/mo</span>
                   <span class="text-yellow-500">🌐 {{ city.internetSpeed }} Mbps</span>
                 </div>

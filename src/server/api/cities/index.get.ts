@@ -178,6 +178,7 @@ export default defineEventHandler(async (event) => {
                 population: true,
                 image: true,
                 internetSpeed: true,
+                temperatureC: true,
                 weathersAverage: {
                     select: {
                         avgTemperatureC: true,
@@ -256,7 +257,7 @@ export default defineEventHandler(async (event) => {
             //     options: getSingleOptions([...populations], 5),
             // },
         } as const,
-        cities,
+        cities: cities.map(({ temperatureC, weathersAverage, ...city }) => ({ ...city, temperature: weathersAverage[0]?.avgTemperatureC ?? temperatureC })),
         count,
         pagesCount: Math.ceil(count / limit),
     }

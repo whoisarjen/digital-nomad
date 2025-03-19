@@ -5,7 +5,7 @@ export default defineEventHandler(async () => {
       weathers: {
         select: {
           date: true,
-          temperature2mMean: true,
+          temperature2mMax: true,
         }
       },
     },
@@ -20,7 +20,7 @@ export default defineEventHandler(async () => {
 
     city.weathers.forEach((weather) => {
       const month = new Date(weather.date).getMonth(); // Get the month (0-11)
-      monthlyTemps[month].sum += weather.temperature2mMean.toNumber();  // Add the temperature to the corresponding month
+      monthlyTemps[month].sum += weather.temperature2mMax.toNumber();  // Add the temperature to the corresponding month
       monthlyTemps[month].count += 1;                    // Increment the count of records for that month
     });
 
