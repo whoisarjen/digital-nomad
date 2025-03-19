@@ -258,7 +258,7 @@ export default defineEventHandler(async (event) => {
             //     options: getSingleOptions([...populations], 5),
             // },
         } as const,
-        cities: cities.map(({ temperatureC, weathersAverage, ...city }) => ({ ...city, temperature: weathersAverage[0]?.temperature2mMax ?? temperatureC })),
+        cities: cities.map(({ temperatureC, weathersAverage, ...city }) => ({ ...city, weathersAverage, temperature: weathersAverage[0]?.temperature2mMax ?? temperatureC })),
         count,
         pagesCount: Math.ceil(count / limit),
     }
