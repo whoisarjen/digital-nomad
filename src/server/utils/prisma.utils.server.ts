@@ -43,9 +43,13 @@ export const processInBatches = async <T>(
     items: T[],
     asyncFn: (item: T) => Promise<any>,
     batchSize = 50,
+    isLogging = true,
 ): Promise<void> => {
     for (let i = 0; i < items.length; i += batchSize) {
-        console.info(`processInBatches is working, left ${items.length - i}`)
+        if (isLogging) {
+          console.info(`processInBatches is working, left ${items.length - i}`)
+        }
+
         const batch = items.slice(i, i + batchSize);
         await Promise.all(batch.map(asyncFn));
     }

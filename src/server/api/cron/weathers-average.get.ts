@@ -14,7 +14,7 @@ export default defineEventHandler(async () => {
     },
   })
 
-  for (const city of cities) {
+  await processInBatches(cities, async city => {
     // Group weather data by month (extract month from date)
     const monthlyTemps = Array(12).fill(0).map(() => ({ sum: 0, count: 0 })); // Initialize an array for each month
 
@@ -51,8 +51,8 @@ export default defineEventHandler(async () => {
           avgTemperatureC: option.averageTemperatureC ?? 0,
         },
       })
-    })
-  }
+    }, 20, false)
+  })
 
   return 'Hello Nitro'
 })
