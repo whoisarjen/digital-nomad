@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["driverAdapters"]
@@ -73,7 +67,8 @@ model City {
 
   isWeather2024Collected Boolean @default(false)
 
-  weathers Weather[] @relation("cityWeather")
+  weathers        Weather[]        @relation("cityWeather")
+  weathersAverage WeatherAverage[] @relation("cityWeatherAverage")
 }
 
 model Weather {
@@ -101,4 +96,16 @@ model Weather {
   city     City   @relation("cityWeather", fields: [citySlug], references: [slug], onDelete: Cascade)
 
   @@unique([citySlug, date])
+}
+
+model WeatherAverage {
+  id              Int     @id @default(autoincrement())
+  month           String  @db.VarChar(2)
+  avgTemperatureC Decimal @db.Decimal(4, 2)
+
+  citySlug String
+  city     City   @relation("cityWeatherAverage", fields: [citySlug], references: [slug], onDelete: Cascade)
+
+  @@unique([citySlug, month])
+  @@index([citySlug, month])
 }

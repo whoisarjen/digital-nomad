@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client';
-import _ from 'lodash';
+import _, { last } from 'lodash';
 import { z } from 'zod';
 
 const RANGE_BREAK_SYMBOL = ':'
@@ -91,6 +91,18 @@ const getCitiesSchema = z.object({
         .pipe(z.number().positive().optional()),
 });
 
+const getFirstAndLastDayOfMonth = (month: string) => {
+    const firstDayOfMonth = new Date(`2024-${month}-01`)
+    const lastDayOfMonth = new Date(firstDayOfMonth)
+    lastDayOfMonth.setMonth(firstDayOfMonth.getMonth() + 1)
+    lastDayOfMonth.setDate(0)
+
+    return {
+        firstDayOfMonth,
+        lastDayOfMonth,
+    }
+}
+
 const getCityPrismaQuery = (query: z.infer<typeof getCitiesSchema>) => {
     const prismaQuery: Prisma.CityFindManyArgs['where'] = {}
 
@@ -119,10 +131,7 @@ const getCityPrismaQuery = (query: z.infer<typeof getCitiesSchema>) => {
     if (query.months) {
         if (query.temperatures) {
             const [gte, lte] = query.temperatures.split(RANGE_BREAK_SYMBOL)
-            const firstDayOfMonth = new Date(`2024-${query.months}-01`)
-            const lastDayOfMonth = new Date(firstDayOfMonth)
-            lastDayOfMonth.setMonth(firstDayOfMonth.getMonth() + 1)
-            lastDayOfMonth.setDate(0)
+            const { firstDayOfMonth, lastDayOfMonth } = getFirstAndLastDayOfMonth(query.months)
 
             prismaQuery.weathers = {
                 some: {
@@ -151,6 +160,8 @@ export default defineEventHandler(async (event) => {
       limit,
     } = validatedQuery;
 
+    const { firstDayOfMonth, lastDayOfMonth } = getFirstAndLastDayOfMonth(validatedQuery.months)
+
     const [cities, count, allCities] = await Promise.all([
         prisma.city.findMany({
             where,
@@ -164,10 +175,18 @@ export default defineEventHandler(async (event) => {
                 name: true,
                 country: true,
                 costForNomadInUsd: true,
-                temperatureC: true,
                 population: true,
                 image: true,
                 internetSpeed: true,
+                weathersAverage: {
+                    select: {
+                        avgTemperatureC: true,
+                    },
+                    where: {
+                        month: validatedQuery.months,
+                    },
+                    take: 1,
+                },
             },
         }),
         prisma.city.count({
@@ -179,9 +198,9 @@ export default defineEventHandler(async (event) => {
                 population: true,
                 internetSpeed: true,
                 costForNomadInUsd: true,
-                weathers: {
+                weathersAverage: {
                     select: {
-                        temperature2mMean: true,
+                        avgTemperatureC: true,
                     },
                 }
             },
@@ -192,7 +211,7 @@ export default defineEventHandler(async (event) => {
     const populations = new Set<number>()
     const internetSpeed = new Set<number>()
     const costForNomadInUsd = new Set<number>()
-    const temperatures = new Set<number>(allCities.flatMap(({ weathers }) => weathers.map(({ temperature2mMean }) => parseInt(temperature2mMean as unknown as string))))
+    const temperatures = new Set<number>(allCities.flatMap(city => city.weathersAverage.map(option => parseInt(option.avgTemperatureC.toString()))))
 
     allCities.forEach(city => {
         regions.add(city.region)
