@@ -7,23 +7,27 @@
             @change="updateQuery"
             class="w-full p-3 mt-2 border rounded-lg"
         >
-            <option v-for="option of preparedOptions" :value="option">{{ option }}</option>
+            <option v-for="option of preparedOptions" :value="option.value">{{ option.label }}</option>
         </select>
     </div>
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
-import { useRoute, useRouter } from 'nuxt/app'
 import upperFirst from 'lodash/upperFirst'
 
-type Option = string | number
+type Option = {
+    label: string
+    value: string
+}
 const props = defineProps<{
   name: string
   options: Option[]
 }>()
 
-const defaultOption = computed(() => `All ${props.name}`)
+const defaultOption = computed(() => ({
+    label: `All ${props.name}`,
+    value: '-1',
+}))
 
 const preparedOptions = computed(() => {
     return [
@@ -35,22 +39,22 @@ const preparedOptions = computed(() => {
 const route = useRoute()
 const router = useRouter()
 
-const selectedOption = ref<string | number>(route.query[props.name as keyof typeof route['query']] as Option ?? defaultOption.value)
+const selectedOption = ref<string | number>(route.query[props.name as keyof typeof route['query']] as string | number | undefined ?? defaultOption.value.value)
 
 function updateQuery(event: Event) {
-    const value = (event.target as HTMLSelectElement).value as Option
+    const value = (event.target as HTMLSelectElement).value as string | number
 
     router.push({
         query: {
             ...route.query,
             page: undefined,
-            [props.name]: defaultOption.value === value ? undefined : value,
+            [props.name]: defaultOption.value.value === value ? undefined : value,
         }
     })
 }
 
 watch(() => route.query[props.name], (newVal) => {
-    selectedOption.value = newVal as Option ?? defaultOption.value
+    selectedOption.value = newVal as string | number | undefined ?? defaultOption.value.value
 }, {
     immediate: true,
 })

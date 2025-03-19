@@ -45,7 +45,7 @@ const visiblePages = computed(() => {
       }"
       class="size-10 rounded bg-slate-100 hover:bg-slate-200 border border-slate-300 transition-colors flex items-center justify-center"
     >
-      <font-awesome-icon :icon="['fas', 'chevron-left']" />
+      <
     </NuxtLink>
 
     <NuxtLink
@@ -81,7 +81,7 @@ const visiblePages = computed(() => {
       }"
       class="size-10 rounded bg-slate-100 hover:bg-slate-200 border border-slate-300 transition-colors flex items-center justify-center"
     >
-      <font-awesome-icon :icon="['fas', 'chevron-right']" />
+      >
     </NuxtLink>
   </section>
 </template>

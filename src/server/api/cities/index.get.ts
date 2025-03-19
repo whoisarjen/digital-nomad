@@ -2,13 +2,11 @@ import { Prisma } from '@prisma/client';
 import _ from 'lodash';
 import { z } from 'zod';
 
+const RANGE_BREAK_SYMBOL = ':'
+
 const getOptions = (array: number[], numOptionsRaw: number) => {
     const numOptions = numOptionsRaw + 2 // we need one more to drop 0 later (we already have 0 as all options)
     const sortedArray = [...new Set([...array])].sort((a, b) => a - b);
-
-    if (sortedArray.length <= numOptions) {
-      return sortedArray.slice(1, sortedArray.length - 1);
-    }
 
     const result = [sortedArray[0], sortedArray[sortedArray.length - 1]];
 
@@ -19,8 +17,42 @@ const getOptions = (array: number[], numOptionsRaw: number) => {
         result.splice(i, 0, sortedArray[index]);
     }
 
-    return result.slice(1, result.length - 1);
+    return {
+        options: numOptionsRaw > result.length ? result : result.slice(1, result.length - 1),
+        min: sortedArray.at(0),
+        max: sortedArray.at(-1),
+    };
 }
+
+const getSingleOptions = (array: number[], numOptionsRaw: number) => {
+    const { options } = getOptions(array, numOptionsRaw)
+
+    return options.map(option => ({
+        value: option.toString(),
+        label: option.toString(),
+    }))
+}
+
+const getRangeOptions = (array: number[], numOptionsRaw: number) => {
+    const { options: optionsRaw, min, max } = getOptions(array, numOptionsRaw)
+    const options = [...new Set([min, ...optionsRaw, max])]
+
+    const ranges = [];
+    for (let i = 0; i < options.length - 1; i++) {
+        if (i + 1 === options.length) {
+            break
+        }
+
+        const start = options[i];
+        const end = options[i + 1];
+        ranges.push({
+            value: `${start}${RANGE_BREAK_SYMBOL}${end}`,
+            label: `${start} to ${end}°C`,
+        });
+    }
+
+    return ranges;
+};
 
 const MAX_LIMIT_OF_ITEMS_TO_LOAD = 100
 const getCitiesSchema = z.object({
@@ -34,7 +66,12 @@ const getCitiesSchema = z.object({
         .optional()
         .transform((val) => (val ? Number(val) : undefined))
         .pipe(z.number().positive().max(MAX_LIMIT_OF_ITEMS_TO_LOAD).optional().default(20)),
+    months: z
+        .string(),
     regions: z
+        .string()
+        .optional(),
+    temperatures: z
         .string()
         .optional(),
     internets: z
@@ -65,6 +102,29 @@ const getCityPrismaQuery = (query: z.infer<typeof getCitiesSchema>) => {
     if (query.populations) {
         prismaQuery.population = {
             gte: query.populations
+        }
+    }
+
+    if (query.months) {
+        if (query.temperatures) {
+            const [gte, lte] = query.temperatures.split(RANGE_BREAK_SYMBOL)
+            const firstDayOfMonth = new Date(`2024-${query.months}-01`)
+            const lastDayOfMonth = new Date(firstDayOfMonth)
+            lastDayOfMonth.setMonth(firstDayOfMonth.getMonth() + 1)
+            lastDayOfMonth.setDate(0)
+
+            prismaQuery.weathers = {
+                some: {
+                    temperature2mMean: {
+                        gte,
+                        lte,
+                    },
+                    date: {
+                        gte: firstDayOfMonth,
+                        lte: lastDayOfMonth,
+                    },
+                }
+            }
         }
     }
 
@@ -107,6 +167,11 @@ export default defineEventHandler(async (event) => {
                 region: true,
                 population: true,
                 internetSpeed: true,
+                weathers: {
+                    select: {
+                        temperature2mMean: true,
+                    },
+                }
             },
         }),
     ])
@@ -114,6 +179,7 @@ export default defineEventHandler(async (event) => {
     const regions = new Set<string>()
     const populations = new Set<number>()
     const internetSpeed = new Set<number>()
+    const temperatures = new Set<number>(allCities.flatMap(({ weathers }) => weathers.map(({ temperature2mMean }) => parseInt(temperature2mMean as unknown as string))))
 
     allCities.forEach(city => {
         regions.add(city.region)
@@ -126,22 +192,30 @@ export default defineEventHandler(async (event) => {
             regions: {
                 type: 'single',
                 operation: 'equals',
-                options: [...regions],
+                options: [...regions].map(option => ({
+                    label: option,
+                    value: option,
+                })),
             },
             // ranks: {
             //     type: 'single',
             //     operation: 'gte',
             //     options: [1, 2, 3, 4, 5],
             // },
+            temperatures: {
+                type: 'single',
+                operation: 'range',
+                options: getRangeOptions([...temperatures], 5),
+            },
             internets: {
                 type: 'single',
                 operation: 'gte',
-                options: getOptions([...internetSpeed], 5),
+                options: getSingleOptions([...internetSpeed], 5),
             },
             populations: {
                 type: 'single',
                 operation: 'gte',
-                options: getOptions([...populations], 5),
+                options: getSingleOptions([...populations], 5),
             },
         },
         cities,

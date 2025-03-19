@@ -13,8 +13,9 @@
       </section>
   
       <section class="py-12 px-6 grid grid-cols-1 lg:grid-cols-6 gap-6">
-        <aside class="lg:col-span-1 rounded-2xl p-6">
+        <aside class="lg:col-span-1 rounded-2xl flex flex-col gap-3">
           <h3 class="text-xl font-bold">Filters</h3>
+          <MonthsPicker />
           <template v-if="data">
             <SinglePicker
               v-for="key of Object.keys(data.filters)"
@@ -27,7 +28,7 @@
   
         <div class="lg:col-span-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           <template v-if="status === 'pending'">
-            <div v-for="city in 20" :key="city.slug" class="bg-white shadow-xl rounded-xl transition-all transform hover:scale-105 hover:shadow-2xl">
+            <div v-for="city in 20" :key="city" class="bg-white shadow-xl rounded-xl transition-all transform hover:scale-105 hover:shadow-2xl">
               <div class="h-64 bg-gray-300 rounded-t-lg animate-pulse" />
             </div>
           </template>
@@ -45,7 +46,7 @@
               </div>
             </div>
             <div class="col-span-4">
-              <Pagination :pages-count="data.pagesCount" />
+              <Pagination :pages-count="data?.pagesCount ?? 0" />
             </div>
           </template>
         </div>
@@ -54,19 +55,18 @@
   </template>
   
   <script setup lang="ts">
+  import { getUserCurrentMonthString } from '~/shared/global.utils';
+
   const route = useRoute()
-  
+
   const params = computed(() => ({
-      page: route.query.page,
-      regions: route.query.regions,
-      internets: route.query.internets,
+    ...route.query,
+    months: route.query.months ?? getUserCurrentMonthString(),
   }))
 
   const { data, status } = await useFetch('/api/cities', {
     params,
-    watch: [
-      () => params.value,
-    ],
+    watch: [() => params.value],
     immediate: true,
   })
   </script>
