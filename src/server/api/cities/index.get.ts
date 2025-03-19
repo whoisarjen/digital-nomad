@@ -34,12 +34,15 @@ const getCitiesSchema = z.object({
         .optional()
         .transform((val) => (val ? Number(val) : undefined))
         .pipe(z.number().positive().max(MAX_LIMIT_OF_ITEMS_TO_LOAD).optional().default(20)),
-    populations: z
+    regions: z
+        .string()
+        .optional(),
+    internets: z
         .string()
         .optional()
         .transform((val) => (val ? Number(val) : undefined))
         .pipe(z.number().positive().optional()),
-    internets: z
+    populations: z
         .string()
         .optional()
         .transform((val) => (val ? Number(val) : undefined))
@@ -48,6 +51,10 @@ const getCitiesSchema = z.object({
 
 const getCityPrismaQuery = (query: z.infer<typeof getCitiesSchema>) => {
     const prismaQuery: Prisma.CityFindManyArgs['where'] = {}
+
+    if (query.regions) {
+        prismaQuery.region = query.regions
+    }
 
     if (query.internets) {
         prismaQuery.internetSpeedCity = {
@@ -119,16 +126,16 @@ export default defineEventHandler(async (event) => {
                 operation: 'equals',
                 options: [...regions],
             },
-            ranks: {
-                type: 'single',
-                operation: 'gte',
-                options: [1, 2, 3, 4, 5],
-            },
-            populations: {
-                type: 'single',
-                operation: 'gte',
-                options: getOptions([...populations], 5),
-            },
+            // ranks: {
+            //     type: 'single',
+            //     operation: 'gte',
+            //     options: [1, 2, 3, 4, 5],
+            // },
+            // populations: {
+            //     type: 'single',
+            //     operation: 'gte',
+            //     options: getOptions([...populations], 5),
+            // },
             internets: {
                 type: 'single',
                 operation: 'gte',
