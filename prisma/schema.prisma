@@ -15,7 +15,7 @@ datasource db {
 }
 
 model City {
-  slug         String  @unique
+  slug         String  @id
   name         String
   country      String
   image        String
