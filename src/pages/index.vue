@@ -21,6 +21,7 @@
               v-for="key of Object.keys(data.filters)"
               :key="key"
               :name="key"
+              :operation="data.filters[key as keyof typeof data['filters']].operation"
               :options="data.filters[key as keyof typeof data['filters']].options"
             />
           </template>

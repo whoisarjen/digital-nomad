@@ -7,7 +7,9 @@
             @change="updateQuery"
             class="w-full p-3 mt-2 border rounded-lg"
         >
-            <option v-for="option of preparedOptions" :value="option.value">{{ option.label }}</option>
+            <option v-for="option of preparedOptions" :value="option.value">
+                {{ getLabel(option) }}
+            </option>
         </select>
     </div>
 </template>
@@ -21,6 +23,7 @@ type Option = {
 }
 const props = defineProps<{
   name: string
+  operation: 'lte' | 'gte' | 'range' | 'equals'
   options: Option[]
 }>()
 
@@ -28,6 +31,22 @@ const defaultOption = computed(() => ({
     label: `All ${props.name}`,
     value: '-1',
 }))
+
+const getLabel = (option: Option) => {
+    if (option.value === defaultOption.value.value) {
+        return option.label
+    }
+
+    if (props.operation === 'lte') {
+        return `≤ ${option.label}`
+    }
+
+    if (props.operation === 'gte') {
+        return `${option.label} ≤`
+    }
+
+    return option.label
+}
 
 const preparedOptions = computed(() => {
     return [

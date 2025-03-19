@@ -24,16 +24,16 @@ const getOptions = (array: number[], numOptionsRaw: number) => {
     };
 }
 
-const getSingleOptions = (array: number[], numOptionsRaw: number) => {
+const getSingleOptions = (array: number[], numOptionsRaw: number, transformLabel?: (option: string) => string) => {
     const { options } = getOptions(array, numOptionsRaw)
 
     return options.map(option => ({
         value: option.toString(),
-        label: option.toString(),
+        label: transformLabel?.(option.toString()) ?? option.toString(),
     }))
 }
 
-const getRangeOptions = (array: number[], numOptionsRaw: number) => {
+const getRangeOptions = (array: number[], numOptionsRaw: number, transformLabel: (option: [any, any]) => string) => {
     const { options: optionsRaw, min, max } = getOptions(array, numOptionsRaw)
     const options = [...new Set([min, ...optionsRaw, max])]
 
@@ -47,7 +47,7 @@ const getRangeOptions = (array: number[], numOptionsRaw: number) => {
         const end = options[i + 1];
         ranges.push({
             value: `${start}${RANGE_BREAK_SYMBOL}${end}`,
-            label: `${start} to ${end}°C`,
+            label: transformLabel([start, end]),
         });
     }
 
@@ -71,6 +71,11 @@ const getCitiesSchema = z.object({
     regions: z
         .string()
         .optional(),
+    costs: z
+        .string()
+        .optional()
+        .transform((val) => (val ? Number(val) : undefined))
+        .pipe(z.number().positive().optional()),
     temperatures: z
         .string()
         .optional(),
@@ -91,6 +96,12 @@ const getCityPrismaQuery = (query: z.infer<typeof getCitiesSchema>) => {
 
     if (query.regions) {
         prismaQuery.region = query.regions
+    }
+
+    if (query.costs) {
+        prismaQuery.costForNomadInUsd = {
+            lte: query.costs
+        }
     }
 
     if (query.internets) {
@@ -167,6 +178,7 @@ export default defineEventHandler(async (event) => {
                 region: true,
                 population: true,
                 internetSpeed: true,
+                costForNomadInUsd: true,
                 weathers: {
                     select: {
                         temperature2mMean: true,
@@ -179,12 +191,14 @@ export default defineEventHandler(async (event) => {
     const regions = new Set<string>()
     const populations = new Set<number>()
     const internetSpeed = new Set<number>()
+    const costForNomadInUsd = new Set<number>()
     const temperatures = new Set<number>(allCities.flatMap(({ weathers }) => weathers.map(({ temperature2mMean }) => parseInt(temperature2mMean as unknown as string))))
 
     allCities.forEach(city => {
         regions.add(city.region)
         populations.add(city.population)
         internetSpeed.add(city.internetSpeed)
+        costForNomadInUsd.add(parseInt(city.costForNomadInUsd.toString()))
     })
 
     return {
@@ -202,22 +216,27 @@ export default defineEventHandler(async (event) => {
             //     operation: 'gte',
             //     options: [1, 2, 3, 4, 5],
             // },
+            costs: {
+                type: 'single',
+                operation: 'lte',
+                options: getSingleOptions([...costForNomadInUsd], 5, option => `${option}$`),
+            },
             temperatures: {
                 type: 'single',
                 operation: 'range',
-                options: getRangeOptions([...temperatures], 5),
+                options: getRangeOptions([...temperatures], 5, ([start, end]) => `${start} to ${end}°C`),
             },
             internets: {
                 type: 'single',
                 operation: 'gte',
-                options: getSingleOptions([...internetSpeed], 5),
+                options: getSingleOptions([...internetSpeed], 5, option => `${option}Mb/s`),
             },
-            populations: {
-                type: 'single',
-                operation: 'gte',
-                options: getSingleOptions([...populations], 5),
-            },
-        },
+            // populations: {
+            //     type: 'single',
+            //     operation: 'gte',
+            //     options: getSingleOptions([...populations], 5),
+            // },
+        } as const,
         cities,
         count,
         pagesCount: Math.ceil(count / limit),
