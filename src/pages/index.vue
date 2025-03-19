@@ -28,18 +28,7 @@
         <div class="lg:col-span-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           <template v-if="status === 'pending'">
             <div v-for="city in 20" :key="city.slug" class="bg-white shadow-xl rounded-xl transition-all transform hover:scale-105 hover:shadow-2xl">
-              <div class="skeleton-loader">
-                <div class="h-48 bg-gray-300 rounded-t-lg animate-pulse"></div>
-                <div class="p-3 flex flex-col gap-3">
-                  <div class="h-6 bg-gray-300 rounded-md animate-pulse"></div>
-                  <div class="h-4 bg-gray-300 rounded-md animate-pulse"></div>
-                  <div class="flex justify-between text-sm gap-2">
-                    <div class="h-4 bg-gray-300 rounded-md animate-pulse w-1/3"></div>
-                    <div class="h-4 bg-gray-300 rounded-md animate-pulse w-1/3"></div>
-                    <div class="h-4 bg-gray-300 rounded-md animate-pulse w-1/3"></div>
-                  </div>
-                </div>
-              </div>
+              <div class="h-64 bg-gray-300 rounded-t-lg animate-pulse" />
             </div>
           </template>
           <template v-else>

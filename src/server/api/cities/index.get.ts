@@ -131,16 +131,16 @@ export default defineEventHandler(async (event) => {
             //     operation: 'gte',
             //     options: [1, 2, 3, 4, 5],
             // },
-            // populations: {
-            //     type: 'single',
-            //     operation: 'gte',
-            //     options: getOptions([...populations], 5),
-            // },
             internets: {
                 type: 'single',
                 operation: 'gte',
                 options: getOptions([...internetSpeed], 5),
-            }
+            },
+            populations: {
+                type: 'single',
+                operation: 'gte',
+                options: getOptions([...populations], 5),
+            },
         },
         cities,
         count,
