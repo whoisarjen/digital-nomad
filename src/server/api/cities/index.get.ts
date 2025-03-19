@@ -80,7 +80,7 @@ export default defineEventHandler(async (event) => {
       limit,
     } = validatedQuery;
 
-    const [cities, allCities] = await Promise.all([
+    const [cities, count, allCities] = await Promise.all([
         prisma.city.findMany({
             where,
             skip: (page - 1) * limit,
@@ -99,6 +99,9 @@ export default defineEventHandler(async (event) => {
                 internetSpeed: true,
             },
         }),
+        prisma.city.count({
+            where,
+        }),
         prisma.city.findMany({
             select: {
                 region: true,
@@ -108,7 +111,6 @@ export default defineEventHandler(async (event) => {
         }),
     ])
 
-    const count = allCities.length
     const regions = new Set<string>()
     const populations = new Set<number>()
     const internetSpeed = new Set<number>()

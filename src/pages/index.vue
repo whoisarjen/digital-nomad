@@ -44,6 +44,9 @@
                 </div>
               </div>
             </div>
+            <div class="col-span-4">
+              <Pagination :pages-count="data.pagesCount" />
+            </div>
           </template>
         </div>
       </section>
@@ -54,9 +57,11 @@
   const route = useRoute()
   
   const params = computed(() => ({
+      page: route.query.page,
       regions: route.query.regions,
       internets: route.query.internets,
   }))
+
   const { data, status } = await useFetch('/api/cities', {
     params,
     watch: [

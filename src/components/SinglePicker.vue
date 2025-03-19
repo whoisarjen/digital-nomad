@@ -43,6 +43,7 @@ function updateQuery(event: Event) {
     router.push({
         query: {
             ...route.query,
+            page: undefined,
             [props.name]: defaultOption.value === value ? undefined : value,
         }
     })
