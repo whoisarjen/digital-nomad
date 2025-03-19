@@ -45,7 +45,7 @@ model City {
   stateChinese   String?
   state          String?
 
-  internetSpeed Int
+  internetSpeed               Int
   internetScoreDigitalNomad   Decimal @db.Decimal
   internetSpeedDigitalNomad   Int
   internetSpeedCity           Int
@@ -70,4 +70,35 @@ model City {
   costScore             Int
   likesScore            Decimal @db.Decimal
   safetyLevel           Decimal @db.Decimal
+
+  isWeather2024Collected Boolean @default(false)
+
+  weathers Weather[] @relation("cityWeather")
+}
+
+model Weather {
+  id                       Int      @id @default(autoincrement())
+  date                     DateTime
+  weatherCode              Int
+  apparentTemperatureMax   Decimal
+  rainSum                  Decimal
+  windGusts10mMax          Decimal
+  snowfallSum              Decimal
+  windDirection10mDominant Decimal
+  daylightDuration         Decimal
+  apparentTemperatureMin   Decimal
+  temperature2mMax         Decimal
+  temperature2mMin         Decimal
+  apparentTemperatureMean  Decimal
+  sunshineDuration         Decimal
+  precipitationHours       Decimal
+  shortwaveRadiationSum    Decimal
+  windSpeed10mMax          Decimal
+  precipitationSum         Decimal
+  temperature2mMean        Decimal
+
+  citySlug String
+  city     City   @relation("cityWeather", fields: [citySlug], references: [slug], onDelete: Cascade)
+
+  @@unique([citySlug, date])
 }

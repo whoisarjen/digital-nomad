@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "postinstall": "nuxt prepare",
+    "postinstall": "nuxt prepare && npx prisma generate",
     "build": "nuxt build",
     "predev": "vercel env pull .env -y --environment=development",
     "dev": "nuxt dev",
@@ -17,6 +17,7 @@
     "cheerio": "^1.0.0",
     "lodash": "^4.17.21",
     "nuxt": "^3.16.0",
+    "openmeteo": "^1.2.0",
     "prisma": "^6.5.0",
     "vue": "^3.5.13",
     "vue-router": "^4.5.0",
