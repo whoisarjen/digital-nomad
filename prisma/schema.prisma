@@ -101,7 +101,23 @@ model Weather {
 model WeatherAverage {
   id              Int     @id @default(autoincrement())
   month           String  @db.VarChar(2)
-  avgTemperatureC Decimal @db.Decimal(4, 2)
+  weatherCode              Int
+  apparentTemperatureMax   Decimal
+  rainSum                  Decimal
+  windGusts10mMax          Decimal
+  snowfallSum              Decimal
+  windDirection10mDominant Decimal
+  daylightDuration         Decimal
+  apparentTemperatureMin   Decimal
+  temperature2mMax         Decimal
+  temperature2mMin         Decimal
+  apparentTemperatureMean  Decimal
+  sunshineDuration         Decimal
+  precipitationHours       Decimal
+  shortwaveRadiationSum    Decimal
+  windSpeed10mMax          Decimal
+  precipitationSum         Decimal
+  temperature2mMean        Decimal
 
   citySlug String
   city     City   @relation("cityWeatherAverage", fields: [citySlug], references: [slug], onDelete: Cascade)

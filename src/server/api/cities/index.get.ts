@@ -181,7 +181,7 @@ export default defineEventHandler(async (event) => {
                 temperatureC: true,
                 weathersAverage: {
                     select: {
-                        avgTemperatureC: true,
+                        temperature2mMax: true,
                     },
                     where: {
                         month: validatedQuery.months,
@@ -201,7 +201,7 @@ export default defineEventHandler(async (event) => {
                 costForNomadInUsd: true,
                 weathersAverage: {
                     select: {
-                        avgTemperatureC: true,
+                        temperature2mMax: true,
                     },
                 }
             },
@@ -212,7 +212,7 @@ export default defineEventHandler(async (event) => {
     const populations = new Set<number>()
     const internetSpeed = new Set<number>()
     const costForNomadInUsd = new Set<number>()
-    const temperatures = new Set<number>(allCities.flatMap(city => city.weathersAverage.map(option => parseInt(option.avgTemperatureC.toString()))))
+    const temperatures = new Set<number>(allCities.flatMap(city => city.weathersAverage.map(option => parseInt(option.temperature2mMax.toString()))))
 
     allCities.forEach(city => {
         regions.add(city.region)
@@ -257,7 +257,7 @@ export default defineEventHandler(async (event) => {
             //     options: getSingleOptions([...populations], 5),
             // },
         } as const,
-        cities: cities.map(({ temperatureC, weathersAverage, ...city }) => ({ ...city, temperature: weathersAverage[0]?.avgTemperatureC ?? temperatureC })),
+        cities: cities.map(({ temperatureC, weathersAverage, ...city }) => ({ ...city, temperature: weathersAverage[0]?.temperature2mMax ?? temperatureC })),
         count,
         pagesCount: Math.ceil(count / limit),
     }
