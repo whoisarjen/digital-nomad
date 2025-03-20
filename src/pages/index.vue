@@ -25,7 +25,14 @@
         </aside>
   
         <div class="lg:col-span-5 flex flex-col gap-6">
-          <div class="flex">
+          <div class="flex gap-2 justify-end">
+            <div
+              v-if="Object.keys(route.query).length"
+              @click="() => router.push({ query: {} })"
+              class="px-4 py-2 rounded-xl border transition-all cursor-pointer text-center text-sm bg-red-600 text-white border-red-700 hover:bg-red-700"
+            >
+              Clear filters
+            </div>
             <SortPicker />
           </div>
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -78,6 +85,7 @@
   import { getUserCurrentMonthString } from '~/shared/global.utils';
 
   const route = useRoute()
+  const router = useRouter()
 
   const params = computed(() => ({
     ...route.query,
