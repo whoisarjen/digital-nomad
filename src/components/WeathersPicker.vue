@@ -7,7 +7,7 @@
       @click="selectWeather(icon)"
       class="custom-button"
       :class="{
-        'custom-button-active': selectedOption === icon,
+        'custom-button-active': selectedOptions.includes(icon),
       }"
     >
       <WeatherIcon :weather-icon="icon" />
@@ -16,6 +16,8 @@
 </template>
 
 <script setup lang="ts">
+import concat from 'lodash/concat'
+import compact from 'lodash/compact'
 import type { WeatherIcon } from '@prisma/client';
 
 const route = useRoute();
@@ -29,28 +31,31 @@ const WEATHERS_ICONS = {
   SNOW: true,
 } as const satisfies { [key in Exclude<WeatherIcon, 'NULL'>]: boolean }
 
-const selectedOption = ref<string | undefined>(route.query.weathers as string | undefined);
+const selectedOptions = ref<string[]>(compact(concat(route.query.weathers as string | string[] | undefined)));
 
 function selectWeather(value: string) {
-  const isAlreadySelected = selectedOption.value === value
+  const index = selectedOptions.value.indexOf(value);
 
-  if (isAlreadySelected) {
-    selectedOption.value = undefined
+  let newSelections = []
+  if (index !== -1) {
+    newSelections = selectedOptions.value.filter(option => option !== value);
   } else {
-    selectedOption.value = value;
+    newSelections = [...selectedOptions.value, value];
   }
 
   router.push({
     query: {
       ...route.query,
       page: undefined,
-      weathers: isAlreadySelected ? undefined : value,
-    }
+      weathers: newSelections,
+    },
   });
 }
 
 watch(() => route.query.weathers, (newVal) => {
-  selectedOption.value = newVal as string | undefined
+  selectedOptions.value = Array.isArray(newVal)
+    ? (newVal as string[])
+    : newVal ? [newVal] : [];
 }, {
   immediate: true,
 });

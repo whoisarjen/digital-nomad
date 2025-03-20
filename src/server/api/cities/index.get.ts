@@ -32,7 +32,10 @@ const getCitiesSchema = z.object({
     months: z
         .string(),
     weathers: z
-        .enum(Object.values(WeatherIcon) as [WeatherIcon, ...WeatherIcon[]])
+        .union([
+            z.enum(Object.values(WeatherIcon) as [WeatherIcon, ...WeatherIcon[]]),
+            z.array(z.enum(Object.values(WeatherIcon) as [WeatherIcon, ...WeatherIcon[]])),
+        ])
         .optional(),
     regions: z
         .string()
@@ -118,16 +121,10 @@ const getCityPrismaQuery = (query: z.infer<typeof getCitiesSchema>) => {
             AND.push({
                 weathersAverage: {
                     some: {
-                        OR: [
-                            {
-                                weatherIcon: query.weathers,
-                                month: query.months,
-                            },
-                            {
-                                weatherIcon: 'NULL',
-                                month: query.months,
-                            },
-                        ]
+                        weatherIcon: {
+                            in: [..._.compact(query.weathers) as WeatherIcon[], 'NULL']
+                        },
+                        month: query.months,
                     }
                 }
             })
