@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import { formatNumber } from '~/shared/global.utils';
 
 export const RANGE_BREAK_SYMBOL = ':'
 
@@ -109,10 +110,10 @@ export default defineEventHandler(async () => {
             operation: 'gte',
             options: getSingleOptions([...internetSpeed], 5, option => `${option}Mb/s`),
         },
-        // populations: {
-        //     type: 'single',
-        //     operation: 'gte',
-        //     options: getSingleOptions([...populations], 5),
-        // },
+        populations: {
+            type: 'single',
+            operation: 'gte',
+            options: getSingleOptions([...populations], 5, option => formatNumber(Number(option))),
+        },
     } as const
 })

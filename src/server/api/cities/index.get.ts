@@ -1,9 +1,11 @@
 import { Prisma, WeatherIcon } from '@prisma/client';
 import _ from 'lodash';
 import { z } from 'zod';
-import { RANGE_BREAK_SYMBOL } from './filters.get';
+import { RANGE_BREAK_SYMBOL } from './filters.get'; 
+import { formatNumber } from '~/shared/global.utils';
 
 const MAX_LIMIT_OF_ITEMS_TO_LOAD = 100
+
 const getCitiesSchema = z.object({
     page: z
         .string()
@@ -156,7 +158,12 @@ export default defineEventHandler(async (event) => {
     ])
 
     return {
-        data: cities.map(({ temperatureC, weathersAverage, ...city }) => ({ ...city, weathersAverage, temperature: weathersAverage[0]?.temperature2mMax ?? temperatureC })),
+        data: cities.map(({ temperatureC, weathersAverage, ...city }) => ({
+            ...city,
+            population: formatNumber(city.population),
+            weathersAverage,
+            temperature: weathersAverage[0]?.temperature2mMax ?? temperatureC,
+        })),
         count,
         pagesCount: Math.ceil(count / limit),
     }
