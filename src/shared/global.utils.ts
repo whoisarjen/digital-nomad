@@ -16,6 +16,14 @@ export const ORDER_BY_OPTIONS = [
         label: 'Internet Speed',
         value: 'internetSpeed',
     },
+    {
+        label: 'Safety Level',
+        value: 'safetyLevel',
+    },
+    {
+        label: 'Population Size',
+        value: 'population',
+    },
 ] satisfies { label: string; value: keyof Prisma.CityOrderByWithRelationInput }[]
 
 export const getUserCurrentMonthString = () => {
