@@ -18,7 +18,7 @@
 import { SEARCH_BAR_MAXIMUM_Q_LENGTH } from '~/shared/global.utils';
 
 const PLACEHOLDER_OPTIONS = ['Bangkok...', 'Shanghai...', 'Warsaw...', 'Thailand...', 'Japan...'];
-const typedPlaceholder = ref('Search for a city...', );
+const typedPlaceholder = ref('Search for Bangkok...', );
 
 const route = useRoute();
 const router = useRouter();
