@@ -60,7 +60,7 @@
                   class="bg-white cursor-pointer rounded-xl overflow-hidden transition-all transform group"
                 >
                   <img
-                    :src="city.image"
+                    :src="city.image?.url"
                     :alt="city.name"
                     class="w-full h-48 object-cover rounded-t-xl transition-all transform group-hover:scale-105"
                   />

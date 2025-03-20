@@ -8,11 +8,28 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Image {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  width Int
+  height Int
+  url String
+  blurHash String
+  downloadLocation String
+  ownerName String
+  ownerSurname String?
+  ownerUsername String?
+
+  citySlug String? @unique
+  city     City?   @relation(fields: [citySlug], references: [slug])
+}
+
 model City {
   slug         String  @id
   name         String
   country      String
-  image        String
   population   Int
   temperatureC Decimal @db.Decimal(4, 1)
   latitude     Decimal @db.Decimal(9, 6)
@@ -69,6 +86,9 @@ model City {
 
   weathers        Weather[]        @relation("cityWeather")
   weathersAverage WeatherAverage[] @relation("cityWeatherAverage")
+
+  imageId Int?
+  image   Image?
 }
 
 model Weather {
