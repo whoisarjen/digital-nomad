@@ -1,4 +1,4 @@
-import { Prisma } from '@prisma/client';
+import { Prisma, WeatherIcon } from '@prisma/client';
 import _ from 'lodash';
 import { z } from 'zod';
 
@@ -68,6 +68,9 @@ const getCitiesSchema = z.object({
         .pipe(z.number().positive().max(MAX_LIMIT_OF_ITEMS_TO_LOAD).optional().default(20)),
     months: z
         .string(),
+    weathers: z
+        .enum(Object.values(WeatherIcon) as [WeatherIcon, ...WeatherIcon[]])
+        .optional(),
     regions: z
         .string()
         .optional(),
@@ -94,42 +97,61 @@ const getCitiesSchema = z.object({
 const getCityPrismaQuery = (query: z.infer<typeof getCitiesSchema>) => {
     const prismaQuery: Prisma.CityFindManyArgs['where'] = {}
 
+    const conditions: Prisma.CityWhereInput[] = []
+
     if (query.regions) {
-        prismaQuery.region = query.regions
+        conditions.push({ region: query.regions })
     }
 
     if (query.costs) {
-        prismaQuery.costForNomadInUsd = {
-            lte: query.costs
-        }
+        conditions.push({
+            costForNomadInUsd: { lte: query.costs }
+        })
     }
 
     if (query.internets) {
-        prismaQuery.internetSpeedCity = {
-            gte: query.internets
-        }
+        conditions.push({
+            internetSpeedCity: { gte: query.internets }
+        })
     }
 
     if (query.populations) {
-        prismaQuery.population = {
-            gte: query.populations
-        }
+        conditions.push({
+            population: { gte: query.populations }
+        })
     }
 
     if (query.months) {
+        if (query.weathers) {
+            conditions.push({
+                weathersAverage: {
+                    some: {
+                        weatherIcon: query.weathers,
+                        month: query.months,
+                    }
+                }
+            })
+        }
+
         if (query.temperatures) {
             const [gte, lte] = query.temperatures.split(RANGE_BREAK_SYMBOL)
 
-            prismaQuery.weathersAverage = {
-                some: {
-                    temperature2mMax: {
-                        gte,
-                        lte,
-                    },
-                    month: query.months,
+            conditions.push({
+                weathersAverage: {
+                    some: {
+                        temperature2mMax: { 
+                            gte: Number(gte), 
+                            lte: Number(lte) 
+                        },
+                        month: query.months
+                    }
                 }
-            }
+            })
         }
+    }
+
+    if (conditions.length) {
+        prismaQuery.AND = conditions
     }
 
     return prismaQuery
@@ -163,7 +185,7 @@ export default defineEventHandler(async (event) => {
                 temperatureC: true,
                 weathersAverage: {
                     select: {
-                        weatherCode: true,
+                        weatherIcon: true,
                         temperature2mMax: true,
                     },
                     where: {

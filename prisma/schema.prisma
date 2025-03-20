@@ -98,9 +98,18 @@ model Weather {
   @@unique([citySlug, date])
 }
 
+enum WeatherIcon {
+  SUN
+  CLOUDY
+  WIND
+  RAIN
+  SNOW
+  NULL
+}
+
 model WeatherAverage {
-  id              Int     @id @default(autoincrement())
-  month           String  @db.VarChar(2)
+  id                       Int         @id @default(autoincrement())
+  month                    String      @db.VarChar(2)
   weatherCode              Int
   apparentTemperatureMax   Decimal
   rainSum                  Decimal
@@ -118,6 +127,7 @@ model WeatherAverage {
   windSpeed10mMax          Decimal
   precipitationSum         Decimal
   temperature2mMean        Decimal
+  weatherIcon              WeatherIcon @default(NULL)
 
   citySlug String
   city     City   @relation("cityWeatherAverage", fields: [citySlug], references: [slug], onDelete: Cascade)

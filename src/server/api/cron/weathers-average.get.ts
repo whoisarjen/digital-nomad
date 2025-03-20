@@ -94,7 +94,8 @@ export default defineEventHandler(async () => {
       const data = {
         citySlug: city.slug,
         month: option.month,
-        weatherCode: Number(option.weatherCode ?? 0),
+        weatherIcon: getIconBasedOnWeatherCode(Number(option.weatherCode ?? -1)),
+        weatherCode: Number(option.weatherCode ?? -1),
         apparentTemperatureMax: option.apparentTemperatureMax ?? 0,
         rainSum: option.rainSum ?? 0,
         windGusts10mMax: option.windGusts10mMax ?? 0,
