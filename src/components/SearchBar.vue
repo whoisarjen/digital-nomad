@@ -1,5 +1,5 @@
 <template>
-  <div class="order-last sm:order-2 w-3/4 pb-0">
+  <div class="order-last sm:order-2 w-3/5 pb-0">
     <div
       class="bg-gray-100 rounded-lg h-12 p-2 flex ps-4 sm:ps-0 flex-row-reverse sm:flex-row items-center sm:pe-6 group"
     >
