@@ -11,3 +11,15 @@
         @apply bg-blue-500 text-white border-blue-500 hover:bg-blue-600
     }
 }
+
+select {
+    -webkit-appearance: none; /* Remove the default arrow in WebKit-based browsers (Chrome, Safari) */
+    -moz-appearance: none; /* Remove the default arrow in Firefox */
+    appearance: none; /* Remove default arrow in most browsers */
+    padding-right: 2.5rem; /* Ensure space for the custom arrow */
+}
+
+/* Custom Arrow styling */
+select::-ms-expand {
+    display: none; /* Remove default arrow in Internet Explorer */
+}

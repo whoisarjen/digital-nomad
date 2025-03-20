@@ -1,16 +1,26 @@
 <template>
     <div>
-        <label :for="name" class="block text-sm font-medium text-gray-700">{{ upperFirst(props.name) }}</label>
+      <label :for="name" class="block text-sm font-medium text-gray-700">{{ upperFirst(props.name) }}</label>
+      <div class="relative mt-2">
         <select
-            :id="name"
-            v-model="selectedOption"
-            @change="updateQuery"
-            class="w-full p-3 mt-2 border rounded-lg"
+          :id="name"
+          v-model="selectedOption"
+          @change="updateQuery"
+          class="w-full p-3 pl-4 pr-10 rounded-lg focus:outline-none custom-button"
         >
-            <option v-for="option of preparedOptions" :value="option.value">
-                {{ getLabel(option) }}
-            </option>
+          <option
+            v-for="option of preparedOptions"
+            :key="option.value"
+            :value="option.value"
+            class="text-sm text-gray-700"
+          >
+            {{ getLabel(option) }}
+          </option>
         </select>
+        <div class="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
+          <lucideChevronDown class="w-5 h-5 text-gray-500"/>
+        </div>
+      </div>
     </div>
 </template>
 
