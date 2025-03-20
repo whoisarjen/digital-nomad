@@ -7,7 +7,7 @@
       @click="selectMonth(month.value)"
       class="custom-button min-w-16"
       :class="{
-        'bg-blue-500 text-white border-blue-500 hover:bg-blue-600': selectedOption === month.value,
+        'custom-button-active': selectedOption === month.value,
       }"
     >
       {{ month.label }}

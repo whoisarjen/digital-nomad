@@ -7,7 +7,7 @@
       @click="selectWeather(icon)"
       class="custom-button"
       :class="{
-        'bg-blue-500 text-white border-blue-500 hover:bg-blue-600': selectedOption === icon,
+        'custom-button-active': selectedOption === icon,
       }"
     >
       <WeatherIcon :weather-icon="icon" />

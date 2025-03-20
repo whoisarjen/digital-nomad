@@ -6,4 +6,8 @@
     .custom-button {
         @apply px-4 py-2 rounded-xl border transition-all cursor-pointer text-center text-sm bg-white text-gray-700 border-gray-300 hover:bg-gray-100
     }
+
+    .custom-button-active {
+        @apply bg-blue-500 text-white border-blue-500 hover:bg-blue-600
+    }
 }
