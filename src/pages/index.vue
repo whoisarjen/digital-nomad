@@ -61,7 +61,8 @@
                 >
                   <div class="relative">
                     <NuxtImg
-                      :src="city.image?.url"
+                      provider="unsplash"
+                      :src="city.image?.url.replace('https://images.unsplash.com', '')"
                       :alt="city.name"
                       class="w-full h-48 object-cover rounded-t-xl transition-all transform group-hover:scale-105"
                       loading="lazy"

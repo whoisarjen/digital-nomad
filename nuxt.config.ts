@@ -17,6 +17,12 @@ export default defineNuxtConfig({
     },
   },
   image: {
-    domains: ['images.unsplash.com']
-  }
+    providers: {
+      unsplash: {
+        options: {
+          baseURL: 'https://images.unsplash.com'
+        }
+      }
+    }
+  },
 })
