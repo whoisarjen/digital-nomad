@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-const RANGE_BREAK_SYMBOL = ':'
+export const RANGE_BREAK_SYMBOL = ':'
 
 const getOptions = (array: number[], numOptionsRaw: number) => {
     const numOptions = numOptionsRaw + 2 // we need one more to drop 0 later (we already have 0 as all options)
