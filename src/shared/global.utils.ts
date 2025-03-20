@@ -1,6 +1,17 @@
 export const DEFAULT_SORT_VALUE = 'desc'
 export const SEARCH_BAR_MAXIMUM_Q_LENGTH = 120
 
+export const ORDER_BY_OPTIONS = [
+    {
+        label: 'Rank',
+        value: 'totalScore',
+    },
+    {
+        label: 'Cost',
+        value: 'costForNomadInUsd',
+    },
+]
+
 export const getUserCurrentMonthString = () => {
     const currentMonth = new Date().getMonth() + 1;
     const currentMonthString = currentMonth < 10 ? `0${currentMonth}` : `${currentMonth}`;

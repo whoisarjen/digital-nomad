@@ -11,6 +11,16 @@
       <section class="py-12 px-6 grid grid-cols-1 lg:grid-cols-6 gap-6">
         <aside class="lg:col-span-1 rounded-2xl flex flex-col gap-3">
           <h3 class="text-xl font-bold">Filters</h3>
+          <div
+            @click="() => Object.keys(omit(route.query, ['page'])).length && router.push({ query: {} })"
+            class="px-4 py-2 rounded-xl border transition-all text-center text-sm text-white"
+            :class="{
+              'bg-red-600 hover:bg-red-700 cursor-pointer': Object.keys(omit(route.query, ['page'])).length,
+              'cursor-not-allowed opacity-50 bg-gray-400 hover:bg-gray-400': !Object.keys(omit(route.query, ['page'])).length,
+            }"
+          >
+            Clear filters
+          </div>
           <MonthsPicker />
           <WeathersPicker />
           <template v-if="filters">
@@ -20,19 +30,19 @@
               :name="key"
               :operation="filters[key as keyof typeof filters].operation"
               :options="filters[key as keyof typeof filters].options"
+              isLabel
             />
           </template>
         </aside>
   
         <div class="lg:col-span-5 flex flex-col gap-6">
           <div class="flex gap-2 justify-end">
-            <div
-              v-if="Object.keys(omit(route.query, ['page'])).length"
-              @click="() => router.push({ query: {} })"
-              class="px-4 py-2 rounded-xl border transition-all cursor-pointer text-center text-sm bg-red-600 text-white border-red-700 hover:bg-red-700"
-            >
-              Clear filters
-            </div>
+            <SinglePicker
+              name="orderBy"
+              operation="equals"
+              :options="ORDER_BY_OPTIONS"
+              :customDefaultOption="ORDER_BY_OPTIONS[0]"
+            />
             <SortPicker />
           </div>
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -83,7 +93,7 @@
   
   <script setup lang="ts">
   import omit from 'lodash/omit'
-  import { getUserCurrentMonthString } from '~/shared/global.utils';
+  import { getUserCurrentMonthString, ORDER_BY_OPTIONS } from '~/shared/global.utils';
 
   const route = useRoute()
   const router = useRouter()

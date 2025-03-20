@@ -1,12 +1,12 @@
 <template>
-    <div>
-      <label :for="name" class="block text-sm font-medium text-gray-700">{{ upperFirst(props.name) }}</label>
-      <div class="relative mt-2">
+    <div class="flex flex-col gap-2">
+      <label v-if="isLabel" :for="name" class="block text-sm font-medium text-gray-700">{{ upperFirst(props.name) }}</label>
+      <div class="relative">
         <select
           :id="name"
           v-model="selectedOption"
           @change="updateQuery"
-          class="w-full p-3 pl-4 pr-10 rounded-lg focus:outline-none custom-button"
+          class="w-full p-2 pl-4 pr-10 rounded-lg focus:outline-none custom-button"
         >
           <option
             v-for="option of preparedOptions"
@@ -25,6 +25,7 @@
 </template>
 
 <script setup lang="ts">
+import uniqBy from 'lodash/uniqBy';
 import upperFirst from 'lodash/upperFirst'
 
 type Option = {
@@ -35,9 +36,11 @@ const props = defineProps<{
   name: string
   operation: 'lte' | 'gte' | 'range' | 'equals'
   options: Option[]
+  isLabel?: boolean
+  customDefaultOption?: Option
 }>()
 
-const defaultOption = computed(() => ({
+const defaultOption = computed(() => props.customDefaultOption ?? ({
     label: `All ${props.name}`,
     value: '-1',
 }))
@@ -59,10 +62,10 @@ const getLabel = (option: Option) => {
 }
 
 const preparedOptions = computed(() => {
-    return [
+    return uniqBy([
         defaultOption.value,
         ...props.options,
-    ]
+    ], option => option.value)
 })
 
 const route = useRoute()

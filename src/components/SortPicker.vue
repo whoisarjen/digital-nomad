@@ -1,8 +1,8 @@
 <template>
-  <div v-if="selectedOption === DEFAULT_SORT_VALUE" class="custom-button" @click="() => updateQuery('asc')">
+  <div v-if="selectedOption === DEFAULT_SORT_VALUE" class="custom-button flex justify-center items-center" @click="() => updateQuery('asc')">
     <LucideArrowDownWideNarrow :size="16" />
   </div>
-  <div v-else class="custom-button custom-button-active" @click="() => updateQuery('desc')">
+  <div v-else class="custom-button flex justify-center items-center custom-button-active" @click="() => updateQuery('desc')">
     <LucideArrowUpNarrowWide :size="16" />
   </div>
 </template>

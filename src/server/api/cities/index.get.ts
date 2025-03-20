@@ -2,7 +2,7 @@ import { Prisma, WeatherIcon } from '@prisma/client';
 import _ from 'lodash';
 import { z } from 'zod';
 import { RANGE_BREAK_SYMBOL } from './filters.get'; 
-import { DEFAULT_SORT_VALUE, formatNumber, SEARCH_BAR_MAXIMUM_Q_LENGTH } from '~/shared/global.utils';
+import { DEFAULT_SORT_VALUE, formatNumber, ORDER_BY_OPTIONS, SEARCH_BAR_MAXIMUM_Q_LENGTH } from '~/shared/global.utils';
 
 const MAX_LIMIT_OF_ITEMS_TO_LOAD = 100
 
@@ -24,7 +24,11 @@ const getCitiesSchema = z.object({
     sort: z
         .enum(['desc', 'asc'])
         .optional()
-        .default(DEFAULT_SORT_VALUE),        
+        .default(DEFAULT_SORT_VALUE),
+    orderBy: z
+        .enum(ORDER_BY_OPTIONS.map(option => option.value) as [string, ...string[]])
+        .optional()
+        .default(ORDER_BY_OPTIONS[0].value),    
     months: z
         .string(),
     weathers: z
@@ -161,6 +165,7 @@ export default defineEventHandler(async (event) => {
       page,
       limit,
       sort,
+      orderBy,
     } = validatedQuery;
 
     const [cities, count] = await Promise.all([
@@ -169,7 +174,7 @@ export default defineEventHandler(async (event) => {
             skip: (page - 1) * limit,
             take: limit,
             orderBy: {
-                totalScore: sort,
+                [orderBy]: sort,
             },
             select: {
                 slug: true,
