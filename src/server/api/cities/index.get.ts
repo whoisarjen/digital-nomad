@@ -2,7 +2,7 @@ import { Prisma, WeatherIcon } from '@prisma/client';
 import _ from 'lodash';
 import { z } from 'zod';
 import { RANGE_BREAK_SYMBOL } from './filters.get'; 
-import { formatNumber } from '~/shared/global.utils';
+import { formatNumber, SEARCH_BAR_MAXIMUM_Q_LENGTH } from '~/shared/global.utils';
 
 const MAX_LIMIT_OF_ITEMS_TO_LOAD = 100
 
@@ -17,6 +17,10 @@ const getCitiesSchema = z.object({
         .optional()
         .transform((val) => (val ? Number(val) : undefined))
         .pipe(z.number().positive().max(MAX_LIMIT_OF_ITEMS_TO_LOAD).optional().default(20)),
+    q: z
+        .string()
+        .max(SEARCH_BAR_MAXIMUM_Q_LENGTH)
+        .optional(),
     months: z
         .string(),
     weathers: z
@@ -47,6 +51,37 @@ const getCitiesSchema = z.object({
 
 const getCityPrismaQuery = (query: z.infer<typeof getCitiesSchema>) => {
     const AND: Prisma.CityWhereInput[] = []
+
+    if (query.q) {
+        AND.push({
+            OR: [
+                {
+                    name: {
+                        contains: query.q,
+                        mode: 'insensitive',
+                    },
+                },
+                {
+                    nameChinese: {
+                        contains: query.q,
+                        mode: 'insensitive',
+                    },
+                },
+                {
+                    country: {
+                        contains: query.q,
+                        mode: 'insensitive',
+                    },
+                },
+                {
+                    countryChinese: {
+                        contains: query.q,
+                        mode: 'insensitive',
+                    },
+                },
+            ]
+        })
+    }
 
     if (query.regions) {
         AND.push({ region: query.regions })

@@ -1,14 +1,10 @@
 <template>
     <div class="min-h-screen bg-gray-100 text-gray-900">
-      <section class="bg-blue-600 text-white py-20 text-center">
+      <section class="bg-blue-600 text-white py-20 text-center flex flex-col justify-center">
         <h1 class="text-5xl font-bold">Explore. Work. Live.</h1>
         <p class="mt-4 text-lg">Find the perfect city for your digital nomad lifestyle.</p>
-        <div class="mt-6">
-          <input 
-            type="text" 
-            placeholder="Search for a city..." 
-            class="w-3/4 p-3 rounded-lg text-gray-900 focus:outline-none"
-          />
+        <div class="mt-6 flex justify-center">
+          <SearchBar />
         </div>
       </section>
   
