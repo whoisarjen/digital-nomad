@@ -5,12 +5,10 @@
       v-for="icon in (Object.keys(WEATHERS_ICONS) as WeatherIcon[])"
       :key="icon"
       @click="selectWeather(icon)"
-      :class="[
-        'px-4 py-2 rounded-xl border transition-all cursor-pointer text-center text-sm',
-        selectedOption === icon
-          ? 'bg-blue-500 text-white border-blue-500 scale-105'
-          : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100'
-      ]"
+      class="custom-button"
+      :class="{
+        'bg-blue-500 text-white border-blue-500 hover:bg-blue-600': selectedOption === icon,
+      }"
     >
       <WeatherIcon :weather-icon="icon" />
     </div>

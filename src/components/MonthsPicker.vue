@@ -5,12 +5,10 @@
       v-for="month in months"
       :key="month.value"
       @click="selectMonth(month.value)"
-      :class="[
-        'px-4 py-2 rounded-xl border transition-all cursor-pointer text-center text-sm min-w-16',
-        selectedOption === month.value
-          ? 'bg-blue-500 text-white border-blue-500'
-          : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100'
-      ]"
+      class="custom-button min-w-16"
+      :class="{
+        'bg-blue-500 text-white border-blue-500 hover:bg-blue-600': selectedOption === month.value,
+      }"
     >
       {{ month.label }}
     </div>

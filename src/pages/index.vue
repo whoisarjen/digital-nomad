@@ -24,29 +24,34 @@
           </template>
         </aside>
   
-        <div class="lg:col-span-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          <template v-if="status === 'pending'">
-            <div v-for="city in 20" :key="city" class="bg-white rounded-xl transition-all transform hover:scale-105">
-              <div class="h-64 bg-gray-300 rounded-t-lg animate-pulse" />
-            </div>
-          </template>
-          <template v-else>
-            <div v-for="city in cities?.data" :key="city.slug" class="bg-white cursor-pointer rounded-xl transition-all transform hover:scale-105">
-              <img :src="city.image" :alt="city.name" class="rounded-lg w-full object-cover">
-              <div class="p-3 flex flex-col gap-3">
-                <h3 class="text-xl font-semibold text-gray-900">{{ city.name }}, {{ city.country }}</h3>
-                <p class="text-sm text-gray-600">Population: {{ city.population }}</p>
-                <div class="flex justify-between text-sm">
-                  <span class="text-blue-500 flex items-center gap-1"><WeatherIcon :weather-icon="city.weathersAverage[0]?.weatherIcon" /> {{ Number(city.temperature).toFixed(1) }}°C</span>
-                  <span class="text-green-500">💰 ${{ city.costForNomadInUsd }}/mo</span>
-                  <span class="text-yellow-500">🌐 {{ city.internetSpeed }} Mbps</span>
+        <div class="lg:col-span-5 flex flex-col gap-6">
+          <div class="flex">
+            <SortPicker />
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <template v-if="status === 'pending'">
+              <div v-for="city in 20" :key="city" class="bg-white rounded-xl transition-all transform hover:scale-105">
+                <div class="h-64 bg-gray-300 rounded-t-lg animate-pulse" />
+              </div>
+            </template>
+            <template v-else>
+              <div v-for="city in cities?.data" :key="city.slug" class="bg-white cursor-pointer rounded-xl transition-all transform hover:scale-105">
+                <img :src="city.image" :alt="city.name" class="rounded-lg w-full object-cover">
+                <div class="p-3 flex flex-col gap-3">
+                  <h3 class="text-xl font-semibold text-gray-900">{{ city.name }}, {{ city.country }}</h3>
+                  <p class="text-sm text-gray-600">Population: {{ city.population }}</p>
+                  <div class="flex justify-between text-sm">
+                    <span class="text-blue-500 flex items-center gap-1"><WeatherIcon :weather-icon="city.weathersAverage[0]?.weatherIcon" /> {{ Number(city.temperature).toFixed(1) }}°C</span>
+                    <span class="text-green-500">💰 ${{ city.costForNomadInUsd }}/mo</span>
+                    <span class="text-yellow-500">🌐 {{ city.internetSpeed }} Mbps</span>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="col-span-4">
-              <Pagination :pages-count="cities?.pagesCount ?? 0" />
-            </div>
-          </template>
+              <div class="col-span-4">
+                <Pagination :pages-count="cities?.pagesCount ?? 0" />
+              </div>
+            </template>
+          </div>
         </div>
       </section>
     </div>

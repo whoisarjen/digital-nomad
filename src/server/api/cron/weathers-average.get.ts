@@ -123,7 +123,7 @@ export default defineEventHandler(async () => {
         create: data,
         update: data,
       })
-    }, 20, false)
+    }, 20)
   }
 
   return 'Hello Nitro'

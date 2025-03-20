@@ -1,3 +1,4 @@
+export const DEFAULT_SORT_VALUE = 'desc'
 export const SEARCH_BAR_MAXIMUM_Q_LENGTH = 120
 
 export const getUserCurrentMonthString = () => {
