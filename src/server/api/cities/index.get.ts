@@ -126,8 +126,16 @@ const getCityPrismaQuery = (query: z.infer<typeof getCitiesSchema>) => {
             conditions.push({
                 weathersAverage: {
                     some: {
-                        weatherIcon: query.weathers,
-                        month: query.months,
+                        OR: [
+                            {
+                                weatherIcon: query.weathers,
+                                month: query.months,
+                            },
+                            {
+                                weatherIcon: 'NULL',
+                                month: query.months,
+                            },
+                        ]
                     }
                 }
             })
