@@ -1,6 +1,6 @@
 <template>
     <div class="min-h-screen bg-gray-100 text-gray-900">
-      <section class="bg-blue-600 text-white py-20 text-center flex flex-col justify-center">
+      <section class="bg-blue-600 text-white py-20 text-center flex flex-col justify-center min-h-[50vh]">
         <h1 class="text-5xl font-bold">Explore. Work. Live.</h1>
         <p class="mt-4 text-lg">Find the perfect city for your digital nomad lifestyle.</p>
         <div class="mt-6 flex justify-center">
