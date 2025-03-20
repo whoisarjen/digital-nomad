@@ -41,7 +41,7 @@ const visiblePages = computed(() => {
       :to="{
         name: route.name,
         params: route.params,
-        query: { ...route.query, page: currentPage - 1 },
+        query: { ...route.query, page: currentPage - 1  === 1 ? undefined : currentPage - 1 },
       }"
       class='custom-button size-11 !p-0 flex justify-center items-center'
     >
@@ -57,7 +57,7 @@ const visiblePages = computed(() => {
           : {
               name: route.name,
               params: route.params,
-              query: { ...route.query, page },
+              query: { ...route.query, page: page === 1 ? undefined : page },
             }
       "
       :class="{
