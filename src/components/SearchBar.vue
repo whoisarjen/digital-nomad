@@ -1,7 +1,7 @@
 <template>
   <div class="order-last sm:order-2 w-3/4 pb-0">
     <div
-      class="bg-gray-100 rounded-lg h-12 p-2 flex ps-4 sm:ps-0 flex-row-reverse sm:flex-row items-center sm:pe-6"
+      class="bg-gray-100 rounded-lg h-12 p-2 flex ps-4 sm:ps-0 flex-row-reverse sm:flex-row items-center sm:pe-6 group"
     >
       <input
         v-model="q"
@@ -9,7 +9,7 @@
         placeholder="Search for a city..."
         @keyup.enter="handleSearch"
       >
-      <LucideSearch class="text-gray-400 cursor-pointer" @click="handleSearch" />
+      <LucideSearch class="text-gray-400 cursor-pointer group-hover:text-blue-500" @click="handleSearch" />
     </div>
   </div>
 </template>
