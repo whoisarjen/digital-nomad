@@ -24,8 +24,8 @@ const route = useRoute();
 const router = useRouter();
 
 const WEATHERS_ICONS = {
-  CLOUDY: true,
   SUN: true,
+  CLOUDY: true,
   WIND: true,
   RAIN: true,
   SNOW: true,
