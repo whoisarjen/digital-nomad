@@ -59,10 +59,14 @@
                   :key="city.slug"
                   class="bg-white cursor-pointer rounded-xl overflow-hidden transition-all transform group"
                 >
-                  <img
+                  <NuxtImg
                     :src="city.image?.url"
                     :alt="city.name"
                     class="w-full h-48 object-cover rounded-t-xl transition-all transform group-hover:scale-105"
+                    loading="lazy"
+                    width="360"
+                    quality="75"
+                    preset="cover"
                   />
                   
                   <div class="p-4 flex flex-col gap-4">

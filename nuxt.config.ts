@@ -3,7 +3,11 @@ export default defineNuxtConfig({
   srcDir: 'src/',
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
-  modules: ['@nuxtjs/tailwindcss', 'nuxt-lucide-icons'],
+  modules: [
+    '@nuxtjs/tailwindcss',
+    'nuxt-lucide-icons',
+    '@nuxt/image',
+  ],
   nitro: {
     vercel: {
       regions: ['fra1'],
@@ -12,4 +16,7 @@ export default defineNuxtConfig({
       }
     },
   },
+  image: {
+    domains: ['images.unsplash.com']
+  }
 })
