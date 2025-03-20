@@ -16,7 +16,7 @@ model Image {
   width Int
   height Int
   url String
-  blurHash String
+  blurHash String?
   downloadLocation String
   ownerName String
   ownerUsername String?
@@ -80,6 +80,15 @@ model City {
   costScore             Int
   likesScore            Decimal @db.Decimal
   safetyLevel           Decimal @db.Decimal
+
+  purchasingPowerIndex Decimal?
+  safetyIndex Decimal?
+  healthCareIndex Decimal?
+  climateIndex Decimal?
+  costOfLivingIndex Decimal?
+  propertyPriceToIncomeRatio Decimal?
+  trafficCommuteTimeIndex Decimal?
+  pollutionIndex Decimal?
 
   isWeather2024Collected Boolean @default(false)
 
