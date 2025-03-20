@@ -23,11 +23,11 @@
           <aside class="lg:col-span-1 rounded-2xl flex flex-col gap-3">
             <h3 class="text-xl font-bold">Filters</h3>
             <div
-              @click="() => Object.keys(omit(route.query, ['page'])).length && router.push({ query: {} })"
+              @click="() => Object.keys(route.query).length && router.push({ query: {} })"
               class="px-4 py-2 rounded-xl border transition-all text-center text-sm text-white"
               :class="{
-                'bg-red-600 hover:bg-red-700 cursor-pointer': Object.keys(omit(route.query, ['page'])).length,
-                'cursor-not-allowed opacity-50 bg-gray-400 hover:bg-gray-400': !Object.keys(omit(route.query, ['page'])).length,
+                'bg-red-600 hover:bg-red-700 cursor-pointer': Object.keys(route.query).length,
+                'cursor-not-allowed opacity-50 bg-gray-400 hover:bg-gray-400': !Object.keys(route.query).length,
               }"
             >
               Clear filters
@@ -104,7 +104,6 @@
   </template>
   
   <script setup lang="ts">
-  import omit from 'lodash/omit'
   import { getUserCurrentMonthString, ORDER_BY_OPTIONS } from '~/shared/global.utils';
 
   const route = useRoute()
