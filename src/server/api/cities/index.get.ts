@@ -91,18 +91,6 @@ const getCitiesSchema = z.object({
         .pipe(z.number().positive().optional()),
 });
 
-const getFirstAndLastDayOfMonth = (month: string) => {
-    const firstDayOfMonth = new Date(`2024-${month}-01`)
-    const lastDayOfMonth = new Date(firstDayOfMonth)
-    lastDayOfMonth.setMonth(firstDayOfMonth.getMonth() + 1)
-    lastDayOfMonth.setDate(0)
-
-    return {
-        firstDayOfMonth,
-        lastDayOfMonth,
-    }
-}
-
 const getCityPrismaQuery = (query: z.infer<typeof getCitiesSchema>) => {
     const prismaQuery: Prisma.CityFindManyArgs['where'] = {}
 
@@ -131,18 +119,14 @@ const getCityPrismaQuery = (query: z.infer<typeof getCitiesSchema>) => {
     if (query.months) {
         if (query.temperatures) {
             const [gte, lte] = query.temperatures.split(RANGE_BREAK_SYMBOL)
-            const { firstDayOfMonth, lastDayOfMonth } = getFirstAndLastDayOfMonth(query.months)
 
-            prismaQuery.weathers = {
+            prismaQuery.weathersAverage = {
                 some: {
-                    temperature2mMean: {
+                    temperature2mMax: {
                         gte,
                         lte,
                     },
-                    date: {
-                        gte: firstDayOfMonth,
-                        lte: lastDayOfMonth,
-                    },
+                    month: query.months,
                 }
             }
         }

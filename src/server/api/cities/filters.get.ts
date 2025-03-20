@@ -71,7 +71,7 @@ export default defineEventHandler(async () => {
     const populations = new Set<number>()
     const internetSpeed = new Set<number>()
     const costForNomadInUsd = new Set<number>()
-    const temperatures = new Set<number>(allCities.flatMap(city => city.weathersAverage.map(option => parseInt(option.temperature2mMax.toString()))))
+    const temperature2mMax = new Set<number>(allCities.flatMap(city => city.weathersAverage.map(option => parseInt(option.temperature2mMax.toString()))))
 
     allCities.forEach(city => {
         regions.add(city.region)
@@ -102,7 +102,7 @@ export default defineEventHandler(async () => {
         temperatures: {
             type: 'single',
             operation: 'range',
-            options: getRangeOptions([...temperatures], 5, ([start, end]) => `${start} to ${end}°C`),
+            options: getRangeOptions([...temperature2mMax], 5, ([start, end]) => `${start} to ${end}°C`),
         },
         internets: {
             type: 'single',
