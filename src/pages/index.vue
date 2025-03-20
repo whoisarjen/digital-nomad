@@ -16,13 +16,13 @@
         <aside class="lg:col-span-1 rounded-2xl flex flex-col gap-3">
           <h3 class="text-xl font-bold">Filters</h3>
           <MonthsPicker />
-          <template v-if="data">
+          <template v-if="filters">
             <SinglePicker
-              v-for="key of Object.keys(data.filters)"
+              v-for="key of Object.keys(filters)"
               :key="key"
               :name="key"
-              :operation="data.filters[key as keyof typeof data['filters']].operation"
-              :options="data.filters[key as keyof typeof data['filters']].options"
+              :operation="filters[key as keyof typeof filters].operation"
+              :options="filters[key as keyof typeof filters].options"
             />
           </template>
         </aside>
@@ -34,7 +34,7 @@
             </div>
           </template>
           <template v-else>
-            <div v-for="city in data?.cities" :key="city.slug" class="bg-white shadow-xl rounded-xl transition-all transform hover:scale-105 hover:shadow-2xl">
+            <div v-for="city in cities?.data" :key="city.slug" class="bg-white shadow-xl rounded-xl transition-all transform hover:scale-105 hover:shadow-2xl">
               <img :src="city.image" :alt="city.name" class="rounded-lg w-full object-cover">
               <div class="p-3 flex flex-col gap-3">
                 <h3 class="text-xl font-semibold text-gray-900">{{ city.name }}, {{ city.country }}</h3>
@@ -47,7 +47,7 @@
               </div>
             </div>
             <div class="col-span-4">
-              <Pagination :pages-count="data?.pagesCount ?? 0" />
+              <Pagination :pages-count="cities?.pagesCount ?? 0" />
             </div>
           </template>
         </div>
@@ -65,9 +65,14 @@
     months: route.query.months ?? getUserCurrentMonthString(),
   }))
 
-  const { data, status } = await useFetch('/api/cities', {
+  const { data: cities, status } = await useFetch('/api/cities', {
     params,
     watch: [() => params.value],
+    immediate: true,
+  })
+  const { data: filters } = await useFetch('/api/cities/filters', {
+    params,
+    // watch: [() => params.value],
     immediate: true,
   })
   </script>

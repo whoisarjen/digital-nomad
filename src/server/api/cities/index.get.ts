@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client';
-import _, { last } from 'lodash';
+import _ from 'lodash';
 import { z } from 'zod';
 
 const RANGE_BREAK_SYMBOL = ':'
@@ -160,9 +160,7 @@ export default defineEventHandler(async (event) => {
       limit,
     } = validatedQuery;
 
-    const { firstDayOfMonth, lastDayOfMonth } = getFirstAndLastDayOfMonth(validatedQuery.months)
-
-    const [cities, count, allCities] = await Promise.all([
+    const [cities, count] = await Promise.all([
         prisma.city.findMany({
             where,
             skip: (page - 1) * limit,
@@ -194,71 +192,10 @@ export default defineEventHandler(async (event) => {
         prisma.city.count({
             where,
         }),
-        prisma.city.findMany({
-            select: {
-                region: true,
-                population: true,
-                internetSpeed: true,
-                costForNomadInUsd: true,
-                weathersAverage: {
-                    select: {
-                        temperature2mMax: true,
-                    },
-                }
-            },
-        }),
     ])
 
-    const regions = new Set<string>()
-    const populations = new Set<number>()
-    const internetSpeed = new Set<number>()
-    const costForNomadInUsd = new Set<number>()
-    const temperatures = new Set<number>(allCities.flatMap(city => city.weathersAverage.map(option => parseInt(option.temperature2mMax.toString()))))
-
-    allCities.forEach(city => {
-        regions.add(city.region)
-        populations.add(city.population)
-        internetSpeed.add(city.internetSpeed)
-        costForNomadInUsd.add(parseInt(city.costForNomadInUsd.toString()))
-    })
-
     return {
-        filters: {
-            regions: {
-                type: 'single',
-                operation: 'equals',
-                options: [...regions].map(option => ({
-                    label: option,
-                    value: option,
-                })),
-            },
-            // ranks: {
-            //     type: 'single',
-            //     operation: 'gte',
-            //     options: [1, 2, 3, 4, 5],
-            // },
-            costs: {
-                type: 'single',
-                operation: 'lte',
-                options: getSingleOptions([...costForNomadInUsd], 5, option => `${option}$`),
-            },
-            temperatures: {
-                type: 'single',
-                operation: 'range',
-                options: getRangeOptions([...temperatures], 5, ([start, end]) => `${start} to ${end}°C`),
-            },
-            internets: {
-                type: 'single',
-                operation: 'gte',
-                options: getSingleOptions([...internetSpeed], 5, option => `${option}Mb/s`),
-            },
-            // populations: {
-            //     type: 'single',
-            //     operation: 'gte',
-            //     options: getSingleOptions([...populations], 5),
-            // },
-        } as const,
-        cities: cities.map(({ temperatureC, weathersAverage, ...city }) => ({ ...city, weathersAverage, temperature: weathersAverage[0]?.temperature2mMax ?? temperatureC })),
+        data: cities.map(({ temperatureC, weathersAverage, ...city }) => ({ ...city, weathersAverage, temperature: weathersAverage[0]?.temperature2mMax ?? temperatureC })),
         count,
         pagesCount: Math.ceil(count / limit),
     }
