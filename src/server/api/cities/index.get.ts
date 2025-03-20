@@ -95,35 +95,33 @@ const getCitiesSchema = z.object({
 });
 
 const getCityPrismaQuery = (query: z.infer<typeof getCitiesSchema>) => {
-    const prismaQuery: Prisma.CityFindManyArgs['where'] = {}
-
-    const conditions: Prisma.CityWhereInput[] = []
+    const AND: Prisma.CityWhereInput[] = []
 
     if (query.regions) {
-        conditions.push({ region: query.regions })
+        AND.push({ region: query.regions })
     }
 
     if (query.costs) {
-        conditions.push({
+        AND.push({
             costForNomadInUsd: { lte: query.costs }
         })
     }
 
     if (query.internets) {
-        conditions.push({
+        AND.push({
             internetSpeedCity: { gte: query.internets }
         })
     }
 
     if (query.populations) {
-        conditions.push({
+        AND.push({
             population: { gte: query.populations }
         })
     }
 
     if (query.months) {
         if (query.weathers) {
-            conditions.push({
+            AND.push({
                 weathersAverage: {
                     some: {
                         OR: [
@@ -144,7 +142,7 @@ const getCityPrismaQuery = (query: z.infer<typeof getCitiesSchema>) => {
         if (query.temperatures) {
             const [gte, lte] = query.temperatures.split(RANGE_BREAK_SYMBOL)
 
-            conditions.push({
+            AND.push({
                 weathersAverage: {
                     some: {
                         temperature2mMax: { 
@@ -158,11 +156,11 @@ const getCityPrismaQuery = (query: z.infer<typeof getCitiesSchema>) => {
         }
     }
 
-    if (conditions.length) {
-        prismaQuery.AND = conditions
+    if (AND.length) {
+        return { AND }
     }
 
-    return prismaQuery
+    return undefined
 }
 
 export default defineEventHandler(async (event) => {
