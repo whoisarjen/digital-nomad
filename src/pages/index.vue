@@ -27,7 +27,7 @@
         <div class="lg:col-span-5 flex flex-col gap-6">
           <div class="flex gap-2 justify-end">
             <div
-              v-if="Object.keys(route.query).length"
+              v-if="Object.keys(omit(route.query, ['page'])).length"
               @click="() => router.push({ query: {} })"
               class="px-4 py-2 rounded-xl border transition-all cursor-pointer text-center text-sm bg-red-600 text-white border-red-700 hover:bg-red-700"
             >
@@ -82,6 +82,7 @@
   </template>
   
   <script setup lang="ts">
+  import omit from 'lodash/omit'
   import { getUserCurrentMonthString } from '~/shared/global.utils';
 
   const route = useRoute()
