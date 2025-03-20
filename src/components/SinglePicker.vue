@@ -6,7 +6,10 @@
           :id="name"
           v-model="selectedOption"
           @change="updateQuery"
-          class="w-full p-2 pl-4 pr-10 rounded-lg focus:outline-none custom-button"
+          class="w-full p-2 pl-4 pr-10 rounded-lg focus:outline-none custom-button text-left"
+          :class="{
+            'custom-button-active': selectedOption !== defaultOption.value,
+          }"
         >
           <option
             v-for="option of preparedOptions"
@@ -18,7 +21,13 @@
           </option>
         </select>
         <div class="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
-          <lucideChevronDown class="w-5 h-5 text-gray-500"/>
+          <lucideChevronDown
+            class="w-5 h-5"
+            :class="{
+              'text-white': selectedOption !== defaultOption.value,
+              'text-gray-500': selectedOption === defaultOption.value,
+            }"
+          />
         </div>
       </div>
     </div>
