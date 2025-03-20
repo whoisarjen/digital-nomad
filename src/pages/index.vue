@@ -59,15 +59,19 @@
                   :key="city.slug"
                   class="bg-white cursor-pointer rounded-xl overflow-hidden transition-all transform group"
                 >
-                  <NuxtImg
-                    :src="city.image?.url"
-                    :alt="city.name"
-                    class="w-full h-48 object-cover rounded-t-xl transition-all transform group-hover:scale-105"
-                    loading="lazy"
-                    width="360"
-                    quality="75"
-                    preset="cover"
-                  />
+                  <div class="relative">
+                    <NuxtImg
+                      :src="city.image?.url"
+                      :alt="city.name"
+                      class="w-full h-48 object-cover rounded-t-xl transition-all transform group-hover:scale-105"
+                      loading="lazy"
+                      width="360"
+                      quality="75"
+                    />
+                    <div v-if="city.image" class="text-xs absolute bottom-0 right-0 text-white bg-black py-1 px-2 rounded-tl-lg">
+                      <NuxtLink target="_blank" :href="`https://unsplash.com/@${city.image.ownerUsername}?utm_source=Digital%20Nomad&utm_medium=referral`">{{ city.image.ownerName }}</NuxtLink> on <NuxtLink target="_blank" href="https://unsplash.com/?utm_source=Digital%20Nomad&utm_medium=referral">Unsplash</NuxtLink>
+                    </div>
+                  </div>
                   
                   <div class="p-4 flex flex-col gap-4">
                     <h3 class="text-xl font-semibold text-gray-900 transition-colors group-hover:text-blue-500">

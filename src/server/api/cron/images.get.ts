@@ -104,7 +104,6 @@ export default defineEventHandler(async () => {
         blurHash: photo.blur_hash,
         downloadLocation: photo.links.download_location,
         ownerName: photo.user.name,
-        ownerSurname: photo.user.last_name,
         ownerUsername: photo.user.username,
       }
 

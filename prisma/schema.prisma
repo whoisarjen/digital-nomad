@@ -19,7 +19,6 @@ model Image {
   blurHash String
   downloadLocation String
   ownerName String
-  ownerSurname String?
   ownerUsername String?
 
   citySlug String? @unique
