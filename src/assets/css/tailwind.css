@@ -8,7 +8,7 @@
     }
 
     .custom-button-active {
-        @apply bg-blue-500 text-white border-blue-500 hover:bg-blue-600
+        @apply bg-primary-500 text-white border-primary-500 hover:bg-primary-600
     }
 }
 

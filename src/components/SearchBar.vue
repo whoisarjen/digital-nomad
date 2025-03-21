@@ -9,7 +9,7 @@
         :placeholder="typedPlaceholder"
         @keyup.enter="handleSearch"
       >
-      <LucideSearch class="text-gray-400 cursor-pointer group-hover:text-blue-500" @click="handleSearch" />
+      <LucideSearch class="text-gray-400 cursor-pointer group-hover:text-primary-500" @click="handleSearch" />
     </div>
   </div>
 </template>
