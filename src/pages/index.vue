@@ -13,8 +13,8 @@
           <SinglePicker
             name="orderBy"
             operation="equals"
-            :options="ORDER_BY_OPTIONS"
-            :customDefaultOption="ORDER_BY_OPTIONS[0]"
+            :options="OPTIONS_ORDER_BY"
+            :customDefaultOption="OPTIONS_ORDER_BY[0]"
           />
           <SortPicker />
         </section>
@@ -116,7 +116,7 @@
   
   <script setup lang="ts">
   import type { GetCitiesSchema } from '~/server/api/cities/index.get';
-import { getUserCurrentMonthString, ORDER_BY_OPTIONS } from '~/shared/global.utils';
+import { getUserCurrentMonthString, OPTIONS_ORDER_BY } from '~/shared/global.utils';
 
   const route = useRoute()
   const router = useRouter()

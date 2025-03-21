@@ -1,6 +1,6 @@
 <template>
     <div class="flex flex-col gap-2">
-      <label v-if="isLabel" :for="name" class="block text-sm font-medium text-gray-700">{{ upperFirst(props.name) }}</label>
+      <label v-if="isLabel" :for="name" class="block text-sm font-medium text-gray-700">{{ props.name.split('_').map(upperFirst).join(' ') }}</label>
       <div class="relative">
         <select
           :id="name"
@@ -50,7 +50,7 @@ const props = defineProps<{
 }>()
 
 const defaultOption = computed(() => props.customDefaultOption ?? ({
-    label: `All ${props.name}`,
+    label: `All ${props.name.split('_').join(' ')}`,
     value: '-1',
 }))
 

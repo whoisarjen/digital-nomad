@@ -2,7 +2,7 @@ import { Prisma, WeatherIcon } from '@prisma/client';
 import _ from 'lodash';
 import { z } from 'zod';
 import { RANGE_BREAK_SYMBOL } from './filters.get'; 
-import { DEFAULT_SORT_VALUE, formatNumber, ORDER_BY_OPTIONS, SEARCH_BAR_MAXIMUM_Q_LENGTH } from '~/shared/global.utils';
+import { DEFAULT_SORT_VALUE, formatNumber, getIndexMapValue, OPTIONS_ORDER_BY, OPTIONS_POLLUTIONS, OPTIONS_RANKS, SEARCH_BAR_MAXIMUM_Q_LENGTH } from '~/shared/global.utils';
 
 const MAX_LIMIT_OF_ITEMS_TO_LOAD = 100
 
@@ -26,9 +26,9 @@ const getCitiesSchema = z.object({
         .optional()
         .default(DEFAULT_SORT_VALUE),
     orderBy: z
-        .enum(ORDER_BY_OPTIONS.map(option => option.value) as [string, ...string[]])
+        .enum(OPTIONS_ORDER_BY.map(option => option.value) as [string, ...string[]])
         .optional()
-        .default(ORDER_BY_OPTIONS[0].value),    
+        .default(OPTIONS_ORDER_BY[0].value),    
     months: z
         .string(),
     weathers: z
@@ -40,6 +40,11 @@ const getCitiesSchema = z.object({
     regions: z
         .string()
         .optional(),
+    total_scores: z
+        .enum(OPTIONS_RANKS.map(({ value }) => value) as [string, ...string[]])
+        .optional()
+        .transform((val) => (val ? Number(val) : undefined))
+        .pipe(z.number().positive().optional()),
     costs: z
         .string()
         .optional()
@@ -58,6 +63,9 @@ const getCitiesSchema = z.object({
         .optional()
         .transform((val) => (val ? Number(val) : undefined))
         .pipe(z.number().positive().optional()),
+    pollutions: z
+        .enum(OPTIONS_POLLUTIONS.map(({ value }) => value) as [string, ...string[]])
+        .optional(),
 });
 
 export type GetCitiesSchema = z.infer<typeof getCitiesSchema>;
@@ -98,6 +106,10 @@ const getCityPrismaQuery = (query: z.infer<typeof getCitiesSchema>) => {
 
     if (query.regions) {
         AND.push({ region: query.regions })
+    }
+
+    if (query.total_scores) {
+        AND.push({ totalScore: { gte: query.total_scores } })
     }
 
     if (query.costs) {
@@ -147,6 +159,12 @@ const getCityPrismaQuery = (query: z.infer<typeof getCitiesSchema>) => {
                 }
             })
         }
+    }
+
+    if (query.pollutions) {
+        AND.push({
+            pollutionIndex: getIndexMapValue('pollutionIndex', query.pollutions)
+        })
     }
 
     if (AND.length) {

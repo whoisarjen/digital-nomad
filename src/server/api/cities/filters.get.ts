@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { formatNumber } from '~/shared/global.utils';
+import { formatNumber, OPTIONS_POLLUTIONS, OPTIONS_RANKS } from '~/shared/global.utils';
 
 export const RANGE_BREAK_SYMBOL = ':'
 
@@ -60,6 +60,7 @@ export default defineEventHandler(async () => {
             population: true,
             internetSpeed: true,
             costForNomadInUsd: true,
+            pollutionIndex: true,
             weathersAverage: {
                 select: {
                     temperature2mMax: true,
@@ -90,11 +91,11 @@ export default defineEventHandler(async () => {
                 value: option,
             })),
         },
-        // ranks: {
-        //     type: 'single',
-        //     operation: 'gte',
-        //     options: [1, 2, 3, 4, 5],
-        // },
+        total_scores: {
+            type: 'single',
+            operation: 'gte',
+            options: OPTIONS_RANKS,
+        },
         costs: {
             type: 'single',
             operation: 'lte',
@@ -115,5 +116,10 @@ export default defineEventHandler(async () => {
             operation: 'gte',
             options: getSingleOptions([...populations], 5, option => formatNumber(Number(option))),
         },
+        pollutions: {
+            type: 'single',
+            operation: 'lte',
+            options: OPTIONS_POLLUTIONS,
+        }
     } as const
 })
