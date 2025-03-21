@@ -26,7 +26,7 @@ type Indices = {
 
 export default defineEventHandler(async () => {
   const cities = await prisma.city.findMany()
-  const citiesToSeed = cities.filter(option => !option.purchasingPowerIndex)
+  const citiesToSeed = cities.filter(option => !option.purchasingPowerIndex && !option.safetyIndex && !option.climateIndex && !option.pollutionIndex && !option.healthCareIndex)
 
   let counter = 0
   for (const city of citiesToSeed) {
