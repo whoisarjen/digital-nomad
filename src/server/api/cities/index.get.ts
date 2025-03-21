@@ -2,7 +2,7 @@ import { Prisma, WeatherIcon } from '@prisma/client';
 import _ from 'lodash';
 import { z } from 'zod';
 import { RANGE_BREAK_SYMBOL } from './filters.get'; 
-import { DEFAULT_SORT_VALUE, formatNumber, getIndexMapValue, OPTIONS_ORDER_BY, OPTIONS_POLLUTIONS, OPTIONS_RANKS, SEARCH_BAR_MAXIMUM_Q_LENGTH } from '~/shared/global.utils';
+import { DEFAULT_SORT_VALUE, formatNumber, getIndexMapValueLTE, OPTIONS_ORDER_BY, OPTIONS_LEVEL_LTE, OPTIONS_RANKS, SEARCH_BAR_MAXIMUM_Q_LENGTH, OPTIONS_LEVEL_GTE, getIndexMapValueGTE } from '~/shared/global.utils';
 
 const MAX_LIMIT_OF_ITEMS_TO_LOAD = 100
 
@@ -64,7 +64,10 @@ const getCitiesSchema = z.object({
         .transform((val) => (val ? Number(val) : undefined))
         .pipe(z.number().positive().optional()),
     pollutions: z
-        .enum(OPTIONS_POLLUTIONS.map(({ value }) => value) as [string, ...string[]])
+        .enum(OPTIONS_LEVEL_LTE.map(({ value }) => value) as [string, ...string[]])
+        .optional(),
+    safeties: z
+        .enum(OPTIONS_LEVEL_GTE.map(({ value }) => value) as [string, ...string[]])
         .optional(),
 });
 
@@ -163,7 +166,13 @@ const getCityPrismaQuery = (query: z.infer<typeof getCitiesSchema>) => {
 
     if (query.pollutions) {
         AND.push({
-            pollutionIndex: getIndexMapValue('pollutionIndex', query.pollutions)
+            pollutionIndex: getIndexMapValueLTE('pollutionIndex', query.pollutions)
+        })
+    }
+
+    if (query.safeties) {
+        AND.push({
+            safetyIndex: getIndexMapValueGTE('safetyIndex', query.safeties)
         })
     }
 

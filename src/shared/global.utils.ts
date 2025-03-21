@@ -9,9 +9,14 @@ export const OPTIONS_RANKS = [
   { value: '4', label: '⭐⭐⭐⭐' },
 ]
 
-export const OPTIONS_POLLUTIONS = [
+export const OPTIONS_LEVEL_LTE = [
   { label: 'Low', value: 'low' }, 
   { label: 'Medium', value: 'medium' }, 
+]
+
+export const OPTIONS_LEVEL_GTE = [
+  { label: 'Medium', value: 'medium' }, 
+  { label: 'High', value: 'high' }, 
 ]
 
 export const OPTIONS_ORDER_BY = [
@@ -21,6 +26,7 @@ export const OPTIONS_ORDER_BY = [
     { label: 'Safety Level', value: 'safetyLevel' },
     { label: 'Population Size', value: 'population' },
     { label: 'Pollution', value: 'pollutionIndex' },
+    { label: 'Safety', value: 'safetyIndex' },
 ] satisfies { label: string; value: keyof Prisma.CityOrderByWithRelationInput }[]
 
 export const INDEX_MAP = {
@@ -66,10 +72,23 @@ export const INDEX_MAP = {
     }
 } as const 
 
-export const getIndexMapValue = (key: keyof typeof INDEX_MAP, option: string) => {
+export const getIndexMapValueLTE = (key: keyof typeof INDEX_MAP, option: string) => {
   if (option === 'low') {
     return {
       lte: INDEX_MAP[key].low_until,
+    }
+  }
+
+  return {
+    gt: INDEX_MAP[key].low_until,
+    lte: INDEX_MAP[key].medium_until,
+  }
+}
+
+export const getIndexMapValueGTE = (key: keyof typeof INDEX_MAP, option: string) => {
+  if (option === 'high') {
+    return {
+      gt: INDEX_MAP[key].medium_until,
     }
   }
 

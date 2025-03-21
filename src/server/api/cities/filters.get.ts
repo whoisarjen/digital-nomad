@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { formatNumber, OPTIONS_POLLUTIONS, OPTIONS_RANKS } from '~/shared/global.utils';
+import { formatNumber, OPTIONS_LEVEL_GTE, OPTIONS_LEVEL_LTE, OPTIONS_RANKS } from '~/shared/global.utils';
 
 export const RANGE_BREAK_SYMBOL = ':'
 
@@ -119,7 +119,12 @@ export default defineEventHandler(async () => {
         pollutions: {
             type: 'single',
             operation: 'lte',
-            options: OPTIONS_POLLUTIONS,
-        }
+            options: OPTIONS_LEVEL_LTE,
+        },
+        safeties: {
+            type: 'single',
+            operation: 'gte',
+            options: OPTIONS_LEVEL_GTE,
+        },
     } as const
 })
