@@ -52,6 +52,17 @@
                 <div v-for="city in 20" :key="city" class="bg-white rounded-xl transition-all transform">
                   <div class="h-64 bg-gray-300 rounded-t-lg animate-pulse" />
                 </div>
+                <div class="col-span-4">
+                  <section
+                    class="flex items-center justify-center mt-5 gap-1"
+                  >
+                    <div class="bg-gray-300 rounded-xl animate-pulse size-11"></div>
+
+                    <div v-for="n in 5" :key="n" class="bg-gray-300 rounded-xl animate-pulse size-11" />
+
+                    <div class="bg-gray-300 rounded-xl animate-pulse size-11"></div>
+                  </section>
+                </div>
               </template>
               <template v-else>
                 <div
