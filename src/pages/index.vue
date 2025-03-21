@@ -19,8 +19,8 @@
           <SortPicker />
         </section>
     
-        <section class="grid grid-cols-1 lg:grid-cols-6 gap-6">
-          <aside class="lg:col-span-1 rounded-2xl flex flex-col gap-3">
+        <section class="flex max-md:flex-col gap-6 max-md:items-center">
+          <aside class="rounded-2xl flex flex-col gap-3 w-full max-w-xs">
             <h3 class="text-xl font-bold">Filters</h3>
             <div
               @click="() => isClearFilter && router.push({ query: {} })"
@@ -46,13 +46,13 @@
             </template>
           </aside>
     
-          <div class="lg:col-span-5 flex flex-col gap-6">
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div class="flex flex-col gap-6 flex-1">
+            <div class="gap-6 w-full grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
               <template v-if="status === 'pending'">
                 <div v-for="city in 20" :key="city" class="bg-white rounded-xl transition-all transform">
                   <div class="h-64 bg-gray-300 rounded-t-lg animate-pulse" />
                 </div>
-                <div class="col-span-4">
+                <div>
                   <section
                     class="flex items-center justify-center mt-5 gap-1"
                   >
@@ -68,7 +68,7 @@
                 <div
                   v-for="city in cities?.data"
                   :key="city.slug"
-                  class="bg-white cursor-pointer rounded-xl overflow-hidden transition-all transform group hover:shadow-lg"
+                  class="bg-white cursor-pointer rounded-xl overflow-hidden transition-all transform group hover:shadow-lg w-full"
                 >
                   <div class="relative h-48 overflow-hidden">
                     <NuxtImg
@@ -104,7 +104,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="col-span-4">
+                <div>
                   <Pagination :pages-count="cities?.pagesCount ?? 0" />
                 </div>
               </template>
