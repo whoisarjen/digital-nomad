@@ -8,6 +8,10 @@
       {
         "path": "/api/cron/numbeo",
         "schedule": "0 */1 * * *"
+      },
+      {
+        "path": "/api/cron/weathers",
+        "schedule": "0 */12 * * *"
       }
     ]
   }
