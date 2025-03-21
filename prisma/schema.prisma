@@ -8,18 +8,24 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Level {
+  LOW
+  MIDDLE
+  HIGH
+}
+
 model Image {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  width Int
-  height Int
-  url String
-  blurHash String?
+  width            Int
+  height           Int
+  url              String
+  blurHash         String?
   downloadLocation String
-  ownerName String
-  ownerUsername String?
+  ownerName        String
+  ownerUsername    String?
 
   citySlug String? @unique
   city     City?   @relation(fields: [citySlug], references: [slug])
@@ -81,14 +87,23 @@ model City {
   likesScore            Decimal @db.Decimal
   safetyLevel           Decimal @db.Decimal
 
-  purchasingPowerIndex Decimal?
-  safetyIndex Decimal?
-  healthCareIndex Decimal?
-  climateIndex Decimal?
-  costOfLivingIndex Decimal?
+  safetyIndex                Decimal?
+  climateIndex               Decimal?
+  pollutionIndex             Decimal?
+  purchasingPowerIndex       Decimal?
+  healthCareIndex            Decimal?
+  costOfLivingIndex          Decimal?
   propertyPriceToIncomeRatio Decimal?
-  trafficCommuteTimeIndex Decimal?
-  pollutionIndex Decimal?
+  trafficCommuteTimeIndex    Decimal?
+
+  safety                Level?
+  climate               Level?
+  pollution             Level?
+  purchasingPower       Level?
+  healthCare            Level?
+  costOfLiving          Level?
+  propertyPriceToIncome Level?
+  trafficCommuteTime    Level?
 
   isWeather2024Collected Boolean @default(false)
 
