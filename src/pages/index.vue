@@ -70,7 +70,7 @@
                   :key="city.slug"
                   class="bg-white cursor-pointer rounded-xl overflow-hidden transition-all transform group"
                 >
-                  <div class="relative">
+                  <div class="relative h-48 overflow-hidden">
                     <NuxtImg
                       provider="unsplash"
                       :src="city.image?.url.replace('https://images.unsplash.com', '')"
