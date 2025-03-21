@@ -20,6 +20,7 @@ export const OPTIONS_ORDER_BY = [
     { label: 'Internet Speed', value: 'internetSpeed' },
     { label: 'Safety Level', value: 'safetyLevel' },
     { label: 'Population Size', value: 'population' },
+    { label: 'Pollution', value: 'pollutionIndex' },
 ] satisfies { label: string; value: keyof Prisma.CityOrderByWithRelationInput }[]
 
 export const INDEX_MAP = {

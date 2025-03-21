@@ -89,9 +89,10 @@
                     <h3 class="text-xl font-semibold text-gray-900 transition-colors group-hover:text-blue-500">
                       {{ city.name }}, {{ city.country }}
                     </h3>
-                    <p class="text-sm text-gray-600">
+                    <div class="text-sm text-gray-600 flex gap-1">
+                      Pollution: {{ city.pollutionIndex }}
                       Population: {{ city.population }}
-                    </p>
+                    </div>
 
                     <div class="flex justify-between text-sm text-gray-500">
                       <span class="text-blue-500 flex items-center gap-1">
