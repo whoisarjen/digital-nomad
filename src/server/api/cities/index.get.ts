@@ -120,7 +120,6 @@ const getCityPrismaQuery = (query: z.infer<typeof getCitiesSchema>) => {
 
     if (query.months) {
         if (query.weathers) {
-            console.log(query.weathers)
             AND.push({
                 weathersAverage: {
                     some: {

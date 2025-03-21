@@ -26,6 +26,49 @@ export const ORDER_BY_OPTIONS = [
     },
 ] satisfies { label: string; value: keyof Prisma.CityOrderByWithRelationInput }[]
 
+export const INDEX_MAP = {
+    "purchasingPowerIndex": {
+      "low_when_lower_than": 40,
+      "high_when_higher_than": 70,
+      "ideal_value": "Higher"
+    },
+    "safetyIndex": {
+      "low_when_lower_than": 40,
+      "high_when_higher_than": 70,
+      "ideal_value": "Higher"
+    },
+    "healthCareIndex": {
+      "low_when_lower_than": 40,
+      "high_when_higher_than": 70,
+      "ideal_value": "Higher"
+    },
+    "climateIndex": {
+      "low_when_lower_than": 40,
+      "high_when_higher_than": 70,
+      "ideal_value": "Higher"
+    },
+    "costOfLivingIndex": {
+      "low_when_lower_than": 40,
+      "high_when_higher_than": 70,
+      "ideal_value": "Lower"
+    },
+    "propertyPriceToIncomeRatio": {
+      "low_when_lower_than": 5,
+      "high_when_higher_than": 15,
+      "ideal_value": "Lower"
+    },
+    "trafficCommuteTimeIndex": {
+      "low_when_lower_than": 20,
+      "high_when_higher_than": 50,
+      "ideal_value": "Lower"
+    },
+    "pollutionIndex": {
+      "low_when_lower_than": 30,
+      "high_when_higher_than": 60,
+      "ideal_value": "Lower"
+    }
+} as const  
+
 export const getUserCurrentMonthString = () => {
     const currentMonth = new Date().getMonth() + 1;
     const currentMonthString = currentMonth < 10 ? `0${currentMonth}` : `${currentMonth}`;
