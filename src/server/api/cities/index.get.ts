@@ -1,10 +1,32 @@
-import { Prisma, WeatherIcon } from '@prisma/client';
+import { Level, Prisma, WeatherIcon } from '@prisma/client';
 import _ from 'lodash';
 import { z } from 'zod';
 import { RANGE_BREAK_SYMBOL } from './filters.get'; 
-import { DEFAULT_SORT_VALUE, formatNumber, getIndexMapValueLTE, OPTIONS_ORDER_BY, OPTIONS_LEVEL_LTE, OPTIONS_RANKS, SEARCH_BAR_MAXIMUM_Q_LENGTH, OPTIONS_LEVEL_GTE, getIndexMapValueGTE } from '~/shared/global.utils';
+import { DEFAULT_SORT_VALUE, formatNumber, OPTIONS_ORDER_BY, OPTIONS_LEVEL_LTE, OPTIONS_RANKS, SEARCH_BAR_MAXIMUM_Q_LENGTH, OPTIONS_LEVEL_GTE } from '~/shared/global.utils';
 
 const MAX_LIMIT_OF_ITEMS_TO_LOAD = 100
+
+const mapLevelToQuery = (level: string, option: 'lte' | 'gte'): Level[] => {
+    if (option === 'lte') {
+        if (level === 'LOW') {
+            return [Level.LOW]
+        }
+
+        if (level === 'MIDDLE') {
+            return [Level.LOW, Level.MIDDLE]
+        }
+    } else {
+        if (level === 'MIDDLE') {
+            return [Level.MIDDLE, Level.HIGH]
+        }
+
+        if (level === 'HIGH') {
+            return [Level.HIGH]
+        }
+    }
+
+    throw new Error(`Missing value in mapLevelToQuery for ${level} - ${option}`)
+}
 
 const getCitiesSchema = z.object({
     page: z
@@ -68,9 +90,11 @@ const getCitiesSchema = z.object({
         .pipe(z.number().positive().optional()),
     pollutions: z
         .enum(OPTIONS_LEVEL_LTE.map(({ value }) => value) as [string, ...string[]])
+        .transform(value => mapLevelToQuery(value, 'lte'))
         .optional(),
     safeties: z
         .enum(OPTIONS_LEVEL_GTE.map(({ value }) => value) as [string, ...string[]])
+        .transform(value => mapLevelToQuery(value, 'gte'))
         .optional(),
 });
 
@@ -169,13 +193,17 @@ const getCityPrismaQuery = (query: z.infer<typeof getCitiesSchema>) => {
 
     if (query.pollutions) {
         AND.push({
-            pollutionIndex: getIndexMapValueLTE('pollutionIndex', query.pollutions)
+            pollution: {
+                in: query.pollutions
+            }
         })
     }
 
     if (query.safeties) {
         AND.push({
-            safetyIndex: getIndexMapValueGTE('safetyIndex', query.safeties)
+            safety: {
+                in: query.safeties
+            }
         })
     }
 

@@ -1,5 +1,47 @@
 import { Level } from "@prisma/client"
-import { INDEX_MAP } from "~/shared/global.utils"
+
+const INDEX_MAP = {
+  "purchasingPowerIndex": {
+    "low_until": 40,
+    "medium_until": 70,
+    "ideal_value": "Higher"
+  },
+  "safetyIndex": {
+    "low_until": 40,
+    "medium_until": 70,
+    "ideal_value": "Higher"
+  },
+  "healthCareIndex": {
+    "low_until": 40,
+    "medium_until": 70,
+    "ideal_value": "Higher"
+  },
+  "climateIndex": {
+    "low_until": 40,
+    "medium_until": 70,
+    "ideal_value": "Higher"
+  },
+  "costOfLivingIndex": {
+    "low_until": 40,
+    "medium_until": 70,
+    "ideal_value": "Lower"
+  },
+  "propertyPriceToIncomeRatio": {
+    "low_until": 5,
+    "medium_until": 15,
+    "ideal_value": "Lower"
+  },
+  "trafficCommuteTimeIndex": {
+    "low_until": 20,
+    "medium_until": 50,
+    "ideal_value": "Lower"
+  },
+  "pollutionIndex": {
+    "low_until": 30,
+    "medium_until": 60,
+    "ideal_value": "Lower"
+  }
+} as const
 
 const getLevelForGTE = (key: keyof typeof INDEX_MAP, value: number | undefined) => {
   if (value === undefined) {
