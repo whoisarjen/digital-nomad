@@ -56,7 +56,6 @@ const getRangeOptions = (array: number[], numOptionsRaw: number, transformLabel:
 export default defineEventHandler(async () => {
     const allCities = await prisma.city.findMany({
         select: {
-            region: true,
             population: true,
             internetSpeed: true,
             costForNomadInUsd: true,
@@ -69,28 +68,18 @@ export default defineEventHandler(async () => {
         }
     })
 
-    const regions = new Set<string>()
     const populations = new Set<number>()
     const internetSpeed = new Set<number>()
     const costForNomadInUsd = new Set<number>()
     const temperature2mMax = new Set<number>(allCities.flatMap(city => city.weathersAverage.map(option => parseInt(option.temperature2mMax.toString()))))
 
     allCities.forEach(city => {
-        regions.add(city.region)
         populations.add(city.population)
         internetSpeed.add(city.internetSpeed)
         costForNomadInUsd.add(parseInt(city.costForNomadInUsd.toString()))
     })
 
     return {
-        regions: {
-            type: 'single',
-            operation: 'equals',
-            options: [...regions].map(option => ({
-                label: option,
-                value: option,
-            })),
-        },
         total_scores: {
             type: 'single',
             operation: 'gte',

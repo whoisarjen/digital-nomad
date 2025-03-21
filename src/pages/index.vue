@@ -34,6 +34,7 @@
             </div>
             <MonthsPicker />
             <WeathersPicker />
+            <RegionsPicker />
             <template v-if="filters">
               <SinglePicker
                 v-for="key of Object.keys(filters)"

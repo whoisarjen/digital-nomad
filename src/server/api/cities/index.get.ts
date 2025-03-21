@@ -38,7 +38,10 @@ const getCitiesSchema = z.object({
         ])
         .optional(),
     regions: z
-        .string()
+        .union([
+            z.string(),
+            z.array(z.string()),
+        ])
         .optional(),
     total_scores: z
         .enum(OPTIONS_RANKS.map(({ value }) => value) as [string, ...string[]])
@@ -108,7 +111,7 @@ const getCityPrismaQuery = (query: z.infer<typeof getCitiesSchema>) => {
     }
 
     if (query.regions) {
-        AND.push({ region: query.regions })
+        AND.push({ region: { in: _.concat(query.regions) } })
     }
 
     if (query.total_scores) {
