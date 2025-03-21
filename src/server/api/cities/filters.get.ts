@@ -110,7 +110,7 @@ export default defineEventHandler(async () => {
             operation: 'lte',
             options: OPTIONS_LEVEL_LTE,
         },
-        safeties: {
+        safety: {
             type: 'single',
             operation: 'gte',
             options: OPTIONS_LEVEL_GTE,

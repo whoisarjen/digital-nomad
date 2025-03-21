@@ -1,4 +1,4 @@
-import type { Prisma } from "@prisma/client";
+import type { Level, Prisma } from "@prisma/client";
 
 export const DEFAULT_SORT_VALUE = 'desc'
 export const SEARCH_BAR_MAXIMUM_Q_LENGTH = 120
@@ -10,14 +10,14 @@ export const OPTIONS_RANKS = [
 ]
 
 export const OPTIONS_LEVEL_LTE = [
-  { label: 'Low', value: 'low' }, 
-  { label: 'Medium', value: 'medium' }, 
-]
+  { label: 'Low', value: 'LOW' }, 
+  { label: 'Middle', value: 'MIDDLE' }, 
+] satisfies { label: string; value: Level }[]
 
 export const OPTIONS_LEVEL_GTE = [
-  { label: 'Medium', value: 'medium' }, 
-  { label: 'High', value: 'high' }, 
-]
+  { label: 'Middle', value: 'MIDDLE' }, 
+  { label: 'High', value: 'HIGH' }, 
+] satisfies { label: string; value: Level }[]
 
 export const OPTIONS_ORDER_BY = [
     { label: 'Total Score', value: 'totalScore' },

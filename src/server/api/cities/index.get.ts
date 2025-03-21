@@ -7,26 +7,20 @@ import { DEFAULT_SORT_VALUE, formatNumber, OPTIONS_ORDER_BY, OPTIONS_LEVEL_LTE, 
 const MAX_LIMIT_OF_ITEMS_TO_LOAD = 100
 
 const mapLevelToQuery = (level: string, option: 'lte' | 'gte'): Level[] => {
-    if (option === 'lte') {
-        if (level === 'LOW') {
-            return [Level.LOW]
-        }
-
-        if (level === 'MIDDLE') {
-            return [Level.LOW, Level.MIDDLE]
-        }
-    } else {
-        if (level === 'MIDDLE') {
-            return [Level.MIDDLE, Level.HIGH]
-        }
-
-        if (level === 'HIGH') {
-            return [Level.HIGH]
-        }
+    switch (option) {
+        case 'lte':
+            return level === 'LOW'
+                ? [Level.LOW]
+                : [Level.LOW, Level.MIDDLE];
+        case 'gte':
+            return level === 'HIGH'
+                ? [Level.HIGH]
+                : [Level.MIDDLE, Level.HIGH];
+        default:
+            console.warn(`Unexpected value in mapLevelToQuery: ${level} - ${option}`);
+            return [];
     }
-
-    throw new Error(`Missing value in mapLevelToQuery for ${level} - ${option}`)
-}
+};
 
 const getCitiesSchema = z.object({
     page: z
@@ -92,7 +86,7 @@ const getCitiesSchema = z.object({
         .enum(OPTIONS_LEVEL_LTE.map(({ value }) => value) as [string, ...string[]])
         .transform(value => mapLevelToQuery(value, 'lte'))
         .optional(),
-    safeties: z
+    safety: z
         .enum(OPTIONS_LEVEL_GTE.map(({ value }) => value) as [string, ...string[]])
         .transform(value => mapLevelToQuery(value, 'gte'))
         .optional(),
@@ -199,10 +193,10 @@ const getCityPrismaQuery = (query: z.infer<typeof getCitiesSchema>) => {
         })
     }
 
-    if (query.safeties) {
+    if (query.safety) {
         AND.push({
             safety: {
-                in: query.safeties
+                in: query.safety
             }
         })
     }
