@@ -80,6 +80,7 @@
                     </h3>
                     <div class="text-sm text-gray-600 flex gap-1">
                       Pollution: {{ city.pollutionIndex }}
+                      Safety: {{ city.safetyIndex }}
                       Population: {{ city.population }}
                     </div>
 
