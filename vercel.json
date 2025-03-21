@@ -3,7 +3,7 @@
     "crons": [
       {
         "path": "/api/cron/images",
-        "schedule": "0 */1 * * *"
+        "schedule": "*/30 * * * *"
       },
       {
         "path": "/api/cron/numbeo",
