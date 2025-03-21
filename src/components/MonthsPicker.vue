@@ -1,6 +1,6 @@
 <template>
   <div class="block text-sm font-medium text-gray-700">Months</div>
-  <div class="flex flex-wrap gap-1 justify-between">
+  <div class="flex flex-wrap gap-1">
     <div
       v-for="month in months"
       :key="month.value"

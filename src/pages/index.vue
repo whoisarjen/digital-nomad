@@ -20,7 +20,7 @@
         </section>
     
         <section class="flex max-md:flex-col gap-6 max-md:items-center">
-          <aside class="rounded-2xl flex flex-col gap-3 w-full max-w-xs">
+          <aside class="rounded-2xl flex flex-col gap-3 w-full max-w-[268px]">
             <h3 class="text-xl font-bold">Filters</h3>
             <div
               @click="() => isClearFilter && router.push({ query: {} })"

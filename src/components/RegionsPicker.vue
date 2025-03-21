@@ -32,29 +32,29 @@ const REGIONS = [
         "value": "Asia"
     },
     {
-        "label": "Latin America",
-        "value": "Latin America"
+        "label": "Middle East",
+        "value": "Middle East"
     },
     {
-        "label": "Africa",
-        "value": "Africa"
+        "label": "Latin America",
+        "value": "Latin America"
     },
     {
         "label": "North America",
         "value": "North America"
     },
     {
+        "label": "Africa",
+        "value": "Africa"
+    },
+    {
         "label": "Oceania",
         "value": "Oceania"
     },
     {
-        "label": "Middle East",
-        "value": "Middle East"
-    },
-    {
         "label": "Antarctica",
         "value": "Antarctica"
-    }
+    },
 ]
 
 const selectedOptions = ref<string[]>(compact(concat(route.query.regions as string | string[] | undefined)));
