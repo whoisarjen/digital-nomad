@@ -214,8 +214,8 @@ export default defineEventHandler(async (event) => {
                 image: true,
                 internetSpeed: true,
                 temperatureC: true,
-                pollutionIndex: true,
-                safetyIndex: true,
+                pollution: true,
+                safety: true,
                 weathersAverage: {
                     select: {
                         weatherIcon: true,

@@ -25,8 +25,8 @@ export const OPTIONS_ORDER_BY = [
     { label: 'Internet Speed', value: 'internetSpeed' },
     { label: 'Safety Level', value: 'safetyLevel' },
     { label: 'Population Size', value: 'population' },
-    { label: 'Pollution', value: 'pollutionIndex' },
-    { label: 'Safety', value: 'safetyIndex' },
+    { label: 'Pollution', value: 'pollution' },
+    { label: 'Safety', value: 'safety' },
 ] satisfies { label: string; value: keyof Prisma.CityOrderByWithRelationInput }[]
 
 export const INDEX_MAP = {
@@ -70,7 +70,7 @@ export const INDEX_MAP = {
       "medium_until": 60,
       "ideal_value": "Lower"
     }
-} as const 
+} as const
 
 export const getIndexMapValueLTE = (key: keyof typeof INDEX_MAP, option: string) => {
   if (option === 'low') {
