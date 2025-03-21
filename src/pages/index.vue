@@ -16,7 +16,7 @@
           >
             <b>Filters:</b>
             <span>{{ Object.entries(params).map(([key, value]) =>
-              `${upperFirst(key)} (${key === 'months'
+              `${key.split('_').map(upperFirst).join(' ')} (${key === 'months'
                 ? new Date(2025, Number(value) - 1).toLocaleString('en-US', { month: 'long' }).toLowerCase()
                 : `${filters?.[key as keyof typeof filters]?.operation === 'lte' ? '≤' : ''}${value}`.toLowerCase().split(',').join(', ')}${filters?.[key as keyof typeof filters]?.operation === 'gte' ? '≤' : ''})`).join(', ') }}
               </span>
