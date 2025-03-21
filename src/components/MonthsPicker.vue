@@ -5,7 +5,7 @@
       v-for="month in months"
       :key="month.value"
       @click="selectMonth(month.value)"
-      class="custom-button min-w-16"
+      class="custom-button min-w-16 flex-grow"
       :class="{
         'custom-button-active': selectedOption === month.value,
       }"
