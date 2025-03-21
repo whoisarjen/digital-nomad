@@ -93,9 +93,9 @@ export default defineEventHandler(async () => {
   })
   const cities = citiesRaw.filter(option => !option.image?.id)
 console.log(`Still missing images for ${cities.length} cities`)
-  for (const { slug, name, country } of cities) {
-    const data = await $fetch<{ results: Result[] }>(`REDACTED_IMAGE_API_URL?client_id=REDACTED_UNSPLASH_KEY&query=${[name, country, 'city'].filter(option => option).join(' ')}`)
-    const photo = _.orderBy(data.results, ['likes'], ['desc']).at(0)
+  for (const { slug, name } of cities) {
+    const data = await $fetch<{ results: Result[] }>(`REDACTED_IMAGE_API_URL?client_id=REDACTED_UNSPLASH_KEY&query=${[name].filter(option => option).join(' ')}`)
+    const photo = data.results.at(0)
 
     if (photo) {
       const data = {
