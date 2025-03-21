@@ -12,7 +12,7 @@ export default defineNuxtConfig({
     vercel: {
       regions: ['fra1'],
       functions: {
-        maxDuration: 60
+        maxDuration: 300,
       }
     },
   },
