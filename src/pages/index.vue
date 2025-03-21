@@ -23,11 +23,11 @@
           <aside class="lg:col-span-1 rounded-2xl flex flex-col gap-3">
             <h3 class="text-xl font-bold">Filters</h3>
             <div
-              @click="() => Object.keys(route.query).length && router.push({ query: {} })"
+              @click="() => isClearFilter && router.push({ query: {} })"
               class="px-4 py-2 rounded-xl border transition-all text-center text-sm text-white"
               :class="{
-                'bg-red-600 hover:bg-red-700 cursor-pointer': Object.keys(route.query).length,
-                'cursor-not-allowed opacity-50 bg-gray-400 hover:bg-gray-400': !Object.keys(route.query).length,
+                'bg-red-600 hover:bg-red-700 cursor-pointer': isClearFilter,
+                'cursor-not-allowed opacity-50 bg-gray-400 hover:bg-gray-400': !isClearFilter,
               }"
             >
               Clear filters
@@ -121,6 +121,7 @@ import { getUserCurrentMonthString, ORDER_BY_OPTIONS } from '~/shared/global.uti
   const route = useRoute()
   const router = useRouter()
 
+  const isClearFilter = computed(() => Object.keys(route.query).length)
   const params = computed(() => ({
     ...route.query,
     months: route.query.months ?? getUserCurrentMonthString(),
