@@ -9,14 +9,27 @@
       </section>
 
       <section class="p-6 flex flex-col gap-6">
-        <section class="flex gap-1 justify-end">
-          <SinglePicker
-            name="orderBy"
-            operation="equals"
-            :options="OPTIONS_ORDER_BY"
-            :customDefaultOption="OPTIONS_ORDER_BY[0]"
-          />
-          <SortPicker />
+        <section class="flex gap-6 justify-end flex-col md:flex-row items-center">
+          <div
+            v-if="isClearFilter"
+            class="flex-1 text-sm flex gap-1 items-center"
+          >
+            <b>Filters:</b>
+            <span>{{ Object.entries(params).map(([key, value]) =>
+              `${upperFirst(key)} (${key === 'months'
+                ? new Date(2025, Number(value) - 1).toLocaleString('en-US', { month: 'long' }).toLowerCase()
+                : `${filters?.[key as keyof typeof filters]?.operation === 'lte' ? '≤' : ''}${value}`.toLowerCase().split(',').join(', ')}${filters?.[key as keyof typeof filters]?.operation === 'gte' ? '≤' : ''})`).join(', ') }}
+              </span>
+          </div>
+          <div class="flex gap-1">
+            <SinglePicker
+              name="orderBy"
+              operation="equals"
+              :options="OPTIONS_ORDER_BY"
+              :customDefaultOption="OPTIONS_ORDER_BY[0]"
+            />
+            <SortPicker />
+          </div>
         </section>
     
         <section class="flex max-md:flex-col gap-6 max-md:items-center">
@@ -117,7 +130,8 @@
   </template>
   
   <script setup lang="ts">
-  import type { GetCitiesSchema } from '~/server/api/cities/index.get';
+  import upperFirst from 'lodash/upperFirst';
+import type { GetCitiesSchema } from '~/server/api/cities/index.get';
 import { getUserCurrentMonthString, OPTIONS_ORDER_BY } from '~/shared/global.utils';
 
   const route = useRoute()
