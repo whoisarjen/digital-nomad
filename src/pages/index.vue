@@ -49,7 +49,7 @@
           <div class="flex flex-col gap-6 flex-1">
             <div class="gap-6 w-full grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
               <template v-if="status === 'pending'">
-                <div v-for="city in 20" :key="city" class="bg-white rounded-xl transition-all transform">
+                <div v-for="city in 40" :key="city" class="bg-white rounded-xl transition-all transform">
                   <div class="h-64 bg-gray-300 rounded-t-lg animate-pulse" />
                 </div>
               </template>
