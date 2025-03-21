@@ -60,6 +60,8 @@ const getCitiesSchema = z.object({
         .pipe(z.number().positive().optional()),
 });
 
+export type GetCitiesSchema = z.infer<typeof getCitiesSchema>;
+
 const getCityPrismaQuery = (query: z.infer<typeof getCitiesSchema>) => {
     const AND: Prisma.CityWhereInput[] = []
 

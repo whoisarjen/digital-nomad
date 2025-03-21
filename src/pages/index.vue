@@ -115,7 +115,8 @@
   </template>
   
   <script setup lang="ts">
-  import { getUserCurrentMonthString, ORDER_BY_OPTIONS } from '~/shared/global.utils';
+  import type { GetCitiesSchema } from '~/server/api/cities/index.get';
+import { getUserCurrentMonthString, ORDER_BY_OPTIONS } from '~/shared/global.utils';
 
   const route = useRoute()
   const router = useRouter()
@@ -123,7 +124,7 @@
   const params = computed(() => ({
     ...route.query,
     months: route.query.months ?? getUserCurrentMonthString(),
-  }))
+  })) as Ref<Partial<GetCitiesSchema>>
 
   const { data: cities, status } = await useFetch('/api/cities', {
     params,
@@ -135,5 +136,9 @@
     // watch: [() => params.value],
     immediate: true,
   })
+
+  watch(() => params.value.page, () => {
+    window?.scrollTo({ top: 0, behavior: 'smooth' });
+  }, { immediate: true })
   </script>
   
