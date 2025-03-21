@@ -71,7 +71,7 @@
                 <div
                   v-for="city in cities?.data"
                   :key="city.slug"
-                  class="bg-white cursor-pointer rounded-xl overflow-hidden transition-all transform group hover:shadow-lg w-full"
+                  class="bg-white cursor-pointer rounded-xl overflow-hidden transition-all transform group hover:shadow-lg w-full flex flex-col"
                 >
                   <div class="relative h-48 overflow-hidden">
                     <NuxtImg
@@ -88,11 +88,11 @@
                     </div>
                   </div>
                   
-                  <div class="p-4 flex flex-col gap-4">
+                  <div class="p-4 flex flex-col gap-4 flex-1">
                     <h3 class="text-xl font-semibold text-gray-900 transition-colors group-hover:text-primary-500">
                       {{ city.name }}, {{ city.country }}
                     </h3>
-                    <div class="text-sm text-gray-600 flex gap-1">
+                    <div class="text-sm text-gray-600 flex gap-1 flex-1">
                       Pollution: {{ city.pollution }}
                       Safety: {{ city.safety }}
                       Population: {{ city.population }}
