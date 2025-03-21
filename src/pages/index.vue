@@ -68,7 +68,7 @@
                 <div
                   v-for="city in cities?.data"
                   :key="city.slug"
-                  class="bg-white cursor-pointer rounded-xl overflow-hidden transition-all transform group hover:shadow-xl"
+                  class="bg-white cursor-pointer rounded-xl overflow-hidden transition-all transform group hover:shadow-lg"
                 >
                   <div class="relative h-48 overflow-hidden">
                     <NuxtImg
