@@ -5,7 +5,7 @@
       v-for="region in REGIONS"
       :key="region.value"
       @click="selectRegion(region.value)"
-      class="custom-button"
+      class="custom-button flex-grow"
       :class="{
         'custom-button-active': selectedOptions.includes(region.value),
       }"
