@@ -9,7 +9,7 @@
       </section>
 
       <section class="p-6 flex flex-col gap-6">
-        <section class="flex gap-2 justify-end">
+        <section class="flex gap-1 justify-end">
           <SinglePicker
             name="orderBy"
             operation="equals"
