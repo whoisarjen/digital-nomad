@@ -21,7 +21,7 @@ model Image {
 
   width            Int
   height           Int
-  url              String
+  url              String  @unique
   blurHash         String?
   downloadLocation String
   ownerName        String

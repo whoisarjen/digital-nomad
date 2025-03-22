@@ -79,62 +79,64 @@ type Result = {
   };
 };
 
+async function tryUpdateImage(slug: string, photo: Result) {
+  const data = {
+    width: photo.width,
+    height: photo.height,
+    url: photo.urls.raw,
+    blurHash: photo.blur_hash,
+    downloadLocation: photo.links.download_location,
+    ownerName: photo.user.name,
+    ownerUsername: photo.user.username,
+  };
+
+  try {
+    await prisma.image.upsert({
+      where: { citySlug: slug },
+      create: { ...data, city: { connect: { slug } } },
+      update: { ...data, city: { connect: { slug } } },
+    });
+    return true; // Success
+  } catch {
+    return false; // Failure
+  }
+}
+
 export default defineEventHandler(async () => {
-  const cities = await prisma.city.findMany({
+  const citiesRaw = await prisma.city.findMany({
     select: {
       slug: true,
       name: true,
-      country: true,
       image: true,
     },
-    orderBy: {
-      totalScore: 'asc',
-    },
-  })
+  });
 
-  await processInBatches(cities, async ({ slug, name, country }) => {
+  const cities = citiesRaw.filter(city => !city.image);
+
+  let counter = 0
+  for (const { slug, name } of cities) {
+    counter++
+    console.log(`Left ${cities.length - counter}`)
     const data = await $fetch<{ results: Result[] }>('REDACTED_IMAGE_API_URL', {
       query: {
         client_id: 'REDACTED_UNSPLASH_KEY',
-        query: `${name} city in ${country}`,
+        query: name,
+        collections: 'REDACTED_COLLECTION_IDS',
       }
-    })
-    const photo = data.results.at(0)
+    });
 
-    if (photo) {
-      const data = {
-        width: photo.width,
-        height: photo.height,
-        url: photo.urls.raw,
-        blurHash: photo.blur_hash,
-        downloadLocation: photo.links.download_location,
-        ownerName: photo.user.name,
-        ownerUsername: photo.user.username,
+    const results = data.results.length ? data.results : (await $fetch<{ results: Result[] }>('REDACTED_IMAGE_API_URL', {
+      query: {
+        client_id: 'REDACTED_UNSPLASH_KEY',
+        query: name,
       }
+    })).results;
 
-      await prisma.image.upsert({
-        where: {
-          citySlug: slug,
-        },
-        create: {
-          ...data,
-          city: {
-            connect: {
-              slug,
-            },
-          },
-        },
-        update: {
-          ...data,
-          city: {
-            connect: {
-              slug,
-            },
-          },
-        },
-      })
+    for (const photo of results) {
+      const success = await tryUpdateImage(slug, photo);
+      if (success) break; // Stop if successful
     }
-  })
+  };
 
-  return 'Done'
-})
+  return 'Done';
+});
