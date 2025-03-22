@@ -10,17 +10,6 @@
 
       <section class="p-6 flex flex-col gap-6">
         <section class="flex gap-6 justify-end flex-col md:flex-row items-center">
-          <div
-            v-if="isClearFilter"
-            class="flex-1 text-sm flex gap-1 items-center"
-          >
-            <b>Filters:</b>
-            <span>{{ Object.entries(params).map(([key, value]) =>
-              `${key.split('_').map(upperFirst).join(' ')} (${key === 'months'
-                ? new Date(2025, Number(value) - 1).toLocaleString('en-US', { month: 'long' }).toLowerCase()
-                : `${filters?.[key as keyof typeof filters]?.operation === 'lte' ? '≤' : ''}${value}`.toLowerCase().split(',').join(', ')}${filters?.[key as keyof typeof filters]?.operation === 'gte' ? '≤' : ''})`).join(', ') }}
-              </span>
-          </div>
           <div class="flex gap-1">
             <SinglePicker
               name="orderBy"
@@ -33,7 +22,7 @@
         </section>
     
         <section class="flex max-md:flex-col gap-6 max-md:items-center">
-          <aside class="rounded-2xl flex flex-col gap-3 w-full max-w-[268px]">
+          <aside class="rounded-2xl flex flex-col gap-3 w-full md:max-w-[268px]">
             <h3 class="text-xl font-bold">Filters</h3>
             <div
               @click="() => isClearFilter && router.push({ query: {} })"
@@ -60,7 +49,18 @@
             </template>
           </aside>
     
-          <div class="flex flex-col gap-6 flex-1">
+          <div class="flex flex-col gap-6 flex-1 w-full">
+            <div
+              v-if="isClearFilter"
+              class="flex-1 text-sm flex gap-1 items-center"
+            >
+              <b>Filters:</b>
+              <span>{{ Object.entries(params).map(([key, value]) =>
+                `${key.split('_').map(upperFirst).join(' ')} (${key === 'months'
+                  ? new Date(2025, Number(value) - 1).toLocaleString('en-US', { month: 'long' }).toLowerCase()
+                  : `${filters?.[key as keyof typeof filters]?.operation === 'lte' ? '≤' : ''}${value}`.toLowerCase().split(',').join(', ')}${filters?.[key as keyof typeof filters]?.operation === 'gte' ? '≤' : ''})`).join(', ') }}
+                </span>
+            </div>
             <div class="gap-6 w-full grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
               <template v-if="status === 'pending'">
                 <div v-for="city in 40" :key="city" class="bg-white rounded-xl transition-all transform">
