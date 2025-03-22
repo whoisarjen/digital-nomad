@@ -103,15 +103,22 @@ async function tryUpdateImage(slug: string, photo: Result) {
 }
 
 export default defineEventHandler(async () => {
-  const citiesRaw = await prisma.city.findMany({
+  const images = await prisma.image.findMany({
     select: {
-      slug: true,
-      name: true,
-      image: true,
+      city: {
+        select: {
+          slug: true,
+          name: true,
+          image: true
+        },
+      },
+    },
+    orderBy: {
+      updatedAt: 'asc',
     },
   });
 
-  const cities = citiesRaw.filter(city => !city.image);
+  const cities = _.compact(images.map(({ city }) => city).filter(city => !city?.image));
 
   let counter = 0
   for (const { slug, name } of cities) {
@@ -125,12 +132,12 @@ export default defineEventHandler(async () => {
       }
     });
 
-    const results = data.results.length ? data.results : (await $fetch<{ results: Result[] }>('REDACTED_IMAGE_API_URL', {
+    const results = _.orderBy(data.results.length ? data.results : (await $fetch<{ results: Result[] }>('REDACTED_IMAGE_API_URL', {
       query: {
         client_id: 'REDACTED_UNSPLASH_KEY',
         query: name,
       }
-    })).results;
+    })).results, ['likes'], ['desc']);
 
     for (const photo of results) {
       const success = await tryUpdateImage(slug, photo);
