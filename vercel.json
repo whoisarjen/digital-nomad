@@ -2,10 +2,6 @@
     "regions": ["fra1"],
     "crons": [
       {
-        "path": "/api/cron/images",
-        "schedule": "*/30 * * * *"
-      },
-      {
         "path": "/api/cron/numbeo",
         "schedule": "0 */1 * * *"
       },
