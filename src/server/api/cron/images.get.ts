@@ -133,7 +133,7 @@ export default defineEventHandler(async () => {
       }),
     ])
 
-    const results = _.orderBy([...data[0].results, ...data[0].results], ['likes'], ['desc']);
+    const results = _.orderBy([...data[0].results, ...data[1].results], ['likes'], ['desc']);
 
     for (const photo of results) {
       const success = await tryUpdateImage(slug, photo);
