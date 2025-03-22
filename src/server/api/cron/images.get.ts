@@ -135,9 +135,15 @@ export default defineEventHandler(async () => {
 
     const results = _.orderBy([...data[0].results, ...data[1].results], ['likes'], ['desc']);
 
+    let counter2 = 0
     for (const photo of results) {
+      counter2++
       const success = await tryUpdateImage(slug, photo);
-      if (success) break; // Stop if successful
+      if (success) {
+        break
+      } else if (results.length === counter2) {
+        console.error(`Missing image for ${name}`)
+      }
     }
   };
 
