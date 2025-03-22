@@ -135,6 +135,10 @@ export default defineEventHandler(async () => {
 
     const results = _.orderBy([...data[0].results, ...data[1].results], ['likes'], ['desc']);
 
+    if (!results.length) {
+      console.log(`${results.length} images from ${name}`)
+    }
+
     let counter2 = 0
     for (const photo of results) {
       counter2++
