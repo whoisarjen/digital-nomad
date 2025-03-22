@@ -135,12 +135,6 @@ export default defineEventHandler(async () => {
       $fetch<{ results: Result[] }>('REDACTED_IMAGE_API_URL', {
         query: {
           client_id: 'REDACTED_UNSPLASH_KEY',
-          query: `${name} city ${country}`,
-        }
-      }),
-      $fetch<{ results: Result[] }>('REDACTED_IMAGE_API_URL', {
-        query: {
-          client_id: 'REDACTED_UNSPLASH_KEY',
           query: country,
         }
       }),
