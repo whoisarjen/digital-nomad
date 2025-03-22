@@ -10,7 +10,7 @@
 
       <section class="p-6 flex flex-col gap-6">
         <section class="flex gap-6 justify-end flex-col md:flex-row items-center">
-          <div class="flex gap-1">
+          <div class="flex gap-1 max-md:w-full">
             <SinglePicker
               name="orderBy"
               operation="equals"

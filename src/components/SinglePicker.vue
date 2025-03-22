@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-col gap-2">
+    <div class="flex flex-col gap-2 w-full">
       <label v-if="isLabel" :for="name" class="block text-sm font-medium text-gray-700">{{ props.name.split('_').map(upperFirst).join(' ') }}</label>
       <div class="relative">
         <select
