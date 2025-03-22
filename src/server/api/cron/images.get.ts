@@ -117,20 +117,23 @@ export default defineEventHandler(async () => {
   for (const { slug, name } of cities) {
     counter++
     console.log(`Left ${cities.length - counter}`)
-    const data = await $fetch<{ results: Result[] }>('REDACTED_IMAGE_API_URL', {
-      query: {
-        client_id: 'REDACTED_UNSPLASH_KEY',
-        query: name,
-        collections: 'REDACTED_COLLECTION_IDS',
-      }
-    });
+    const data = await Promise.all([
+      $fetch<{ results: Result[] }>('REDACTED_IMAGE_API_URL', {
+        query: {
+          client_id: 'REDACTED_UNSPLASH_KEY',
+          query: name,
+          collections: 'REDACTED_COLLECTION_IDS',
+        }
+      }),
+      $fetch<{ results: Result[] }>('REDACTED_IMAGE_API_URL', {
+        query: {
+          client_id: 'REDACTED_UNSPLASH_KEY',
+          query: name,
+        }
+      }),
+    ])
 
-    const results = _.orderBy(data.results.length ? data.results : (await $fetch<{ results: Result[] }>('REDACTED_IMAGE_API_URL', {
-      query: {
-        client_id: 'REDACTED_UNSPLASH_KEY',
-        query: name,
-      }
-    })).results, ['likes'], ['desc']);
+    const results = _.orderBy([...data[0].results, ...data[0].results], ['likes'], ['desc']);
 
     for (const photo of results) {
       const success = await tryUpdateImage(slug, photo);
