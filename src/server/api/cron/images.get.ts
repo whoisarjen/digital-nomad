@@ -138,6 +138,12 @@ export default defineEventHandler(async () => {
           query: `${name} city ${country}`,
         }
       }),
+      $fetch<{ results: Result[] }>('REDACTED_IMAGE_API_URL', {
+        query: {
+          client_id: 'REDACTED_UNSPLASH_KEY',
+          query: country,
+        }
+      }),
     ])
 
     const results = _.orderBy(data.flatMap(option => option.results), ['likes'], ['desc']);
