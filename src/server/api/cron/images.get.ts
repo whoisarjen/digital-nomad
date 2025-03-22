@@ -108,13 +108,14 @@ export default defineEventHandler(async () => {
       slug: true,
       name: true,
       image: true,
+      country: true,
     },
   });
 
   const cities = citiesRaw.filter(({ image }) => !image);
 
   let counter = 0
-  for (const { slug, name } of cities) {
+  for (const { slug, name, country } of cities) {
     counter++
     console.log(`Left ${cities.length - counter}`)
     const data = await Promise.all([
@@ -131,9 +132,15 @@ export default defineEventHandler(async () => {
           query: name,
         }
       }),
+      $fetch<{ results: Result[] }>('REDACTED_IMAGE_API_URL', {
+        query: {
+          client_id: 'REDACTED_UNSPLASH_KEY',
+          query: `${name} city ${country}`,
+        }
+      }),
     ])
 
-    const results = _.orderBy([...data[0].results, ...data[1].results], ['likes'], ['desc']);
+    const results = _.orderBy(data.flatMap(option => option.results), ['likes'], ['desc']);
 
     if (!results.length) {
       console.log(`${results.length} images from ${name}`)
