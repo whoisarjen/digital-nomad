@@ -25,70 +25,87 @@ type Indices = {
 }
 
 export default defineEventHandler(async () => {
-  const cities = await prisma.city.findMany()
+  const cities = await prisma.city.findMany({
+    where: {
+      
+    }
+  })
   const citiesToSeed = cities.filter(option => !option.purchasingPowerIndex && !option.safetyIndex && !option.climateIndex && !option.pollutionIndex && !option.healthCareIndex)
 
   let counter = 0
-  for (const city of citiesToSeed) {
+  for (const { numbeoName, name, slug } of citiesToSeed) {
     counter++
-    console.log(`Left ${citiesToSeed.length - counter}, working on ${city.name}`)
-    const url = `REDACTED_QOL_URL/${city.name.split(' ').join('-')}`;
+    if (numbeoName) {
+      console.log(`Left ${citiesToSeed.length - counter}, working on ${numbeoName}`)
+      const url = `REDACTED_QOL_URL/${numbeoName}`;
 
-    try {
-      // Fetch the HTML content of the page
-      const { data } = await axios.get(url);
+      try {
+        // Fetch the HTML content of the page
+        const { data } = await axios.get(url);
 
-      // Load the HTML into cheerio for parsing
-      const $ = cheerio.load(data);
+        // Load the HTML into cheerio for parsing
+        const $ = cheerio.load(data);
 
-      // Initialize an object to store the scraped data (using Partial to allow missing keys)
-      const indices: Partial<Indices> = {};
+        // Initialize an object to store the scraped data (using Partial to allow missing keys)
+        const indices: Partial<Indices> = {};
 
-      // Select all rows within the table for relevant indices
-      $('table tbody tr').each((i, element) => {
-        const columns = $(element).find('td');
+        // Select all rows within the table for relevant indices
+        $('table tbody tr').each((i, element) => {
+          const columns = $(element).find('td');
 
-        // Check if the row has data (skip rows with no data)
-        if (columns.length >= 2) {
-          const indexName = $(columns[0]).text().trim();
-          const indexValue = $(columns[1]).text().trim();
-          const indexStatus = $(columns[2]).find('span').text().trim();
+          // Check if the row has data (skip rows with no data)
+          if (columns.length >= 2) {
+            const indexName = $(columns[0]).text().trim();
+            const indexValue = $(columns[1]).text().trim();
+            const indexStatus = $(columns[2]).find('span').text().trim();
 
-          // Ensure that the indexName matches one of the valid keys in IndexName
-          if (indexName && indexValue && indexStatus) {
-            // Type assertion to ensure indexName matches one of the predefined keys
-            if (['Purchasing Power Index', 'Safety Index', 'Health Care Index', 'Climate Index', 'Cost of Living Index', 'Property Price to Income Ratio', 'Traffic Commute Time Index', 'Pollution Index', 'Quality of Life Index'].includes(indexName)) {
-              indices[indexName as IndexName] = {
-                value: indexValue,
-                status: indexStatus as 'Low' | 'Moderate' | 'High' | 'Very Low' | 'Very High',
-              };
+            // Ensure that the indexName matches one of the valid keys in IndexName
+            if (indexName && indexValue && indexStatus) {
+              // Type assertion to ensure indexName matches one of the predefined keys
+              if (['Purchasing Power Index', 'Safety Index', 'Health Care Index', 'Climate Index', 'Cost of Living Index', 'Property Price to Income Ratio', 'Traffic Commute Time Index', 'Pollution Index', 'Quality of Life Index'].includes(indexName)) {
+                indices[indexName as IndexName] = {
+                  value: indexValue,
+                  status: indexStatus as 'Low' | 'Moderate' | 'High' | 'Very Low' | 'Very High',
+                };
+              }
             }
           }
-        }
-      });
+        });
 
-      // Return the scraped data
-      await prisma.city.update({
-        where: {
-          slug: city.slug,
-        },
-        data: {
-          purchasingPowerIndex: indices['Purchasing Power Index']?.value,
-          safetyIndex: indices['Safety Index']?.value,
-          healthCareIndex: indices['Health Care Index']?.value,
-          climateIndex: indices['Climate Index']?.value,
-          costOfLivingIndex: indices['Cost of Living Index']?.value,
-          propertyPriceToIncomeRatio: indices['Property Price to Income Ratio']?.value,
-          trafficCommuteTimeIndex: indices['Traffic Commute Time Index']?.value,
-          pollutionIndex: indices['Pollution Index']?.value,
-        }
-      })
+        // Return the scraped data
+        await prisma.city.update({
+          where: {
+            slug,
+          },
+          data: {
+            purchasingPowerIndex: indices['Purchasing Power Index']?.value,
+            safetyIndex: indices['Safety Index']?.value,
+            healthCareIndex: indices['Health Care Index']?.value,
+            climateIndex: indices['Climate Index']?.value,
+            costOfLivingIndex: indices['Cost of Living Index']?.value,
+            propertyPriceToIncomeRatio: indices['Property Price to Income Ratio']?.value,
+            trafficCommuteTimeIndex: indices['Traffic Commute Time Index']?.value,
+            pollutionIndex: indices['Pollution Index']?.value,
+            isNumberData: !!$('.no-much-data').length,
+            numbeoName:
+              undefined === indices['Purchasing Power Index']?.value &&
+              undefined === indices['Safety Index']?.value &&
+              undefined === indices['Health Care Index']?.value &&
+              undefined === indices['Climate Index']?.value &&
+              undefined === indices['Cost of Living Index']?.value &&
+              undefined === indices['Property Price to Income Ratio']?.value &&
+              undefined === indices['Traffic Commute Time Index']?.value &&
+              undefined === indices['Pollution Index']?.value ? '' : undefined,
+          }
+        })
 
-      await new Promise(res => setTimeout(() => res(true), 500))
-    } catch (error) {
-      console.error('Error fetching data:', error);
-      await $fetch('/api/cron/counter')
-      return { error: 'Error fetching data from the website' };
+        await new Promise(res => setTimeout(() => res(true), 500))
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        return { error: 'Error fetching data from the website' };
+      }
+    } else {
+      console.log(`Skipped ${name} as missing numbeoName`)
     }
   }
 

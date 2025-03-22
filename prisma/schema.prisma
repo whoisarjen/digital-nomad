@@ -87,6 +87,9 @@ model City {
   likesScore            Decimal @db.Decimal
   safetyLevel           Decimal @db.Decimal
 
+  numbeoName                 String?
+  numbeoSlug                 String?
+  isNumberData               Boolean  @default(true)
   safetyIndex                Decimal?
   climateIndex               Decimal?
   pollutionIndex             Decimal?
