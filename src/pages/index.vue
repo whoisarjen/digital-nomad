@@ -100,7 +100,7 @@
 
                     <div class="flex justify-between text-sm text-gray-500">
                       <span class="text-primary-500 flex items-center gap-1">
-                        <WeatherIcon :weather-icon="city.weathersAverage[0]?.weatherIcon" />
+                        <WeatherIcon :weather-icon="city.weatherIcon" />
                         {{ Number(city.temperature).toFixed(1) }}°C
                       </span>
                       <span class="text-green-500">💰 ${{ city.costForNomadInUsd }}/mo</span>

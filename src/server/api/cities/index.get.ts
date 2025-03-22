@@ -235,7 +235,6 @@ export default defineEventHandler(async (event) => {
                 population: true,
                 image: true,
                 internetSpeed: true,
-                temperatureC: true,
                 pollution: true,
                 safety: true,
                 weathersAverage: {
@@ -256,11 +255,11 @@ export default defineEventHandler(async (event) => {
     ])
 
     return {
-        data: cities.map(({ temperatureC, weathersAverage, ...city }) => ({
+        data: cities.map(({ weathersAverage, ...city }) => ({
             ...city,
             population: formatNumber(city.population),
-            weathersAverage,
-            temperature: weathersAverage[0]?.temperature2mMax ?? temperatureC,
+            weatherIcon: weathersAverage[0]?.weatherIcon,
+            temperature: weathersAverage[0]?.temperature2mMax,
         })),
         count,
         pagesCount: Math.ceil(count / limit),
