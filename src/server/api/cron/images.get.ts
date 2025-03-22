@@ -118,7 +118,7 @@ export default defineEventHandler(async () => {
     },
   });
 
-  const cities = _.compact(images.map(({ city }) => city).filter(city => !city?.image));
+  const cities = _.compact(images.map(({ city }) => city));
 
   let counter = 0
   for (const { slug, name } of cities) {
