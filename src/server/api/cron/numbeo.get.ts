@@ -32,7 +32,7 @@ export default defineEventHandler(async () => {
   for (const city of citiesToSeed) {
     counter++
     console.log(`Left ${citiesToSeed.length - counter}, working on ${city.name}`)
-    const url = `REDACTED_QOL_URL/${city.name}`;
+    const url = `REDACTED_QOL_URL/${city.name.split(' ').join('-')}`;
 
     try {
       // Fetch the HTML content of the page
