@@ -103,22 +103,15 @@ async function tryUpdateImage(slug: string, photo: Result) {
 }
 
 export default defineEventHandler(async () => {
-  const images = await prisma.image.findMany({
+  const citiesRaw = await prisma.city.findMany({
     select: {
-      city: {
-        select: {
-          slug: true,
-          name: true,
-          image: true
-        },
-      },
-    },
-    orderBy: {
-      updatedAt: 'asc',
+      slug: true,
+      name: true,
+      image: true,
     },
   });
 
-  const cities = _.compact(images.map(({ city }) => city));
+  const cities = citiesRaw.filter(({ image }) => !image);
 
   let counter = 0
   for (const { slug, name } of cities) {
