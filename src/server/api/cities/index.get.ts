@@ -1,7 +1,7 @@
 import { Level, Prisma, WeatherIcon } from '@prisma/client';
 import _ from 'lodash';
 import { z } from 'zod';
-import { DEFAULT_SORT_VALUE, formatNumber, OPTIONS_ORDER_BY, OPTIONS_LEVEL_LTE, OPTIONS_RANKS, SEARCH_BAR_MAXIMUM_Q_LENGTH, OPTIONS_LEVEL_GTE, getTemperaturesFromQuery } from '~/shared/global.utils';
+import { DEFAULT_SORT_VALUE, formatNumber, OPTIONS_ORDER_BY, OPTIONS_LEVEL_LTE, OPTIONS_RANKS, SEARCH_BAR_MAXIMUM_Q_LENGTH, OPTIONS_LEVEL_GTE, getTemperaturesFromQuery, OrderByOptionValue } from '~/shared/global.utils';
 
 const MAX_LIMIT_OF_ITEMS_TO_LOAD = 100
 
@@ -43,6 +43,7 @@ const getCitiesSchema = z.object({
     orderBy: z
         .enum(OPTIONS_ORDER_BY.map(option => option.value) as [string, ...string[]])
         .optional()
+        .transform(value => value as OrderByOptionValue)
         .default(OPTIONS_ORDER_BY[0].value),    
     months: z
         .string(),
@@ -206,6 +207,12 @@ const getCityPrismaQuery = (query: z.infer<typeof getCitiesSchema>) => {
     return undefined
 }
 
+const getOrderBy = (field: OrderByOptionValue, sort: 'desc' | 'asc'): Prisma.CityOrderByWithAggregationInput => {
+    return {
+        [field]: sort,
+    }
+}
+
 export default defineEventHandler(async (event) => {
     const validatedQuery = await getValidatedQuery(event, (body) => getCitiesSchema.parse(body));
     const where = getCityPrismaQuery(validatedQuery)
@@ -222,9 +229,7 @@ export default defineEventHandler(async (event) => {
             where,
             skip: (page - 1) * limit,
             take: limit,
-            orderBy: {
-                [orderBy]: sort,
-            },
+            orderBy: getOrderBy(orderBy, sort),
             select: {
                 slug: true,
                 name: true,

@@ -19,6 +19,20 @@ export const OPTIONS_LEVEL_GTE = [
   { label: 'High', value: 'HIGH' }, 
 ] satisfies { label: string; value: Level }[]
 
+export type OrderByOptionValue =
+  keyof Pick<Prisma.CityOrderByWithRelationInput,
+  | 'totalScore'
+  | 'costForNomadInUsd'
+  | 'internetSpeed'
+  | 'safety'
+  | 'pollution'
+  | 'healthCare'
+  | 'purchasingPower'
+  | 'propertyPriceToIncome'
+  | 'costOfLiving'
+  | 'trafficCommuteTime'
+  | 'population'>
+
 export const OPTIONS_ORDER_BY = [
   { label: 'Total Score', value: 'totalScore' },
   { label: 'Cost of Living (Nomad)', value: 'costForNomadInUsd' },
@@ -31,7 +45,7 @@ export const OPTIONS_ORDER_BY = [
   { label: 'Cost of Living (Local)', value: 'costOfLiving' },
   { label: 'Traffic & Commute Time', value: 'trafficCommuteTime' },
   { label: 'Population Size', value: 'population' },
-] satisfies { label: string; value: keyof Prisma.CityOrderByWithRelationInput }[]
+] satisfies { label: string; value: OrderByOptionValue }[]
 
 export const getUserCurrentMonthString = () => {
     const currentMonth = new Date().getMonth() + 1;
