@@ -31,6 +31,8 @@ model Numbeo {
   propertyPriceToIncomeRatio Decimal?
   trafficCommuteTimeIndex    Decimal?
   isNumberData               Boolean  @default(true)
+
+  climate Json?
 }
 
 model City {
