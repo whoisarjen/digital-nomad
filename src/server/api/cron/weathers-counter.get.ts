@@ -1,0 +1,127 @@
+import _ from 'lodash'
+
+export default defineEventHandler(async () => {
+  const cities = await prisma.city.findMany({
+    select: {
+      slug: true,
+      weathers: true,
+    },
+    where: {
+      isWeather2024Collected: true,
+    },
+  })
+
+  await processInBatches(cities, async city => {
+    // Group weather data by month (extract month from date)
+    const monthlyTemps = Array(12).fill(0).map(() => ({
+      weatherCodeMap: {} as any,
+      apparentTemperatureMax: [] as number[],
+      rainSum: [] as number[],
+      windGusts10mMax: [] as number[],
+      snowfallSum: [] as number[],
+      windDirection10mDominant: [] as number[],
+      daylightDuration: [] as number[],
+      apparentTemperatureMin: [] as number[],
+      temperature2mMax: [] as number[],
+      temperature2mMin: [] as number[],
+      apparentTemperatureMean: [] as number[],
+      sunshineDuration: [] as number[],
+      precipitationHours: [] as number[],
+      shortwaveRadiationSum: [] as number[],
+      windSpeed10mMax: [] as number[],
+      precipitationSum: [] as number[],
+      temperature2mMean: [] as number[],
+    })); // Initialize an array for each month
+    city.weathers.forEach((weather) => {
+      const month = new Date(weather.date).getMonth(); // Get the month (0-11)
+      
+      // Track frequency of weather codes
+      const weatherCode = Number(weather.weatherCode);
+      monthlyTemps[month].weatherCodeMap[weatherCode] = 
+        (monthlyTemps[month].weatherCodeMap[weatherCode] || 0) + 1;
+    
+      // Existing logic
+      monthlyTemps[month].apparentTemperatureMax.push(Number(weather.apparentTemperatureMax));
+      monthlyTemps[month].rainSum.push(Number(weather.rainSum));
+      monthlyTemps[month].windGusts10mMax.push(Number(weather.windGusts10mMax));
+      monthlyTemps[month].snowfallSum.push(Number(weather.snowfallSum));
+      monthlyTemps[month].windDirection10mDominant.push(Number(weather.windDirection10mDominant));
+      monthlyTemps[month].daylightDuration.push(Number(weather.daylightDuration));
+      monthlyTemps[month].apparentTemperatureMin.push(Number(weather.apparentTemperatureMin));
+      monthlyTemps[month].temperature2mMax.push(Number(weather.temperature2mMax));
+      monthlyTemps[month].temperature2mMin.push(Number(weather.temperature2mMin));
+      monthlyTemps[month].apparentTemperatureMean.push(Number(weather.apparentTemperatureMean));
+      monthlyTemps[month].sunshineDuration.push(Number(weather.sunshineDuration));
+      monthlyTemps[month].precipitationHours.push(Number(weather.precipitationHours));
+      monthlyTemps[month].shortwaveRadiationSum.push(Number(weather.shortwaveRadiationSum));
+      monthlyTemps[month].windSpeed10mMax.push(Number(weather.windSpeed10mMax));
+      monthlyTemps[month].precipitationSum.push(Number(weather.precipitationSum));
+      monthlyTemps[month].temperature2mMean.push(Number(weather.temperature2mMean));
+    });
+    
+    // Calculate the most common weather code
+    const medianTemperatures = monthlyTemps.map((data, index) => {
+      const mostCommonWeatherCode = data.weatherCodeMap 
+        ? Object.entries(data.weatherCodeMap).reduce((a: any, b: any) => (a[1] > b[1] ? a : b))[0]
+        : null;
+    
+      return {
+        month: index + 1 < 10 ? `0${index + 1}` : `${index + 1}`,  // Month number (1-12)
+        weatherCode: mostCommonWeatherCode,  // <- Most common weather code logic
+        apparentTemperatureMax: _.mean(data.apparentTemperatureMax),
+        rainSum: _.mean(data.rainSum),
+        windGusts10mMax: _.mean(data.windGusts10mMax),
+        snowfallSum: _.mean(data.snowfallSum),
+        windDirection10mDominant: _.mean(data.windDirection10mDominant),
+        daylightDuration: _.mean(data.daylightDuration),
+        apparentTemperatureMin: _.mean(data.apparentTemperatureMin),
+        temperature2mMax: _.mean(data.temperature2mMax),
+        temperature2mMin: _.mean(data.temperature2mMin),
+        apparentTemperatureMean: _.mean(data.apparentTemperatureMean),
+        sunshineDuration: _.mean(data.sunshineDuration),
+        precipitationHours: _.mean(data.precipitationHours),
+        shortwaveRadiationSum: _.mean(data.shortwaveRadiationSum),
+        windSpeed10mMax: _.mean(data.windSpeed10mMax),
+        precipitationSum: _.mean(data.precipitationSum),
+        temperature2mMean: _.mean(data.temperature2mMean),
+      };
+    });
+
+    await processInBatches(medianTemperatures, async option => {
+      const data = {
+        citySlug: city.slug,
+        month: option.month,
+        weatherIcon: getIconBasedOnWeatherCode(Number(option.weatherCode ?? -1)),
+        weatherCode: Number(option.weatherCode ?? -1),
+        apparentTemperatureMax: option.apparentTemperatureMax ?? 0,
+        rainSum: option.rainSum ?? 0,
+        windGusts10mMax: option.windGusts10mMax ?? 0,
+        snowfallSum: option.snowfallSum ?? 0,
+        windDirection10mDominant: option.windDirection10mDominant ?? 0,
+        daylightDuration: option.daylightDuration ?? 0,
+        apparentTemperatureMin: option.apparentTemperatureMin ?? 0,
+        temperature2mMax: option.temperature2mMax ?? 0,
+        temperature2mMin: option.temperature2mMin ?? 0,
+        apparentTemperatureMean: option.apparentTemperatureMean ?? 0,
+        sunshineDuration: option.sunshineDuration ?? 0,
+        precipitationHours: option.precipitationHours ?? 0,
+        shortwaveRadiationSum: option.shortwaveRadiationSum ?? 0,
+        windSpeed10mMax: option.windSpeed10mMax ?? 0,
+        precipitationSum: option.precipitationSum ?? 0,
+        temperature2mMean: option.temperature2mMean ?? 0,
+      }
+      await prisma.monthSummary.upsert({
+        where: {
+          citySlug_month: {
+            citySlug: city.slug,
+            month: option.month,
+          },
+        },
+        create: data,
+        update: data,
+      })
+    }, 50, false)
+  })
+
+  return 'Hello Nitro'
+})

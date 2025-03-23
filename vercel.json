@@ -10,7 +10,7 @@
         "schedule": "0 */12 * * *"
       },
       {
-        "path": "/api/cron/weathers-average",
+        "path": "/api/cron/weathers-counter",
         "schedule": "30 */12 * * *"
       },
       {

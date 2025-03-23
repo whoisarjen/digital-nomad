@@ -74,23 +74,23 @@ model City {
   internetSpeedCountry        Int
   internetSpeedCountryRanking Int
 
-  airQualityScore       Int
-  airQualityNowScore    Decimal @db.Decimal
-  humidity              String
-  rank                  Int
+  airQualityScore    Int
+  airQualityNowScore Decimal @db.Decimal
+  humidity           String
+  rank               Int
   // weatherEmoji              String
   // temperatureF          Decimal @db.Decimal
   // temperatureCFeelsLike Decimal @db.Decimal
   // temperatureFFeelsLike Decimal @db.Decimal
-  costForNomadInUsd     Decimal @db.Decimal
-  costForExpatInUsd     Decimal @db.Decimal
-  costForLocalInUsd     Decimal @db.Decimal
-  costForFamilyInUsd    Decimal @db.Decimal
-  totalScore            Decimal @db.Decimal
-  overallScore          Decimal @db.Decimal
-  costScore             Int
-  likesScore            Decimal @db.Decimal
-  safetyLevel           Decimal @db.Decimal
+  costForNomadInUsd  Decimal @db.Decimal
+  costForExpatInUsd  Decimal @db.Decimal
+  costForLocalInUsd  Decimal @db.Decimal
+  costForFamilyInUsd Decimal @db.Decimal
+  totalScore         Decimal @db.Decimal
+  overallScore       Decimal @db.Decimal
+  costScore          Int
+  likesScore         Decimal @db.Decimal
+  safetyLevel        Decimal @db.Decimal
 
   safety                Level?
   climate               Level?
@@ -103,8 +103,8 @@ model City {
 
   isWeather2024Collected Boolean @default(false)
 
-  weathers        Weather[]        @relation("cityWeather")
-  weathersAverage WeatherAverage[] @relation("cityWeatherAverage")
+  weathers     Weather[]      @relation("cityWeather")
+  monthSummary MonthSummary[] @relation("cityMonthSummary")
 
   imageId  Int?
   image    Image?
@@ -151,7 +151,7 @@ enum WeatherIcon {
   NULL
 }
 
-model WeatherAverage {
+model MonthSummary {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
@@ -177,7 +177,7 @@ model WeatherAverage {
   weatherIcon              WeatherIcon @default(NULL)
 
   citySlug String
-  city     City   @relation("cityWeatherAverage", fields: [citySlug], references: [slug], onDelete: Cascade)
+  city     City   @relation("cityMonthSummary", fields: [citySlug], references: [slug], onDelete: Cascade)
 
   @@unique([citySlug, month])
   @@index([citySlug, month])

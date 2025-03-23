@@ -157,7 +157,7 @@ const getCityPrismaQuery = (query: z.infer<typeof getCitiesSchema>) => {
     if (query.months) {
         if (query.weathers) {
             AND.push({
-                weathersAverage: {
+                monthSummary: {
                     some: {
                         weatherIcon: {
                             in: [..._.concat(query.weathers) as WeatherIcon[], 'NULL']
@@ -170,7 +170,7 @@ const getCityPrismaQuery = (query: z.infer<typeof getCitiesSchema>) => {
 
         if (query.temperatures) {
             AND.push({
-                weathersAverage: {
+                monthSummary: {
                     some: {
                         temperature2mMax: { 
                             gte: query.temperatures.min,
@@ -235,7 +235,7 @@ export default defineEventHandler(async (event) => {
                 internetSpeed: true,
                 pollution: true,
                 safety: true,
-                weathersAverage: {
+                monthSummary: {
                     select: {
                         weatherIcon: true,
                         temperature2mMax: true,
@@ -253,11 +253,11 @@ export default defineEventHandler(async (event) => {
     ])
 
     return {
-        data: cities.map(({ weathersAverage, ...city }) => ({
+        data: cities.map(({ monthSummary, ...city }) => ({
             ...city,
             population: formatNumber(city.population),
-            weatherIcon: weathersAverage[0]?.weatherIcon,
-            temperature: weathersAverage[0]?.temperature2mMax,
+            weatherIcon: monthSummary[0]?.weatherIcon,
+            temperature: monthSummary[0]?.temperature2mMax,
         })),
         count,
         pagesCount: Math.ceil(count / limit),

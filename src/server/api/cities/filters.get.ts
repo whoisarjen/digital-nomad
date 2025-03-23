@@ -36,18 +36,12 @@ export default defineEventHandler(async () => {
             population: true,
             internetSpeed: true,
             costForNomadInUsd: true,
-            weathersAverage: {
-                select: {
-                    temperature2mMax: true,
-                },
-            }
         }
     })
 
     const populations = new Set<number>()
     const internetSpeed = new Set<number>()
     const costForNomadInUsd = new Set<number>()
-    const temperature2mMax = new Set<number>(allCities.flatMap(city => city.weathersAverage.map(option => parseInt(option.temperature2mMax.toString()))))
 
     allCities.forEach(city => {
         populations.add(city.population)
