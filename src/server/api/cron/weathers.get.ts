@@ -106,7 +106,7 @@ export default defineEventHandler(async () => {
         create: option,
         update: option,
       })
-    })
+    }, res.length, false)
 
     await prisma.city.update({
       where: {

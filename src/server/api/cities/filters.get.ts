@@ -59,7 +59,6 @@ export default defineEventHandler(async () => {
             population: true,
             internetSpeed: true,
             costForNomadInUsd: true,
-            pollutionIndex: true,
             weathersAverage: {
                 select: {
                     temperature2mMax: true,
