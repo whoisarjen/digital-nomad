@@ -1,4 +1,17 @@
-import _ from 'lodash'
+const median = (numbers: number[]): number => {
+  // Sort the array in ascending order
+  const sortedNumbers = [...numbers].sort((a, b) => a - b);
+
+  const middleIndex = Math.floor(sortedNumbers.length / 2);
+
+  // If the array length is odd, return the middle element
+  if (sortedNumbers.length % 2 !== 0) {
+    return sortedNumbers[middleIndex];
+  }
+
+  // If the array length is even, return the average of the two middle elements
+  return (sortedNumbers[middleIndex - 1] + sortedNumbers[middleIndex]) / 2;
+}
 
 export default defineEventHandler(async () => {
   const cities = await prisma.city.findMany({
@@ -68,22 +81,22 @@ export default defineEventHandler(async () => {
       return {
         month: index + 1 < 10 ? `0${index + 1}` : `${index + 1}`,  // Month number (1-12)
         weatherCode: mostCommonWeatherCode,  // <- Most common weather code logic
-        apparentTemperatureMax: _.mean(data.apparentTemperatureMax),
-        rainSum: _.mean(data.rainSum),
-        windGusts10mMax: _.mean(data.windGusts10mMax),
-        snowfallSum: _.mean(data.snowfallSum),
-        windDirection10mDominant: _.mean(data.windDirection10mDominant),
-        daylightDuration: _.mean(data.daylightDuration),
-        apparentTemperatureMin: _.mean(data.apparentTemperatureMin),
-        temperature2mMax: _.mean(data.temperature2mMax),
-        temperature2mMin: _.mean(data.temperature2mMin),
-        apparentTemperatureMean: _.mean(data.apparentTemperatureMean),
-        sunshineDuration: _.mean(data.sunshineDuration),
-        precipitationHours: _.mean(data.precipitationHours),
-        shortwaveRadiationSum: _.mean(data.shortwaveRadiationSum),
-        windSpeed10mMax: _.mean(data.windSpeed10mMax),
-        precipitationSum: _.mean(data.precipitationSum),
-        temperature2mMean: _.mean(data.temperature2mMean),
+        apparentTemperatureMax: median(data.apparentTemperatureMax),
+        rainSum: median(data.rainSum),
+        windGusts10mMax: median(data.windGusts10mMax),
+        snowfallSum: median(data.snowfallSum),
+        windDirection10mDominant: median(data.windDirection10mDominant),
+        daylightDuration: median(data.daylightDuration),
+        apparentTemperatureMin: median(data.apparentTemperatureMin),
+        temperature2mMax: median(data.temperature2mMax),
+        temperature2mMin: median(data.temperature2mMin),
+        apparentTemperatureMean: median(data.apparentTemperatureMean),
+        sunshineDuration: median(data.sunshineDuration),
+        precipitationHours: median(data.precipitationHours),
+        shortwaveRadiationSum: median(data.shortwaveRadiationSum),
+        windSpeed10mMax: median(data.windSpeed10mMax),
+        precipitationSum: median(data.precipitationSum),
+        temperature2mMean: median(data.temperature2mMean),
       };
     });
 

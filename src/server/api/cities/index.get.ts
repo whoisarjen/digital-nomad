@@ -172,7 +172,7 @@ const getCityPrismaQuery = (query: z.infer<typeof getCitiesSchema>) => {
             AND.push({
                 monthSummary: {
                     some: {
-                        temperature2mMax: { 
+                        temperature2mMean: { 
                             gte: query.temperatures.min,
                             lte: query.temperatures.max,
                         },
