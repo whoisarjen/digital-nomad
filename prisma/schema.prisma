@@ -79,9 +79,9 @@ model City {
   humidity              String
   rank                  Int
   // weatherEmoji              String
-  temperatureF          Decimal @db.Decimal
-  temperatureCFeelsLike Decimal @db.Decimal
-  temperatureFFeelsLike Decimal @db.Decimal
+  // temperatureF          Decimal @db.Decimal
+  // temperatureCFeelsLike Decimal @db.Decimal
+  // temperatureFFeelsLike Decimal @db.Decimal
   costForNomadInUsd     Decimal @db.Decimal
   costForExpatInUsd     Decimal @db.Decimal
   costForLocalInUsd     Decimal @db.Decimal
