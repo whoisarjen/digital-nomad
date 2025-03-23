@@ -1,10 +1,5 @@
 {
     "regions": ["fra1"],
-    "crons": [
-      {
-        "path": "/api/cron/numbeo/climate",
-        "schedule": "0 */1 * * *"
-      }
-    ]
+    "crons": []
   }
   

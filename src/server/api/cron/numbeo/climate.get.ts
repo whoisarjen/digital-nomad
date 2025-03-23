@@ -11,10 +11,11 @@ export default defineEventHandler(async () => {
   })
 
   let counter = 0
-  const numbeosToSeed = options.filter(({ climate, slug }) => !climate && slug)
+  const numbeosToSeed = options.filter(({ climate, slug }) => slug)
   for (const { citySlug, slug } of numbeosToSeed) {
     counter++
     console.log(`Left ${numbeosToSeed.length - counter}, working on ${slug}`)
+
     const { data } = await axios.get(`REDACTED_CLIMATE_URL/${slug}`);
 
     const $ = cheerio.load(data);
@@ -33,14 +34,25 @@ export default defineEventHandler(async () => {
       }
     })
 
+    const isPerfectAllYearAround = $('body').text().includes( "all year round");
+    const firstTextAfterH2 = $('h2').nextUntil('p').next('p').text().trim()
+    const match = firstTextAfterH2.match(/visit:\s*(.*)/i);
+    const bestMonthsToVisit = match ? match[1].trim().replace('.', '').split(', ') : []
+
     await prisma.numbeo.update({
       where: {
         citySlug,
       },
       data: {
-        climate,
-      }
+        climate: {
+          isPerfectAllYearAround,
+          bestMonthsToVisit,
+          climate,
+        }
+      },
     })
+
+    await new Promise(res => setTimeout(() => res(true), 1000))
   }
 
   return 'Done'

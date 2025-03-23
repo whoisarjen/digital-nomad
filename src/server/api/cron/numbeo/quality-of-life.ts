@@ -99,7 +99,7 @@ export default defineEventHandler(async () => {
           }
         })
 
-        await new Promise(res => setTimeout(() => res(true), 500))
+        await new Promise(res => setTimeout(() => res(true), 1000))
       } catch (error) {
         console.error('Error fetching data:', error);
         return { error: 'Error fetching data from the website' };
