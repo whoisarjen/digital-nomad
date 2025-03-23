@@ -2,7 +2,7 @@
     "regions": ["fra1"],
     "crons": [
       {
-        "path": "/api/cron/numbeo",
+        "path": "/api/cron/numbeo/quality-of-life",
         "schedule": "0 */1 * * *"
       },
       {
