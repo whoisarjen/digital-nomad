@@ -1,8 +1,7 @@
 import { Level, Prisma, WeatherIcon } from '@prisma/client';
 import _ from 'lodash';
 import { z } from 'zod';
-import { RANGE_BREAK_SYMBOL } from './filters.get'; 
-import { DEFAULT_SORT_VALUE, formatNumber, OPTIONS_ORDER_BY, OPTIONS_LEVEL_LTE, OPTIONS_RANKS, SEARCH_BAR_MAXIMUM_Q_LENGTH, OPTIONS_LEVEL_GTE } from '~/shared/global.utils';
+import { DEFAULT_SORT_VALUE, formatNumber, OPTIONS_ORDER_BY, OPTIONS_LEVEL_LTE, OPTIONS_RANKS, SEARCH_BAR_MAXIMUM_Q_LENGTH, OPTIONS_LEVEL_GTE, getTemperaturesFromQuery } from '~/shared/global.utils';
 
 const MAX_LIMIT_OF_ITEMS_TO_LOAD = 100
 
@@ -70,7 +69,8 @@ const getCitiesSchema = z.object({
         .transform((val) => (val ? Number(val) : undefined))
         .pipe(z.number().positive().optional()),
     temperatures: z
-        .string()
+        .array(z.string())
+        .transform(getTemperaturesFromQuery)
         .optional(),
     internets: z
         .string()
@@ -169,14 +169,12 @@ const getCityPrismaQuery = (query: z.infer<typeof getCitiesSchema>) => {
         }
 
         if (query.temperatures) {
-            const [gte, lte] = query.temperatures.split(RANGE_BREAK_SYMBOL)
-
             AND.push({
                 weathersAverage: {
                     some: {
                         temperature2mMax: { 
-                            gte: Number(gte), 
-                            lte: Number(lte) 
+                            gte: query.temperatures.min,
+                            lte: query.temperatures.max,
                         },
                         month: query.months
                     }

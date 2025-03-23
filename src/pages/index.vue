@@ -35,6 +35,7 @@
               Clear filters
             </div>
             <MonthsPicker />
+            <TemperaturesPickers />
             <WeathersPicker />
             <RegionsPicker />
             <template v-if="filters">
@@ -52,13 +53,13 @@
           <div class="flex flex-col gap-6 flex-1 w-full">
             <div
               v-if="isClearFilter"
-              class="flex-1 text-sm flex gap-1 items-center"
+              class="text-sm flex gap-1 items-center"
             >
               <b>Filters:</b>
               <span>{{ Object.entries(params).map(([key, value]) =>
                 `${key.split('_').map(upperFirst).join(' ')} (${key === 'months'
                   ? new Date(2025, Number(value) - 1).toLocaleString('en-US', { month: 'long' }).toLowerCase()
-                  : `${filters?.[key as keyof typeof filters]?.operation === 'lte' ? '≤' : ''}${value}`.toLowerCase().split(',').join(', ')}${filters?.[key as keyof typeof filters]?.operation === 'gte' ? '≤' : ''})`).join(', ') }}
+                  : `${filters?.[key as keyof typeof filters]?.operation === 'lte' ? '≤' : ''}${value}`.toLowerCase().split(',').join(', ').replace('gte:', '').replace('lte:', '')}${filters?.[key as keyof typeof filters]?.operation === 'gte' ? '≤' : ''})`).join(', ') }}
                 </span>
             </div>
             <div class="gap-6 w-full grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">

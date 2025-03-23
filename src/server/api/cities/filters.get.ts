@@ -1,8 +1,6 @@
 import _ from 'lodash';
 import { formatNumber, OPTIONS_LEVEL_GTE, OPTIONS_LEVEL_LTE, OPTIONS_RANKS } from '~/shared/global.utils';
 
-export const RANGE_BREAK_SYMBOL = '-'
-
 const getOptions = (array: number[], numOptionsRaw: number) => {
     const numOptions = numOptionsRaw + 2 // we need one more to drop 0 later (we already have 0 as all options)
     const sortedArray = [...new Set([...array])].sort((a, b) => a - b);
@@ -31,27 +29,6 @@ const getSingleOptions = (array: number[], numOptionsRaw: number, transformLabel
         label: transformLabel?.(option.toString()) ?? option.toString(),
     }))
 }
-
-const getRangeOptions = (array: number[], numOptionsRaw: number, transformLabel: (option: [any, any]) => string) => {
-    const { options: optionsRaw, min, max } = getOptions(array, numOptionsRaw)
-    const options = [...new Set([min, ...optionsRaw, max])]
-
-    const ranges = [];
-    for (let i = 0; i < options.length - 1; i++) {
-        if (i + 1 === options.length) {
-            break
-        }
-
-        const start = options[i];
-        const end = options[i + 1];
-        ranges.push({
-            value: `${start}${RANGE_BREAK_SYMBOL}${end}`,
-            label: transformLabel([start, end]),
-        });
-    }
-
-    return ranges;
-};
 
 export default defineEventHandler(async () => {
     const allCities = await prisma.city.findMany({
@@ -88,11 +65,6 @@ export default defineEventHandler(async () => {
             type: 'single',
             operation: 'lte',
             options: getSingleOptions([...costForNomadInUsd], 5, option => `${option}$`),
-        },
-        temperatures: {
-            type: 'single',
-            operation: 'range',
-            options: getRangeOptions([...temperature2mMax], 5, ([start, end]) => `${start} to ${end}°C`),
         },
         internets: {
             type: 'single',
