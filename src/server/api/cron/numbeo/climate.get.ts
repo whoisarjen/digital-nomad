@@ -10,7 +10,11 @@ export default defineEventHandler(async () => {
     },
   })
 
-  for (const { citySlug, slug } of options.filter(({ climate }) => !climate)) {
+  let counter = 0
+  const numbeosToSeed = options.filter(({ climate }) => !climate)
+  for (const { citySlug, slug } of numbeosToSeed) {
+    counter++
+    console.log(`Left ${numbeosToSeed.length - counter}, working on ${slug}`)
     const { data } = await axios.get(`REDACTED_CLIMATE_URL/${slug}`);
 
     const $ = cheerio.load(data);
