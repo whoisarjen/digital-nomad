@@ -14,25 +14,30 @@ enum Level {
   HIGH
 }
 
-model Image {
-  id        Int      @id @default(autoincrement())
+model Numbeo {
+  citySlug String @id
+  city     City   @relation(fields: [citySlug], references: [slug])
+
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @default(now()) @updatedAt
 
-  width            Int
-  height           Int
-  url              String  @unique
-  blurHash         String?
-  downloadLocation String
-  ownerName        String
-  ownerUsername    String?
-
-  citySlug String? @unique
-  city     City?   @relation(fields: [citySlug], references: [slug])
+  slug                       String
+  safetyIndex                Decimal?
+  climateIndex               Decimal?
+  pollutionIndex             Decimal?
+  purchasingPowerIndex       Decimal?
+  healthCareIndex            Decimal?
+  costOfLivingIndex          Decimal?
+  propertyPriceToIncomeRatio Decimal?
+  trafficCommuteTimeIndex    Decimal?
+  isNumberData               Boolean  @default(true)
 }
 
 model City {
-  slug         String  @id
+  slug      String   @id
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
   name         String
   country      String
   population   Int
@@ -87,18 +92,6 @@ model City {
   likesScore            Decimal @db.Decimal
   safetyLevel           Decimal @db.Decimal
 
-  numbeoName                 String?
-  numbeoSlug                 String?
-  isNumberData               Boolean  @default(true)
-  safetyIndex                Decimal?
-  climateIndex               Decimal?
-  pollutionIndex             Decimal?
-  purchasingPowerIndex       Decimal?
-  healthCareIndex            Decimal?
-  costOfLivingIndex          Decimal?
-  propertyPriceToIncomeRatio Decimal?
-  trafficCommuteTimeIndex    Decimal?
-
   safety                Level?
   climate               Level?
   pollution             Level?
@@ -113,12 +106,17 @@ model City {
   weathers        Weather[]        @relation("cityWeather")
   weathersAverage WeatherAverage[] @relation("cityWeatherAverage")
 
-  imageId Int?
-  image   Image?
+  imageId  Int?
+  image    Image?
+  numbeoId String?
+  numbeo   Numbeo?
 }
 
 model Weather {
-  id                       Int      @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
   date                     DateTime
   weatherCode              Int
   apparentTemperatureMax   Decimal
@@ -154,7 +152,10 @@ enum WeatherIcon {
 }
 
 model WeatherAverage {
-  id                       Int         @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
   month                    String      @db.VarChar(2)
   weatherCode              Int
   apparentTemperatureMax   Decimal
@@ -180,4 +181,21 @@ model WeatherAverage {
 
   @@unique([citySlug, month])
   @@index([citySlug, month])
+}
+
+model Image {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  width            Int
+  height           Int
+  url              String  @unique
+  blurHash         String?
+  downloadLocation String
+  ownerName        String
+  ownerUsername    String?
+
+  citySlug String? @unique
+  city     City?   @relation(fields: [citySlug], references: [slug])
 }

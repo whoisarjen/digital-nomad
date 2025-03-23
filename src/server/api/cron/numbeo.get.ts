@@ -25,19 +25,19 @@ type Indices = {
 }
 
 export default defineEventHandler(async () => {
-  const cities = await prisma.city.findMany({
+  const numbeos = await prisma.numbeo.findMany({
     where: {
-      
-    }
+      isNumberData: true,
+    },
   })
-  const citiesToSeed = cities.filter(option => !option.purchasingPowerIndex && !option.safetyIndex && !option.climateIndex && !option.pollutionIndex && !option.healthCareIndex)
+  const numbeosToSeed = numbeos.filter(option => !option.purchasingPowerIndex && !option.safetyIndex && !option.climateIndex && !option.pollutionIndex && !option.healthCareIndex)
 
   let counter = 0
-  for (const { numbeoName, name, slug } of citiesToSeed) {
+  for (const { slug, citySlug } of numbeosToSeed) {
     counter++
-    if (numbeoName) {
-      console.log(`Left ${citiesToSeed.length - counter}, working on ${numbeoName}`)
-      const url = `REDACTED_QOL_URL/${numbeoName}`;
+    if (slug) {
+      console.log(`Left ${numbeosToSeed.length - counter}, working on ${slug}`)
+      const url = `REDACTED_QOL_URL/${slug}`;
 
       try {
         // Fetch the HTML content of the page
@@ -73,9 +73,9 @@ export default defineEventHandler(async () => {
         });
 
         // Return the scraped data
-        await prisma.city.update({
+        await prisma.numbeo.update({
           where: {
-            slug,
+            citySlug,
           },
           data: {
             purchasingPowerIndex: indices['Purchasing Power Index']?.value,
@@ -87,7 +87,7 @@ export default defineEventHandler(async () => {
             trafficCommuteTimeIndex: indices['Traffic Commute Time Index']?.value,
             pollutionIndex: indices['Pollution Index']?.value,
             isNumberData: !!$('.no-much-data').length,
-            numbeoName:
+            slug:
               undefined === indices['Purchasing Power Index']?.value &&
               undefined === indices['Safety Index']?.value &&
               undefined === indices['Health Care Index']?.value &&
@@ -105,7 +105,7 @@ export default defineEventHandler(async () => {
         return { error: 'Error fetching data from the website' };
       }
     } else {
-      console.log(`Skipped ${name} as missing numbeoName`)
+      console.log(`Skipped ${citySlug} as missing slug`)
     }
   }
 
