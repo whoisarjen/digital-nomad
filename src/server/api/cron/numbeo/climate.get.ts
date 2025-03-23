@@ -11,7 +11,7 @@ export default defineEventHandler(async () => {
   })
 
   let counter = 0
-  const numbeosToSeed = options.filter(({ climate }) => !climate)
+  const numbeosToSeed = options.filter(({ climate, slug }) => !climate && slug)
   for (const { citySlug, slug } of numbeosToSeed) {
     counter++
     console.log(`Left ${numbeosToSeed.length - counter}, working on ${slug}`)
