@@ -1,22 +1,5 @@
 {
     "regions": ["fra1"],
-    "crons": [
-      {
-        "path": "/api/cron/numbeo/quality-of-life",
-        "schedule": "0 */1 * * *"
-      },
-      {
-        "path": "/api/cron/weathers",
-        "schedule": "0 */12 * * *"
-      },
-      {
-        "path": "/api/cron/weathers-counter",
-        "schedule": "30 */12 * * *"
-      },
-      {
-        "path": "/api/cron/counter",
-        "schedule": "40 */12 * * *"
-      }
-    ]
+    "crons": []
   }
   
