@@ -1,11 +1,11 @@
 <template>
   <Teleport to="body">
     <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-40">
-      <OnClickOutside @trigger="$modalRouter.close()" class="bg-white w-full max-w-screen-lg rounded-2xl p-4 shadow-lg relative min-h-[64%] max-h-[90%] overflow-auto flex-1">
+      <OnClickOutside @trigger="$modalRouter.close()" class="bg-white w-full max-w-screen-lg rounded-2xl shadow-lg relative min-h-[64%] max-h-[90%] overflow-auto flex-1">
         <div class="size-full">
           <button 
             @click="$modalRouter.close()" 
-            class="absolute top-4 right-4 custom-button-active rounded-full p-2 shadow-md transition-all z-50"
+            class="absolute top-6 right-6 custom-button-active rounded-full p-2 shadow-md transition-all z-50"
           >
             <lucideX class="size-5" />
           </button>

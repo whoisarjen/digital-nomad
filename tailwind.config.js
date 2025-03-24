@@ -25,10 +25,6 @@ export default {
     },
     container: {
       center: true,
-      padding: {
-        DEFAULT: '10px',
-        lg: '2rem',
-      },
       screens: {
         '2xl': '1400px',
         xl: '1280px',
