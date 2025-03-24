@@ -1,12 +1,12 @@
 <template>
     <PlusModalPage name="modal" />
     <div class="min-h-screen bg-gray-100 text-gray-900">
-      <section class="relative min-h-[50vh] flex flex-col justify-center text-center text-white p-6">
-        <NuxtImg 
+      <section class="relative h-[50vh] flex flex-col justify-center text-center text-white p-6 group overflow-hidden">
+        <NuxtImg
           provider="unsplash"
           src="/photo-1535117399959-7df1714b4202?ixid=M3w3MjU5NzR8MHwxfHNlYXJjaHw1fHxCYW5na29rfGVufDB8fHx8MTc0MjYxMjM3Mnww&ixlib=rb-4.0.3&" 
           alt="Explore. Work. Live." 
-          class="absolute inset-0 size-full object-cover"
+          class="absolute inset-0 w-full h-[50vh] object-cover transition-all transform group-hover:scale-105"
         />
         <div class="absolute inset-0 z-10 bg-black size-full opacity-50" />
         <div class="relative py-20 z-20">
@@ -122,16 +122,16 @@
               </template>
             </div>
             <div class="flex justify-center">
-                <section
-                  v-if="status === 'pending'"
-                  class="flex items-center justify-center mt-5 gap-1"
-                >
-                  <div class="bg-gray-300 rounded-xl animate-pulse size-11"></div>
+              <section
+                v-if="status === 'pending'"
+                class="flex items-center justify-center mt-5 gap-1"
+              >
+                <div class="bg-gray-300 rounded-xl animate-pulse size-11"></div>
 
-                  <div v-for="n in 5" :key="n" class="bg-gray-300 rounded-xl animate-pulse size-11" />
+                <div v-for="n in 5" :key="n" class="bg-gray-300 rounded-xl animate-pulse size-11" />
 
-                  <div class="bg-gray-300 rounded-xl animate-pulse size-11"></div>
-                </section>
+                <div class="bg-gray-300 rounded-xl animate-pulse size-11"></div>
+              </section>
               <Pagination v-else :pages-count="cities?.pagesCount ?? 0" />
             </div>
           </div>
