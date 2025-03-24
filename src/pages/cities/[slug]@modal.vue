@@ -16,7 +16,6 @@
   </Teleport>
 </template>
 
-
 <script setup>
 import { OnClickOutside } from '@vueuse/components'
 import PageComponent from './[slug].vue'

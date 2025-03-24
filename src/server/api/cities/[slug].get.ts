@@ -1,5 +1,7 @@
+import { getCitiesBySlugSchema } from "~/shared/global.schema"
+
 export default defineEventHandler(async (event) => {
-  const slug = getRouterParam(event, 'slug')
+  const { slug } = await getValidatedRouterParams(event, getCitiesBySlugSchema.parse)
 
   return await prisma.city.findFirstOrThrow({
     where: { slug },

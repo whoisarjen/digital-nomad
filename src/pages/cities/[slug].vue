@@ -60,6 +60,7 @@ import type { InternalApi } from 'nitropack';
 const router = useRouter()
 const slug = computed(() => router.currentRoute.value.params.slug as string)
 
+// TODO rewrite to useCitiesBySlug
 const { data, status } = await useFetch<InternalApi['/api/cities/:slug']['get']>(() => `/api/cities/${slug.value}`, {
   watch: [() => slug.value],
   immediate: true,

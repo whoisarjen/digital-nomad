@@ -1,0 +1,104 @@
+
+
+import { Level, WeatherIcon } from '@prisma/client';
+import { z } from 'zod';
+import { DEFAULT_SORT_VALUE, OPTIONS_ORDER_BY, OPTIONS_LEVEL_LTE, OPTIONS_RANKS, SEARCH_BAR_MAXIMUM_Q_LENGTH, OPTIONS_LEVEL_GTE, getTemperaturesFromQuery, type OrderByOptionValue } from '~/shared/global.utils';
+
+const MAX_LIMIT_OF_ITEMS_TO_LOAD = 100
+
+const mapLevelToQuery = (level: string, option: 'lte' | 'gte'): Level[] => {
+    switch (option) {
+        case 'lte':
+            return level === 'LOW'
+                ? [Level.LOW]
+                : [Level.LOW, Level.MIDDLE];
+        case 'gte':
+            return level === 'HIGH'
+                ? [Level.HIGH]
+                : [Level.MIDDLE, Level.HIGH];
+        default:
+            console.warn(`Unexpected value in mapLevelToQuery: ${level} - ${option}`);
+            return [];
+    }
+};
+
+export const getCitiesSchema = z.object({
+    page: z
+        .string()
+        .optional()
+        .transform((val) => (val ? Number(val) : undefined))
+        .pipe(z.number().positive().optional().default(1)),
+    limit: z
+        .string()
+        .optional()
+        .transform((val) => (val ? Number(val) : undefined))
+        .pipe(z.number().positive().max(MAX_LIMIT_OF_ITEMS_TO_LOAD).optional().default(40)),
+    q: z
+        .string()
+        .max(SEARCH_BAR_MAXIMUM_Q_LENGTH)
+        .optional(),
+    sort: z
+        .enum(['desc', 'asc'])
+        .optional()
+        .default(DEFAULT_SORT_VALUE),
+    orderBy: z
+        .enum(OPTIONS_ORDER_BY.map(option => option.value) as [string, ...string[]])
+        .optional()
+        .transform(value => value as OrderByOptionValue)
+        .default(OPTIONS_ORDER_BY[0].value),    
+    months: z
+        .string(),
+    weathers: z
+        .union([
+            z.enum(Object.values(WeatherIcon) as [WeatherIcon, ...WeatherIcon[]]),
+            z.array(z.enum(Object.values(WeatherIcon) as [WeatherIcon, ...WeatherIcon[]])),
+        ])
+        .optional(),
+    regions: z
+        .union([
+            z.string(),
+            z.array(z.string()),
+        ])
+        .optional(),
+    total_scores: z
+        .enum(OPTIONS_RANKS.map(({ value }) => value) as [string, ...string[]])
+        .optional()
+        .transform((val) => (val ? Number(val) : undefined))
+        .pipe(z.number().positive().optional()),
+    costs: z
+        .string()
+        .optional()
+        .transform((val) => (val ? Number(val) : undefined))
+        .pipe(z.number().positive().optional()),
+    temperatures: z
+        .array(z.string())
+        .transform(getTemperaturesFromQuery)
+        .optional(),
+    internets: z
+        .string()
+        .optional()
+        .transform((val) => (val ? Number(val) : undefined))
+        .pipe(z.number().positive().optional()),
+    populations: z
+        .string()
+        .optional()
+        .transform((val) => (val ? Number(val) : undefined))
+        .pipe(z.number().positive().optional()),
+    pollutions: z
+        .enum(OPTIONS_LEVEL_LTE.map(({ value }) => value) as [string, ...string[]])
+        .transform(value => mapLevelToQuery(value, 'lte'))
+        .optional(),
+    safety: z
+        .enum(OPTIONS_LEVEL_GTE.map(({ value }) => value) as [string, ...string[]])
+        .transform(value => mapLevelToQuery(value, 'gte'))
+        .optional(),
+});
+
+export type GetCitiesSchema = z.infer<typeof getCitiesSchema>;
+
+export const getCitiesBySlugSchema = z.object({
+    slug: z
+        .string(),
+});
+
+export type GetCitiesBySlugSchema = z.infer<typeof getCitiesBySlugSchema>;

@@ -56,7 +56,7 @@
               class="text-sm flex gap-1 items-center"
             >
               <b>Filters:</b>
-              <span>{{ Object.entries(query).map(([key, value]) =>
+              <span>{{ Object.entries(queryParams).map(([key, value]) =>
                 `${key.split('_').map(upperFirst).join(' ')} (${key === 'months'
                   ? new Date(2025, Number(value) - 1).toLocaleString('en-US', { month: 'long' }).toLowerCase()
                   : `${filters?.[key as keyof typeof filters]?.operation === 'lte' ? '≤' : ''}${value}`.toLowerCase().split(',').join(', ').replace('gte:', '').replace('lte:', '')}${filters?.[key as keyof typeof filters]?.operation === 'gte' ? '≤' : ''})`).join(', ') }}
@@ -133,30 +133,22 @@
   
   <script setup lang="ts">
   import upperFirst from 'lodash/upperFirst';
-import type { GetCitiesSchema } from '~/server/api/cities/index.get';
+import type { GetCitiesSchema } from '~/shared/global.schema';
 import { getUserCurrentMonthString, OPTIONS_ORDER_BY } from '~/shared/global.utils';
 
   const route = useRoute()
   const router = useRouter()
 
   const isClearFilter = computed(() => Object.keys(route.query).length)
-  const query = computed(() => ({
+  const queryParams = computed(() => ({
     ...route.query,
     months: route.query.months ?? getUserCurrentMonthString(),
   })) as Ref<Partial<GetCitiesSchema>>
 
-  const { data: cities, status } = await useFetch('/api/cities', {
-    query,
-    watch: [() => query.value],
-    immediate: true,
-  })
-  const { data: filters } = await useFetch('/api/cities/filters', {
-    // query,
-    // watch: [() => query.value],
-    immediate: true,
-  })
+  const { data: cities, status } = await useCities(queryParams)
+  const { data: filters } = await useCitiesFilters()
 
-  watch(() => query.value.page, () => {
+  watch(() => queryParams.value.page, () => {
     window?.scrollTo({ top: 0, behavior: 'smooth' });
   }, { immediate: true })
   </script>
