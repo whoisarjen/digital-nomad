@@ -22,7 +22,21 @@ export default {
           900: '#1E3A8A'
         }
       }
-    }
+    },
+    container: {
+      center: true,
+      padding: {
+        DEFAULT: '10px',
+        lg: '2rem',
+      },
+      screens: {
+        '2xl': '1400px',
+        xl: '1280px',
+        lg: '1024px',
+        md: '100vw',
+        sm: '100%',
+      },
+    },
   },
   plugins: [],
 }

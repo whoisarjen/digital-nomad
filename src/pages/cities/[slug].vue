@@ -1,57 +1,68 @@
 <template>
-  <template v-if="!data || status !== 'success'">
-    <div class="relative aspect-video overflow-hidden bg-gray-200 animate-pulse">
-      <div class="w-full aspect-video bg-gray-300 rounded-t-xl h-full"></div>
-      <div class="absolute bottom-0 right-0 text-xs text-white bg-black py-1 px-2 rounded-tl-lg w-32"></div>
-    </div>
-
-    <div class="p-4 flex flex-col gap-4 flex-1">
-      <h3 class="text-xl font-semibold text-gray-900 bg-gray-300 animate-pulse rounded w-2/3 h-6 mb-2"></h3>
-      <div class="text-sm text-gray-600 bg-gray-300 animate-pulse rounded w-3/4 h-4 mb-2"></div>
-
-      <div class="flex justify-between text-sm text-gray-500">
-        <span class="bg-gray-300 animate-pulse rounded w-1/4 h-4"></span>
-        <span class="bg-gray-300 animate-pulse rounded w-1/4 h-4"></span>
-        <span class="bg-gray-300 animate-pulse rounded w-1/4 h-4"></span>
+  <div class="container">
+    <template v-if="!data || status !== 'success'">
+      <div class="grid grid-cols-4 gap-4">
+        <div v-for="index in 12" :key="index" class="bg-gray-300 animate-pulse rounded h-20"></div>
       </div>
-    </div>
-  </template>
-  <template v-else>
-    <div class="relative aspect-video overflow-hidden">
-      <NuxtImg
-        provider="unsplash"
-        :src="data.image?.url.replace('https://images.unsplash.com', '')"
-        :alt="data.name"
-        class="w-full aspect-video object-cover rounded-t-xl transition-all transform group-hover:scale-105"
-        loading="lazy"
-        width="1024"
-        quality="100"
-      />
-      <div v-if="data.image" class="text-xs absolute bottom-0 right-0 text-white bg-black py-1 px-2 rounded-tl-lg">
-        <NuxtLink target="_blank" :to="`https://unsplash.com/@${data.image.ownerUsername}?utm_source=Digital%20Nomad&utm_medium=referral`">{{ data.image.ownerName }}</NuxtLink> on <NuxtLink target="_blank" to="https://unsplash.com/?utm_source=Digital%20Nomad&utm_medium=referral">Unsplash</NuxtLink>
-      </div>
-    </div>
+    </template>
 
-    <div class="p-4 flex flex-col gap-4 flex-1">
-      <h3 class="text-xl font-semibold text-gray-900 transition-colors group-hover:text-primary-500">
-        {{ data.name }}, {{ data.country }}
-      </h3>
-      <div class="text-sm text-gray-600 flex gap-1 flex-1">
-        Pollution: {{ data.pollution }}
-        Safety: {{ data.safety }}
-        Population: {{ data.population }}
-      </div>
+    <template v-else>
+      <div class="p-4 flex flex-col gap-4 flex-1">
+        <div class="relative aspect-video overflow-hidden">
+          <NuxtImg
+            provider="unsplash"
+            :src="data.image?.url.replace('https://images.unsplash.com', '')"
+            :alt="data.name"
+            class="w-full aspect-video object-cover rounded-t-xl transition-all transform group-hover:scale-105"
+            loading="lazy"
+            width="1024"
+            quality="100"
+          />
+          <div v-if="data.image" class="text-xs absolute bottom-0 right-0 text-white bg-black py-1 px-2 rounded-tl-lg">
+            <NuxtLink target="_blank" :to="`https://unsplash.com/@${data.image.ownerUsername}?utm_source=Digital%20Nomad&utm_medium=referral`">{{ data.image.ownerName }}</NuxtLink> on <NuxtLink target="_blank" to="https://unsplash.com/?utm_source=Digital%20Nomad&utm_medium=referral">Unsplash</NuxtLink>
+          </div>
+        </div>
 
-      <div class="flex justify-between text-sm text-gray-500">
-        <span class="text-primary-500 flex items-center gap-1">
-          <!-- <WeatherIcon :weather-icon="data.weatherIcon" />
-          {{ Number(data.temperature).toFixed(1) }}°C -->
-        </span>
-        <span class="text-green-500">💰 ${{ data.costForNomadInUsd }}/mo</span>
-        <span class="text-yellow-500">🌐 {{ data.internetSpeed }} Mbps</span>
+        <h3 class="text-xl font-semibold text-gray-900">
+          {{ data.name }}, {{ data.country }}
+        </h3>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div class="bg-white shadow-md p-4 rounded-lg border">
+            <h5 class="font-semibold">Internet</h5>
+            <p>Speed: {{ data.internetSpeed }} Mbps</p>
+            <p>Digital Nomad Score: {{ data.internetScoreDigitalNomad }}</p>
+            <p>City Speed: {{ data.internetSpeedCity }} Mbps (Rank: {{ data.internetSpeedCityRanking }})</p>
+            <p>Country Speed: {{ data.internetSpeedCountry }} Mbps (Rank: {{ data.internetSpeedCountryRanking }})</p>
+          </div>
+
+          <div class="bg-white shadow-md p-4 rounded-lg border">
+            <h5 class="font-semibold">Air Quality</h5>
+            <p>Now: {{ data.airQualityNow }}</p>
+            <p>Score: {{ data.airQualityScore }}</p>
+            <p>Now Score: {{ data.airQualityNowScore }}</p>
+            <p>Humidity: {{ data.humidity }}</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-4 gap-4 mt-4">
+          <div
+            v-for="(monthData, index) in data.monthSummary"
+            :key="index"
+            class="flex flex-col items-center bg-white shadow-md p-2 rounded-lg border"
+          >
+            <span class="text-sm text-gray-500 font-semibold">{{ new Date(2023, Number(monthData.month) - 1).toLocaleString('en-US', { month: 'long' }) }}</span>
+            <WeatherIcon :weather-icon="monthData.weatherIcon" class="text-3xl" />
+            <span class="text-primary-500 text-lg font-bold">{{ Number(monthData.apparentTemperatureMax).toFixed(1) }}°C</span>
+            <div class="text-xs text-gray-500 flex gap-2 mt-2">
+              <span>🌧️ {{ Number(monthData.rainSum).toFixed(1) }}mm</span>
+              <span>☀️ {{ Number(monthData.sunshineDuration).toFixed(1) }} hrs</span>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-  </template>
+    </template>
+  </div>
 </template>
 
 <script lang="ts" setup>

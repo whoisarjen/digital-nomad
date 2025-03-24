@@ -8,13 +8,20 @@ export default defineEventHandler(async (event) => {
     select: {
       name: true,
       country: true,
-      // weatherIcon: true,
-      // temperature: true,
       costForNomadInUsd: true,
       internetSpeed: true,
       pollution: true,
       safety: true,
       population: true,
+      internetScoreDigitalNomad: true,
+      internetSpeedCity: true,
+      internetSpeedCityRanking: true,
+      internetSpeedCountry: true,
+      internetSpeedCountryRanking: true,
+      airQualityNow: true,
+      airQualityScore: true,
+      airQualityNowScore: true,
+      humidity: true,
       image: {
         select: {
           url: true,
@@ -22,6 +29,15 @@ export default defineEventHandler(async (event) => {
           ownerUsername: true,
         }
       },
+      monthSummary: {
+        select: {
+          month: true,
+          weatherIcon: true,
+          apparentTemperatureMax: true,
+          rainSum: true,
+          sunshineDuration: true,
+        }
+      }
     }
   })
 })
