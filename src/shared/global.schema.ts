@@ -1,21 +1,36 @@
 
 
-import { Level, WeatherIcon } from '@prisma/client';
+import type { Level, WeatherIcon } from '@prisma/client';
 import { z } from 'zod';
 import { DEFAULT_SORT_VALUE, OPTIONS_ORDER_BY, OPTIONS_LEVEL_LTE, OPTIONS_RANKS, SEARCH_BAR_MAXIMUM_Q_LENGTH, OPTIONS_LEVEL_GTE, getTemperaturesFromQuery, type OrderByOptionValue } from '~/shared/global.utils';
 
 const MAX_LIMIT_OF_ITEMS_TO_LOAD = 100
 
+const LEVEL = {
+    LOW: 'LOW',
+    MIDDLE: 'MIDDLE',
+    HIGH: 'HIGH',
+} satisfies Record<Level, Level>
+
+const WEATHER_ICON = {
+    SUN: 'SUN',
+    CLOUDY: 'CLOUDY',
+    WIND: 'WIND',
+    RAIN: 'RAIN',
+    SNOW: 'SNOW',
+    NULL: 'NULL',
+} satisfies Record<WeatherIcon, WeatherIcon>
+
 const mapLevelToQuery = (level: string, option: 'lte' | 'gte'): Level[] => {
     switch (option) {
         case 'lte':
             return level === 'LOW'
-                ? [Level.LOW]
-                : [Level.LOW, Level.MIDDLE];
+                ? [LEVEL.LOW]
+                : [LEVEL.LOW, LEVEL.MIDDLE];
         case 'gte':
             return level === 'HIGH'
-                ? [Level.HIGH]
-                : [Level.MIDDLE, Level.HIGH];
+                ? [LEVEL.HIGH]
+                : [LEVEL.MIDDLE, LEVEL.HIGH];
         default:
             console.warn(`Unexpected value in mapLevelToQuery: ${level} - ${option}`);
             return [];
@@ -50,8 +65,8 @@ export const getCitiesSchema = z.object({
         .string(),
     weathers: z
         .union([
-            z.enum(Object.values(WeatherIcon) as [WeatherIcon, ...WeatherIcon[]]),
-            z.array(z.enum(Object.values(WeatherIcon) as [WeatherIcon, ...WeatherIcon[]])),
+            z.enum(Object.values(WEATHER_ICON) as [WeatherIcon, ...WeatherIcon[]]),
+            z.array(z.enum(Object.values(WEATHER_ICON) as [WeatherIcon, ...WeatherIcon[]])),
         ])
         .optional(),
     regions: z
