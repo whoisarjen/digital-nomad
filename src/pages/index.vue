@@ -1,11 +1,20 @@
 <template>
     <PlusModalPage name="modal" />
     <div class="min-h-screen bg-gray-100 text-gray-900">
-      <section class="bg-primary-600 text-white py-20 text-center flex flex-col justify-center min-h-[50vh] p-6">
-        <h1 class="text-5xl font-bold">Explore. Work. Live.</h1>
-        <p class="mt-4 text-lg">Find the perfect city for your digital nomad lifestyle.</p>
-        <div class="mt-6 flex justify-center">
-          <SearchBar />
+      <section class="relative min-h-[50vh] flex flex-col justify-center text-center text-white p-6">
+        <NuxtImg 
+          provider="unsplash"
+          src="/photo-1535117399959-7df1714b4202?ixid=M3w3MjU5NzR8MHwxfHNlYXJjaHw1fHxCYW5na29rfGVufDB8fHx8MTc0MjYxMjM3Mnww&ixlib=rb-4.0.3&" 
+          alt="Explore. Work. Live." 
+          class="absolute inset-0 size-full object-cover"
+        />
+        <div class="absolute inset-0 z-10 bg-black size-full opacity-50" />
+        <div class="relative py-20 z-20">
+          <h1 class="text-5xl font-bold">Explore. Work. Live.</h1>
+          <p class="mt-4 text-lg">Find the perfect city for your digital nomad lifestyle.</p>
+          <div class="mt-6 flex justify-center">
+            <SearchBar />
+          </div>
         </div>
       </section>
       <section class="p-6 flex flex-col gap-6">
