@@ -89,7 +89,6 @@ export default defineEventHandler(async () => {
         windSpeed10mMax: weatherData.daily.windSpeed10mMax[i],
         precipitationSum: weatherData.daily.precipitationSum[i],
         temperature2mMean: weatherData.daily.temperature2mMean[i],
-        citySlug: city.slug,
       };
 
       res.push(data)
@@ -103,7 +102,14 @@ export default defineEventHandler(async () => {
             citySlug: city.slug,
           },
         },
-        create: option,
+        create: {
+          ...option,
+          city: {
+            connect: {
+              slug: city.slug,
+            }
+          }
+        },
         update: option,
       })
     }, res.length, false)

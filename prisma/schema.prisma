@@ -121,22 +121,22 @@ model Weather {
 
   date                     DateTime
   weatherCode              Int
-  apparentTemperatureMax   Decimal
-  rainSum                  Decimal
-  windGusts10mMax          Decimal
-  snowfallSum              Decimal
-  windDirection10mDominant Decimal
-  daylightDuration         Decimal
-  apparentTemperatureMin   Decimal
-  temperature2mMax         Decimal
-  temperature2mMin         Decimal
-  apparentTemperatureMean  Decimal
-  sunshineDuration         Decimal
-  precipitationHours       Decimal
-  shortwaveRadiationSum    Decimal
-  windSpeed10mMax          Decimal
-  precipitationSum         Decimal
-  temperature2mMean        Decimal
+  apparentTemperatureMax   Decimal?
+  rainSum                  Decimal?
+  windGusts10mMax          Decimal?
+  snowfallSum              Decimal?
+  windDirection10mDominant Decimal?
+  daylightDuration         Decimal?
+  apparentTemperatureMin   Decimal?
+  temperature2mMax         Decimal?
+  temperature2mMin         Decimal?
+  apparentTemperatureMean  Decimal?
+  sunshineDuration         Decimal?
+  precipitationHours       Decimal?
+  shortwaveRadiationSum    Decimal?
+  windSpeed10mMax          Decimal?
+  precipitationSum         Decimal?
+  temperature2mMean        Decimal?
 
   citySlug String
   city     City   @relation("cityWeather", fields: [citySlug], references: [slug], onDelete: Cascade)

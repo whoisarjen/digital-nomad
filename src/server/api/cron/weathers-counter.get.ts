@@ -1,3 +1,5 @@
+import _ from "lodash";
+
 const median = (numbers: number[]): number => {
   // Sort the array in ascending order
   const sortedNumbers = [...numbers].sort((a, b) => a - b);
@@ -54,22 +56,22 @@ export default defineEventHandler(async () => {
         (monthlyTemps[month].weatherCodeMap[weatherCode] || 0) + 1;
     
       // Existing logic
-      monthlyTemps[month].apparentTemperatureMax.push(Number(weather.apparentTemperatureMax));
-      monthlyTemps[month].rainSum.push(Number(weather.rainSum));
-      monthlyTemps[month].windGusts10mMax.push(Number(weather.windGusts10mMax));
-      monthlyTemps[month].snowfallSum.push(Number(weather.snowfallSum));
-      monthlyTemps[month].windDirection10mDominant.push(Number(weather.windDirection10mDominant));
-      monthlyTemps[month].daylightDuration.push(Number(weather.daylightDuration));
-      monthlyTemps[month].apparentTemperatureMin.push(Number(weather.apparentTemperatureMin));
-      monthlyTemps[month].temperature2mMax.push(Number(weather.temperature2mMax));
-      monthlyTemps[month].temperature2mMin.push(Number(weather.temperature2mMin));
-      monthlyTemps[month].apparentTemperatureMean.push(Number(weather.apparentTemperatureMean));
-      monthlyTemps[month].sunshineDuration.push(Number(weather.sunshineDuration));
-      monthlyTemps[month].precipitationHours.push(Number(weather.precipitationHours));
-      monthlyTemps[month].shortwaveRadiationSum.push(Number(weather.shortwaveRadiationSum));
-      monthlyTemps[month].windSpeed10mMax.push(Number(weather.windSpeed10mMax));
-      monthlyTemps[month].precipitationSum.push(Number(weather.precipitationSum));
-      monthlyTemps[month].temperature2mMean.push(Number(weather.temperature2mMean));
+      !_.isNil(weather.apparentTemperatureMax) && monthlyTemps[month].apparentTemperatureMax.push(Number(weather.apparentTemperatureMax));
+      !_.isNil(weather.rainSum) && monthlyTemps[month].rainSum.push(Number(weather.rainSum));
+      !_.isNil(weather.windGusts10mMax) && monthlyTemps[month].windGusts10mMax.push(Number(weather.windGusts10mMax));
+      !_.isNil(weather.snowfallSum) && monthlyTemps[month].snowfallSum.push(Number(weather.snowfallSum));
+      !_.isNil(weather.windDirection10mDominant) && monthlyTemps[month].windDirection10mDominant.push(Number(weather.windDirection10mDominant));
+      !_.isNil(weather.daylightDuration) && monthlyTemps[month].daylightDuration.push(Number(weather.daylightDuration));
+      !_.isNil(weather.apparentTemperatureMin) && monthlyTemps[month].apparentTemperatureMin.push(Number(weather.apparentTemperatureMin));
+      !_.isNil(weather.temperature2mMax) && monthlyTemps[month].temperature2mMax.push(Number(weather.temperature2mMax));
+      !_.isNil(weather.temperature2mMin) && monthlyTemps[month].temperature2mMin.push(Number(weather.temperature2mMin));
+      !_.isNil(weather.apparentTemperatureMean) && monthlyTemps[month].apparentTemperatureMean.push(Number(weather.apparentTemperatureMean));
+      !_.isNil(weather.sunshineDuration) && monthlyTemps[month].sunshineDuration.push(Number(weather.sunshineDuration));
+      !_.isNil(weather.precipitationHours) && monthlyTemps[month].precipitationHours.push(Number(weather.precipitationHours));
+      !_.isNil(weather.shortwaveRadiationSum) && monthlyTemps[month].shortwaveRadiationSum.push(Number(weather.shortwaveRadiationSum));
+      !_.isNil(weather.windSpeed10mMax) && monthlyTemps[month].windSpeed10mMax.push(Number(weather.windSpeed10mMax));
+      !_.isNil(weather.precipitationSum) && monthlyTemps[month].precipitationSum.push(Number(weather.precipitationSum));
+      !_.isNil(weather.temperature2mMean) && monthlyTemps[month].temperature2mMean.push(Number(weather.temperature2mMean));
     });
     
     // Calculate the most common weather code
