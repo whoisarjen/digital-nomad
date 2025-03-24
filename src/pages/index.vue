@@ -6,7 +6,7 @@
           provider="unsplash"
           src="/photo-1535117399959-7df1714b4202?ixid=M3w3MjU5NzR8MHwxfHNlYXJjaHw1fHxCYW5na29rfGVufDB8fHx8MTc0MjYxMjM3Mnww&ixlib=rb-4.0.3&" 
           alt="Explore. Work. Live." 
-          class="absolute inset-0 w-full h-[50vh] object-cover transition-all transform group-hover:scale-105"
+          class="absolute inset-0 w-full h-[50vh] object-cover transition-all duration-500 transform group-hover:scale-105"
         />
         <div class="absolute inset-0 z-10 bg-black size-full opacity-50" />
         <div class="relative py-20 z-20">
@@ -35,7 +35,7 @@
             <h3 class="text-xl font-bold">Filters</h3>
             <div
               @click="() => isClearFilter && router.push({ query: {} })"
-              class="px-4 py-2 rounded-xl border transition-all text-center text-sm text-white"
+              class="px-4 py-2 rounded-xl border transition-all duration-500 text-center text-sm text-white"
               :class="{
                 'bg-red-600 hover:bg-red-700 cursor-pointer': isClearFilter,
                 'cursor-not-allowed opacity-50 bg-gray-400 hover:bg-gray-400': !isClearFilter,
@@ -73,7 +73,7 @@
             </div>
             <div class="gap-6 w-full grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
               <template v-if="status === 'pending'">
-                <div v-for="city in 40" :key="city" class="bg-white rounded-xl transition-all transform">
+                <div v-for="city in 40" :key="city" class="bg-white rounded-xl transition-all duration-500 transform">
                   <div class="h-64 bg-gray-300 rounded-t-lg animate-pulse" />
                 </div>
               </template>
@@ -82,14 +82,14 @@
                   v-for="city in cities?.data"
                   :key="city.slug"
                   :to="`/cities/${city.slug}`"
-                  class="bg-white cursor-pointer rounded-xl overflow-hidden transition-all transform group hover:shadow-lg w-full flex flex-col"
+                  class="bg-white cursor-pointer rounded-xl overflow-hidden transition-all duration-500 transform group hover:shadow-lg w-full flex flex-col"
                 >
                   <div class="relative h-48 overflow-hidden">
                     <NuxtImg
                       provider="unsplash"
                       :src="city.image?.url.replace('https://images.unsplash.com', '')"
                       :alt="city.name"
-                      class="w-full h-48 object-cover rounded-t-xl transition-all transform group-hover:scale-105"
+                      class="w-full h-48 object-cover rounded-t-xl transition-all duration-500 transform group-hover:scale-105"
                       loading="lazy"
                       width="360"
                       quality="75"
