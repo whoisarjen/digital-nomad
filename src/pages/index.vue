@@ -1,4 +1,5 @@
 <template>
+    <PlusModalPage name="modal" />
     <div class="min-h-screen bg-gray-100 text-gray-900">
       <section class="bg-primary-600 text-white py-20 text-center flex flex-col justify-center min-h-[50vh] p-6">
         <h1 class="text-5xl font-bold">Explore. Work. Live.</h1>
@@ -7,7 +8,6 @@
           <SearchBar />
         </div>
       </section>
-
       <section class="p-6 flex flex-col gap-6">
         <section class="flex gap-6 justify-end flex-col md:flex-row items-center">
           <div class="flex gap-1 max-md:w-full">
@@ -56,7 +56,7 @@
               class="text-sm flex gap-1 items-center"
             >
               <b>Filters:</b>
-              <span>{{ Object.entries(params).map(([key, value]) =>
+              <span>{{ Object.entries(query).map(([key, value]) =>
                 `${key.split('_').map(upperFirst).join(' ')} (${key === 'months'
                   ? new Date(2025, Number(value) - 1).toLocaleString('en-US', { month: 'long' }).toLowerCase()
                   : `${filters?.[key as keyof typeof filters]?.operation === 'lte' ? '≤' : ''}${value}`.toLowerCase().split(',').join(', ').replace('gte:', '').replace('lte:', '')}${filters?.[key as keyof typeof filters]?.operation === 'gte' ? '≤' : ''})`).join(', ') }}
@@ -69,9 +69,10 @@
                 </div>
               </template>
               <template v-else>
-                <div
+                <PlusModalLink
                   v-for="city in cities?.data"
                   :key="city.slug"
+                  :to="`/cities/${city.slug}`"
                   class="bg-white cursor-pointer rounded-xl overflow-hidden transition-all transform group hover:shadow-lg w-full flex flex-col"
                 >
                   <div class="relative h-48 overflow-hidden">
@@ -108,7 +109,7 @@
                       <span class="text-yellow-500">🌐 {{ city.internetSpeed }} Mbps</span>
                     </div>
                   </div>
-                </div>
+                </PlusModalLink>
               </template>
             </div>
             <div class="flex justify-center">
@@ -139,23 +140,23 @@ import { getUserCurrentMonthString, OPTIONS_ORDER_BY } from '~/shared/global.uti
   const router = useRouter()
 
   const isClearFilter = computed(() => Object.keys(route.query).length)
-  const params = computed(() => ({
+  const query = computed(() => ({
     ...route.query,
     months: route.query.months ?? getUserCurrentMonthString(),
   })) as Ref<Partial<GetCitiesSchema>>
 
   const { data: cities, status } = await useFetch('/api/cities', {
-    params,
-    watch: [() => params.value],
+    query,
+    watch: [() => query.value],
     immediate: true,
   })
   const { data: filters } = await useFetch('/api/cities/filters', {
-    params,
-    // watch: [() => params.value],
+    // query,
+    // watch: [() => query.value],
     immediate: true,
   })
 
-  watch(() => params.value.page, () => {
+  watch(() => query.value.page, () => {
     window?.scrollTo({ top: 0, behavior: 'smooth' });
   }, { immediate: true })
   </script>

@@ -1,5 +1,5 @@
 <template>
-  <NuxtPage />
+  <PlusModalNuxtPage />
 </template>
 
 <script setup lang="ts"></script>
