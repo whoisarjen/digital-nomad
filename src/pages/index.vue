@@ -78,47 +78,48 @@
                 </div>
               </template>
               <template v-else>
-                <PlusModalLink
-                  v-for="city in cities?.data"
-                  :key="city.slug"
-                  :to="`/cities/${city.slug}`"
-                  class="bg-white cursor-pointer rounded-xl overflow-hidden transition-all duration-500 transform group hover:shadow-lg w-full flex flex-col"
-                >
-                  <div class="relative h-48 overflow-hidden">
-                    <NuxtImg
-                      provider="unsplash"
-                      :src="city.image?.url.replace('https://images.unsplash.com', '')"
-                      :alt="city.name"
-                      class="w-full h-48 object-cover rounded-t-xl transition-all duration-500 transform group-hover:scale-105"
-                      loading="lazy"
-                      height="192"
-                      quality="75"
-                    />
-                    <div v-if="city.image" class="text-xs absolute bottom-0 right-0 text-white bg-black py-1 px-2 rounded-tl-lg">
-                      <NuxtLink target="_blank" :to="`https://unsplash.com/@${city.image.ownerUsername}?utm_source=Digital%20Nomad&utm_medium=referral`">{{ city.image.ownerName }}</NuxtLink> on <NuxtLink target="_blank" to="https://unsplash.com/?utm_source=Digital%20Nomad&utm_medium=referral">Unsplash</NuxtLink>
-                    </div>
-                  </div>
-                  
-                  <div class="p-4 flex flex-col gap-4 flex-1">
-                    <h3 class="text-xl font-semibold text-gray-900 transition-colors group-hover:text-primary-500">
-                      {{ city.name }}, {{ city.country }}
-                    </h3>
-                    <div class="text-sm text-gray-600 flex gap-1 flex-1">
-                      Pollution: {{ city.pollution }}
-                      Safety: {{ city.safety }}
-                      Population: {{ city.population }}
+                <div class="relative w-full flex" v-for="city in cities?.data" :key="city.slug">
+                  <PlusModalLink
+                    :to="`/cities/${city.slug}`"
+                    class="bg-white cursor-pointer rounded-xl overflow-hidden transition-all duration-500 transform group hover:shadow-lg w-full flex flex-col"
+                  >
+                    <div class="relative h-48 overflow-hidden">
+                      <NuxtImg
+                        provider="unsplash"
+                        :src="city.image?.url.replace('https://images.unsplash.com', '')"
+                        :alt="city.name"
+                        class="w-full h-48 object-cover rounded-t-xl transition-all duration-500 transform group-hover:scale-105"
+                        loading="lazy"
+                        height="192"
+                        quality="75"
+                      />
                     </div>
 
-                    <div class="flex justify-between text-sm text-gray-500">
-                      <span class="text-primary-500 flex items-center gap-1">
-                        <WeatherIcon :weather-icon="city.weatherIcon" />
-                        {{ Number(city.temperature).toFixed(1) }}°C
-                      </span>
-                      <span class="text-green-500">💰 ${{ city.costForNomadInUsd }}/mo</span>
-                      <span class="text-yellow-500">🌐 {{ city.internetSpeed }} Mbps</span>
+                    <div class="p-4 flex flex-col gap-4 flex-1">
+                      <h3 class="text-xl font-semibold text-gray-900 transition-colors group-hover:text-primary-500">
+                        {{ city.name }}, {{ city.country }}
+                      </h3>
+                      <div class="text-sm text-gray-600 flex gap-1 flex-1">
+                        Pollution: {{ city.pollution }}
+                        Safety: {{ city.safety }}
+                        Population: {{ city.population }}
+                      </div>
+
+                      <div class="flex justify-between text-sm text-gray-500">
+                        <span class="text-primary-500 flex items-center gap-1">
+                          <WeatherIcon :weather-icon="city.weatherIcon" />
+                          {{ Number(city.temperature).toFixed(1) }}°C
+                        </span>
+                        <span class="text-green-500">💰 ${{ city.costForNomadInUsd }}/mo</span>
+                        <span class="text-yellow-500">🌐 {{ city.internetSpeed }} Mbps</span>
+                      </div>
                     </div>
+                  </PlusModalLink>
+
+                  <div v-if="city.image" class="absolute top-[168px] right-0 text-white bg-black py-1 px-2 rounded-tl-lg text-xs z-10">
+                    <NuxtLink target="_blank" :to="'https://unsplash.com/@${city.image.ownerUsername}?utm_source=Digital%20Nomad&utm_medium=referral'">{{ city.image.ownerName }}</NuxtLink> on <NuxtLink target="_blank" to="https://unsplash.com/?utm_source=Digital%20Nomad&utm_medium=referral">Unsplash</NuxtLink>
                   </div>
-                </PlusModalLink>
+                </div>
               </template>
             </div>
             <div class="flex justify-center">
