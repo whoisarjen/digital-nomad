@@ -69,7 +69,6 @@ model City {
   state          String?
 
   internetSpeed               Int
-  internetScoreDigitalNomad   Decimal @db.Decimal
   internetSpeedDigitalNomad   Int
   internetSpeedCity           Int
   internetSpeedCityRanking    Int

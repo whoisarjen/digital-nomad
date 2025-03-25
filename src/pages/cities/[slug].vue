@@ -40,7 +40,6 @@
             <div class="custom-box">
               <h5 class="font-semibold">Internet</h5>
               <p>Speed: {{ data.internetSpeed }} Mbps</p>
-              <p>Digital Nomad Score: {{ data.internetScoreDigitalNomad }}</p>
               <p>City Speed: {{ data.internetSpeedCity }} Mbps (Rank: {{ data.internetSpeedCityRanking }})</p>
               <p>Country Speed: {{ data.internetSpeedCountry }} Mbps (Rank: {{ data.internetSpeedCountryRanking }})</p>
             </div>
