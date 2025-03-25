@@ -34,19 +34,19 @@ export default defineEventHandler(async () => {
     const allCities = await prisma.city.findMany({
         select: {
             population: true,
-            internetSpeed: true,
+            internetSpeedCity: true,
             costForNomadInUsd: true,
         }
     })
 
     const populations = new Set<number>()
-    const internetSpeed = new Set<number>()
+    const internetSpeedCity = new Set<number>()
     let costMin = Infinity;
     let costMax = -Infinity;
 
     allCities.forEach(city => {
         populations.add(city.population)
-        internetSpeed.add(city.internetSpeed)
+        internetSpeedCity.add(city.internetSpeedCity)
 
         costMin = Math.min(costMin, city.costForNomadInUsd.toNumber());
         costMax = Math.max(costMax, city.costForNomadInUsd.toNumber());
@@ -68,7 +68,7 @@ export default defineEventHandler(async () => {
             internets: {
                 type: 'single',
                 operation: 'gte',
-                options: getSingleOptions([...internetSpeed], 5, option => `${option}Mb/s`),
+                options: getSingleOptions([...internetSpeedCity], 5, option => `${option}Mb/s`),
             },
             populations: {
                 type: 'single',

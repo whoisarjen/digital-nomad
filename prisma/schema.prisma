@@ -68,8 +68,6 @@ model City {
   stateChinese   String?
   state          String?
 
-  internetSpeed               Int
-  internetSpeedDigitalNomad   Int
   internetSpeedCity           Int
   internetSpeedCityRanking    Int
   internetSpeedCountry        Int

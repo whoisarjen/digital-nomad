@@ -155,7 +155,7 @@ export default defineEventHandler(async (event) => {
                 costForNomadInUsd: true,
                 population: true,
                 image: true,
-                internetSpeed: true,
+                internetSpeedCity: true,
                 pollution: true,
                 safety: true,
                 monthSummary: {

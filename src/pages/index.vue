@@ -96,7 +96,7 @@
                           {{ Number(city.temperature).toFixed(1) }}°C
                         </span>
                         <span class="text-green-500">💰 ${{ city.costForNomadInUsd }}/mo</span>
-                        <span class="text-yellow-500">🌐 {{ city.internetSpeed }} Mbps</span>
+                        <span class="text-yellow-500">🌐 {{ city.internetSpeedCity }} Mbps</span>
                       </div>
                     </div>
                   </NuxtLink>

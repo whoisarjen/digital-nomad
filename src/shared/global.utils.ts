@@ -23,7 +23,7 @@ export type OrderByOptionValue =
   keyof Pick<Prisma.CityOrderByWithRelationInput,
   | 'totalScore'
   | 'costForNomadInUsd'
-  | 'internetSpeed'
+  | 'internetSpeedCity'
   | 'safety'
   | 'pollution'
   | 'healthCare'
@@ -36,7 +36,7 @@ export type OrderByOptionValue =
 export const OPTIONS_ORDER_BY = [
   { label: 'Total Score', value: 'totalScore' },
   { label: 'Cost of Living (Nomad)', value: 'costForNomadInUsd' },
-  { label: 'Internet Speed', value: 'internetSpeed' },
+  { label: 'Internet Speed', value: 'internetSpeedCity' },
   { label: 'Safety Level', value: 'safety' },
   { label: 'Pollution Level', value: 'pollution' },
   { label: 'Healthcare Quality', value: 'healthCare' },

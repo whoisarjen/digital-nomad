@@ -32,7 +32,7 @@ export default defineEventHandler(async () => {
         }
       },
       data: {
-        internetSpeed: country.speed,
+        internetSpeedCity: country.speed,
         internetSpeedCountry: country.speed,
         internetSpeedCountryRanking: country.ranking,
       },
@@ -48,7 +48,6 @@ export default defineEventHandler(async () => {
         }
       },
       data: {
-        internetSpeed: city.speed,
         internetSpeedCity: city.speed,
         internetSpeedCityRanking: city.ranking,
       },

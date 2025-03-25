@@ -39,9 +39,8 @@
           <div class="grid grid-cols-2 gap-4">
             <div class="custom-box">
               <h5 class="font-semibold">Internet</h5>
-              <p>Speed: {{ data.internetSpeed }} Mbps</p>
-              <p>City Speed: {{ data.internetSpeedCity }} Mbps (Rank: {{ data.internetSpeedCityRanking }})</p>
-              <p>Country Speed: {{ data.internetSpeedCountry }} Mbps (Rank: {{ data.internetSpeedCountryRanking }})</p>
+              <p>City Speed: {{ data.internetSpeedCity }} Mbps <span v-if="data.internetSpeedCityRanking">(Rank: {{ data.internetSpeedCityRanking }})</span></p>
+              <p>Country Speed: {{ data.internetSpeedCountry }} Mbps <span v-if="data.internetSpeedCountry">(Rank: {{ data.internetSpeedCountryRanking }})</span></p>
             </div>
 
             <div class="custom-box">

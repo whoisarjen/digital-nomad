@@ -9,7 +9,6 @@ export default defineEventHandler(async (event) => {
       name: true,
       country: true,
       costForNomadInUsd: true,
-      internetSpeed: true,
       pollution: true,
       safety: true,
       population: true,

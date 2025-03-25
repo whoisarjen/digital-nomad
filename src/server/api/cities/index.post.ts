@@ -26,8 +26,6 @@ export default defineEventHandler(async () => {
       stateCode: option.state_code,
       stateChinese: option.state_chinese,
       state: option.state,
-      internetSpeed: option.internet_speed,
-      internetSpeedDigitalNomad: option.internet_speed,
       internetSpeedCity: 0,
       internetSpeedCityRanking: 0,
       internetSpeedCountry: 0,
