@@ -3,8 +3,12 @@
 @tailwind utilities;
 
 @layer components {
+    .custom-box {
+        @apply px-4 py-2 rounded-xl border bg-white text-gray-700 border-gray-300
+    }
+
     .custom-button {
-        @apply px-4 py-2 rounded-xl border transition-all cursor-pointer text-center text-sm bg-white text-gray-700 border-gray-300 hover:bg-gray-100
+        @apply custom-box hover:bg-gray-100 cursor-pointer text-center text-sm transition-all
     }
 
     .custom-button-active {

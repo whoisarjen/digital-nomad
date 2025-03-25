@@ -91,7 +91,7 @@
                       :alt="city.name"
                       class="w-full h-48 object-cover rounded-t-xl transition-all duration-500 transform group-hover:scale-105"
                       loading="lazy"
-                      width="360"
+                      height="192"
                       quality="75"
                     />
                     <div v-if="city.image" class="text-xs absolute bottom-0 right-0 text-white bg-black py-1 px-2 rounded-tl-lg">

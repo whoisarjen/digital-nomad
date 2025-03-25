@@ -28,7 +28,7 @@
         </h3>
 
         <div class="grid grid-cols-2 gap-4">
-          <div class="bg-white shadow-md p-4 rounded-lg border">
+          <div class="custom-box">
             <h5 class="font-semibold">Internet</h5>
             <p>Speed: {{ data.internetSpeed }} Mbps</p>
             <p>Digital Nomad Score: {{ data.internetScoreDigitalNomad }}</p>
@@ -36,7 +36,7 @@
             <p>Country Speed: {{ data.internetSpeedCountry }} Mbps (Rank: {{ data.internetSpeedCountryRanking }})</p>
           </div>
 
-          <div class="bg-white shadow-md p-4 rounded-lg border">
+          <div class="custom-box">
             <h5 class="font-semibold">Air Quality</h5>
             <p>Now: {{ data.airQualityNow }}</p>
             <p>Score: {{ data.airQualityScore }}</p>
@@ -49,7 +49,7 @@
           <div
             v-for="(monthData, index) in data.monthSummary"
             :key="index"
-            class="flex flex-col items-center bg-white shadow-md p-2 rounded-lg border"
+            class="flex flex-col items-center custom-box"
           >
             <span class="text-sm text-gray-500 font-semibold">{{ new Date(2023, Number(monthData.month) - 1).toLocaleString('en-US', { month: 'long' }) }}</span>
             <WeatherIcon :weather-icon="monthData.weatherIcon" class="text-3xl" />
