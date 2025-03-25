@@ -10,7 +10,7 @@ export default defineEventHandler(async () => {
         slug: cityInDb.slug,
       },
       data: {
-        internetSpeedCity: cityInDb.internetSpeedCity ?? city?.internet_speed,
+        internetSpeedCity: cityInDb.internetSpeedCity || city?.internet_speed,
       },
     })
   })
