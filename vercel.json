@@ -1,14 +1,5 @@
 {
     "regions": ["fra1"],
-    "crons": [
-      {
-        "path": "/api/cron/weathers",
-        "schedule": "0 */12 * * *"
-      },
-      {
-        "path": "/api/cron/weathers/counter",
-        "schedule": "5 */12 * * *"
-      }
-    ]
+    "crons": []
   }
   
