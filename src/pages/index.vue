@@ -117,7 +117,7 @@
                   </PlusModalLink>
 
                   <div v-if="city.image" class="absolute top-[168px] right-0 text-white bg-black py-1 px-2 rounded-tl-lg text-xs z-10">
-                    <NuxtLink target="_blank" :to="'https://unsplash.com/@${city.image.ownerUsername}?utm_source=Digital%20Nomad&utm_medium=referral'">{{ city.image.ownerName }}</NuxtLink> on <NuxtLink target="_blank" to="https://unsplash.com/?utm_source=Digital%20Nomad&utm_medium=referral">Unsplash</NuxtLink>
+                    <NuxtLink target="_blank" :to="`https://unsplash.com/@${city.image.ownerUsername}?utm_source=Digital%20Nomad&utm_medium=referral`">{{ city.image.ownerName }}</NuxtLink> on <NuxtLink target="_blank" to="https://unsplash.com/?utm_source=Digital%20Nomad&utm_medium=referral">Unsplash</NuxtLink>
                   </div>
                 </div>
               </template>
