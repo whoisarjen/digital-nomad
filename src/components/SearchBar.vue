@@ -27,6 +27,7 @@ const q = ref(route.query.q as string | undefined ?? '');
 
 const handleSearch = () => {
   router.push({
+    path: '/',
     query: {
       q: q.value.trim().substring(0, SEARCH_BAR_MAXIMUM_Q_LENGTH) || undefined,
     }
