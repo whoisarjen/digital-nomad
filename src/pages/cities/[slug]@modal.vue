@@ -9,7 +9,7 @@
           >
             <lucideX class="size-5" />
           </button>
-          <PageComponent />
+          <CityPageMainContent />
         </div>
       </OnClickOutside>
     </div>
@@ -18,5 +18,4 @@
 
 <script setup>
 import { OnClickOutside } from '@vueuse/components'
-import PageComponent from './[slug].vue'
 </script>
