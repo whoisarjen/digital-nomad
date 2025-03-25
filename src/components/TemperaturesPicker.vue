@@ -34,12 +34,12 @@
 <script setup lang="ts">
 import concat from 'lodash/concat'
 import compact from 'lodash/compact'
-import { getTemperaturesFromQuery } from '~/shared/global.utils';
+import { getRangesFromQuery } from '~/shared/global.utils';
 
 const route = useRoute();
 const router = useRouter();
 
-const temperatures = computed(() => getTemperaturesFromQuery(compact(concat(route.query['temperatures'])) as string[]))
+const temperatures = computed(() => getRangesFromQuery(-50, 50)(compact(concat(route.query['temperatures'])) as string[]))
 
 const minValue = ref<number>(temperatures.value.min);
 const maxValue = ref<number>(temperatures.value.max);
@@ -59,7 +59,7 @@ function validateRange() {
 
 watch(
   () => route.query,
-  (newQuery) => {
+  () => {
     const updatedTemps = temperatures.value;
     minValue.value = updatedTemps.min;
     maxValue.value = updatedTemps.max;
@@ -67,9 +67,3 @@ watch(
   { immediate: true }
 );
 </script>
-
-<style scoped>
-.custom-button {
-  border: 1px solid #d1d5db;
-}
-</style>

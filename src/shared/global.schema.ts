@@ -2,7 +2,7 @@
 
 import type { Level, WeatherIcon } from '@prisma/client';
 import { z } from 'zod';
-import { DEFAULT_SORT_VALUE, OPTIONS_ORDER_BY, OPTIONS_LEVEL_LTE, OPTIONS_RANKS, SEARCH_BAR_MAXIMUM_Q_LENGTH, OPTIONS_LEVEL_GTE, getTemperaturesFromQuery, type OrderByOptionValue } from '~/shared/global.utils';
+import { DEFAULT_SORT_VALUE, OPTIONS_ORDER_BY, OPTIONS_LEVEL_LTE, OPTIONS_RANKS, SEARCH_BAR_MAXIMUM_Q_LENGTH, OPTIONS_LEVEL_GTE, getRangesFromQuery, type OrderByOptionValue } from '~/shared/global.utils';
 
 const MAX_LIMIT_OF_ITEMS_TO_LOAD = 100
 
@@ -85,9 +85,13 @@ export const getCitiesSchema = z.object({
         .optional()
         .transform((val) => (val ? Number(val) : undefined))
         .pipe(z.number().positive().optional()),
+    prices: z
+        .array(z.string())
+        .transform(getRangesFromQuery(-Infinity, Infinity))
+        .optional(),
     temperatures: z
         .array(z.string())
-        .transform(getTemperaturesFromQuery)
+        .transform(getRangesFromQuery(-50, 50))
         .optional(),
     internets: z
         .string()

@@ -41,44 +41,50 @@ export default defineEventHandler(async () => {
 
     const populations = new Set<number>()
     const internetSpeed = new Set<number>()
-    const costForNomadInUsd = new Set<number>()
+    let costMin = Infinity;
+    let costMax = -Infinity;
 
     allCities.forEach(city => {
         populations.add(city.population)
         internetSpeed.add(city.internetSpeed)
-        costForNomadInUsd.add(parseInt(city.costForNomadInUsd.toString()))
+
+        costMin = Math.min(costMin, city.costForNomadInUsd.toNumber());
+        costMax = Math.max(costMax, city.costForNomadInUsd.toNumber());
     })
 
     return {
-        total_scores: {
-            type: 'single',
-            operation: 'gte',
-            options: OPTIONS_RANKS,
+        data: {
+            costs: {
+                costMin,
+                costMax,
+            }
         },
-        costs: {
-            type: 'single',
-            operation: 'lte',
-            options: getSingleOptions([...costForNomadInUsd], 5, option => `${option}$`),
-        },
-        internets: {
-            type: 'single',
-            operation: 'gte',
-            options: getSingleOptions([...internetSpeed], 5, option => `${option}Mb/s`),
-        },
-        populations: {
-            type: 'single',
-            operation: 'gte',
-            options: getSingleOptions([...populations], 5, option => formatNumber(Number(option))),
-        },
-        pollutions: {
-            type: 'single',
-            operation: 'lte',
-            options: OPTIONS_LEVEL_LTE,
-        },
-        safety: {
-            type: 'single',
-            operation: 'gte',
-            options: OPTIONS_LEVEL_GTE,
+        pickers: {
+            total_scores: {
+                type: 'single',
+                operation: 'gte',
+                options: OPTIONS_RANKS,
+            },
+            internets: {
+                type: 'single',
+                operation: 'gte',
+                options: getSingleOptions([...internetSpeed], 5, option => `${option}Mb/s`),
+            },
+            populations: {
+                type: 'single',
+                operation: 'gte',
+                options: getSingleOptions([...populations], 5, option => formatNumber(Number(option))),
+            },
+            pollutions: {
+                type: 'single',
+                operation: 'lte',
+                options: OPTIONS_LEVEL_LTE,
+            },
+            safety: {
+                type: 'single',
+                operation: 'gte',
+                options: OPTIONS_LEVEL_GTE,
+            },
         },
     } as const
 })

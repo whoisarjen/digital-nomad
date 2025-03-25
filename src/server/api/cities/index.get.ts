@@ -64,6 +64,15 @@ const getCityPrismaQuery = (query: z.infer<typeof getCitiesSchema>) => {
         })
     }
 
+    if (query.prices) {
+        AND.push({
+            costForNomadInUsd: {
+                gte: query.prices.min,
+                lte: query.prices.max,
+            },
+        })
+    }
+
     if (query.months) {
         if (query.weathers) {
             AND.push({

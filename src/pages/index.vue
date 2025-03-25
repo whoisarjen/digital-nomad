@@ -47,16 +47,17 @@
               Clear filters
             </div>
             <MonthsPicker />
-            <TemperaturesPickers />
+            <TemperaturesPicker />
             <WeathersPicker />
             <RegionsPicker />
-            <template v-if="filters">
+            <PricesPicker :min="filters?.data.costs.costMin ?? 0" :max="filters?.data.costs.costMax ?? 0" />
+            <template v-if="filters?.pickers">
               <SinglePicker
-                v-for="key of Object.keys(filters)"
+                v-for="key of Object.keys(filters?.pickers)"
                 :key="key"
                 :name="key"
-                :operation="filters[key as keyof typeof filters].operation"
-                :options="filters[key as keyof typeof filters].options"
+                :operation="filters['pickers'][key as keyof typeof filters['pickers']].operation"
+                :options="filters['pickers'][key as keyof typeof filters['pickers']].options"
                 isLabel
               />
             </template>
@@ -71,7 +72,7 @@
               <span>{{ Object.entries(queryParams).map(([key, value]) =>
                 `${key.split('_').map(upperFirst).join(' ')} (${key === 'months'
                   ? new Date(2025, Number(value) - 1).toLocaleString('en-US', { month: 'long' }).toLowerCase()
-                  : `${filters?.[key as keyof typeof filters]?.operation === 'lte' ? '≤' : ''}${value}`.toLowerCase().split(',').join(', ').replace('gte:', '').replace('lte:', '')}${filters?.[key as keyof typeof filters]?.operation === 'gte' ? '≤' : ''})`).join(', ') }}
+                  : `${filters?.pickers[key as keyof typeof filters['pickers']]?.operation === 'lte' ? '≤' : ''}${value}`.toLowerCase().split(',').join(', ').replace('gte:', '').replace('lte:', '')}${filters?.pickers[key as keyof typeof filters['pickers']]?.operation === 'gte' ? '≤' : ''})`).join(', ') }}
                 </span>
             </div>
             <div class="gap-6 w-full grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">

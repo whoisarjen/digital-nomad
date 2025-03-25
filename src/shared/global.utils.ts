@@ -70,12 +70,12 @@ export const formatNumber = (number: number) => {
     return number.toString();
 }
 
-export const getTemperaturesFromQuery = (tempValues: string[]) => {
+export const getRangesFromQuery = (defaultMin: number, defaultMax: number) => (tempValues: string[]) => {
   const min = tempValues.find((val) => val.startsWith('gte:'))?.split(':')[1];
   const max = tempValues.find((val) => val.startsWith('lte:'))?.split(':')[1];
 
   return {
-    min: Number(min ?? -50),
-    max: Number(max ?? 50),
+    min: Number(min ?? defaultMin),
+    max: Number(max ?? defaultMax),
   };
 }
