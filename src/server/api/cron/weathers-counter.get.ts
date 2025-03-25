@@ -16,15 +16,39 @@ const median = (numbers: number[]): number => {
 }
 
 export default defineEventHandler(async () => {
-  const cities = await prisma.city.findMany({
-    select: {
-      slug: true,
-      weathers: true,
-    },
-    where: {
-      isWeather2024Collected: true,
-    },
-  })
+  const cities = (await Promise.all(_.range(5).map(index => 
+    prisma.city.findMany({
+      select: {
+        slug: true,
+        weathers: {
+          select: {
+            apparentTemperatureMax: true,
+            rainSum: true,
+            windGusts10mMax: true,
+            snowfallSum: true,
+            windDirection10mDominant: true,
+            daylightDuration: true,
+            apparentTemperatureMin: true,
+            temperature2mMax: true,
+            temperature2mMin: true,
+            apparentTemperatureMean: true,
+            sunshineDuration: true,
+            precipitationHours: true,
+            shortwaveRadiationSum: true,
+            windSpeed10mMax: true,
+            precipitationSum: true,
+            temperature2mMean: true,
+            date: true,
+            weatherCode: true,
+          }
+        },
+      },
+      where: {
+        isWeather2024Collected: true,
+      },
+      take: 400,
+      skip: index * 400,
+    })))).flatMap(option => option)
 
   await processInBatches(cities, async city => {
     // Group weather data by month (extract month from date)
@@ -135,7 +159,7 @@ export default defineEventHandler(async () => {
         create: data,
         update: data,
       })
-    }, 50, false)
+    }, medianTemperatures.length, false)
   })
 
   return 'Hello Nitro'
