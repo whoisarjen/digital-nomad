@@ -1,6 +1,6 @@
 <template>
     <div class="min-h-screen bg-gray-100 text-gray-900">
-      <Hero :image="{ ownerName: 'Tan Kaninthanond', ownerUsername: 'tankanin', url: '/photo-1535117399959-7df1714b4202?ixid=M3w3MjU5NzR8MHwxfHNlYXJjaHw1fHxCYW5na29rfGVufDB8fHx8MTc0MjYxMjM3Mnww&ixlib=rb-4.0.3&' }" />
+      <Hero />
       <section class="p-6 flex flex-col gap-6">
         <section class="flex gap-6 justify-end flex-col md:flex-row items-center">
           <div class="flex gap-1 max-md:w-full">

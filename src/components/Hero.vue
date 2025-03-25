@@ -2,7 +2,7 @@
   <section class="relative h-[50vh] flex flex-col justify-center text-center text-white p-6 group overflow-hidden">
     <NuxtImg
       provider="unsplash"
-      :src="props.image?.url" 
+      :src="image.url" 
       alt="Explore. Work. Live." 
       class="absolute inset-0 w-full h-[50vh] object-cover transition-all duration-500 transform group-hover:scale-105"
     />
@@ -15,7 +15,7 @@
       </div>
     </div>
     <div class="absolute bottom-0 right-0 text-white bg-black py-1 px-2 rounded-tl-lg text-xs z-10">
-      <NuxtLink target="_blank" :to="`https://unsplash.com/@${props.image?.ownerUsername}?utm_source=Digital%20Nomad&utm_medium=referral`">{{ image?.ownerName }}</NuxtLink> on <NuxtLink target="_blank" to="https://unsplash.com/?utm_source=Digital%20Nomad&utm_medium=referral">Unsplash</NuxtLink>
+      <NuxtLink target="_blank" :to="`https://unsplash.com/@${image.ownerUsername}?utm_source=Digital%20Nomad&utm_medium=referral`">{{ image?.ownerName }}</NuxtLink> on <NuxtLink target="_blank" to="https://unsplash.com/?utm_source=Digital%20Nomad&utm_medium=referral">Unsplash</NuxtLink>
     </div>
   </section>
 </template>
@@ -23,5 +23,6 @@
 <script lang="ts" setup>
 import type { Image } from '@prisma/client';
 
-const props = defineProps<{ image: Pick<Image, 'ownerName' | 'ownerUsername' | 'url'> | undefined | null }>()
+const props = defineProps<{ image?: Pick<Image, 'ownerName' | 'ownerUsername' | 'url'> | undefined | null }>()
+const image = computed(() => props.image ?? { ownerName: 'Tan Kaninthanond', ownerUsername: 'tankanin', url: '/photo-1535117399959-7df1714b4202?ixid=M3w3MjU5NzR8MHwxfHNlYXJjaHw1fHxCYW5na29rfGVufDB8fHx8MTc0MjYxMjM3Mnww&ixlib=rb-4.0.3&' })
 </script>
