@@ -13,7 +13,6 @@ export default defineEventHandler(async (event) => {
       pollution: true,
       safety: true,
       population: true,
-      internetScoreDigitalNomad: true,
       internetSpeedCity: true,
       internetSpeedCityRanking: true,
       internetSpeedCountry: true,
