@@ -12,21 +12,28 @@
           </NuxtLink>
           <MonthsPicker />
         </aside>
-        <CityPageMainContent class="flex-1" />
+        <CityPageMainContent :city="data" class="flex-1" />
       </section>
     </section>
   </div>
 </template>
 
 <script lang="ts" setup>
-import type { InternalApi } from 'nitropack';
+const route = useRoute()
 
-const router = useRouter()
-const slug = computed(() => router.currentRoute.value.params.slug as string)
-
-// TODO rewrite to useCitiesBySlug
-const { data } = await useFetch<InternalApi['/api/cities/:slug']['get']>(() => `/api/cities/${slug.value}`, {
-  watch: [() => slug.value],
-  immediate: true,
+const queryParams = ref({
+  slug: route.params.slug as string,
 })
+
+watch(
+  () => route.params.slug as string,
+  (slug) => {
+    if (slug) {
+      queryParams.value.slug = slug
+    }
+  },
+  { immediate: true }
+)
+
+const { data } = await useCitiesBySlug(queryParams)
 </script>

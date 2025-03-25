@@ -7,7 +7,6 @@ export default defineNuxtConfig({
     '@nuxtjs/tailwindcss',
     'nuxt-lucide-icons',
     '@nuxt/image',
-    'nuxt-pages-plus',
     '@vueuse/nuxt',
   ],
   nitro: {

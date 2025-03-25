@@ -1,5 +1,4 @@
 <template>
-    <PlusModalPage name="modal" />
     <div class="min-h-screen bg-gray-100 text-gray-900">
       <Hero :image="{ ownerName: 'Tan Kaninthanond', ownerUsername: 'tankanin', url: '/photo-1535117399959-7df1714b4202?ixid=M3w3MjU5NzR8MHwxfHNlYXJjaHw1fHxCYW5na29rfGVufDB8fHx8MTc0MjYxMjM3Mnww&ixlib=rb-4.0.3&' }" />
       <section class="p-6 flex flex-col gap-6">
@@ -65,7 +64,7 @@
               </template>
               <template v-else>
                 <div class="relative w-full flex" v-for="city in cities?.data" :key="city.slug">
-                  <PlusModalLink
+                  <NuxtLink
                     :to="`/cities/${city.slug}`"
                     class="bg-white cursor-pointer rounded-xl overflow-hidden transition-all duration-500 transform group hover:shadow-lg w-full flex flex-col"
                   >
@@ -100,7 +99,7 @@
                         <span class="text-yellow-500">🌐 {{ city.internetSpeed }} Mbps</span>
                       </div>
                     </div>
-                  </PlusModalLink>
+                  </NuxtLink>
 
                   <div v-if="city.image" class="absolute top-[168px] right-0 text-white bg-black py-1 px-2 rounded-tl-lg text-xs z-10">
                     <NuxtLink target="_blank" :to="`https://unsplash.com/@${city.image.ownerUsername}?utm_source=Digital%20Nomad&utm_medium=referral`">{{ city.image.ownerName }}</NuxtLink> on <NuxtLink target="_blank" to="https://unsplash.com/?utm_source=Digital%20Nomad&utm_medium=referral">Unsplash</NuxtLink>

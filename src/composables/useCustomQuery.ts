@@ -43,7 +43,7 @@ export const useCustomQuery = async <T = unknown>(
   })
 
   const customKey = computed(() => {
-    const sortedObj = fromPairs(sortBy(toPairs(query?.value)));
+    const sortedObj = fromPairs(sortBy(toPairs(query?.value ?? {})));
     const uniqueKey = JSON.stringify(sortedObj);
 
     return `${url}${uniqueKey}`

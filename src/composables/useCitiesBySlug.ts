@@ -7,7 +7,7 @@ export const useCitiesBySlug = (
 ) => {
   return useCustomQuery<InternalApi['/api/cities/:slug']['get']>(
     `/api/cities/${query.value.slug}`,
-    query,
+    undefined,
     queryOptions,
     getCitiesBySlugSchema,
   )
