@@ -16,6 +16,9 @@
             <SearchBar />
           </div>
         </div>
+        <div class="absolute bottom-0 right-0 text-white bg-black py-1 px-2 rounded-tl-lg text-xs z-10">
+          <NuxtLink target="_blank" to="https://unsplash.com/@tankanin?utm_source=Digital%20Nomad&utm_medium=referral">Tan Kaninthanond</NuxtLink> on <NuxtLink target="_blank" to="https://unsplash.com/?utm_source=Digital%20Nomad&utm_medium=referral">Unsplash</NuxtLink>
+        </div>
       </section>
       <section class="p-6 flex flex-col gap-6">
         <section class="flex gap-6 justify-end flex-col md:flex-row items-center">
