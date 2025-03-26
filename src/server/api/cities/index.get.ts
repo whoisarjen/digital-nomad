@@ -155,7 +155,7 @@ export default defineEventHandler(async (event) => {
                         [orderBy]: sort,
                     },
                     {
-                        popularity: sort === 'asc' ? 'desc' : 'asc',
+                        popularity: sort,
                     },
                     {
                         weatherIcon: sort === 'asc' ? 'desc' : 'asc',
