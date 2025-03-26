@@ -31,22 +31,22 @@ class TotalScoreFactory {
     const logValue = Math.log10(popularity)
 
     if (logValue < 1) {
-      return 0;
-    }
-
-    if (logValue < 2) {
       return 1;
     }
 
-    if (logValue < 3) {
+    if (logValue < 2) {
       return 2;
     }
 
-    if (logValue < 4) {
+    if (logValue < 3) {
       return 3;
     }
 
-    return 5;
+    if (logValue < 4) {
+      return 5;
+    }
+
+    return 8;
   }
 
   getRegionScore() {
@@ -75,7 +75,7 @@ class TotalScoreFactory {
     const { weatherIcon } = this.getMonthSummary()
 
     if (weatherIcon === 'SUN') {
-      return 2
+      return 1
     }
 
     return 0
