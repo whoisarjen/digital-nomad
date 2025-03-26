@@ -48,16 +48,6 @@ model City {
   longitude    Decimal @db.Decimal(9, 6)
   region       String
 
-  // descriptionFromReview     String? 
-  // shortSlug                 String
-  // usersCount                Int
-  // usersCountEst             Int
-  // usersCountBeen            Int
-  // usersCountBeenEst         Int
-  // boost                     Float?
-  // last2YearGrowth           Decimal @db.Decimal
-  // weatherIcon               String
-
   nameChinese    String
   countryChinese String
   airQualityNow  Int
@@ -77,19 +67,11 @@ model City {
   airQualityNowScore Decimal @db.Decimal
   humidity           String
   rank               Int
-  // weatherEmoji              String
-  // temperatureF          Decimal @db.Decimal
-  // temperatureCFeelsLike Decimal @db.Decimal
-  // temperatureFFeelsLike Decimal @db.Decimal
+
   costForNomadInUsd  Decimal @db.Decimal
   costForExpatInUsd  Decimal @db.Decimal
   costForLocalInUsd  Decimal @db.Decimal
   costForFamilyInUsd Decimal @db.Decimal
-  totalScore         Decimal @db.Decimal
-  overallScore       Decimal @db.Decimal
-  costScore          Int
-  likesScore         Decimal @db.Decimal
-  safetyLevel        Decimal @db.Decimal
 
   safety                Level?
   climate               Level?
@@ -174,6 +156,8 @@ model MonthSummary {
   precipitationSum         Decimal
   temperature2mMean        Decimal
   weatherIcon              WeatherIcon @default(NULL)
+
+  totalScore Int? @db.SmallInt
 
   citySlug String
   city     City   @relation("cityMonthSummary", fields: [citySlug], references: [slug], onDelete: Cascade)

@@ -2,7 +2,7 @@ import { Prisma, WeatherIcon } from '@prisma/client';
 import _ from 'lodash';
 import { z } from 'zod';
 import { getCitiesSchema } from '~/shared/global.schema';
-import { formatNumber, OrderByOptionValue } from '~/shared/global.utils';
+import { formatNumber, OPTIONS_ORDER_BY_MONTH_SUMMARY } from '~/shared/global.utils';
 
 const getCityPrismaQuery = (query: z.infer<typeof getCitiesSchema>) => {
     const AND: Prisma.CityWhereInput[] = []
@@ -42,10 +42,6 @@ const getCityPrismaQuery = (query: z.infer<typeof getCitiesSchema>) => {
         AND.push({ region: { in: _.concat(query.regions) } })
     }
 
-    if (query.total_scores) {
-        AND.push({ totalScore: { gte: query.total_scores } })
-    }
-
     if (query.costs) {
         AND.push({
             costForNomadInUsd: { lte: query.costs }
@@ -73,33 +69,44 @@ const getCityPrismaQuery = (query: z.infer<typeof getCitiesSchema>) => {
         })
     }
 
-    if (query.months) {
-        if (query.weathers) {
-            AND.push({
-                monthSummary: {
-                    some: {
-                        weatherIcon: {
-                            in: [..._.concat(query.weathers) as WeatherIcon[], 'NULL']
-                        },
-                        month: query.months,
-                    }
+    if (query.totalScore) {
+        AND.push({
+            monthSummary: {
+                some: {
+                    totalScore: {
+                        gte: query.totalScore,
+                    },
+                    month: query.months,
                 }
-            })
-        }
+            },
+        })
+    }
 
-        if (query.temperatures) {
-            AND.push({
-                monthSummary: {
-                    some: {
-                        temperature2mMean: { 
-                            gte: query.temperatures.min,
-                            lte: query.temperatures.max,
-                        },
-                        month: query.months
-                    }
+    if (query.weathers) {
+        AND.push({
+            monthSummary: {
+                some: {
+                    weatherIcon: {
+                        in: [..._.concat(query.weathers) as WeatherIcon[], 'NULL']
+                    },
+                    month: query.months,
                 }
-            })
-        }
+            }
+        })
+    }
+
+    if (query.temperatures) {
+        AND.push({
+            monthSummary: {
+                some: {
+                    temperature2mMean: { 
+                        gte: query.temperatures.min,
+                        lte: query.temperatures.max,
+                    },
+                    month: query.months
+                }
+            }
+        })
     }
 
     if (query.pollutions) {
@@ -125,12 +132,6 @@ const getCityPrismaQuery = (query: z.infer<typeof getCitiesSchema>) => {
     return undefined
 }
 
-const getOrderBy = (field: OrderByOptionValue, sort: 'desc' | 'asc'): Prisma.CityOrderByWithAggregationInput => {
-    return {
-        [field]: sort,
-    }
-}
-
 export default defineEventHandler(async (event) => {
     const validatedQuery = await getValidatedQuery(event, (body) => getCitiesSchema.parse(body));
     const where = getCityPrismaQuery(validatedQuery)
@@ -142,38 +143,69 @@ export default defineEventHandler(async (event) => {
       orderBy,
     } = validatedQuery;
 
-    const [cities, count] = await Promise.all([
-        prisma.city.findMany({
-            where,
-            skip: (page - 1) * limit,
-            take: limit,
-            orderBy: getOrderBy(orderBy, sort),
+    const select = {
+        slug: true,
+        name: true,
+        country: true,
+        costForNomadInUsd: true,
+        population: true,
+        image: true,
+        internetSpeedCity: true,
+        pollution: true,
+        safety: true,
+        monthSummary: {
             select: {
-                slug: true,
-                name: true,
-                country: true,
-                costForNomadInUsd: true,
-                population: true,
-                image: true,
-                internetSpeedCity: true,
-                pollution: true,
-                safety: true,
-                monthSummary: {
-                    select: {
-                        weatherIcon: true,
-                        temperature2mMax: true,
-                    },
+                weatherIcon: true,
+                temperature2mMax: true,
+            },
+            where: {
+                month: validatedQuery.months,
+            },
+            take: 1,
+        },
+    } satisfies Prisma.CitySelect
+
+    const [cities, count] = await (async () => {
+        if (OPTIONS_ORDER_BY_MONTH_SUMMARY.includes(orderBy as unknown as typeof OPTIONS_ORDER_BY_MONTH_SUMMARY[number])) {
+            const response = await Promise.all([
+                prisma.monthSummary.findMany({
                     where: {
                         month: validatedQuery.months,
                     },
-                    take: 1,
+                    orderBy: {
+                        [orderBy]: sort
+                    },
+                    select: {
+                        city: {
+                            select,
+                        }
+                    },
+                    skip: (page - 1) * limit,
+                    take: limit,
+                }),
+                prisma.city.count({
+                    where,
+                }),
+            ])
+
+            return [response[0].flatMap(option => option.city), response[1]]
+        }
+
+        return await Promise.all([
+            prisma.city.findMany({
+                where,
+                skip: (page - 1) * limit,
+                take: limit,
+                orderBy: {
+                    [orderBy]: sort
                 },
-            },
-        }),
-        prisma.city.count({
-            where,
-        }),
-    ])
+                select,
+            }),
+            prisma.city.count({
+                where,
+            }),
+        ])
+    })()
 
     return {
         data: cities.map(({ monthSummary, ...city }) => ({

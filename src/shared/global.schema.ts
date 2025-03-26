@@ -75,7 +75,7 @@ export const getCitiesSchema = z.object({
             z.array(z.string()),
         ])
         .optional(),
-    total_scores: z
+    totalScore: z
         .enum(OPTIONS_RANKS.map(({ value }) => value) as [string, ...string[]])
         .optional()
         .transform((val) => (val ? Number(val) : undefined))
