@@ -19,23 +19,25 @@ export const OPTIONS_LEVEL_GTE = [
   { label: 'High', value: 'HIGH' }, 
 ] satisfies { label: string; value: Level }[]
 
+const OPTIONS_ORDER_BY_CITY = [
+  'costForNomadInUsd',
+  'internetSpeedCity',
+  'safety',
+  'pollution',
+  'healthCare',
+  'purchasingPower',
+  'propertyPriceToIncome',
+  'costOfLiving',
+  'trafficCommuteTime',
+  'population',
+] satisfies Partial<keyof Prisma.CityOrderByWithRelationInput>[]
+
 export const OPTIONS_ORDER_BY_MONTH_SUMMARY = [
   'totalScore',
-] satisfies (keyof Pick<Prisma.MonthSummaryOrderByWithRelationInput,
-| 'totalScore'>)[]
+] satisfies Partial<keyof Prisma.MonthSummaryOrderByWithRelationInput>[]
 
 export type OrderByOptionValue =
-  keyof Pick<Prisma.CityOrderByWithRelationInput,
-  | 'costForNomadInUsd'
-  | 'internetSpeedCity'
-  | 'safety'
-  | 'pollution'
-  | 'healthCare'
-  | 'purchasingPower'
-  | 'propertyPriceToIncome'
-  | 'costOfLiving'
-  | 'trafficCommuteTime'
-  | 'population'>
+  | typeof OPTIONS_ORDER_BY_CITY[number]
   | typeof OPTIONS_ORDER_BY_MONTH_SUMMARY[number]
 
 export const OPTIONS_ORDER_BY = [
