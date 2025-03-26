@@ -34,6 +34,7 @@ export default defineEventHandler(async (event) => {
           apparentTemperatureMax: true,
           rainSum: true,
           sunshineDuration: true,
+          totalScore: true,
         },
         orderBy: {
           month: 'asc',

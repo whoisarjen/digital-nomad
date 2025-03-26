@@ -99,48 +99,6 @@ class TotalScoreFactory {
     return 6
   }
 
-  getSunshineScore() {
-    const { sunshineDuration } = this.getMonthSummary()
-    if (sunshineDuration === null) return null
-    if (sunshineDuration.toNumber() < 100) {
-      return 0
-    } else if (sunshineDuration.toNumber() >= 100 && sunshineDuration.toNumber() <= 200) {
-      return 1
-    } else {
-      return 1.5
-    }
-  }
-
-  getPrecipitationScore() {
-    const { rainSum, snowfallSum } = this.getMonthSummary()
-    if (rainSum === null || snowfallSum === null) return null
-    if (rainSum.toNumber() > 100 || snowfallSum.toNumber() > 50) {
-      return 0
-    }
-    return 1
-  }
-
-  getWindScore() {
-    const { windGusts10mMax } = this.getMonthSummary()
-    if (windGusts10mMax === null) return null
-    if (windGusts10mMax.toNumber() > 30) {
-      return 0
-    }
-    return 1
-  }
-
-  getDaylightDurationScore() {
-    const { daylightDuration } = this.getMonthSummary()
-    if (daylightDuration === null) return null
-    if (daylightDuration.toNumber() < 8) {
-      return 0
-    } else if (daylightDuration.toNumber() >= 8 && daylightDuration.toNumber() <= 12) {
-      return 1
-    } else {
-      return 1.5
-    }
-  }
-
   getPollutionScore() {
     const { pollution } = this.getCity()
     if (pollution === null) return null
@@ -205,10 +163,6 @@ class TotalScoreFactory {
     return [
       this.getWeatherIconScore(),
       this.getTemperatureScore(),
-      // this.getSunshineScore(),
-      // this.getPrecipitationScore(),
-      // this.getWindScore(),
-      // this.getDaylightDurationScore(),
     ].filter(score => score !== null).reduce((prev, curr) => prev += curr, 0)
   }
 

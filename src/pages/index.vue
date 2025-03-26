@@ -85,7 +85,6 @@
                         {{ city.name }}, {{ city.country }} ({{ city.totalScore }})
                       </h3>
                       <div class="text-sm text-gray-600 flex gap-1 flex-1">
-                        Region: {{ city.region }}
                         Pollution: {{ city.pollution }}
                         Safety: {{ city.safety }}
                         Population: {{ city.population }}

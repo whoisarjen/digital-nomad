@@ -58,7 +58,7 @@
               :key="index"
               class="flex flex-col items-center custom-box"
             >
-              <span class="text-sm text-gray-500 font-semibold">{{ new Date(2023, Number(monthData.month) - 1).toLocaleString('en-US', { month: 'long' }) }}</span>
+              <span class="text-sm text-gray-500 font-semibold">{{ new Date(2023, Number(monthData.month) - 1).toLocaleString('en-US', { month: 'long' }) }} ({{ monthData.totalScore }})</span>
               <WeatherIcon :weather-icon="monthData.weatherIcon" class="text-3xl" />
               <span class="text-primary-500 text-lg font-bold">{{ Number(monthData.apparentTemperatureMax).toFixed(1) }}°C</span>
               <div class="text-xs text-gray-500 flex gap-2 mt-2">
