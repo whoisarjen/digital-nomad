@@ -39,14 +39,14 @@ class TotalScoreFactory {
     }
 
     if (logValue < 3) {
-      return 1.5;
-    }
-
-    if (logValue < 4) {
       return 2;
     }
 
-    return 2.5;
+    if (logValue < 4) {
+      return 3;
+    }
+
+    return 5;
   }
 
   getRegionScore() {
