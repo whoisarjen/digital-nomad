@@ -2,7 +2,7 @@ import { Prisma, WeatherIcon } from '@prisma/client';
 import _ from 'lodash';
 import { z } from 'zod';
 import { getCitiesSchema } from '~/shared/global.schema';
-import { formatNumber, OPTIONS_ORDER_BY_MONTH_SUMMARY } from '~/shared/global.utils';
+import { formatNumber } from '~/shared/global.utils';
 
 const getCityPrismaQuery = (query: z.infer<typeof getCitiesSchema>) => {
     const AND: Prisma.CityWhereInput[] = []
@@ -143,70 +143,72 @@ export default defineEventHandler(async (event) => {
       orderBy,
     } = validatedQuery;
 
-    const select = {
-        slug: true,
-        name: true,
-        country: true,
-        costForNomadInUsd: true,
-        population: true,
-        image: true,
-        internetSpeedCity: true,
-        pollution: true,
-        safety: true,
-        monthSummary: {
-            select: {
-                weatherIcon: true,
-                temperature2mMax: true,
-                totalScore: true,
-            },
+    const [monthSummaries, count] = await Promise.all([
+        prisma.monthSummary.findMany({
             where: {
                 month: validatedQuery.months,
+                city: where
             },
-            take: 1,
-        },
-    } satisfies Prisma.CitySelect
-
-    const [cities, count] = await (async () => {
-        if (OPTIONS_ORDER_BY_MONTH_SUMMARY.includes(orderBy as unknown as typeof OPTIONS_ORDER_BY_MONTH_SUMMARY[number])) {
-            const response = await Promise.all([
-                prisma.monthSummary.findMany({
-                    where: {
-                        month: validatedQuery.months,
+            orderBy: orderBy === 'totalScore'
+                ? [
+                    {
+                        [orderBy]: sort,
                     },
-                    orderBy: {
-                        [orderBy]: sort
+                    {
+                        popularity: sort === 'asc' ? 'desc' : 'asc',
                     },
-                    select: {
-                        city: {
-                            select,
-                        }
+                    {
+                        weatherIcon: sort === 'asc' ? 'desc' : 'asc',
                     },
-                    skip: (page - 1) * limit,
-                    take: limit,
-                }),
-                prisma.city.count({
-                    where,
-                }),
-            ])
-
-            return [response[0].flatMap(option => option.city), response[1]]
-        }
-
-        return await Promise.all([
-            prisma.city.findMany({
-                where,
-                skip: (page - 1) * limit,
-                take: limit,
-                orderBy: {
-                    [orderBy]: sort
+                    {
+                        region: sort === 'asc' ? 'desc' : 'asc',
+                    },
+                    {
+                        safety: sort,
+                    },
+                    {
+                        costForNomadInUsd: sort === 'asc' ? 'desc' : 'asc',
+                    },
+                ]
+                : {
+                    [orderBy]: 'asc'
                 },
-                select,
-            }),
-            prisma.city.count({
-                where,
-            }),
-        ])
-    })()
+            select: {
+                city: {
+                    select: {
+                        slug: true,
+                        name: true,
+                        country: true,
+                        costForNomadInUsd: true,
+                        population: true,
+                        image: true,
+                        internetSpeedCity: true,
+                        pollution: true,
+                        safety: true,
+                        monthSummary: {
+                            select: {
+                                weatherIcon: true,
+                                temperature2mMax: true,
+                                totalScore: true,
+                                region: true,
+                            },
+                            where: {
+                                month: validatedQuery.months,
+                            },
+                            take: 1,
+                        },
+                    },
+                }
+            },
+            skip: (page - 1) * limit,
+            take: limit,
+        }),
+        prisma.city.count({
+            where,
+        }),
+    ])
+
+    const cities = monthSummaries.map(option => option.city)
 
     return {
         data: cities.map(({ monthSummary, ...city }) => ({
@@ -215,6 +217,7 @@ export default defineEventHandler(async (event) => {
             weatherIcon: monthSummary[0]?.weatherIcon,
             temperature: monthSummary[0]?.temperature2mMax,
             totalScore: monthSummary[0]?.totalScore,
+            region: monthSummary[0]?.region,
         })),
         count,
         pagesCount: Math.ceil(count / limit),

@@ -35,6 +35,17 @@ model Numbeo {
   climate Json?
 }
 
+enum Region {
+  Europe
+  Asia
+  LatinAmerica
+  NorthAmerica
+  MiddleEast
+  Africa
+  Oceania
+  Antarctica
+}
+
 model City {
   slug      String   @id
   createdAt DateTime @default(now())
@@ -46,7 +57,7 @@ model City {
   temperatureC Decimal @db.Decimal(4, 1)
   latitude     Decimal @db.Decimal(9, 6)
   longitude    Decimal @db.Decimal(9, 6)
-  region       String
+  region       Region
 
   nameChinese    String
   countryChinese String
@@ -66,7 +77,6 @@ model City {
   airQualityScore    Int
   airQualityNowScore Decimal @db.Decimal
   humidity           String
-  rank               Int
 
   costForNomadInUsd  Decimal @db.Decimal
   costForExpatInUsd  Decimal @db.Decimal
@@ -157,7 +167,20 @@ model MonthSummary {
   temperature2mMean        Decimal
   weatherIcon              WeatherIcon @default(NULL)
 
-  totalScore Int? @db.SmallInt
+  popularity            Int      @default(0)
+  region                Region
+  population            Int?
+  internetSpeedCity     Int?
+  totalScore            Int      @db.SmallInt
+  costForNomadInUsd     Decimal? @db.Decimal
+  safety                Level?
+  climate               Level?
+  pollution             Level?
+  purchasingPower       Level?
+  healthCare            Level?
+  costOfLiving          Level?
+  propertyPriceToIncome Level?
+  trafficCommuteTime    Level?
 
   citySlug String
   city     City   @relation("cityMonthSummary", fields: [citySlug], references: [slug], onDelete: Cascade)

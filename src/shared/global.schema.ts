@@ -1,8 +1,8 @@
 
 
-import type { Level, WeatherIcon } from '@prisma/client';
+import type { Level, Region, WeatherIcon } from '@prisma/client';
 import { z } from 'zod';
-import { DEFAULT_SORT_VALUE, OPTIONS_ORDER_BY, OPTIONS_LEVEL_LTE, OPTIONS_RANKS, SEARCH_BAR_MAXIMUM_Q_LENGTH, OPTIONS_LEVEL_GTE, getRangesFromQuery, type OrderByOptionValue } from '~/shared/global.utils';
+import { DEFAULT_SORT_VALUE, OPTIONS_ORDER_BY, OPTIONS_LEVEL_LTE, OPTIONS_RANKS, SEARCH_BAR_MAXIMUM_Q_LENGTH, OPTIONS_LEVEL_GTE, getRangesFromQuery, type OrderByOptionValue, OPTIONS_REGIONS } from '~/shared/global.utils';
 
 const MAX_LIMIT_OF_ITEMS_TO_LOAD = 100
 
@@ -60,7 +60,7 @@ export const getCitiesSchema = z.object({
         .enum(OPTIONS_ORDER_BY.map(option => option.value) as [string, ...string[]])
         .optional()
         .transform(value => value as OrderByOptionValue)
-        .default(OPTIONS_ORDER_BY[0].value),    
+        .default(OPTIONS_ORDER_BY[0].value),
     months: z
         .string(),
     weathers: z
@@ -71,8 +71,16 @@ export const getCitiesSchema = z.object({
         .optional(),
     regions: z
         .union([
-            z.string(),
-            z.array(z.string()),
+            z
+                .enum(OPTIONS_REGIONS.map(option => option.value) as [string, ...string[]])
+                .optional()
+                .transform(value => value as Region),
+            z.array(
+                z
+                    .enum(OPTIONS_REGIONS.map(option => option.value) as [string, ...string[]])
+                    .optional()
+                    .transform(value => value as Region)
+            ),
         ])
         .optional(),
     totalScore: z

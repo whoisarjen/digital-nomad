@@ -1,4 +1,4 @@
-import type { Level, Prisma } from "@prisma/client";
+import type { Level, Prisma, Region } from "@prisma/client";
 
 export const DEFAULT_SORT_VALUE = 'desc'
 export const SEARCH_BAR_MAXIMUM_Q_LENGTH = 120
@@ -19,7 +19,7 @@ export const OPTIONS_LEVEL_GTE = [
   { label: 'High', value: 'HIGH' }, 
 ] satisfies { label: string; value: Level }[]
 
-const OPTIONS_ORDER_BY_CITY = [
+const OPTIONS_ORDER_BY_MONTH_SUMMARY = [
   'costForNomadInUsd',
   'internetSpeedCity',
   'safety',
@@ -30,15 +30,10 @@ const OPTIONS_ORDER_BY_CITY = [
   'costOfLiving',
   'trafficCommuteTime',
   'population',
-] satisfies Partial<keyof Prisma.CityOrderByWithRelationInput>[]
-
-export const OPTIONS_ORDER_BY_MONTH_SUMMARY = [
   'totalScore',
 ] satisfies Partial<keyof Prisma.MonthSummaryOrderByWithRelationInput>[]
 
-export type OrderByOptionValue =
-  | typeof OPTIONS_ORDER_BY_CITY[number]
-  | typeof OPTIONS_ORDER_BY_MONTH_SUMMARY[number]
+export type OrderByOptionValue = typeof OPTIONS_ORDER_BY_MONTH_SUMMARY[number]
 
 export const OPTIONS_ORDER_BY = [
   { label: 'Total Score', value: 'totalScore' },
@@ -53,6 +48,41 @@ export const OPTIONS_ORDER_BY = [
   { label: 'Traffic & Commute Time', value: 'trafficCommuteTime' },
   { label: 'Population Size', value: 'population' },
 ] satisfies { label: string; value: OrderByOptionValue }[]
+
+export const OPTIONS_REGIONS = [
+    {
+        "label": "Europe",
+        "value": "Europe"
+    },
+    {
+        "label": "Asia",
+        "value": "Asia"
+    },
+    {
+        "label": "Middle East",
+        "value": "MiddleEast"
+    },
+    {
+        "label": "Latin America",
+        "value": "LatinAmerica"
+    },
+    {
+        "label": "North America",
+        "value": "NorthAmerica"
+    },
+    {
+        "label": "Africa",
+        "value": "Africa"
+    },
+    {
+        "label": "Oceania",
+        "value": "Oceania"
+    },
+    {
+        "label": "Antarctica",
+        "value": "Antarctica"
+    },
+] satisfies { label: string; value: Region }[]
 
 export const getUserCurrentMonthString = () => {
     const currentMonth = new Date().getMonth() + 1;

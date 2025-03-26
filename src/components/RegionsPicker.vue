@@ -2,7 +2,7 @@
   <div class="block text-sm font-medium text-gray-700">Regions</div>
   <div class="flex flex-wrap gap-1">
     <div
-      v-for="region in REGIONS"
+      v-for="region in OPTIONS_REGIONS"
       :key="region.value"
       @click="selectRegion(region.value)"
       class="custom-button flex-grow"
@@ -18,44 +18,10 @@
 <script setup lang="ts">
 import concat from 'lodash/concat'
 import compact from 'lodash/compact'
+import { OPTIONS_REGIONS } from '~/shared/global.utils';
 
 const route = useRoute();
 const router = useRouter();
-
-const REGIONS = [
-    {
-        "label": "Europe",
-        "value": "Europe"
-    },
-    {
-        "label": "Asia",
-        "value": "Asia"
-    },
-    {
-        "label": "Middle East",
-        "value": "Middle East"
-    },
-    {
-        "label": "Latin America",
-        "value": "Latin America"
-    },
-    {
-        "label": "North America",
-        "value": "North America"
-    },
-    {
-        "label": "Africa",
-        "value": "Africa"
-    },
-    {
-        "label": "Oceania",
-        "value": "Oceania"
-    },
-    {
-        "label": "Antarctica",
-        "value": "Antarctica"
-    },
-]
 
 const selectedOptions = ref<string[]>(compact(concat(route.query.regions as string | string[] | undefined)));
 
