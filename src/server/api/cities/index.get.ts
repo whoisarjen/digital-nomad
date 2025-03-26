@@ -157,6 +157,7 @@ export default defineEventHandler(async (event) => {
             select: {
                 weatherIcon: true,
                 temperature2mMax: true,
+                totalScore: true,
             },
             where: {
                 month: validatedQuery.months,
@@ -213,6 +214,7 @@ export default defineEventHandler(async (event) => {
             population: formatNumber(city.population),
             weatherIcon: monthSummary[0]?.weatherIcon,
             temperature: monthSummary[0]?.temperature2mMax,
+            totalScore: monthSummary[0]?.totalScore,
         })),
         count,
         pagesCount: Math.ceil(count / limit),

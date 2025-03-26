@@ -82,7 +82,7 @@
 
                     <div class="p-4 flex flex-col gap-4 flex-1">
                       <h3 class="text-xl font-semibold text-gray-900 transition-colors group-hover:text-primary-500">
-                        {{ city.name }}, {{ city.country }}
+                        {{ city.name }}, {{ city.country }} ({{ city.totalScore }})
                       </h3>
                       <div class="text-sm text-gray-600 flex gap-1 flex-1">
                         Pollution: {{ city.pollution }}
