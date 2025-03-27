@@ -159,11 +159,11 @@ class TotalScoreFactory {
         response = 0.46 * precipitationHours;
     }
 
-    if (precipitationHours >= 5 && precipitationHours <= 6) {
+    if (precipitationHours >= 5 && precipitationHours <= 9) {
         response = 1.03 * precipitationHours;
     }
 
-    if (precipitationHours >= 7) {
+    if (precipitationHours >= 10) {
         response = 1.54 * precipitationHours;
     }
 
