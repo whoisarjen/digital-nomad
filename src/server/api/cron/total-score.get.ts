@@ -28,25 +28,7 @@ class TotalScoreFactory {
     const { popularity } = this.getMonthSummary()
     if (!popularity) return null // Catch also 0
 
-    const logValue = Math.log10(popularity)
-
-    if (logValue < 1) {
-      return 1;
-    }
-
-    if (logValue < 2) {
-      return 2;
-    }
-
-    if (logValue < 3) {
-      return 3;
-    }
-
-    if (logValue < 4) {
-      return 5;
-    }
-
-    return 8;
+    return Math.pow((Math.log1p(popularity) / Math.log1p(783000)), 2) * 10;
   }
 
   getRegionScore() {
