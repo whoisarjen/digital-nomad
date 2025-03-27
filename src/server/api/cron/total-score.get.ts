@@ -199,7 +199,7 @@ class TotalScoreFactory {
         response = 9.09 * precipitationHours;
     }
 
-    return 25 - response
+    return 25 - Math.max(response, -25)
   }
 
   getWeatherScore() {
