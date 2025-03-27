@@ -149,57 +149,57 @@ class TotalScoreFactory {
   getPrecipitationHoursScore() {
     const { precipitationHours: precipitationHoursRaw } = this.getMonthSummary()
     const precipitationHours = precipitationHoursRaw.toNumber()
-    let response = 25
+    let response = 0
 
     if (precipitationHours >= 1 && precipitationHours <= 2) {
-      response -= 0.23 * precipitationHours;
+      response = 0.23 * precipitationHours;
     }
 
     if (precipitationHours >= 3 && precipitationHours <= 4) {
-        response -= 0.46 * precipitationHours;
+        response = 0.46 * precipitationHours;
     }
 
     if (precipitationHours >= 5 && precipitationHours <= 6) {
-        response -= 1.03 * precipitationHours;
+        response = 1.03 * precipitationHours;
     }
 
     if (precipitationHours >= 7 && precipitationHours <= 8) {
-        response -= 1.54 * precipitationHours;
+        response = 1.54 * precipitationHours;
     }
 
     if (precipitationHours >= 9 && precipitationHours <= 10) {
-        response -= 2.31 * precipitationHours;
+        response = 2.31 * precipitationHours;
     }
 
     if (precipitationHours >= 11 && precipitationHours <= 12) {
-        response -= 3.06 * precipitationHours;
+        response = 3.06 * precipitationHours;
     }
 
     if (precipitationHours >= 13 && precipitationHours <= 14) {
-        response -= 4.08 * precipitationHours;
+        response = 4.08 * precipitationHours;
     }
 
     if (precipitationHours >= 15 && precipitationHours <= 16) {
-        response -= 5.06 * precipitationHours;
+        response = 5.06 * precipitationHours;
     }
 
     if (precipitationHours >= 17 && precipitationHours <= 18) {
-        response -= 6.28 * precipitationHours;
+        response = 6.28 * precipitationHours;
     }
 
     if (precipitationHours >= 19 && precipitationHours <= 20) {
-        response -= 7.17 * precipitationHours;
+        response = 7.17 * precipitationHours;
     }
 
     if (precipitationHours >= 21 && precipitationHours <= 22) {
-        response -= 8.07 * precipitationHours;
+        response = 8.07 * precipitationHours;
     }
 
     if (precipitationHours >= 23 && precipitationHours <= 24) {
-        response -= 9.09 * precipitationHours;
+        response = 9.09 * precipitationHours;
     }
 
-    return response
+    return 25 - response
   }
 
   getWeatherScore() {
