@@ -93,19 +93,19 @@ class TotalScoreFactory {
     }
 
     if (temperature2mMax.toNumber() < 20 || 30 < temperature2mMax.toNumber()) {
-      return 4
+      return 3
     }
 
-    return 6
+    return 5
   }
 
   getPollutionScore() {
     const { pollution } = this.getCity()
     if (pollution === null) return null
     if (pollution === 'LOW') {
-      return 1.5
-    } else if (pollution === 'MIDDLE') {
       return 1
+    } else if (pollution === 'MIDDLE') {
+      return 0.5
     } else {
       return 0
     }
@@ -115,9 +115,9 @@ class TotalScoreFactory {
     const { costOfLiving } = this.getCity()
     if (costOfLiving === null) return null
     if (costOfLiving === 'LOW') {
-      return 4
-    } else if (costOfLiving === 'MIDDLE') {
       return 2
+    } else if (costOfLiving === 'MIDDLE') {
+      return 1
     } else {
       return 0
     }
@@ -129,9 +129,9 @@ class TotalScoreFactory {
     if (healthCare === 'LOW') {
       return 0
     } else if (healthCare === 'MIDDLE') {
-      return 1
+      return 0.5
     } else {
-      return 1.5
+      return 1
     }
   }
 
@@ -141,9 +141,9 @@ class TotalScoreFactory {
     if (safety === 'LOW') {
       return 0
     } else if (safety === 'MIDDLE') {
-      return 2
+      return 0.5
     } else {
-      return 3
+      return 1
     }
   }
 
@@ -153,9 +153,9 @@ class TotalScoreFactory {
     if (purchasingPower === 'LOW') {
       return 1
     } else if (purchasingPower === 'MIDDLE') {
-      return 3
+      return 2
     } else {
-      return 4
+      return 3
     }
   }
 
