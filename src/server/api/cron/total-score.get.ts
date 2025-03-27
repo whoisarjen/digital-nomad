@@ -66,15 +66,20 @@ class TotalScoreFactory {
   getTemperatureScore() {
     const { temperature2mMax } = this.getMonthSummary()
     if (temperature2mMax === null) return null
+
     if (temperature2mMax.toNumber() < 10 || 40 < temperature2mMax.toNumber()) {
+      return 0
+    }
+
+    if (temperature2mMax.toNumber() < 15 || 36 < temperature2mMax.toNumber()) {
       return 1
     }
 
-    if (temperature2mMax.toNumber() < 15 || 35 < temperature2mMax.toNumber()) {
+    if (temperature2mMax.toNumber() < 20 || 34 < temperature2mMax.toNumber()) {
       return 2
     }
 
-    if (temperature2mMax.toNumber() < 20 || 30 < temperature2mMax.toNumber()) {
+    if (temperature2mMax.toNumber() < 24 || 32 < temperature2mMax.toNumber()) {
       return 3
     }
 
@@ -141,67 +146,67 @@ class TotalScoreFactory {
     }
   }
 
-  getPrecipitationHoursPenalty() {
+  getPrecipitationHoursScore() {
     const { precipitationHours: precipitationHoursRaw } = this.getMonthSummary()
     const precipitationHours = precipitationHoursRaw.toNumber()
-    let response = 0
+    let response = 25
 
     if (precipitationHours >= 1 && precipitationHours <= 2) {
-      response = 0.23 * precipitationHours;
+      response -= 0.23 * precipitationHours;
     }
 
     if (precipitationHours >= 3 && precipitationHours <= 4) {
-        response = 0.46 * precipitationHours;
+        response -= 0.46 * precipitationHours;
     }
 
     if (precipitationHours >= 5 && precipitationHours <= 6) {
-        response = 1.03 * precipitationHours;
+        response -= 1.03 * precipitationHours;
     }
 
     if (precipitationHours >= 7 && precipitationHours <= 8) {
-        response = 1.54 * precipitationHours;
+        response -= 1.54 * precipitationHours;
     }
 
     if (precipitationHours >= 9 && precipitationHours <= 10) {
-        response = 2.31 * precipitationHours;
+        response -= 2.31 * precipitationHours;
     }
 
     if (precipitationHours >= 11 && precipitationHours <= 12) {
-        response = 3.06 * precipitationHours;
+        response -= 3.06 * precipitationHours;
     }
 
     if (precipitationHours >= 13 && precipitationHours <= 14) {
-        response = 4.08 * precipitationHours;
+        response -= 4.08 * precipitationHours;
     }
 
     if (precipitationHours >= 15 && precipitationHours <= 16) {
-        response = 5.06 * precipitationHours;
+        response -= 5.06 * precipitationHours;
     }
 
     if (precipitationHours >= 17 && precipitationHours <= 18) {
-        response = 6.28 * precipitationHours;
+        response -= 6.28 * precipitationHours;
     }
 
     if (precipitationHours >= 19 && precipitationHours <= 20) {
-        response = 7.17 * precipitationHours;
+        response -= 7.17 * precipitationHours;
     }
 
     if (precipitationHours >= 21 && precipitationHours <= 22) {
-        response = 8.07 * precipitationHours;
+        response -= 8.07 * precipitationHours;
     }
 
     if (precipitationHours >= 23 && precipitationHours <= 24) {
-        response = 9.09 * precipitationHours;
+        response -= 9.09 * precipitationHours;
     }
 
-    return -response
+    return response
   }
 
   getWeatherScore() {
     return [
       this.getWeatherIconScore(),
       this.getTemperatureScore(),
-      this.getPrecipitationHoursPenalty(),
+      this.getPrecipitationHoursScore(),
     ].filter(score => score !== null).reduce((prev, curr) => prev += curr, 0)
   }
 
@@ -218,11 +223,10 @@ class TotalScoreFactory {
   }
 
   getTotalScore() {
-    const startingPoints = 25
     const weatherScore = this.getWeatherScore()
     const cityScore = this.getCityScore()
 
-    return parseInt(((startingPoints + weatherScore + cityScore) * 10).toString())
+    return parseInt(((weatherScore + cityScore) * 10).toString())
   }
 }
 
