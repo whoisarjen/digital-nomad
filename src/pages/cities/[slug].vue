@@ -99,21 +99,23 @@ const { data, status } = await useCitiesBySlug(queryParams, {
 })
 
 const months = computed(() => {
-  const min = Math.min(...data.value?.monthSummary.map((item) => item.totalScore) ?? [])
-  const max = Math.max(...data.value?.monthSummary.map((item) => item.totalScore) ?? [])
-  const range = max - min
+  const getMedian = (arr: number[]) => {
+    const sorted = arr.slice().sort((a, b) => a - b)
+    const mid = Math.floor(sorted.length / 2)
 
-  const thresholds = [
-    min, 
-    min + range * 0.75,
-    min + range * 0.95,
-  ]
+    return sorted.length % 2 !== 0
+      ? sorted[mid]
+      : (sorted[mid - 1] + sorted[mid]) / 2
+  }
+
+  const low = getMedian(data.value?.monthSummary.map((item) => item.totalScore) ?? [])
+  const middle = getMedian(data.value?.monthSummary.map((item) => item.totalScore).filter(value => value > low) ?? [])
 
   return data.value?.monthSummary.map((item) => {
     const totalScore = item.totalScore
     const color =
-      totalScore < thresholds[1] ? 'LOW' :
-      totalScore < thresholds[2] ? 'MIDDLE' :
+      totalScore <= low ? 'LOW' :
+      totalScore <= middle ? 'MIDDLE' :
       'HIGH'
 
     return { ...item, color }
