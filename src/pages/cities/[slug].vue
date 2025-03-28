@@ -54,9 +54,13 @@
 
           <div class="grid grid-cols-4 gap-4 mt-4">
             <div
-              v-for="(monthData, index) in data.monthSummary"
+              v-for="(monthData, index) in months"
               :key="index"
               class="flex flex-col items-center custom-box"
+              :class="{
+                'bg-yellow-100': monthData.color === 'MIDDLE',
+                'bg-green-100': monthData.color === 'HIGH',
+              }"
             >
               <span class="text-sm text-gray-500 font-semibold">{{ new Date(2023, Number(monthData.month) - 1).toLocaleString('en-US', { month: 'long' }) }} ({{ monthData.totalScore }})</span>
               <WeatherIcon :weather-icon="monthData.weatherIcon" class="text-3xl" />
@@ -93,4 +97,27 @@ watch(
 const { data, status } = await useCitiesBySlug(queryParams, {
   lazy: true,
 })
+
+const months = computed(() => {
+  const min = Math.min(...data.value?.monthSummary.map((item) => item.totalScore) ?? [])
+  const max = Math.max(...data.value?.monthSummary.map((item) => item.totalScore) ?? [])
+  const range = max - min
+
+  const thresholds = [
+    min, 
+    min + range * 0.75,
+    min + range * 0.95,
+  ]
+
+  return data.value?.monthSummary.map((item) => {
+    const totalScore = item.totalScore
+    const color =
+      totalScore < thresholds[1] ? 'LOW' :
+      totalScore < thresholds[2] ? 'MIDDLE' :
+      'HIGH'
+
+    return { ...item, color }
+  })
+})
+
 </script>
