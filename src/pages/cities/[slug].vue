@@ -109,13 +109,13 @@ const months = computed(() => {
   }
 
   const low = getMedian(data.value?.monthSummary.map((item) => item.totalScore) ?? [])
-  const middle = getMedian(data.value?.monthSummary.map((item) => item.totalScore).filter(value => value > low) ?? [])
+  const middle = getMedian(data.value?.monthSummary.map((item) => item.totalScore).filter(value => value >= low) ?? [])
 
   return data.value?.monthSummary.map((item) => {
     const totalScore = item.totalScore
     const color =
-      totalScore <= low ? 'LOW' :
-      totalScore <= middle ? 'MIDDLE' :
+      totalScore < low ? 'LOW' :
+      totalScore < middle ? 'MIDDLE' :
       'HIGH'
 
     return { ...item, color }
