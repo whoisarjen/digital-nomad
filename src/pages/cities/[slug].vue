@@ -58,8 +58,8 @@
               :key="index"
               class="flex flex-col items-center custom-box"
               :class="{
-                'bg-yellow-100': monthData.color === 'MIDDLE',
-                'bg-green-100': monthData.color === 'HIGH',
+                'bg-yellow-100': monthData.totalScoreLevel === 'MIDDLE',
+                'bg-green-100': monthData.totalScoreLevel === 'HIGH',
               }"
             >
               <span class="text-sm text-gray-500 font-semibold">{{ new Date(2023, Number(monthData.month) - 1).toLocaleString('en-US', { month: 'long' }) }} ({{ monthData.totalScore }})</span>
@@ -113,12 +113,12 @@ const months = computed(() => {
 
   return data.value?.monthSummary.map((item) => {
     const totalScore = item.totalScore
-    const color =
+    const totalScoreLevel =
       totalScore < low ? 'LOW' :
       totalScore < middle ? 'MIDDLE' :
       'HIGH'
 
-    return { ...item, color }
+    return { ...item, totalScoreLevel }
   })
 })
 
