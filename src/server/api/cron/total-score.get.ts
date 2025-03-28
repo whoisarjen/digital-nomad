@@ -80,10 +80,10 @@ class TotalScoreFactory {
     }
 
     if (temperature2mMax.toNumber() < 24 || 32 < temperature2mMax.toNumber()) {
-      return 3
+      return 4
     }
 
-    return 5
+    return 6
   }
 
   getPollutionScore() {
