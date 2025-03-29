@@ -29,7 +29,6 @@
           >
             Main page
           </NuxtLink>
-          <MonthsPicker />
         </aside>
         <div class="p-4 flex flex-col gap-4 flex-1">
           <h3 class="text-xl font-semibold text-gray-900">
