@@ -171,7 +171,7 @@ export default defineEventHandler(async (event) => {
                     },
                 ]
                 : {
-                    [orderBy]: 'asc'
+                    [orderBy]: sort,
                 },
             select: {
                 city: {
