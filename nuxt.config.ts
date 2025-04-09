@@ -12,9 +12,6 @@ export default defineNuxtConfig({
   nitro: {
     vercel: {
       regions: ['fra1'],
-      functions: {
-        maxDuration: 300,
-      }
     },
   },
   image: {
