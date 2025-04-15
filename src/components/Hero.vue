@@ -4,7 +4,7 @@
       provider="unsplash"
       :src="image.url" 
       alt="Explore. Work. Live." 
-      class="absolute inset-0 w-full h-[50vh] object-cover transition-all duration-500 transform group-hover:scale-105"
+      class="absolute inset-0 w-full h-[50vh] object-cover"
     />
     <div class="absolute inset-0 z-10 bg-black size-full opacity-50" />
     <div class="relative py-20 z-20">
