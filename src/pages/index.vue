@@ -16,14 +16,14 @@
             class="w-24 h-24 rounded-full mx-auto mb-6 border-4 border-white shadow-lg"
           />
           <h1 class="text-4xl md:text-5xl font-bold mb-4">
-            Meet [Product Name]: Built for Digital Nomads
+            Discover Your Perfect Nomad City with [Product Name]
           </h1>
           <p class="text-lg md:text-xl text-gray-200 mb-6">
-            Hi, I'm [Your Name]! I created [Product Name] to help you find the perfect city for your digital nomad lifestyle. Try it out and share your feedback to make it even better!
+            Hi, I'm [Your Name]! I built [Product Name] to help digital nomads find the best cities to live, work, and thrive. Try it out and share your feedback to shape its future!
           </p>
           <div class="mt-6 flex justify-center gap-4">
             <a
-              href="#"
+              href="#feedback"
               class="bg-white text-blue-900 px-6 py-3 rounded-lg font-semibold hover:bg-gray-200 transition"
             >
               Share Feedback
