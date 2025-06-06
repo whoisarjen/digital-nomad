@@ -1,8 +1,50 @@
 <template>
     <div class="min-h-screen bg-gray-100 text-gray-900">
-      <Hero />
-      <section class="p-6 flex flex-col gap-6">
+      <section class="relative min-h-[60vh] flex flex-col justify-center items-center text-center text-white p-6 bg-primary-900 overflow-hidden">
+        <!-- <NuxtImg
+          provider="unsplash"
+          src="/photo-1535117399959-7df1714b4202?ixid=M3w3MjU5NzR8MHwxfHNlYXJjaHw1fHxCYW5na29rfGVufDB8fHx8MTc0MjYxMjM3Mnww&ixlib=rb-4.0.3&" 
+          alt="Explore. Work. Live." 
+          class="absolute inset-0 w-full h-full object-cover"
+        /> -->
+        <!-- Content -->
+        <div class="relative z-20 py-12 max-w-4xl mx-auto">
+          <!-- Your Picture -->
+          <NuxtImg
+            src="https://media.licdn.com/dms/image/v2/D4D03AQHHgPmY4SiQtw/profile-displayphoto-shrink_400_400/B4DZdAbYdqG8Ag-/0/1749132610996?e=1754524800&v=beta&t=Ux3U04ZNx5_25j16UXzK1KMFCH41LWp7rR1S-xt2MlE"
+            alt="Your Name"
+            class="w-24 h-24 rounded-full mx-auto mb-6 border-4 border-white shadow-lg"
+          />
+          <h1 class="text-4xl md:text-5xl font-bold mb-4">
+            Meet [Product Name]: Built for Digital Nomads
+          </h1>
+          <p class="text-lg md:text-xl text-gray-200 mb-6">
+            Hi, I'm [Your Name]! I created [Product Name] to help you find the perfect city for your digital nomad lifestyle. Try it out and share your feedback to make it even better!
+          </p>
+          <div class="mt-6 flex justify-center gap-4">
+            <a
+              href="#"
+              class="bg-white text-blue-900 px-6 py-3 rounded-lg font-semibold hover:bg-gray-200 transition"
+            >
+              Share Feedback
+            </a>
+            <a
+              href="#app"
+              class="bg-transparent border-2 border-white text-white px-6 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-900 transition"
+            >
+              Explore the App
+            </a>
+          </div>
+        </div>
+        <div class="absolute bottom-0 right-0 text-white bg-black py-1 px-2 rounded-tl-lg text-xs z-10">
+          <NuxtLink target="_blank" to="https://unsplash.com/@tankanin?utm_source=Digital%20Nomad&utm_medium=referral">Tan Kaninthanond</NuxtLink> on <NuxtLink target="_blank" to="https://unsplash.com/?utm_source=Digital%20Nomad&utm_medium=referral">Unsplash</NuxtLink>
+        </div>
+      </section>
+      <section class="p-6 flex flex-col gap-6" id="app">
         <section class="flex gap-6 justify-end flex-col md:flex-row items-center">
+          <div class="flex-1 bg-white">
+            <SearchBar />
+          </div>
           <div class="flex gap-1 max-md:w-full">
             <SinglePicker
               name="orderBy"
@@ -81,7 +123,7 @@
                     </div>
 
                     <div class="p-4 flex flex-col gap-4 flex-1">
-                      <h3 class="text-xl font-semibold text-gray-900 transition-colors group-hover:text-primary-500">
+                      <h3 class="text-xl font-semibold text-gray-900 transition-colors group-hover:text-primary-900">
                         {{ city.name }}, {{ city.country }} ({{ city.totalScore }})
                       </h3>
                       <div class="text-sm text-gray-600 flex gap-1 flex-1">
@@ -91,7 +133,7 @@
                       </div>
 
                       <div class="flex justify-between text-sm text-gray-500">
-                        <span class="text-primary-500 flex items-center gap-1">
+                        <span class="text-primary-900 flex items-center gap-1">
                           <WeatherIcon :weather-icon="city.weatherIcon" />
                           {{ Number(city.temperature).toFixed(1) }}°C
                         </span>

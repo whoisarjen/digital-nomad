@@ -1,15 +1,15 @@
 <template>
-  <div class="order-last sm:order-2 w-full md:w-3/5 pb-0">
+  <div class="order-last sm:order-2 w-full pb-0">
     <div
-      class="bg-gray-100 rounded-lg h-12 p-2 flex ps-4 sm:ps-0 flex-row-reverse sm:flex-row items-center sm:pe-6 group"
+      class="bg-white rounded-lg h-12 p-2 flex ps-4 sm:ps-0 flex-row-reverse sm:flex-row items-center sm:pe-6 group"
     >
       <input
         v-model="q"
-        class="w-full bg-gray-100 ps-4 text-black border-0 focus:outline-none"
+        class="w-full bg-white ps-4 text-black border-0 focus:outline-none"
         :placeholder="typedPlaceholder"
         @keyup.enter="handleSearch"
       >
-      <LucideSearch class="text-gray-400 cursor-pointer group-hover:text-primary-500" @click="handleSearch" />
+      <LucideSearch class="text-gray-400 cursor-pointer group-hover:text-primary-900" @click="handleSearch" />
     </div>
   </div>
 </template>

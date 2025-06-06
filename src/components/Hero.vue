@@ -11,7 +11,9 @@
       <h1 class="text-5xl font-bold">Explore. Work. Live.</h1>
       <p class="mt-4 text-lg">Find the perfect city for your digital nomad lifestyle.</p>
       <div class="mt-6 flex justify-center">
-        <SearchBar />
+        <div class="md:w-3/5">
+          <SearchBar />
+        </div>
       </div>
     </div>
     <div class="absolute bottom-0 right-0 text-white bg-black py-1 px-2 rounded-tl-lg text-xs z-10">
