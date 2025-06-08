@@ -36,6 +36,52 @@
             </a>
           </div>
         </div>
+        <div class="mb-10 max-w-3xl mx-auto">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <!-- Available Now -->
+            <div class="bg-white bg-opacity-10 p-4 rounded-lg backdrop-blur-sm">
+              <h4 class="text-lg font-semibold text-white mb-2">Available Now</h4>
+              <ul class="text-gray-200 text-left text-sm">
+                <li class="mb-2 flex items-start">
+                  <svg class="w-5 h-5 text-primary-300 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 00-1.414 0L8 12.586 4.707 9.293a1 1 0 00-1.414 1.414l4 4a1 1 0 001.414 0l8-8a1 1 0 000-1.414z" clip-rule="evenodd" />
+                  </svg>
+                  Search cities by lifestyle (cost, internet, safety)
+                </li>
+                <li class="mb-2 flex items-start">
+                  <svg class="w-5 h-5 text-primary-300 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 00-1.414 0L8 12.586 4.707 9.293a1 1 0 00-1.414 1.414l4 4a1 1 0 001.414 0l8-8a1 1 0 000-1.414z" clip-rule="evenodd" />
+                  </svg>
+                  View city profiles with nomad scores
+                </li>
+                <li class="flex items-start">
+                  <svg class="w-5 h-5 text-primary-300 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 00-1.414 0L8 12.586 4.707 9.293a1 1 0 00-1.414 1.414l4 4a1 1 0 001.414 0l8-8a1 1 0 000-1.414z" clip-rule="evenodd" />
+                  </svg>
+                  Share feedback to improve the app
+                </li>
+              </ul>
+            </div>
+            <!-- Coming Soon -->
+            <div class="bg-white bg-opacity-10 p-4 rounded-lg backdrop-blur-sm">
+              <h4 class="text-lg font-semibold text-white mb-2">Coming Soon</h4>
+              <ul class="text-gray-200 text-left text-sm">
+                <li class="mb-2 flex items-start">
+                  <svg class="w-5 h-5 text-gray-400 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" />
+                  </svg>
+                  Advanced filters (climate, coworking spaces)
+                </li>
+                <li class="flex items-start">
+                  <svg class="w-5 h-5 text-gray-400 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" />
+                  </svg>
+                  Community ratings and reviews
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
         <div class="absolute bottom-0 right-0 text-white bg-black py-1 px-2 rounded-tl-lg text-xs z-10">
           <NuxtLink target="_blank" to="https://unsplash.com/@tankanin?utm_source=Digital%20Nomad&utm_medium=referral">Tan Kaninthanond</NuxtLink> on <NuxtLink target="_blank" to="https://unsplash.com/?utm_source=Digital%20Nomad&utm_medium=referral">Unsplash</NuxtLink>
         </div>
