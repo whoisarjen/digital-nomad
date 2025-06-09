@@ -16,10 +16,10 @@
             class="w-24 h-24 rounded-full mx-auto mb-6 border-4 border-white shadow-lg"
           />
           <h1 class="text-4xl md:text-5xl font-bold mb-4">
-            Discover Your Perfect Nomad City with [Product Name]
+            Discover Your Perfect Nomad City
           </h1>
           <p class="text-lg md:text-xl text-gray-200 mb-6">
-            Hi, I'm [Your Name]! I built [Product Name] to help digital nomads find the best cities to live, work, and thrive. Try it out and share your feedback to shape its future!
+            Hi, I'm Kamil! I built this app to help digital nomads find the best cities to live, work, and thrive. Try it out and share your feedback to shape its future!
           </p>
           <div class="mt-6 flex justify-center gap-4">
             <a
@@ -41,14 +41,14 @@
             <!-- Available Now -->
             <div class="bg-white bg-opacity-10 p-4 rounded-lg backdrop-blur-sm">
               <h4 class="text-lg font-semibold text-white mb-2">Available Now</h4>
-              <ul class="text-gray-200 text-left text-sm">
-                <li class="mb-2 flex items-start">
+              <ul class="text-gray-200 text-left text-sm flex flex-col gap-2">
+                <li class="flex items-start">
                   <svg class="w-5 h-5 text-primary-300 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                     <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 00-1.414 0L8 12.586 4.707 9.293a1 1 0 00-1.414 1.414l4 4a1 1 0 001.414 0l8-8a1 1 0 000-1.414z" clip-rule="evenodd" />
                   </svg>
                   Search cities by lifestyle (cost, internet, safety)
                 </li>
-                <li class="mb-2 flex items-start">
+                <li class="flex items-start">
                   <svg class="w-5 h-5 text-primary-300 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                     <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 00-1.414 0L8 12.586 4.707 9.293a1 1 0 00-1.414 1.414l4 4a1 1 0 001.414 0l8-8a1 1 0 000-1.414z" clip-rule="evenodd" />
                   </svg>
@@ -60,13 +60,19 @@
                   </svg>
                   Share feedback to improve the app
                 </li>
+                <li class="flex items-start">
+                  <svg class="w-5 h-5 text-primary-300 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 00-1.414 0L8 12.586 4.707 9.293a1 1 0 00-1.414 1.414l4 4a1 1 0 001.414 0l8-8a1 1 0 000-1.414z" clip-rule="evenodd" />
+                  </svg>
+                  Archive data
+                </li>
               </ul>
             </div>
             <!-- Coming Soon -->
             <div class="bg-white bg-opacity-10 p-4 rounded-lg backdrop-blur-sm">
               <h4 class="text-lg font-semibold text-white mb-2">Coming Soon</h4>
-              <ul class="text-gray-200 text-left text-sm">
-                <li class="mb-2 flex items-start">
+              <ul class="text-gray-200 text-left text-sm flex flex-col gap-2">
+                <li class="flex items-start">
                   <svg class="w-5 h-5 text-gray-400 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" />
                   </svg>
@@ -77,6 +83,12 @@
                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" />
                   </svg>
                   Community ratings and reviews
+                </li>
+                <li class="flex items-start">
+                  <svg class="w-5 h-5 text-gray-400 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" />
+                  </svg>
+                  Live data
                 </li>
               </ul>
             </div>
