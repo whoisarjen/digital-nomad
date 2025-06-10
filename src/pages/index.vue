@@ -23,7 +23,7 @@
           </p>
           <div class="mt-6 flex justify-center gap-4">
             <a
-              href="#feedback"
+              href="mailto:kamilow97@gmail.com"
               class="bg-white text-blue-900 px-6 py-3 rounded-lg font-semibold hover:bg-gray-200 transition"
             >
               Share Feedback
