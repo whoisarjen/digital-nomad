@@ -11,7 +11,7 @@
         <div class="relative z-20 py-12 max-w-4xl mx-auto">
           <!-- Your Picture -->
           <NuxtImg
-            src="https://media.licdn.com/dms/image/v2/D4D03AQHHgPmY4SiQtw/profile-displayphoto-shrink_400_400/B4DZdAbYdqG8Ag-/0/1749132610996?e=1754524800&v=beta&t=Ux3U04ZNx5_25j16UXzK1KMFCH41LWp7rR1S-xt2MlE"
+            src="https://media.licdn.com/dms/image/v2/D4D03AQEElpGg_3IunA/profile-displayphoto-scale_400_400/B4DZec9TlQGUAg-/0/1750685007011?e=1757548800&v=beta&t=LgGwIvi4Jifm2iMCjVT5xXXS6Q4FF14-LZNu41UufFk"
             alt="Your Name"
             class="w-24 h-24 rounded-full mx-auto mb-6 border-4 border-white shadow-lg"
           />
