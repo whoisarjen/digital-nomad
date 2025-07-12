@@ -6,6 +6,7 @@ Code Style and Structure
 - Emphasize iteration and modularization to follow DRY principles and minimize code duplication.
 - Prefer Composition API <script setup> style.
 - Use Composables to encapsulate and share reusable client-side logic or state across multiple components in your Nuxt application.
+- Avoid creating new components prematurely. Only create new components when the logic is shared between at least two or more places.
 
 Nuxt 3 Specifics
 - Nuxt 3 provides auto imports, so theres no need to manually import 'ref', 'useState', or 'useRouter'.
