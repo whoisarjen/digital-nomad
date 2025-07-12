@@ -1,5 +1,25 @@
 import _ from "lodash";
 
+interface MonthlyTemp {
+  weatherCodeMap: Record<string, number>;
+  apparentTemperatureMax: number[];
+  rainSum: number[];
+  windGusts10mMax: number[];
+  snowfallSum: number[];
+  windDirection10mDominant: number[];
+  daylightDuration: number[];
+  apparentTemperatureMin: number[];
+  temperature2mMax: number[];
+  temperature2mMin: number[];
+  apparentTemperatureMean: number[];
+  sunshineDuration: number[];
+  precipitationHours: number[];
+  shortwaveRadiationSum: number[];
+  windSpeed10mMax: number[];
+  precipitationSum: number[];
+  temperature2mMean: number[];
+}
+
 const median = (numbers: number[]): number => {
   // Sort the array in ascending order
   const sortedNumbers = [...numbers].sort((a, b) => a - b);
@@ -20,6 +40,7 @@ export default defineEventHandler(async () => {
     prisma.city.findMany({
       select: {
         slug: true,
+        region: true,
         weathers: {
           select: {
             apparentTemperatureMax: true,
@@ -52,8 +73,8 @@ export default defineEventHandler(async () => {
 
   await processInBatches(cities, async city => {
     // Group weather data by month (extract month from date)
-    const monthlyTemps = Array(12).fill(0).map(() => ({
-      weatherCodeMap: {} as any,
+    const monthlyTemps: MonthlyTemp[] = Array(12).fill(0).map(() => ({
+      weatherCodeMap: {},
       apparentTemperatureMax: [] as number[],
       rainSum: [] as number[],
       windGusts10mMax: [] as number[],
@@ -101,7 +122,7 @@ export default defineEventHandler(async () => {
     // Calculate the most common weather code
     const medianTemperatures = monthlyTemps.map((data, index) => {
       const mostCommonWeatherCode = data.weatherCodeMap 
-        ? Object.entries(data.weatherCodeMap).reduce((a: any, b: any) => (a[1] > b[1] ? a : b))[0]
+        ? Object.entries(data.weatherCodeMap).reduce((a: [string, number], b: [string, number]) => (a[1] > b[1] ? a : b))[0]
         : null;
     
       return {
@@ -128,6 +149,8 @@ export default defineEventHandler(async () => {
 
     await processInBatches(medianTemperatures, async option => {
       const data = {
+        region: city.region,
+        totalScore: 0,
         citySlug: city.slug,
         month: option.month,
         weatherIcon: getIconBasedOnWeatherCode(Number(option.weatherCode ?? -1)),

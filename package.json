@@ -8,7 +8,8 @@
     "predev": "vercel env pull .env -y --environment=development",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
-    "preview": "nuxt preview"
+    "preview": "nuxt preview",
+    "typecheck": "vue-tsc --noEmit"
   },
   "dependencies": {
     "@nuxt/image": "^1.10.0",

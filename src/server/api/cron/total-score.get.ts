@@ -1,4 +1,4 @@
-import { City, MonthSummary } from "@prisma/client"
+import type { City, MonthSummary } from "@prisma/client"
 import _ from "lodash"
 
 class TotalScoreFactory {

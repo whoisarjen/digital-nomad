@@ -77,6 +77,8 @@ TypeScript Usage
 - Use TypeScript throughout; prefer interfaces over types for better extendability and merging.
 - Avoid enums, opting for maps for improved type safety and flexibility.
 - Use functional components with TypeScript interfaces.
+- Never use `any` or `unknown` types.
+- After any changes, run `npm run typecheck` to ensure there are no type issues.
 
 UI and Styling
 - Use Nuxt UI and Tailwind CSS for components and styling.
