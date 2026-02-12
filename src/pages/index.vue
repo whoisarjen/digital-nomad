@@ -2,14 +2,11 @@
   <div class="min-h-screen bg-gray-100 text-gray-900">
     <!-- Hero -->
     <section class="relative min-h-[85vh] flex flex-col justify-center items-center text-center text-white p-6 bg-[#060E1B] overflow-hidden">
-      <!-- Dot grid pattern -->
+      <!-- Dot grid pattern (SVG for GPU efficiency) -->
       <div
         class="absolute inset-0 opacity-[0.07]"
-        style="background-image: radial-gradient(circle, rgba(255,255,255,0.5) 1px, transparent 1px); background-size: 24px 24px;"
+        style="background-image: url(&quot;data:image/svg+xml,%3Csvg width='24' height='24' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='12' cy='12' r='1' fill='rgba(255,255,255,0.5)'/%3E%3C/svg%3E&quot;);"
       />
-
-      <!-- Static glow -->
-      <div class="absolute inset-0" style="background: radial-gradient(ellipse 60% 50% at 20% 20%, rgba(42,157,143,0.15) 0%, transparent 70%), radial-gradient(ellipse 50% 60% at 80% 80%, rgba(6,182,212,0.1) 0%, transparent 70%);" />
 
       <!-- Content -->
       <div class="relative z-20 py-12 max-w-3xl mx-auto flex flex-col items-center gap-6">
@@ -50,7 +47,7 @@
 
         <a
           href="#app"
-          class="inline-flex items-center gap-2 bg-accent-500 hover:bg-accent-400 text-white font-semibold px-8 py-3.5 rounded-xl text-base shadow-lg shadow-accent-500/25"
+          class="inline-flex items-center gap-2 bg-accent-500 hover:bg-accent-400 text-white font-semibold px-8 py-3.5 rounded-xl text-base"
         >
           Explore Cities
           <LucideChevronDown :size="18" />
@@ -152,7 +149,7 @@
               <div class="relative w-full flex" v-for="city in cities?.data" :key="city.slug">
                 <NuxtLink
                   :to="`/cities/${city.slug}`"
-                  class="bg-white cursor-pointer rounded-xl overflow-hidden shadow-sm hover:shadow-md w-full flex flex-col"
+                  class="bg-white cursor-pointer rounded-xl overflow-hidden shadow-sm w-full flex flex-col"
                 >
                   <!-- Photo -->
                   <div class="relative aspect-[3/2] overflow-hidden">
@@ -164,9 +161,8 @@
                       loading="lazy"
                       quality="75"
                     />
-                    <div class="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/50 to-transparent" />
                     <!-- Weather pill -->
-                    <div class="absolute bottom-3 left-3 flex items-center gap-1.5 bg-black/50 rounded-full px-2.5 py-1 text-sm font-medium text-white">
+                    <div class="absolute bottom-3 left-3 flex items-center gap-1.5 bg-black/60 rounded-full px-2.5 py-1 text-sm font-medium text-white">
                       <WeatherIcon :weather-icon="city.weatherIcon" />
                       <span>{{ Number(city.temperature).toFixed(0) }}&deg;</span>
                     </div>
