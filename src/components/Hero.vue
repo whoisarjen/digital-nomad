@@ -5,6 +5,10 @@
       :src="image.url"
       :alt="cityName || 'City'"
       class="absolute inset-0 w-full h-full object-cover"
+      quality="75"
+      width="1280"
+      height="720"
+      sizes="100vw"
     />
     <div class="absolute inset-0 z-10 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
     <div class="relative z-20 max-w-screen-2xl mx-auto w-full pb-4">
