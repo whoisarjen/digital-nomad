@@ -127,7 +127,7 @@
           <div class="gap-5 w-full grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
             <!-- Skeleton Loading -->
             <template v-if="status === 'pending'">
-              <div v-for="city in 20" :key="city" class="bg-white rounded-xl overflow-hidden">
+              <div v-for="city in 40" :key="city" class="bg-white rounded-xl overflow-hidden">
                 <div class="aspect-[3/2] bg-gray-200 animate-pulse" />
                 <div class="px-4 pt-3.5 pb-1 flex justify-between items-start gap-3">
                   <div class="flex-1">
