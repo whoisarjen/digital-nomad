@@ -1,8 +1,7 @@
-// server/api/scrape.ts
 import axios from 'axios';
 import * as cheerio from 'cheerio';
 
-type IndexName = 
+type IndexName =
   | 'Purchasing Power Index'
   | 'Safety Index'
   | 'Health Care Index'
@@ -13,52 +12,42 @@ type IndexName =
   | 'Pollution Index'
   | 'Quality of Life Index';
 
-// Define a type for the individual index data
 interface IndexData {
   value: string;
   status: 'Low' | 'Moderate' | 'High' | 'Very Low' | 'Very High';
 }
 
-// Define a type for the overall indices object with the specific keys
 type Indices = {
   [key in IndexName]: IndexData;
 }
 
 export default defineEventHandler(async () => {
-  const numbeos = await prisma.numbeo.findMany({
+  const records = await prisma.qualityIndex.findMany({
     where: {
       isNumberData: true,
     },
   })
-  const numbeosToSeed = numbeos.filter(option => !option.purchasingPowerIndex && !option.safetyIndex && !option.climateIndex && !option.pollutionIndex && !option.healthCareIndex)
+  const recordsToSeed = records.filter(option => !option.purchasingPowerIndex && !option.safetyIndex && !option.climateIndex && !option.pollutionIndex && !option.healthCareIndex)
 
-  for (const { slug, citySlug } of numbeosToSeed) {
+  for (const { slug, citySlug } of recordsToSeed) {
     if (slug) {
-      const url = `REDACTED_QOL_URL/${slug}`;
+      const url = `${process.env.QOL_DATA_URL!}/${slug}`;
 
       try {
-        // Fetch the HTML content of the page
         const { data } = await axios.get(url);
-
-        // Load the HTML into cheerio for parsing
         const $ = cheerio.load(data);
 
-        // Initialize an object to store the scraped data (using Partial to allow missing keys)
         const indices: Partial<Indices> = {};
 
-        // Select all rows within the table for relevant indices
         $('table tbody tr').each((i, element) => {
           const columns = $(element).find('td');
 
-          // Check if the row has data (skip rows with no data)
           if (columns.length >= 2) {
             const indexName = $(columns[0]).text().trim();
             const indexValue = $(columns[1]).text().trim();
             const indexStatus = $(columns[2]).find('span').text().trim();
 
-            // Ensure that the indexName matches one of the valid keys in IndexName
             if (indexName && indexValue && indexStatus) {
-              // Type assertion to ensure indexName matches one of the predefined keys
               if (['Purchasing Power Index', 'Safety Index', 'Health Care Index', 'Climate Index', 'Cost of Living Index', 'Property Price to Income Ratio', 'Traffic Commute Time Index', 'Pollution Index', 'Quality of Life Index'].includes(indexName)) {
                 indices[indexName as IndexName] = {
                   value: indexValue,
@@ -69,8 +58,7 @@ export default defineEventHandler(async () => {
           }
         });
 
-        // Return the scraped data
-        await prisma.numbeo.update({
+        await prisma.qualityIndex.update({
           where: {
             citySlug,
           },

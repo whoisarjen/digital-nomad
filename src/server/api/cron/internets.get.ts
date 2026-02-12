@@ -1,11 +1,11 @@
 import * as cheerio from 'cheerio';
 
 export default defineEventHandler(async () => {
-  const html = await $fetch<any>('REDACTED_INTERNET_INDEX_URL');
+  const html = await $fetch<any>(process.env.INTERNET_INDEX_URL!);
   const $ = cheerio.load(html);
 
   const data = [] as { ranking: number; country: string; speed: number }[];
-  
+
   $('#column-fixedMedian tr.data-result.results').each((index, element) => {
     const ranking = $(element).find('td.rank.actual-rank').text().trim();
     const countryName = $(element).find('td.country').text().trim();

@@ -154,7 +154,7 @@
                   <!-- Photo -->
                   <div class="relative aspect-[3/2] overflow-hidden">
                     <NuxtImg
-                      provider="unsplash"
+                      provider="cityImages"
                       :src="city.image?.url.replace('https://images.unsplash.com', '')"
                       :alt="city.name"
                       class="w-full h-full object-cover"
@@ -203,7 +203,7 @@
                   </div>
                 </NuxtLink>
 
-                <!-- Unsplash credit -->
+                <!-- Photo credit -->
                 <div v-if="city.image"
                      class="absolute top-0 right-0 w-full pointer-events-none"
                      style="aspect-ratio: 3/2;">

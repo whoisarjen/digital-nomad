@@ -14,7 +14,7 @@ enum Level {
   HIGH
 }
 
-model Numbeo {
+model QualityIndex {
   citySlug String @id
   city     City   @relation(fields: [citySlug], references: [slug])
 
@@ -33,6 +33,8 @@ model Numbeo {
   isNumberData               Boolean  @default(true)
 
   climate Json?
+
+  @@map("Numbeo")
 }
 
 enum Region {
@@ -99,8 +101,8 @@ model City {
 
   imageId  Int?
   image    Image?
-  numbeoId String?
-  numbeo   Numbeo?
+  qualityIndexId String?   @map("numbeoId")
+  qualityIndex   QualityIndex?
 }
 
 model Weather {

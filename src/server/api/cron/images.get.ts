@@ -96,9 +96,9 @@ async function tryUpdateImage(slug: string, photo: Result) {
       create: { ...data, city: { connect: { slug } } },
       update: { ...data, city: { connect: { slug } } },
     });
-    return true; // Success
+    return true;
   } catch {
-    return false; // Failure
+    return false;
   }
 }
 
@@ -116,22 +116,22 @@ export default defineEventHandler(async () => {
 
   for (const { slug, name, country } of cities) {
     const data = await Promise.all([
-      $fetch<{ results: Result[] }>('REDACTED_IMAGE_API_URL', {
+      $fetch<{ results: Result[] }>(process.env.IMAGE_API_URL!, {
         query: {
-          client_id: process.env.UNSPLASH_ACCESS_KEY!,
+          client_id: process.env.IMAGE_API_KEY!,
           query: name,
-          collections: 'REDACTED_COLLECTION_IDS',
+          collections: process.env.IMAGE_COLLECTION_IDS!,
         }
       }),
-      $fetch<{ results: Result[] }>('REDACTED_IMAGE_API_URL', {
+      $fetch<{ results: Result[] }>(process.env.IMAGE_API_URL!, {
         query: {
-          client_id: process.env.UNSPLASH_ACCESS_KEY!,
+          client_id: process.env.IMAGE_API_KEY!,
           query: name,
         }
       }),
-      $fetch<{ results: Result[] }>('REDACTED_IMAGE_API_URL', {
+      $fetch<{ results: Result[] }>(process.env.IMAGE_API_URL!, {
         query: {
-          client_id: process.env.UNSPLASH_ACCESS_KEY!,
+          client_id: process.env.IMAGE_API_KEY!,
           query: country,
         }
       }),

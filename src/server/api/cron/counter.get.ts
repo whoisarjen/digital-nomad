@@ -60,7 +60,7 @@ const getLevelForGTE = (key: keyof typeof INDEX_MAP, value: number | undefined) 
 }
 
 export default defineEventHandler(async () => {
-  const cities = await prisma.numbeo.findMany()
+  const cities = await prisma.qualityIndex.findMany()
 
   await processInBatches(cities, async city => {
     await prisma.city.update({

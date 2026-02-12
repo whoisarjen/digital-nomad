@@ -2,7 +2,7 @@ import axios from 'axios';
 import * as cheerio from 'cheerio';
 
 export default defineEventHandler(async () => {
-  const options = await prisma.numbeo.findMany({
+  const options = await prisma.qualityIndex.findMany({
     select: {
       slug: true,
       citySlug: true,
@@ -10,10 +10,10 @@ export default defineEventHandler(async () => {
     },
   })
 
-  const numbeosToSeed = options.filter(({ climate, slug }) => slug)
-  for (const { citySlug, slug } of numbeosToSeed) {
+  const recordsToSeed = options.filter(({ climate, slug }) => slug)
+  for (const { citySlug, slug } of recordsToSeed) {
 
-    const { data } = await axios.get(`REDACTED_CLIMATE_URL/${slug}`);
+    const { data } = await axios.get(`${process.env.CLIMATE_DATA_URL!}/${slug}`);
 
     const $ = cheerio.load(data);
     const firstTable = $('table').eq(2);
@@ -36,7 +36,7 @@ export default defineEventHandler(async () => {
     const match = firstTextAfterH2.match(/visit:\s*(.*)/i);
     const bestMonthsToVisit = match ? match[1].trim().replace('.', '').split(', ') : []
 
-    await prisma.numbeo.update({
+    await prisma.qualityIndex.update({
       where: {
         citySlug,
       },

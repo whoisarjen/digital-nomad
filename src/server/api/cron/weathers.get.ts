@@ -20,7 +20,7 @@ export default defineEventHandler(async () => {
       "end_date": "2024-12-31",
       "daily": ["weather_code", "apparent_temperature_max", "rain_sum", "wind_gusts_10m_max", "snowfall_sum", "wind_direction_10m_dominant", "daylight_duration", "apparent_temperature_min", "temperature_2m_max", "temperature_2m_min", "apparent_temperature_mean", "sunshine_duration", "precipitation_hours", "shortwave_radiation_sum", "wind_speed_10m_max", "precipitation_sum", "temperature_2m_mean"]
     };
-    const url = "REDACTED_WEATHER_API_URL";
+    const url = process.env.WEATHER_API_URL!;
     const responses = await fetchWeatherApi(url, params);
     
     // Helper function to form time ranges

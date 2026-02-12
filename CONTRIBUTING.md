@@ -6,7 +6,7 @@ Thanks for your interest in contributing! Here's how to get started.
 
 1. Fork and clone the repository
 2. Install dependencies: `npm install`
-3. Copy `.env.example` to `.env` and fill in your credentials
+3. Copy `.env.example` to `.env` and fill in the required values
 4. Push the schema to your database: `npx prisma db push`
 5. Start the dev server: `npm run dev`
 

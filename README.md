@@ -18,8 +18,6 @@ Built for digital nomads, remote workers, and expats who want data-driven decisi
 
 **Backend:** Nuxt Server API, Prisma ORM, PostgreSQL (Neon serverless)
 
-**Data sources:** OpenMeteo (weather), Numbeo (quality of life), Unsplash (city photos), Speedtest (internet rankings)
-
 **Deployment:** Vercel (Frankfurt region)
 
 ## Getting Started
@@ -28,7 +26,6 @@ Built for digital nomads, remote workers, and expats who want data-driven decisi
 
 - Node.js 18+
 - A [Neon](https://neon.tech) PostgreSQL database
-- An [Unsplash](https://unsplash.com/developers) API access key (for the image cron job)
 
 ### Setup
 
@@ -47,7 +44,7 @@ Built for digital nomads, remote workers, and expats who want data-driven decisi
    ```bash
    cp .env.example .env
    ```
-   Fill in your `DATABASE_URL` and `UNSPLASH_ACCESS_KEY`.
+   Fill in the required environment variables.
 
 4. Set up the database:
    ```bash
@@ -84,7 +81,7 @@ src/
 ├── server/
 │   ├── api/           # REST API endpoints
 │   │   ├── cities/    # City list, detail, and filter endpoints
-│   │   └── cron/      # Data sync jobs (weather, images, internet, numbeo)
+│   │   └── cron/      # Data enrichment jobs
 │   └── utils/         # Prisma client and utility functions
 └── shared/            # Shared schemas (Zod) and utilities
 prisma/
@@ -93,12 +90,9 @@ prisma/
 
 ## Data Architecture
 
-City data is enriched through multiple cron jobs that pull from external APIs:
+City data is enriched through scheduled cron jobs that collect data from multiple external APIs and indices. Each job runs independently and updates the shared PostgreSQL database with weather patterns, quality-of-life indices, internet speed rankings, and city photos.
 
-- **Weather data** — Historical daily weather from OpenMeteo, aggregated into monthly summaries
-- **Quality of life** — Safety, healthcare, pollution, and climate indices from Numbeo
-- **Internet speed** — City and country-level rankings from Speedtest Global Index
-- **City images** — High-quality photos from Unsplash with proper attribution
+All data source URLs and API keys are configured via environment variables — see `.env.example` for the full list.
 
 ## Contributing
 
