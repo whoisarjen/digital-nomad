@@ -4,8 +4,8 @@
     <section class="relative min-h-[85vh] flex flex-col justify-center items-center text-center text-white p-6 bg-[#060E1B] overflow-hidden">
       <!-- Dot grid pattern (SVG for GPU efficiency) -->
       <div
-        class="absolute inset-0 opacity-[0.07]"
-        style="background-image: url(&quot;data:image/svg+xml,%3Csvg width='24' height='24' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='12' cy='12' r='1' fill='rgba(255,255,255,0.5)'/%3E%3C/svg%3E&quot;);"
+        class="absolute inset-0"
+        style="background-image: url(&quot;data:image/svg+xml,%3Csvg width='24' height='24' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='12' cy='12' r='1' fill='rgba(255,255,255,0.035)'/%3E%3C/svg%3E&quot;);"
       />
 
       <!-- Content -->
@@ -146,13 +146,13 @@
 
             <!-- City Cards -->
             <template v-else>
-              <div class="relative w-full flex" v-for="city in cities?.data" :key="city.slug">
+              <div class="relative w-full" style="content-visibility: auto; contain-intrinsic-size: auto 320px;" v-for="city in cities?.data" :key="city.slug">
                 <NuxtLink
                   :to="`/cities/${city.slug}`"
                   class="bg-white cursor-pointer rounded-xl overflow-hidden border border-gray-200 w-full flex flex-col"
                 >
                   <!-- Photo -->
-                  <div class="relative aspect-[3/2] overflow-hidden">
+                  <div class="relative aspect-[3/2]">
                     <NuxtImg
                       provider="unsplash"
                       :src="city.image?.url.replace('https://images.unsplash.com', '')"
@@ -228,7 +228,7 @@
 
       <!-- About Section -->
       <section class="mt-8 mb-4">
-        <div class="bg-white rounded-xl p-6 shadow-sm max-w-2xl mx-auto flex items-center gap-5 max-sm:flex-col max-sm:text-center">
+        <div class="bg-white rounded-xl p-6 border border-gray-200 max-w-2xl mx-auto flex items-center gap-5 max-sm:flex-col max-sm:text-center">
           <img
             src="https://avatars.githubusercontent.com/whoisarjen"
             alt="Kamil"
