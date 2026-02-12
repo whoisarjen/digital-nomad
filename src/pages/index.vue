@@ -154,7 +154,7 @@
                   <!-- Photo -->
                   <div class="relative aspect-[3/2] overflow-hidden">
                     <NuxtImg
-                      provider="cityImages"
+                      provider="unsplash"
                       :src="city.image?.url.replace('https://images.unsplash.com', '')"
                       :alt="city.name"
                       class="w-full h-full object-cover"

@@ -1,7 +1,7 @@
 <template>
   <section class="relative h-[40vh] min-h-[280px] flex flex-col justify-end text-white p-6 group overflow-hidden">
     <NuxtImg
-      provider="cityImages"
+      provider="unsplash"
       :src="image.url"
       :alt="cityName || 'City'"
       class="absolute inset-0 w-full h-full object-cover"

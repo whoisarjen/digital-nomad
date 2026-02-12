@@ -30,7 +30,7 @@ export default defineNuxtConfig({
   },
   image: {
     providers: {
-      cityImages: {
+      unsplash: {
         options: {
           baseURL: 'https://images.unsplash.com'
         }
