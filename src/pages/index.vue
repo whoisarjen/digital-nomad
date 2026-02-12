@@ -11,8 +11,8 @@
         <div class="relative z-20 py-12 max-w-4xl mx-auto">
           <!-- Your Picture -->
           <NuxtImg
-            src="https://media.licdn.com/dms/image/v2/D4D03AQEElpGg_3IunA/profile-displayphoto-scale_400_400/B4DZec9TlQGUAg-/0/1750685007011?e=1757548800&v=beta&t=LgGwIvi4Jifm2iMCjVT5xXXS6Q4FF14-LZNu41UufFk"
-            alt="Your Name"
+            src="/digital-nomad-logo.png"
+            alt="Digital Nomad"
             class="w-24 h-24 rounded-full mx-auto mb-6 border-4 border-white shadow-lg"
           />
           <h1 class="text-4xl md:text-5xl font-bold mb-4">
