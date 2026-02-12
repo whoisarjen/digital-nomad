@@ -1,7 +1,6 @@
 <template>
   <header
-    class="fixed top-0 left-0 right-0 z-50"
-    :class="scrolled ? 'bg-[#060E1B]' : ''"
+    class="fixed top-0 left-0 right-0 z-50 bg-[#060E1B]"
   >
     <div class="max-w-screen-2xl mx-auto px-4 h-14 flex items-center justify-between">
       <NuxtLink to="/" class="flex items-center gap-2.5">
@@ -28,21 +27,4 @@
 </template>
 
 <script setup lang="ts">
-const scrolled = ref(false)
-
-const onScroll = () => {
-  const isScrolled = window.scrollY > 0
-  if (scrolled.value !== isScrolled) {
-    scrolled.value = isScrolled
-  }
-}
-
-onMounted(() => {
-  window.addEventListener('scroll', onScroll, { passive: true })
-  onScroll()
-})
-
-onUnmounted(() => {
-  window.removeEventListener('scroll', onScroll)
-})
 </script>

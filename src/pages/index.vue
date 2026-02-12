@@ -127,7 +127,7 @@
           <div class="gap-5 w-full grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
             <!-- Skeleton Loading -->
             <template v-if="status === 'pending'">
-              <div v-for="city in 40" :key="city" class="bg-white rounded-xl overflow-hidden">
+              <div v-for="city in 12" :key="city" class="bg-white rounded-xl overflow-hidden">
                 <div class="aspect-[3/2] bg-gray-200 animate-pulse" />
                 <div class="px-4 pt-3.5 pb-1 flex justify-between items-start gap-3">
                   <div class="flex-1">
@@ -149,7 +149,7 @@
               <div class="relative w-full flex" v-for="city in cities?.data" :key="city.slug">
                 <NuxtLink
                   :to="`/cities/${city.slug}`"
-                  class="bg-white cursor-pointer rounded-xl overflow-hidden shadow-sm w-full flex flex-col"
+                  class="bg-white cursor-pointer rounded-xl overflow-hidden border border-gray-200 w-full flex flex-col"
                 >
                   <!-- Photo -->
                   <div class="relative aspect-[3/2] overflow-hidden">
@@ -204,22 +204,8 @@
                 </NuxtLink>
 
                 <!-- Photo credit -->
-                <div v-if="city.image"
-                     class="absolute top-0 right-0 w-full pointer-events-none"
-                     style="aspect-ratio: 3/2;">
-                  <div class="absolute bottom-0 right-0 pointer-events-auto text-[10px] text-white/70 bg-black/40 py-0.5 px-1.5 rounded-tl-md z-10">
-                    <a
-                      target="_blank"
-                      :href="`https://unsplash.com/@${city.image.ownerUsername}?utm_source=Digital%20Nomad&utm_medium=referral`"
-                      class="hover:text-white"
-                    >{{ city.image.ownerName }}</a>
-                    /
-                    <a
-                      target="_blank"
-                      href="https://unsplash.com/?utm_source=Digital%20Nomad&utm_medium=referral"
-                      class="hover:text-white"
-                    >Unsplash</a>
-                  </div>
+                <div v-if="city.image" class="absolute top-0 right-0 pointer-events-auto text-[10px] text-white/70 bg-black/40 py-0.5 px-1.5 rounded-bl-md z-10" :style="{ top: 0, right: 0 }">
+                  <a target="_blank" :href="`https://unsplash.com/@${city.image.ownerUsername}?utm_source=Digital%20Nomad&utm_medium=referral`" class="hover:text-white">{{ city.image.ownerName }}</a> / <a target="_blank" href="https://unsplash.com/?utm_source=Digital%20Nomad&utm_medium=referral" class="hover:text-white">Unsplash</a>
                 </div>
               </div>
             </template>

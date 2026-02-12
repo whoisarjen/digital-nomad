@@ -8,7 +8,7 @@
     }
 
     .custom-button {
-        @apply custom-box hover:bg-gray-100 cursor-pointer text-center text-sm transition-all
+        @apply custom-box hover:bg-gray-100 cursor-pointer text-center text-sm transition-colors
     }
 
     .custom-button-active {
