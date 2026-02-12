@@ -1,21 +1,24 @@
 <template>
-  <header class="sticky top-0 z-50 bg-white border-b border-gray-100">
+  <header
+    class="fixed top-0 left-0 right-0 z-50"
+    :class="scrolled ? 'bg-[#060E1B]/90 shadow-lg' : ''"
+  >
     <div class="max-w-screen-2xl mx-auto px-4 h-14 flex items-center justify-between">
-      <NuxtLink to="/" class="flex items-center gap-2.5 group">
+      <NuxtLink to="/" class="flex items-center gap-2.5">
         <img
           src="/digital-nomad-logo.png"
           alt="Digital Nomad"
-          class="h-10 w-10"
+          class="h-8 w-8"
         />
-        <span class="text-lg font-bold text-gray-900">
-          Digital<span class="text-primary-600">Nomad</span>
+        <span class="text-lg font-bold text-white">
+          Digital<span class="text-primary-400">Nomad</span>
         </span>
       </NuxtLink>
 
       <nav class="flex items-center gap-4">
         <NuxtLink
           to="/"
-          class="text-sm text-gray-500 hover:text-gray-900 font-medium"
+          class="text-sm text-white/70 hover:text-white font-medium"
         >
           Explore Cities
         </NuxtLink>
@@ -23,3 +26,23 @@
     </div>
   </header>
 </template>
+
+<script setup lang="ts">
+const scrolled = ref(false)
+
+const onScroll = () => {
+  const isScrolled = window.scrollY > 0
+  if (scrolled.value !== isScrolled) {
+    scrolled.value = isScrolled
+  }
+}
+
+onMounted(() => {
+  window.addEventListener('scroll', onScroll, { passive: true })
+  onScroll()
+})
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', onScroll)
+})
+</script>

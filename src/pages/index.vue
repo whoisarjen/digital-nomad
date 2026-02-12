@@ -290,7 +290,7 @@ const { data: cities, status } = await useCities(queryParams)
 const { data: filters } = await useCitiesFilters()
 
 watch(() => queryParams.value.page, () => {
-  window?.scrollTo({ top: 0, behavior: 'smooth' });
+  window?.scrollTo({ top: 0 });
 }, { immediate: true })
 
 const getSafetyDotColor = (level: Level | undefined | null) => {
