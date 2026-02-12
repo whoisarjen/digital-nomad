@@ -1,82 +1,214 @@
 <template>
-  <div class="min-h-screen bg-gray-100 text-gray-900">
-    <Hero :image="data?.image" />
-    <section class="p-6 flex flex-col gap-6">
-      <section v-if="!data || status !== 'success'" class="flex max-md:flex-col gap-6 max-md:items-center animate-pulse">
-        <aside class="rounded-2xl flex flex-col gap-3 w-full md:max-w-[268px]">
-          <div class="h-10 bg-gray-300 rounded-xl"></div>
-          <div class="h-40 bg-gray-300 rounded-xl"></div>
-        </aside>
-
-        <div class="p-4 flex flex-col gap-4 flex-1">
-          <div class="h-6 w-3/4 bg-gray-300 rounded"></div>
-
-          <div class="grid grid-cols-2 gap-4">
-            <div class="custom-box h-32 bg-gray-300 rounded"></div>
-            <div class="custom-box h-32 bg-gray-300 rounded"></div>
-          </div>
-
-          <div class="grid grid-cols-4 gap-4 mt-4">
-            <div v-for="index in 4" :key="index" class="flex flex-col items-center custom-box h-24 bg-gray-300 rounded"></div>
-          </div>
+  <div class="text-gray-900">
+    <!-- Loading state -->
+    <template v-if="!data || status !== 'success'">
+      <div class="h-[40vh] min-h-[280px] bg-gray-200 animate-pulse" />
+      <div class="max-w-screen-xl mx-auto p-6 flex flex-col gap-6 animate-pulse">
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+          <div v-for="i in 6" :key="i" class="h-24 bg-gray-200 rounded-xl" />
         </div>
-      </section>
-      <section v-else class="flex max-md:flex-col gap-6 max-md:items-center">
-        <aside class="rounded-2xl flex flex-col gap-3 w-full md:max-w-[268px]">
-          <NuxtLink
-            to="/"
-            class="px-4 py-2 rounded-xl border transition-all duration-500 text-center text-sm text-white bg-red-600 hover:bg-red-700 cursor-pointer"
-          >
-            Main page
-          </NuxtLink>
-        </aside>
-        <div class="p-4 flex flex-col gap-4 flex-1">
-          <h3 class="text-xl font-semibold text-gray-900">
-            {{ data.name }}, {{ data.country }}
-          </h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="h-48 bg-gray-200 rounded-xl" />
+          <div class="h-48 bg-gray-200 rounded-xl" />
+        </div>
+        <div class="grid grid-cols-4 md:grid-cols-6 lg:grid-cols-12 gap-3">
+          <div v-for="i in 12" :key="i" class="h-32 bg-gray-200 rounded-xl" />
+        </div>
+      </div>
+    </template>
 
-          <div class="grid grid-cols-2 gap-4">
-            <div class="custom-box">
-              <h5 class="font-semibold">Internet</h5>
-              <p>City Speed: {{ data.internetSpeedCity }} Mbps <span v-if="data.internetSpeedCityRanking">(Rank: {{ data.internetSpeedCityRanking }})</span></p>
-              <p>Country Speed: {{ data.internetSpeedCountry }} Mbps <span v-if="data.internetSpeedCountry">(Rank: {{ data.internetSpeedCountryRanking }})</span></p>
-            </div>
+    <!-- Loaded state -->
+    <template v-else>
+      <Hero
+        :image="data.image"
+        :city-name="data.name"
+        :country="data.country"
+        :region="data.region"
+      />
 
-            <div class="custom-box">
-              <h5 class="font-semibold">Air Quality</h5>
-              <p>Now: {{ data.airQualityNow }}</p>
-              <p>Score: {{ data.airQualityScore }}</p>
-              <p>Now Score: {{ data.airQualityNowScore }}</p>
-              <p>Humidity: {{ data.humidity }}</p>
+      <div class="max-w-screen-xl mx-auto p-6 flex flex-col gap-8">
+        <!-- Key Metrics Strip -->
+        <section class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 -mt-10 relative z-20">
+          <div class="bg-white rounded-xl shadow-md p-4 text-center">
+            <p class="text-xs text-gray-500 mb-1">Nomad Cost</p>
+            <p class="text-xl font-bold text-emerald-600">${{ data.costForNomadInUsd }}<span class="text-sm font-normal text-gray-400">/mo</span></p>
+          </div>
+          <div class="bg-white rounded-xl shadow-md p-4 text-center">
+            <p class="text-xs text-gray-500 mb-1">Internet</p>
+            <p class="text-xl font-bold text-cyan-600">{{ data.internetSpeedCity }}<span class="text-sm font-normal text-gray-400"> Mbps</span></p>
+          </div>
+          <div class="bg-white rounded-xl shadow-md p-4 text-center">
+            <p class="text-xs text-gray-500 mb-1">Safety</p>
+            <div class="flex items-center justify-center gap-1.5">
+              <span
+                class="w-2.5 h-2.5 rounded-full"
+                :class="getLevelDotClass(data.safety)"
+              />
+              <p class="text-lg font-bold capitalize" :class="getLevelTextClass(data.safety)">{{ data.safety?.toLowerCase() ?? 'N/A' }}</p>
             </div>
           </div>
+          <div class="bg-white rounded-xl shadow-md p-4 text-center">
+            <p class="text-xs text-gray-500 mb-1">Air Quality</p>
+            <p class="text-xl font-bold" :class="getAirQualityClass(data.airQualityScore)">{{ data.airQualityScore }}<span class="text-sm font-normal text-gray-400">/5</span></p>
+          </div>
+          <div class="bg-white rounded-xl shadow-md p-4 text-center">
+            <p class="text-xs text-gray-500 mb-1">Healthcare</p>
+            <div class="flex items-center justify-center gap-1.5">
+              <span
+                class="w-2.5 h-2.5 rounded-full"
+                :class="getLevelDotClass(data.healthCare)"
+              />
+              <p class="text-lg font-bold capitalize" :class="getLevelTextClass(data.healthCare)">{{ data.healthCare?.toLowerCase() ?? 'N/A' }}</p>
+            </div>
+          </div>
+          <div class="bg-white rounded-xl shadow-md p-4 text-center">
+            <p class="text-xs text-gray-500 mb-1">Population</p>
+            <p class="text-xl font-bold text-gray-700">{{ formatNumber(data.population) }}</p>
+          </div>
+        </section>
 
-          <div class="grid grid-cols-4 gap-4 mt-4">
+        <!-- Detail Sections -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Cost of Living -->
+          <section class="bg-white rounded-xl shadow-sm p-6">
+            <h2 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+              <LucideWallet :size="20" class="text-emerald-600" />
+              Cost of Living
+            </h2>
+            <div class="flex flex-col gap-3">
+              <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                <span class="text-sm text-gray-600">Nomad</span>
+                <span class="font-semibold text-emerald-600">${{ data.costForNomadInUsd }}/mo</span>
+              </div>
+              <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                <span class="text-sm text-gray-600">Expat</span>
+                <span class="font-semibold text-gray-700">${{ data.costForExpatInUsd }}/mo</span>
+              </div>
+              <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                <span class="text-sm text-gray-600">Local</span>
+                <span class="font-semibold text-gray-700">${{ data.costForLocalInUsd }}/mo</span>
+              </div>
+              <div class="flex justify-between items-center py-2">
+                <span class="text-sm text-gray-600">Family</span>
+                <span class="font-semibold text-gray-700">${{ data.costForFamilyInUsd }}/mo</span>
+              </div>
+            </div>
+          </section>
+
+          <!-- Internet & Infrastructure -->
+          <section class="bg-white rounded-xl shadow-sm p-6">
+            <h2 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+              <LucideWifi :size="20" class="text-cyan-600" />
+              Internet & Infrastructure
+            </h2>
+            <div class="flex flex-col gap-3">
+              <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                <span class="text-sm text-gray-600">City Speed</span>
+                <div class="flex items-center gap-2">
+                  <span class="font-semibold text-cyan-600">{{ data.internetSpeedCity }} Mbps</span>
+                  <span v-if="data.internetSpeedCityRanking" class="text-xs text-gray-400">#{{ data.internetSpeedCityRanking }}</span>
+                </div>
+              </div>
+              <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                <span class="text-sm text-gray-600">Country Speed</span>
+                <div class="flex items-center gap-2">
+                  <span class="font-semibold text-gray-700">{{ data.internetSpeedCountry }} Mbps</span>
+                  <span v-if="data.internetSpeedCountryRanking" class="text-xs text-gray-400">#{{ data.internetSpeedCountryRanking }}</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Environment & Health -->
+          <section class="bg-white rounded-xl shadow-sm p-6">
+            <h2 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+              <LucideLeaf :size="20" class="text-green-600" />
+              Environment & Health
+            </h2>
+            <div class="flex flex-col gap-3">
+              <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                <span class="text-sm text-gray-600">Air Quality Now</span>
+                <span class="font-semibold">{{ data.airQualityNow }} AQI</span>
+              </div>
+              <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                <span class="text-sm text-gray-600">Air Quality Score</span>
+                <span class="font-semibold" :class="getAirQualityClass(data.airQualityScore)">{{ data.airQualityScore }}/5</span>
+              </div>
+              <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                <span class="text-sm text-gray-600">Humidity</span>
+                <span class="font-semibold text-gray-700">{{ data.humidity }}</span>
+              </div>
+              <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                <span class="text-sm text-gray-600">Pollution</span>
+                <span class="font-semibold capitalize" :class="getLevelTextClass(data.pollution, true)">{{ data.pollution?.toLowerCase() ?? 'N/A' }}</span>
+              </div>
+              <div class="flex justify-between items-center py-2">
+                <span class="text-sm text-gray-600">Climate</span>
+                <span class="font-semibold capitalize" :class="getLevelTextClass(data.climate)">{{ data.climate?.toLowerCase() ?? 'N/A' }}</span>
+              </div>
+            </div>
+          </section>
+
+          <!-- Quality of Life -->
+          <section class="bg-white rounded-xl shadow-sm p-6">
+            <h2 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+              <LucideHeart :size="20" class="text-rose-500" />
+              Quality of Life
+            </h2>
+            <div class="flex flex-col gap-3">
+              <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                <span class="text-sm text-gray-600">Safety</span>
+                <span class="font-semibold capitalize" :class="getLevelTextClass(data.safety)">{{ data.safety?.toLowerCase() ?? 'N/A' }}</span>
+              </div>
+              <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                <span class="text-sm text-gray-600">Healthcare</span>
+                <span class="font-semibold capitalize" :class="getLevelTextClass(data.healthCare)">{{ data.healthCare?.toLowerCase() ?? 'N/A' }}</span>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- Monthly Weather -->
+        <section class="bg-white rounded-xl shadow-sm p-6">
+          <h2 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+            <LucideCalendar :size="20" class="text-primary-600" />
+            Monthly Weather
+          </h2>
+          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-12 gap-3">
             <div
               v-for="(monthData, index) in months"
               :key="index"
-              class="flex flex-col items-center custom-box"
+              class="flex flex-col items-center rounded-xl border p-3 transition-all"
               :class="{
-                'bg-yellow-100': monthData.totalScoreLevel === 'MIDDLE',
-                'bg-green-100': monthData.totalScoreLevel === 'HIGH',
+                'bg-emerald-50 border-emerald-200': monthData.totalScoreLevel === 'HIGH',
+                'bg-yellow-50 border-yellow-200': monthData.totalScoreLevel === 'MIDDLE',
+                'bg-white border-gray-200': monthData.totalScoreLevel === 'LOW',
               }"
             >
-              <span class="text-sm text-gray-500 font-semibold">{{ new Date(2023, Number(monthData.month) - 1).toLocaleString('en-US', { month: 'long' }) }} ({{ monthData.totalScore }})</span>
-              <WeatherIcon :weather-icon="monthData.weatherIcon" class="text-3xl" />
-              <span class="text-primary-900 text-lg font-bold">{{ Number(monthData.apparentTemperatureMax).toFixed(1) }}°C</span>
-              <div class="text-xs text-gray-500 flex gap-2 mt-2">
-                <span>🌧️ {{ Number(monthData.rainSum).toFixed(1) }}mm</span>
-                <span>☀️ {{ Number(monthData.sunshineDuration).toFixed(1) }} hrs</span>
+              <span class="text-xs font-semibold text-gray-500">{{ getMonthShort(monthData.month) }}</span>
+              <WeatherIcon :weather-icon="monthData.weatherIcon" class="my-1" />
+              <span class="text-primary-700 text-lg font-bold">{{ Number(monthData.apparentTemperatureMax).toFixed(0) }}°</span>
+              <div class="text-[10px] text-gray-400 flex flex-col items-center mt-1 gap-0.5">
+                <span>{{ Number(monthData.rainSum).toFixed(0) }}mm</span>
+                <span>{{ Number(monthData.sunshineDuration).toFixed(0) }}h</span>
               </div>
+              <span class="mt-1 text-xs font-bold" :class="{
+                'text-emerald-600': monthData.totalScoreLevel === 'HIGH',
+                'text-yellow-600': monthData.totalScoreLevel === 'MIDDLE',
+                'text-gray-400': monthData.totalScoreLevel === 'LOW',
+              }">{{ monthData.totalScore }}</span>
             </div>
           </div>
-        </div>
-      </section>
-    </section>
+        </section>
+      </div>
+    </template>
   </div>
 </template>
 
 <script lang="ts" setup>
+import type { Level } from '@prisma/client';
+import { formatNumber } from '~/shared/global.utils';
+
 const route = useRoute()
 
 const queryParams = ref({
@@ -121,4 +253,29 @@ const months = computed(() => {
   })
 })
 
+const getMonthShort = (month: string) => {
+  return new Date(2023, Number(month) - 1).toLocaleString('en-US', { month: 'short' })
+}
+
+const getLevelDotClass = (level: Level | undefined | null) => {
+  if (!level) return 'bg-gray-400'
+  if (level === 'HIGH') return 'bg-emerald-500'
+  if (level === 'MIDDLE') return 'bg-yellow-500'
+  return 'bg-red-500'
+}
+
+const getLevelTextClass = (level: Level | undefined | null, inverted = false) => {
+  if (!level) return 'text-gray-500'
+  const isGood = inverted ? level === 'LOW' : level === 'HIGH'
+  const isMid = level === 'MIDDLE'
+  if (isGood) return 'text-emerald-600'
+  if (isMid) return 'text-yellow-600'
+  return 'text-red-600'
+}
+
+const getAirQualityClass = (score: number) => {
+  if (score >= 4) return 'text-emerald-600'
+  if (score >= 3) return 'text-yellow-600'
+  return 'text-red-600'
+}
 </script>

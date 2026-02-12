@@ -1,75 +1,113 @@
-# Nuxt Minimal Starter
+# Digital Nomad
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+Compare 500+ cities by cost of living, weather, internet speed, safety, and 12+ data points — filtered to exactly what you need.
 
-## Setup
+Built for digital nomads, remote workers, and expats who want data-driven decisions about where to live next.
 
-Make sure to install dependencies:
+## Features
 
-```bash
-# npm
-npm install
+- **City comparison** — Browse and filter 500+ cities with rich data cards showing cost, weather, safety, and internet speed at a glance
+- **Advanced filters** — Filter by region, temperature range, price range, weather conditions, safety level, pollution, internet speed, and more
+- **Detailed city profiles** — Deep-dive into any city with cost breakdowns (nomad, expat, local, family), internet rankings, air quality, and monthly weather patterns
+- **Monthly weather calendar** — See temperature, weather conditions, and climate scores for every month of the year
+- **Sort & search** — Sort by total score, cost, internet speed, or safety; search by city or country name
 
-# pnpm
-pnpm install
+## Tech Stack
 
-# yarn
-yarn install
+**Frontend:** Nuxt 3, Vue 3, TypeScript, Tailwind CSS, TanStack Vue Query, VueUse, Lucide Icons
 
-# bun
-bun install
+**Backend:** Nuxt Server API, Prisma ORM, PostgreSQL (Neon serverless)
+
+**Data sources:** OpenMeteo (weather), Numbeo (quality of life), Unsplash (city photos), Speedtest (internet rankings)
+
+**Deployment:** Vercel (Frankfurt region)
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js 18+
+- A [Neon](https://neon.tech) PostgreSQL database
+- An [Unsplash](https://unsplash.com/developers) API access key (for the image cron job)
+
+### Setup
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/whoisarjen/digital-nomad.git
+   cd digital-nomad
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Create a `.env` file based on the example:
+   ```bash
+   cp .env.example .env
+   ```
+   Fill in your `DATABASE_URL` and `UNSPLASH_ACCESS_KEY`.
+
+4. Set up the database:
+   ```bash
+   npx prisma db push
+   ```
+
+5. Start the development server:
+   ```bash
+   npm run dev
+   ```
+   Open [http://localhost:3000](http://localhost:3000).
+
+> **Note:** The `predev` script automatically pulls environment variables from Vercel. If you're not using Vercel, remove the `"predev"` script from `package.json` to avoid errors on startup.
+
+### Available Scripts
+
+| Script | Description |
+|--------|-------------|
+| `npm run dev` | Start development server |
+| `npm run build` | Build for production |
+| `npm run preview` | Preview production build locally |
+| `npm run typecheck` | Run TypeScript type checking |
+
+## Project Structure
+
+```
+src/
+├── assets/css/        # Tailwind CSS styles
+├── components/        # Vue components (filters, cards, pickers)
+├── composables/       # Vue composables (data fetching with TanStack Query)
+├── pages/             # Nuxt pages (index, cities/[slug])
+├── plugins/           # Vue Query plugin
+├── public/            # Static assets (logo, favicons)
+├── server/
+│   ├── api/           # REST API endpoints
+│   │   ├── cities/    # City list, detail, and filter endpoints
+│   │   └── cron/      # Data sync jobs (weather, images, internet, numbeo)
+│   └── utils/         # Prisma client and utility functions
+└── shared/            # Shared schemas (Zod) and utilities
+prisma/
+└── schema.prisma      # Database schema
 ```
 
-## Development Server
+## Data Architecture
 
-Start the development server on `http://localhost:3000`:
+City data is enriched through multiple cron jobs that pull from external APIs:
 
-```bash
-# npm
-npm run dev
+- **Weather data** — Historical daily weather from OpenMeteo, aggregated into monthly summaries
+- **Quality of life** — Safety, healthcare, pollution, and climate indices from Numbeo
+- **Internet speed** — City and country-level rankings from Speedtest Global Index
+- **City images** — High-quality photos from Unsplash with proper attribution
 
-# pnpm
-pnpm dev
+## Contributing
 
-# yarn
-yarn dev
+See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
-# bun
-bun run dev
-```
+## License
 
-## Production
+This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
 
-Build the application for production:
+## Author
 
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+Built by [Kamil](https://github.com/whoisarjen) — feedback welcome at kamilow97@gmail.com.

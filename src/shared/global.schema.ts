@@ -32,7 +32,6 @@ const mapLevelToQuery = (level: string, option: 'lte' | 'gte'): Level[] => {
                 ? [LEVEL.HIGH]
                 : [LEVEL.MIDDLE, LEVEL.HIGH];
         default:
-            console.warn(`Unexpected value in mapLevelToQuery: ${level} - ${option}`);
             return [];
     }
 };
@@ -47,7 +46,7 @@ export const getCitiesSchema = z.object({
         .string()
         .optional()
         .transform((val) => (val ? Number(val) : undefined))
-        .pipe(z.number().positive().max(MAX_LIMIT_OF_ITEMS_TO_LOAD).optional().default(40)),
+        .pipe(z.number().positive().max(MAX_LIMIT_OF_ITEMS_TO_LOAD).optional().default(20)),
     q: z
         .string()
         .max(SEARCH_BAR_MAXIMUM_Q_LENGTH)

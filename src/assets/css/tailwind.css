@@ -12,7 +12,7 @@
     }
 
     .custom-button-active {
-        @apply bg-primary-900 text-white border-primary-900 hover:bg-primary-900
+        @apply bg-primary-800 text-white border-primary-800 hover:bg-primary-900
     }
 }
 
@@ -27,3 +27,4 @@ select {
 select::-ms-expand {
     display: none; /* Remove default arrow in Internet Explorer */
 }
+

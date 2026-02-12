@@ -1,5 +1,23 @@
 {
-  "name": "nuxt-app",
+  "name": "digital-nomad",
+  "version": "1.0.0",
+  "description": "Compare 500+ cities by cost of living, weather, internet speed, safety, and more — built for digital nomads and remote workers.",
+  "author": "Kamil Owczarek (https://github.com/whoisarjen)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/whoisarjen/digital-nomad.git"
+  },
+  "homepage": "https://github.com/whoisarjen/digital-nomad",
+  "keywords": [
+    "digital-nomad",
+    "remote-work",
+    "city-comparison",
+    "cost-of-living",
+    "nuxt",
+    "vue",
+    "typescript"
+  ],
   "private": true,
   "type": "module",
   "scripts": {

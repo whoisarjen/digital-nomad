@@ -12,10 +12,7 @@ export default defineEventHandler(async () => {
     },
   })
 
-  let counter = 0
   for (const city of cities) {
-    counter++
-    console.log(`Cities left ${cities.length - counter}`)
     const params = {
       "latitude": city.latitude,
       "longitude": city.longitude,

@@ -15,8 +15,10 @@ logs
 
 # Misc
 .DS_Store
+Thumbs.db
 .fleet
 .idea
+.vscode
 
 # Local env files
 .env
@@ -24,3 +26,6 @@ logs
 !.env.example
 .vercel
 .env*.local
+
+# Seed data
+data.json

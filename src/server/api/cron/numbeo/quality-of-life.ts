@@ -32,11 +32,8 @@ export default defineEventHandler(async () => {
   })
   const numbeosToSeed = numbeos.filter(option => !option.purchasingPowerIndex && !option.safetyIndex && !option.climateIndex && !option.pollutionIndex && !option.healthCareIndex)
 
-  let counter = 0
   for (const { slug, citySlug } of numbeosToSeed) {
-    counter++
     if (slug) {
-      console.log(`Left ${numbeosToSeed.length - counter}, working on ${slug}`)
       const url = `REDACTED_QOL_URL/${slug}`;
 
       try {
@@ -100,12 +97,9 @@ export default defineEventHandler(async () => {
         })
 
         await new Promise(res => setTimeout(() => res(true), 1000))
-      } catch (error) {
-        console.error('Error fetching data:', error);
-        return { error: 'Error fetching data from the website' };
+      } catch {
+        // Skip cities that fail to fetch
       }
-    } else {
-      console.log(`Skipped ${citySlug} as missing slug`)
     }
   }
 

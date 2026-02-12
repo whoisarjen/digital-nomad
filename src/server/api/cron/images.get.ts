@@ -114,27 +114,24 @@ export default defineEventHandler(async () => {
 
   const cities = citiesRaw.filter(({ image }) => !image);
 
-  let counter = 0
   for (const { slug, name, country } of cities) {
-    counter++
-    console.log(`Left ${cities.length - counter}`)
     const data = await Promise.all([
       $fetch<{ results: Result[] }>('REDACTED_IMAGE_API_URL', {
         query: {
-          client_id: 'REDACTED_UNSPLASH_KEY',
+          client_id: process.env.UNSPLASH_ACCESS_KEY!,
           query: name,
           collections: 'REDACTED_COLLECTION_IDS',
         }
       }),
       $fetch<{ results: Result[] }>('REDACTED_IMAGE_API_URL', {
         query: {
-          client_id: 'REDACTED_UNSPLASH_KEY',
+          client_id: process.env.UNSPLASH_ACCESS_KEY!,
           query: name,
         }
       }),
       $fetch<{ results: Result[] }>('REDACTED_IMAGE_API_URL', {
         query: {
-          client_id: 'REDACTED_UNSPLASH_KEY',
+          client_id: process.env.UNSPLASH_ACCESS_KEY!,
           query: country,
         }
       }),
@@ -142,19 +139,9 @@ export default defineEventHandler(async () => {
 
     const results = _.orderBy(data.flatMap(option => option.results), ['likes'], ['desc']);
 
-    if (!results.length) {
-      console.log(`${results.length} images from ${name}`)
-    }
-
-    let counter2 = 0
     for (const photo of results) {
-      counter2++
       const success = await tryUpdateImage(slug, photo);
-      if (success) {
-        break
-      } else if (results.length === counter2) {
-        console.error(`Missing image for ${name}`)
-      }
+      if (success) break
     }
   };
 

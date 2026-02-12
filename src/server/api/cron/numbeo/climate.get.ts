@@ -10,11 +10,8 @@ export default defineEventHandler(async () => {
     },
   })
 
-  let counter = 0
   const numbeosToSeed = options.filter(({ climate, slug }) => slug)
   for (const { citySlug, slug } of numbeosToSeed) {
-    counter++
-    console.log(`Left ${numbeosToSeed.length - counter}, working on ${slug}`)
 
     const { data } = await axios.get(`REDACTED_CLIMATE_URL/${slug}`);
 
