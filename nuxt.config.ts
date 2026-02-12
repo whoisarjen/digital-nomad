@@ -23,6 +23,9 @@ export default defineNuxtConfig({
     '@nuxt/image',
     '@vueuse/nuxt',
   ],
+  routeRules: {
+    '/**': { isr: true },
+  },
   nitro: {
     vercel: {
       regions: ['fra1'],

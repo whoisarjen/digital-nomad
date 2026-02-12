@@ -84,7 +84,7 @@
         <aside class="rounded-2xl flex flex-col gap-3 w-full md:max-w-[268px]">
           <h3 class="text-xl font-bold">Filters</h3>
           <div
-            @click="() => isClearFilter && router.push({ query: {} })"
+            @click="() => isClearFilter && router.push({ query: { months: getUserCurrentMonthString() } })"
             class="px-4 py-2 rounded-xl border text-center text-sm text-white"
             :class="{
               'bg-red-600 hover:bg-red-700 cursor-pointer': isClearFilter,
@@ -146,13 +146,13 @@
 
             <!-- City Cards -->
             <template v-else>
-              <div class="relative w-full" style="content-visibility: auto; contain-intrinsic-size: auto 320px;" v-for="city in cities?.data" :key="city.slug">
+              <div class="relative w-full" v-for="city in cities?.data" :key="city.slug">
                 <NuxtLink
                   :to="`/cities/${city.slug}`"
                   class="bg-white cursor-pointer rounded-xl overflow-hidden border border-gray-200 w-full flex flex-col"
                 >
                   <!-- Photo -->
-                  <div class="relative aspect-[3/2]">
+                  <div class="relative aspect-[3/2] overflow-hidden">
                     <NuxtImg
                       provider="unsplash"
                       :src="city.image?.url.replace('https://images.unsplash.com', '')"
@@ -160,6 +160,9 @@
                       class="w-full h-full object-cover"
                       loading="lazy"
                       quality="75"
+                      width="480"
+                      height="320"
+                      sizes="(max-width: 1024px) 100vw, (max-width: 1280px) 50vw, (max-width: 1536px) 33vw, 25vw"
                     />
                     <!-- Weather pill -->
                     <div class="absolute bottom-3 left-3 flex items-center gap-1.5 bg-black/60 rounded-full px-2.5 py-1 text-sm font-medium text-white">
@@ -262,11 +265,11 @@ import { getUserCurrentMonthString, OPTIONS_ORDER_BY } from '~/shared/global.uti
 const route = useRoute()
 const router = useRouter()
 
-const isClearFilter = computed(() => Object.keys(route.query).length)
-const queryParams = computed(() => ({
-  ...route.query,
-  months: route.query.months ?? getUserCurrentMonthString(),
-})) as Ref<Partial<GetCitiesSchema>>
+const isClearFilter = computed(() => {
+  const { months, ...rest } = route.query
+  return Object.keys(rest).length > 0 || months !== getUserCurrentMonthString()
+})
+const queryParams = computed(() => route.query) as Ref<Partial<GetCitiesSchema>>
 
 const { data: cities, status } = await useCities(queryParams)
 const { data: filters } = await useCitiesFilters()
