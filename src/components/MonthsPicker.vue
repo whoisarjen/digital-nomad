@@ -48,7 +48,7 @@ function selectMonth(value: string) {
     query: {
       ...route.query,
       page: undefined,
-      months: selectedOption.value,
+      months: value === currentMonthString.value ? undefined : selectedOption.value,
     }
   });
 }
