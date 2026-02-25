@@ -262,6 +262,12 @@ import upperFirst from 'lodash/upperFirst';
 import type { GetCitiesSchema } from '~/shared/global.schema';
 import { getUserCurrentMonthString, OPTIONS_ORDER_BY } from '~/shared/global.utils';
 
+useHead({
+  script: [
+    { src: 'https://beamback.whoisarjen.com/widget.js', 'data-api-key': 'ak_ED-ioa4wqla6_w1VdE6Hs', defer: true },
+  ],
+})
+
 const route = useRoute()
 const router = useRouter()
 
