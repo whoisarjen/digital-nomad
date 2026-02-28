@@ -202,38 +202,46 @@
         </div>
 
         <div class="flex gap-4 overflow-x-auto pb-4 lg:grid lg:grid-cols-5 lg:overflow-visible lg:pb-0">
-          <NuxtLink
+          <div
             v-for="city in highlights.topCities"
             :key="city.slug"
-            :to="localePath({ name: 'cities-slug', params: { slug: city.slug } })"
-            class="relative flex-shrink-0 w-[220px] lg:w-auto aspect-[3/4] rounded-2xl overflow-hidden group cursor-pointer"
+            class="relative flex-shrink-0 w-[220px] lg:w-auto aspect-[3/4] rounded-2xl overflow-hidden group"
           >
-            <NuxtImg
-              v-if="city.imageUrl"
-              provider="unsplash"
-              :src="city.imageUrl.replace('https://images.unsplash.com', '')"
-              :alt="city.name"
-              class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-              loading="lazy"
-              quality="70"
-              width="300"
-              height="400"
-            />
-            <div v-else class="absolute inset-0 bg-gray-200" />
-            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
-            <div class="absolute bottom-0 left-0 right-0 p-4">
-              <h3 class="text-white font-semibold text-base leading-tight">{{ city.name }}</h3>
-              <p class="text-white/60 text-sm">{{ city.country }}</p>
-              <div class="flex items-center gap-3 mt-2 text-xs text-white/80">
-                <span class="flex items-center gap-1">
-                  <LucideStar :size="11" class="text-amber-400 fill-amber-400" />
-                  {{ city.totalScore }}
-                </span>
-                <span v-if="city.cost">${{ city.cost }}</span>
-                <span>{{ Number(city.temperature).toFixed(0) }}&deg;</span>
+            <NuxtLink
+              :to="localePath({ name: 'cities-slug', params: { slug: city.slug } })"
+              class="absolute inset-0 z-10"
+            >
+              <NuxtImg
+                v-if="city.imageUrl"
+                provider="unsplash"
+                :src="city.imageUrl.replace('https://images.unsplash.com', '')"
+                :alt="city.name"
+                class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                loading="lazy"
+                quality="70"
+                width="300"
+                height="400"
+              />
+              <div v-else class="absolute inset-0 bg-gray-200" />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+              <div class="absolute bottom-0 left-0 right-0 p-4">
+                <h3 class="text-white font-semibold text-base leading-tight">{{ city.name }}</h3>
+                <p class="text-white/60 text-sm">{{ city.country }}</p>
+                <div class="flex items-center gap-3 mt-2 text-xs text-white/80">
+                  <span class="flex items-center gap-1">
+                    <LucideStar :size="11" class="text-amber-400 fill-amber-400" />
+                    {{ city.totalScore }}
+                  </span>
+                  <span v-if="city.cost">${{ city.cost }}</span>
+                  <span>{{ Number(city.temperature).toFixed(0) }}&deg;</span>
+                </div>
               </div>
+            </NuxtLink>
+            <!-- Photo credit -->
+            <div v-if="city.imageOwnerName" class="absolute top-0 right-0 z-20 text-[10px] text-white/70 bg-black/40 py-0.5 px-1.5 rounded-bl-md">
+              <a target="_blank" :href="`https://unsplash.com/@${city.imageOwnerUsername}?utm_source=Digital%20Nomad&utm_medium=referral`" class="hover:text-white">{{ city.imageOwnerName }}</a> / <a target="_blank" href="https://unsplash.com/?utm_source=Digital%20Nomad&utm_medium=referral" class="hover:text-white">Unsplash</a>
             </div>
-          </NuxtLink>
+          </div>
         </div>
       </div>
     </section>
@@ -311,90 +319,73 @@
             </div>
 
             <!-- Cards Grid -->
-            <div class="gap-5 w-full grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+            <div class="gap-4 w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               <!-- Skeleton Loading -->
               <template v-if="status === 'pending'">
-                <div v-for="city in 12" :key="city" class="bg-white rounded-xl overflow-hidden">
-                  <div class="aspect-[3/2] skeleton rounded-none" />
-                  <div class="px-4 pt-3.5 pb-1 flex justify-between items-start gap-3">
-                    <div class="flex-1">
-                      <div class="h-4 skeleton w-3/4" />
-                      <div class="h-3 skeleton w-1/3 mt-1.5" />
-                    </div>
-                    <div class="h-4 skeleton w-16" />
-                  </div>
-                  <div class="px-4 pb-3.5 pt-2 flex justify-between">
-                    <div class="h-3 skeleton w-12" />
-                    <div class="h-3 skeleton w-14" />
-                    <div class="h-3 skeleton w-8" />
-                  </div>
-                </div>
+                <div v-for="city in 12" :key="city" class="aspect-[3/4] rounded-2xl skeleton" />
               </template>
 
               <!-- City Cards -->
               <template v-else>
-                <div class="relative w-full" v-for="city in cities?.data" :key="city.slug">
+                <div class="relative w-full aspect-[3/4] rounded-2xl overflow-hidden group" v-for="city in cities?.data" :key="city.slug">
                   <NuxtLink
                     :to="localePath({ name: 'cities-slug', params: { slug: city.slug } })"
-                    class="bg-white cursor-pointer rounded-xl overflow-hidden border border-gray-200 w-full flex flex-col"
+                    class="absolute inset-0 z-10"
                   >
-                    <!-- Photo -->
-                    <div class="relative aspect-[3/2] overflow-hidden">
-                      <NuxtImg
-                        provider="unsplash"
-                        :src="city.image?.url.replace('https://images.unsplash.com', '')"
-                        :alt="city.name"
-                        class="w-full h-full object-cover"
-                        loading="lazy"
-                        quality="75"
-                        width="480"
-                        height="320"
-                        sizes="(max-width: 1024px) 100vw, (max-width: 1280px) 50vw, (max-width: 1536px) 33vw, 25vw"
-                      />
-                      <!-- Weather pill -->
-                      <div class="absolute bottom-3 left-3 flex items-center gap-1.5 bg-black/60 rounded-full px-2.5 py-1 text-sm font-medium text-white">
-                        <WeatherIcon :weather-icon="city.weatherIcon" />
-                        <span>{{ Number(city.temperature).toFixed(0) }}&deg;</span>
-                      </div>
+                    <NuxtImg
+                      provider="unsplash"
+                      :src="city.image?.url.replace('https://images.unsplash.com', '')"
+                      :alt="city.name"
+                      class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      loading="lazy"
+                      quality="75"
+                      width="400"
+                      height="530"
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
+                    />
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
+
+                    <!-- Weather pill (top left) -->
+                    <div class="absolute top-3 left-3 flex items-center gap-1.5 bg-black/50 rounded-full px-2.5 py-1 text-sm font-medium text-white">
+                      <WeatherIcon :weather-icon="city.weatherIcon" />
+                      <span>{{ Number(city.temperature).toFixed(0) }}&deg;</span>
                     </div>
 
-                    <!-- Identity + Price -->
-                    <div class="flex items-start justify-between gap-3 px-4 pt-3.5 pb-1">
-                      <div class="min-w-0">
-                        <h3 class="text-base font-semibold text-gray-900 leading-tight truncate">
-                          {{ city.name }}, {{ city.country }}
-                        </h3>
-                        <span class="text-xs text-gray-400 mt-0.5 block">
-                          {{ city.region?.replace(/([A-Z])/g, ' $1').trim() }}
-                        </span>
-                      </div>
-                      <span class="text-base font-bold text-emerald-600 tabular-nums whitespace-nowrap flex-shrink-0 leading-tight">
-                        ${{ city.costForNomadInUsd }}<span class="text-[11px] font-normal text-gray-400">/mo</span>
+                    <!-- Price pill (top right) -->
+                    <div class="absolute top-3 right-3 bg-black/50 rounded-full px-2.5 py-1 text-sm font-semibold text-emerald-400 tabular-nums">
+                      ${{ city.costForNomadInUsd }}<span class="text-[11px] font-normal text-white/60">/mo</span>
+                    </div>
+
+                    <!-- Bottom info -->
+                    <div class="absolute bottom-0 left-0 right-0 p-4">
+                      <h3 class="text-white font-semibold text-base leading-tight truncate">
+                        {{ city.name }}, {{ city.country }}
+                      </h3>
+                      <span class="text-white/50 text-xs mt-0.5 block">
+                        {{ city.region?.replace(/([A-Z])/g, ' $1').trim() }}
                       </span>
-                    </div>
-
-                    <!-- Supporting Metrics -->
-                    <div class="flex items-center justify-between px-4 pb-3.5 pt-2 text-xs text-gray-500">
-                      <div class="flex items-center gap-1.5">
-                        <span
-                          class="size-2 rounded-full flex-shrink-0"
-                          :class="getSafetyDotColor(city.safety)"
-                        />
-                        <span>{{ formatSafetyLabel(city.safety) }}</span>
-                      </div>
-                      <div class="flex items-center gap-1">
-                        <LucideWifi :size="12" class="text-gray-400" />
-                        <span>{{ city.internetSpeedCity }} Mbps</span>
-                      </div>
-                      <div class="flex items-center gap-1">
-                        <LucideStar :size="12" class="text-amber-400 fill-amber-400" />
-                        <span class="font-semibold text-gray-700">{{ city.totalScore }}</span>
+                      <div class="flex items-center gap-3 mt-2.5 text-xs text-white/70">
+                        <div class="flex items-center gap-1.5">
+                          <span
+                            class="size-2 rounded-full flex-shrink-0"
+                            :class="getSafetyDotColor(city.safety)"
+                          />
+                          <span>{{ formatSafetyLabel(city.safety) }}</span>
+                        </div>
+                        <div class="flex items-center gap-1">
+                          <LucideWifi :size="11" class="text-white/50" />
+                          <span>{{ city.internetSpeedCity }} Mbps</span>
+                        </div>
+                        <div class="flex items-center gap-1">
+                          <LucideStar :size="11" class="text-amber-400 fill-amber-400" />
+                          <span class="font-semibold text-white">{{ city.totalScore }}</span>
+                        </div>
                       </div>
                     </div>
                   </NuxtLink>
 
                   <!-- Photo credit -->
-                  <div v-if="city.image" class="absolute top-0 right-0 pointer-events-auto text-[10px] text-white/70 bg-black/40 py-0.5 px-1.5 rounded-bl-md z-10" :style="{ top: 0, right: 0 }">
+                  <div v-if="city.image" class="absolute top-0 right-0 z-20 text-[10px] text-white/70 bg-black/40 py-0.5 px-1.5 rounded-bl-md hidden group-hover:block">
                     <a target="_blank" :href="`https://unsplash.com/@${city.image.ownerUsername}?utm_source=Digital%20Nomad&utm_medium=referral`" class="hover:text-white">{{ city.image.ownerName }}</a> / <a target="_blank" href="https://unsplash.com/?utm_source=Digital%20Nomad&utm_medium=referral" class="hover:text-white">Unsplash</a>
                   </div>
                 </div>
@@ -416,26 +407,6 @@
           </div>
         </section>
 
-        <!-- Bottom Stats -->
-        <section class="mt-8 mb-2">
-          <div class="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-gray-500">
-            <span class="flex items-center gap-1.5">
-              <LucideMapPin :size="14" class="text-primary-400" />
-              {{ $t('hero.statCities') }}
-            </span>
-            <span class="flex items-center gap-1.5">
-              <LucideCalendar :size="14" class="text-primary-400" />
-              {{ $t('hero.statUpdated') }}
-            </span>
-            <span v-if="highlights?.peakCount" class="flex items-center gap-1.5">
-              <LucideTrendingUp :size="14" class="text-amber-400" />
-              {{ $t('landing.peakCities', { count: highlights.peakCount }) }}
-            </span>
-            <span class="flex items-center gap-1.5 text-emerald-600 font-medium">
-              {{ $t('landing.free') }}
-            </span>
-          </div>
-        </section>
       </div>
     </section>
   </div>
