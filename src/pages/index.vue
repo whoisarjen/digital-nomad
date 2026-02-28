@@ -428,6 +428,9 @@ defineI18nRoute({
 const { locale, t } = useCustomI18n()
 const localePath = useLocalePath()
 
+const route = useRoute()
+const router = useRouter()
+
 const hasFilters = computed(() => Object.keys(route.query).length > 0)
 
 useHead({
@@ -436,9 +439,6 @@ useHead({
     { src: 'https://beamback.whoisarjen.com/widget.js', 'data-api-key': 'ak_ED-ioa4wqla6_w1VdE6Hs', defer: true },
   ],
 })
-
-const route = useRoute()
-const router = useRouter()
 
 const translatedOrderByOptions = computed(() =>
   OPTIONS_ORDER_BY.map(opt => ({ ...opt, label: t(`orderBy.${opt.value}`) }))
