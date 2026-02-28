@@ -11,11 +11,6 @@
       <!-- Content -->
       <div class="relative z-20 py-12 max-w-3xl mx-auto flex flex-col items-center gap-6">
         <div class="flex flex-col items-center">
-          <img
-            src="/digital-nomad-logo.png"
-            alt="Digital Nomad"
-            class="w-24 h-24 md:w-32 md:h-32 mb-4"
-          />
           <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight leading-[1.1]">
             Every city, decoded.<br class="hidden sm:block" />
             <span class="text-primary-400">Pick yours.</span>
