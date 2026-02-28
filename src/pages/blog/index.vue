@@ -18,14 +18,14 @@
       <template v-if="status === 'pending'">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <div v-for="i in 6" :key="i" class="bg-white rounded-xl overflow-hidden border border-gray-200">
-            <div class="aspect-[3/2] bg-gray-200 animate-pulse" />
+            <div class="aspect-[3/2] skeleton" />
             <div class="p-4 flex flex-col gap-3">
-              <div class="h-5 bg-gray-200 rounded animate-pulse w-3/4" />
-              <div class="h-4 bg-gray-100 rounded animate-pulse w-full" />
-              <div class="h-4 bg-gray-100 rounded animate-pulse w-2/3" />
+              <div class="h-5 skeleton w-3/4" />
+              <div class="h-4 skeleton w-full" />
+              <div class="h-4 skeleton w-2/3" />
               <div class="flex justify-between pt-1">
-                <div class="h-3 bg-gray-100 rounded animate-pulse w-16" />
-                <div class="h-3 bg-gray-100 rounded animate-pulse w-20" />
+                <div class="h-3 skeleton w-16" />
+                <div class="h-3 skeleton w-20" />
               </div>
             </div>
           </div>

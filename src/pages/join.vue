@@ -1,0 +1,172 @@
+<template>
+  <div class="w-full max-w-md mx-auto">
+    <!-- Header -->
+    <div class="text-center mb-8">
+      <h1 class="text-2xl font-bold text-white tracking-tight">
+        {{ $t('auth.joinTitle') }}
+      </h1>
+      <p class="mt-2 text-sm text-white/40 leading-relaxed max-w-xs mx-auto">
+        {{ $t('auth.joinSubtitle') }}
+      </p>
+    </div>
+
+    <!-- Card -->
+    <div class="bg-white/[0.04] border border-white/[0.08] rounded-2xl p-6 backdrop-blur-sm">
+      <!-- Tabs -->
+      <div class="flex bg-white/[0.04] rounded-xl p-1 mb-6">
+        <button
+          @click="switchTab('signup')"
+          class="flex-1 py-2 text-sm font-medium rounded-lg transition-all duration-200"
+          :class="isSignUp
+            ? 'bg-primary-500/20 text-primary-400 shadow-sm'
+            : 'text-white/40 hover:text-white/60'"
+        >
+          {{ $t('auth.signUp') }}
+        </button>
+        <button
+          @click="switchTab('login')"
+          class="flex-1 py-2 text-sm font-medium rounded-lg transition-all duration-200"
+          :class="!isSignUp
+            ? 'bg-primary-500/20 text-primary-400 shadow-sm'
+            : 'text-white/40 hover:text-white/60'"
+        >
+          {{ $t('auth.logIn') }}
+        </button>
+      </div>
+
+      <!-- Error -->
+      <div
+        v-if="error"
+        class="mb-4 flex items-start gap-2 bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-3"
+      >
+        <LucideAlertCircle :size="16" class="text-red-400 mt-0.5 flex-shrink-0" />
+        <p class="text-sm text-red-300">{{ error }}</p>
+      </div>
+
+      <!-- Google OAuth -->
+      <button
+        @click="signInWithGoogle"
+        :disabled="loading"
+        class="w-full flex items-center justify-center gap-3 bg-white hover:bg-gray-100 text-gray-900 font-medium py-3 px-4 rounded-xl transition-colors duration-150 disabled:opacity-50"
+      >
+        <svg class="w-5 h-5" viewBox="0 0 24 24">
+          <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4" />
+          <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
+          <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05" />
+          <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
+        </svg>
+        {{ $t('auth.continueWithGoogle') }}
+      </button>
+
+      <!-- Divider -->
+      <div class="flex items-center gap-4 my-5">
+        <div class="flex-1 h-px bg-white/[0.08]" />
+        <span class="text-xs text-white/25 uppercase tracking-wider">{{ $t('auth.or') }}</span>
+        <div class="flex-1 h-px bg-white/[0.08]" />
+      </div>
+
+      <!-- Form -->
+      <form @submit.prevent="handleSubmit" class="flex flex-col gap-3">
+        <!-- Name (signup only) -->
+        <div v-if="isSignUp">
+          <input
+            v-model="form.name"
+            type="text"
+            :placeholder="$t('auth.name')"
+            class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 text-sm text-white placeholder-white/25 outline-none focus:border-primary-500/50 focus:bg-white/[0.06] transition-all duration-200"
+          />
+        </div>
+
+        <input
+          v-model="form.email"
+          type="email"
+          :placeholder="$t('auth.email')"
+          required
+          class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 text-sm text-white placeholder-white/25 outline-none focus:border-primary-500/50 focus:bg-white/[0.06] transition-all duration-200"
+        />
+
+        <input
+          v-model="form.password"
+          type="password"
+          :placeholder="$t('auth.password')"
+          required
+          class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 text-sm text-white placeholder-white/25 outline-none focus:border-primary-500/50 focus:bg-white/[0.06] transition-all duration-200"
+        />
+
+        <!-- Referral code (signup only) -->
+        <div v-if="isSignUp">
+          <input
+            v-model="form.referralCode"
+            type="text"
+            :placeholder="$t('auth.referralCode')"
+            class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 text-sm text-white placeholder-white/25 outline-none focus:border-primary-500/50 focus:bg-white/[0.06] transition-all duration-200"
+          />
+        </div>
+
+        <button
+          type="submit"
+          :disabled="loading"
+          class="w-full bg-accent-500 hover:bg-accent-400 text-white font-semibold py-3 px-4 rounded-xl transition-colors duration-150 mt-1 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          <span v-if="loading" class="flex items-center justify-center gap-2">
+            <LucideLoader2 :size="16" class="animate-spin" />
+          </span>
+          <span v-else>{{ isSignUp ? $t('auth.signUp') : $t('auth.logIn') }}</span>
+        </button>
+      </form>
+    </div>
+
+    <!-- Toggle -->
+    <p class="text-center mt-5 text-sm text-white/30">
+      {{ isSignUp ? $t('auth.hasAccount') : $t('auth.noAccount') }}
+      <button
+        @click="switchTab(isSignUp ? 'login' : 'signup')"
+        class="text-primary-400 hover:text-primary-300 font-medium ml-1"
+      >
+        {{ isSignUp ? $t('auth.logIn') : $t('auth.signUp') }}
+      </button>
+    </p>
+  </div>
+</template>
+
+<script setup lang="ts">
+definePageMeta({ layout: 'auth', middleware: 'guest' })
+
+defineI18nRoute({
+  paths: {
+    en: '/join',
+    pl: '/dolacz',
+  },
+})
+
+const { signInWithGoogle, login, register, error, loading, checkOAuthError, clearError } = useAuth()
+
+const isSignUp = ref(true)
+const form = reactive({
+  email: '',
+  password: '',
+  name: '',
+  referralCode: '',
+})
+
+function switchTab(tab: 'signup' | 'login') {
+  isSignUp.value = tab === 'signup'
+  clearError()
+}
+
+async function handleSubmit() {
+  try {
+    if (isSignUp.value) {
+      await register(form.email, form.password, form.name || undefined, form.referralCode || undefined)
+    } else {
+      await login(form.email, form.password)
+    }
+  } catch {
+    // Error is handled by useAuth
+  }
+}
+
+onMounted(() => {
+  checkOAuthError()
+})
+</script>

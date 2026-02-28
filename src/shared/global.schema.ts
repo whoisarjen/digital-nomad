@@ -157,3 +157,21 @@ export type GetArticleBySlugSchema = z.infer<typeof getArticleBySlugSchema>;
 export const getArticlesByCitySchema = z.object({
     citySlug: z.string(),
 });
+
+// Auth schemas
+
+export const registerSchema = z.object({
+    email: z.string().email().max(255),
+    password: z.string().min(8).max(128),
+    name: z.string().min(1).max(100).optional(),
+    referralCode: z.string().optional(),
+});
+
+export const loginSchema = z.object({
+    email: z.string().email().max(255),
+    password: z.string().min(1).max(128),
+});
+
+export const voteSchema = z.object({
+    featureId: z.string().min(1),
+});

@@ -27,6 +27,20 @@
         >
           {{ $t('nav.blog') }}
         </NuxtLink>
+        <NuxtLink
+          v-if="isLoggedIn"
+          :to="localePath('dashboard')"
+          class="text-sm text-white/70 hover:text-white font-medium"
+        >
+          {{ $t('dashboard.title') }}
+        </NuxtLink>
+        <NuxtLink
+          v-else
+          :to="localePath('join')"
+          class="text-sm bg-accent-500 hover:bg-accent-400 text-white font-medium px-4 py-1.5 rounded-lg"
+        >
+          {{ $t('auth.signUp') }}
+        </NuxtLink>
         <LanguagePicker />
       </nav>
     </div>
@@ -34,5 +48,9 @@
 </template>
 
 <script setup lang="ts">
-const localePath = useLocalePath();
+const localePath = useLocalePath()
+const isLoggedIn = computed(() => {
+  if (import.meta.server) return false
+  return useCookie('nomad_logged_in').value === 'true'
+})
 </script>

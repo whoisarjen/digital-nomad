@@ -249,3 +249,51 @@ model ArticleCityMap {
 
   @@id([articleSlug, citySlug])
 }
+
+model User {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  name         String?
+  image        String?
+  googleId     String?   @unique
+  passwordHash String?
+  referralCode String    @unique @default(cuid())
+  referredBy   String?
+  number       Int       @default(autoincrement())
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @default(now()) @updatedAt
+  sessions     Session[]
+  votes        Vote[]
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([token])
+  @@index([userId])
+}
+
+model Feature {
+  id          String   @id @default(cuid())
+  name        String
+  description String
+  status      String   @default("researching")
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  votes       Vote[]
+}
+
+model Vote {
+  userId    String
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  featureId String
+  feature   Feature @relation(fields: [featureId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@id([userId, featureId])
+}

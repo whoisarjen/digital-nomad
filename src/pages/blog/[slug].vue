@@ -2,13 +2,13 @@
   <div class="min-h-screen bg-gray-100 text-gray-900">
     <!-- Loading -->
     <template v-if="!data || status !== 'success'">
-      <div class="h-[400px] bg-gray-200 animate-pulse" />
-      <div class="max-w-screen-md mx-auto p-6 flex flex-col gap-4 animate-pulse">
-        <div class="h-8 bg-gray-200 rounded w-3/4" />
-        <div class="h-4 bg-gray-100 rounded w-1/3" />
-        <div class="h-4 bg-gray-100 rounded w-full mt-4" />
-        <div class="h-4 bg-gray-100 rounded w-full" />
-        <div class="h-4 bg-gray-100 rounded w-2/3" />
+      <div class="h-[400px] skeleton rounded-none" />
+      <div class="max-w-screen-md mx-auto p-6 flex flex-col gap-4">
+        <div class="h-8 skeleton w-3/4" />
+        <div class="h-4 skeleton w-1/3" />
+        <div class="h-4 skeleton w-full mt-4" />
+        <div class="h-4 skeleton w-full" />
+        <div class="h-4 skeleton w-2/3" />
       </div>
     </template>
 

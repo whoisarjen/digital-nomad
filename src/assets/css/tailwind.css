@@ -28,3 +28,28 @@ select::-ms-expand {
     display: none; /* Remove default arrow in Internet Explorer */
 }
 
+/* Background orb float animations */
+@keyframes float {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(10px, -20px) scale(1.05); }
+    66% { transform: translate(-10px, 10px) scale(0.95); }
+}
+.animate-float { animation: float 20s ease-in-out infinite; }
+.animate-float-reverse { animation: float 25s ease-in-out infinite reverse; }
+.animate-float-slow { animation: float 30s ease-in-out infinite 5s; }
+
+html { scroll-behavior: smooth; }
+
+/* Shimmer skeleton animation */
+@keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+.skeleton {
+    background: linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 50%, #e5e7eb 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s ease-in-out infinite;
+    border-radius: 0.375rem;
+}
+
