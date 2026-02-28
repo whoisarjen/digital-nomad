@@ -200,6 +200,9 @@
             </div>
           </div>
         </section>
+
+        <!-- Related Articles -->
+        <CityArticlesWidget :city-slug="data.slug" />
       </div>
     </template>
   </div>

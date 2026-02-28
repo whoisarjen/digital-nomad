@@ -21,6 +21,12 @@
         >
           {{ $t('nav.exploreCities') }}
         </NuxtLink>
+        <NuxtLink
+          :to="localePath('blog')"
+          class="text-sm text-white/70 hover:text-white font-medium"
+        >
+          {{ $t('nav.blog') }}
+        </NuxtLink>
         <LanguagePicker />
       </nav>
     </div>

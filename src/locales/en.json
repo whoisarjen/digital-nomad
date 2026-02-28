@@ -109,5 +109,16 @@
   },
   "search": {
     "placeholder": "Search for"
+  },
+  "blog": {
+    "title": "Blog",
+    "subtitle": "Insights and guides for digital nomads",
+    "readMore": "Read more",
+    "minRead": "{min} min read",
+    "publishedOn": "Published on {date}",
+    "relatedArticles": "Related Articles",
+    "noArticles": "No articles found",
+    "faqTitle": "Frequently Asked Questions",
+    "backToBlog": "Back to Blog"
   }
 }

@@ -128,3 +128,32 @@ export const getCitiesBySlugSchema = z.object({
 });
 
 export type GetCitiesBySlugSchema = z.infer<typeof getCitiesBySlugSchema>;
+
+// Blog schemas
+
+export const getArticlesSchema = z.object({
+    page: z
+        .string()
+        .optional()
+        .transform((val) => (val ? Number(val) : undefined))
+        .pipe(z.number().positive().optional().default(1)),
+    limit: z
+        .string()
+        .optional()
+        .transform((val) => (val ? Number(val) : undefined))
+        .pipe(z.number().positive().max(50).optional().default(12)),
+    city: z.string().optional(),
+    q: z.string().max(SEARCH_BAR_MAXIMUM_Q_LENGTH).optional(),
+});
+
+export type GetArticlesSchema = z.infer<typeof getArticlesSchema>;
+
+export const getArticleBySlugSchema = z.object({
+    slug: z.string(),
+});
+
+export type GetArticleBySlugSchema = z.infer<typeof getArticleBySlugSchema>;
+
+export const getArticlesByCitySchema = z.object({
+    citySlug: z.string(),
+});

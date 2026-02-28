@@ -103,6 +103,8 @@ model City {
   image    Image?
   qualityIndexId String?   @map("numbeoId")
   qualityIndex   QualityIndex?
+
+  articles ArticleCityMap[]
 }
 
 model Weather {
@@ -206,4 +208,44 @@ model Image {
 
   citySlug String? @unique
   city     City?   @relation(fields: [citySlug], references: [slug])
+}
+
+model Article {
+  slug        String   @id
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now()) @updatedAt
+  publishedAt DateTime?
+  isPublished Boolean  @default(false)
+
+  titleEn     String
+  excerptEn   String
+  contentEn   String
+  metaTitleEn String?
+  metaDescEn  String?
+
+  titlePl     String
+  excerptPl   String
+  contentPl   String
+  metaTitlePl String?
+  metaDescPl  String?
+
+  featuredImageUrl   String?
+  featuredImageAlt   String?
+  readingTimeMinutes Int @default(5)
+
+  faqs Json?
+
+  cities ArticleCityMap[]
+
+  @@index([isPublished, publishedAt])
+}
+
+model ArticleCityMap {
+  articleSlug String
+  article     Article @relation(fields: [articleSlug], references: [slug], onDelete: Cascade)
+  citySlug    String
+  city        City    @relation(fields: [citySlug], references: [slug], onDelete: Cascade)
+  isPrimary   Boolean @default(false)
+
+  @@id([articleSlug, citySlug])
 }

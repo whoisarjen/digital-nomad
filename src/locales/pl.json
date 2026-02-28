@@ -109,5 +109,16 @@
   },
   "search": {
     "placeholder": "Szukaj"
+  },
+  "blog": {
+    "title": "Blog",
+    "subtitle": "Porady i przewodniki dla cyfrowych nomadów",
+    "readMore": "Czytaj więcej",
+    "minRead": "{min} min czytania",
+    "publishedOn": "Opublikowano {date}",
+    "relatedArticles": "Powiązane artykuły",
+    "noArticles": "Brak artykułów",
+    "faqTitle": "Najczęściej zadawane pytania",
+    "backToBlog": "Wróć do bloga"
   }
 }
