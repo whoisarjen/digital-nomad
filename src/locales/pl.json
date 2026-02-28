@@ -1,0 +1,113 @@
+{
+  "nav": {
+    "exploreCities": "Odkryj miasta",
+    "blog": "Blog"
+  },
+  "hero": {
+    "titleLine1": "Każde miasto, rozszyfrowane.",
+    "titleLine2": "Wybierz swoje.",
+    "subtitle": "Porównaj koszty, pogodę, internet, bezpieczeństwo i 12+ wskaźników w 500+ miastach — dopasuj filtry do siebie.",
+    "badgeCost": "Koszty życia",
+    "badgeWeather": "Kalendarz pogody",
+    "badgeInternet": "Prędkość internetu",
+    "badgeSafety": "Oceny bezpieczeństwa",
+    "cta": "Odkryj miasta",
+    "statCities": "500+ miast",
+    "statUpdated": "Aktualizowane co miesiąc",
+    "statDataPoints": "12+ wskaźników na miasto"
+  },
+  "filters": {
+    "title": "Filtry",
+    "clear": "Wyczyść filtry",
+    "filtersLabel": "Filtry:",
+    "months": "Miesiące",
+    "temperatures": "Temperatury",
+    "weathers": "Pogoda",
+    "regions": "Regiony",
+    "prices": "Ceny",
+    "to": "do",
+    "allPrefix": "Wszystkie {name}"
+  },
+  "months": {
+    "jan": "Sty",
+    "feb": "Lut",
+    "mar": "Mar",
+    "apr": "Kwi",
+    "may": "Maj",
+    "jun": "Cze",
+    "jul": "Lip",
+    "aug": "Sie",
+    "sep": "Wrz",
+    "oct": "Paź",
+    "nov": "Lis",
+    "dec": "Gru"
+  },
+  "orderBy": {
+    "totalScore": "Wynik ogólny",
+    "costForNomadInUsd": "Koszt życia (Nomad)",
+    "internetSpeedCity": "Prędkość internetu",
+    "safety": "Bezpieczeństwo",
+    "pollution": "Zanieczyszczenie",
+    "healthCare": "Opieka zdrowotna",
+    "purchasingPower": "Siła nabywcza",
+    "propertyPriceToIncome": "Nieruchomości",
+    "costOfLiving": "Koszt życia (lokalne)",
+    "trafficCommuteTime": "Dojazdy",
+    "population": "Populacja"
+  },
+  "levels": {
+    "low": "Niski",
+    "middle": "Średni",
+    "high": "Wysoki"
+  },
+  "regions": {
+    "Europe": "Europa",
+    "Asia": "Azja",
+    "MiddleEast": "Bliski Wschód",
+    "LatinAmerica": "Ameryka Łacińska",
+    "NorthAmerica": "Ameryka Północna",
+    "Africa": "Afryka",
+    "Oceania": "Oceania",
+    "Antarctica": "Antarktyda"
+  },
+  "safety": {
+    "safe": "Bezpieczne",
+    "moderate": "Umiarkowane",
+    "caution": "Ostrożnie"
+  },
+  "city": {
+    "nomadCost": "Koszt nomada",
+    "internet": "Internet",
+    "safety": "Bezpieczeństwo",
+    "airQuality": "Jakość powietrza",
+    "healthcare": "Opieka zdrowotna",
+    "population": "Populacja",
+    "costOfLiving": "Koszty życia",
+    "nomad": "Nomad",
+    "expat": "Expat",
+    "local": "Lokalny",
+    "family": "Rodzina",
+    "internetInfrastructure": "Internet i infrastruktura",
+    "citySpeed": "Prędkość w mieście",
+    "countrySpeed": "Prędkość w kraju",
+    "environmentHealth": "Środowisko i zdrowie",
+    "airQualityNow": "Powietrze teraz",
+    "airQualityScore": "Jakość powietrza",
+    "humidity": "Wilgotność",
+    "pollution": "Zanieczyszczenie",
+    "climate": "Klimat",
+    "qualityOfLife": "Jakość życia",
+    "monthlyWeather": "Pogoda miesięczna"
+  },
+  "about": {
+    "builtBy": "Stworzone przez Kamila",
+    "description": "Stworzyłem to, by pomóc nomadom znaleźć najlepsze miasta do życia i pracy. Apka ciągle się rozwija — Twoja opinia ma znaczenie!",
+    "shareFeedback": "Podziel się opinią"
+  },
+  "lang": {
+    "selectLanguage": "Wybierz język"
+  },
+  "search": {
+    "placeholder": "Szukaj"
+  }
+}

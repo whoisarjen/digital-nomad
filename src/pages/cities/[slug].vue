@@ -30,39 +30,39 @@
         <!-- Key Metrics Strip -->
         <section class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 -mt-10 relative z-20">
           <div class="bg-white rounded-xl shadow-md p-4 text-center">
-            <p class="text-xs text-gray-500 mb-1">Nomad Cost</p>
+            <p class="text-xs text-gray-500 mb-1">{{ $t('city.nomadCost') }}</p>
             <p class="text-xl font-bold text-emerald-600">${{ data.costForNomadInUsd }}<span class="text-sm font-normal text-gray-400">/mo</span></p>
           </div>
           <div class="bg-white rounded-xl shadow-md p-4 text-center">
-            <p class="text-xs text-gray-500 mb-1">Internet</p>
+            <p class="text-xs text-gray-500 mb-1">{{ $t('city.internet') }}</p>
             <p class="text-xl font-bold text-cyan-600">{{ data.internetSpeedCity }}<span class="text-sm font-normal text-gray-400"> Mbps</span></p>
           </div>
           <div class="bg-white rounded-xl shadow-md p-4 text-center">
-            <p class="text-xs text-gray-500 mb-1">Safety</p>
+            <p class="text-xs text-gray-500 mb-1">{{ $t('city.safety') }}</p>
             <div class="flex items-center justify-center gap-1.5">
               <span
                 class="w-2.5 h-2.5 rounded-full"
                 :class="getLevelDotClass(data.safety)"
               />
-              <p class="text-lg font-bold capitalize" :class="getLevelTextClass(data.safety)">{{ data.safety?.toLowerCase() ?? 'N/A' }}</p>
+              <p class="text-lg font-bold capitalize" :class="getLevelTextClass(data.safety)">{{ formatLevel(data.safety) }}</p>
             </div>
           </div>
           <div class="bg-white rounded-xl shadow-md p-4 text-center">
-            <p class="text-xs text-gray-500 mb-1">Air Quality</p>
+            <p class="text-xs text-gray-500 mb-1">{{ $t('city.airQuality') }}</p>
             <p class="text-xl font-bold" :class="getAirQualityClass(data.airQualityScore)">{{ data.airQualityScore }}<span class="text-sm font-normal text-gray-400">/5</span></p>
           </div>
           <div class="bg-white rounded-xl shadow-md p-4 text-center">
-            <p class="text-xs text-gray-500 mb-1">Healthcare</p>
+            <p class="text-xs text-gray-500 mb-1">{{ $t('city.healthcare') }}</p>
             <div class="flex items-center justify-center gap-1.5">
               <span
                 class="w-2.5 h-2.5 rounded-full"
                 :class="getLevelDotClass(data.healthCare)"
               />
-              <p class="text-lg font-bold capitalize" :class="getLevelTextClass(data.healthCare)">{{ data.healthCare?.toLowerCase() ?? 'N/A' }}</p>
+              <p class="text-lg font-bold capitalize" :class="getLevelTextClass(data.healthCare)">{{ formatLevel(data.healthCare) }}</p>
             </div>
           </div>
           <div class="bg-white rounded-xl shadow-md p-4 text-center">
-            <p class="text-xs text-gray-500 mb-1">Population</p>
+            <p class="text-xs text-gray-500 mb-1">{{ $t('city.population') }}</p>
             <p class="text-xl font-bold text-gray-700">{{ formatNumber(data.population) }}</p>
           </div>
         </section>
@@ -73,23 +73,23 @@
           <section class="bg-white rounded-xl shadow-sm p-6">
             <h2 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
               <LucideWallet :size="20" class="text-emerald-600" />
-              Cost of Living
+              {{ $t('city.costOfLiving') }}
             </h2>
             <div class="flex flex-col gap-3">
               <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                <span class="text-sm text-gray-600">Nomad</span>
+                <span class="text-sm text-gray-600">{{ $t('city.nomad') }}</span>
                 <span class="font-semibold text-emerald-600">${{ data.costForNomadInUsd }}/mo</span>
               </div>
               <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                <span class="text-sm text-gray-600">Expat</span>
+                <span class="text-sm text-gray-600">{{ $t('city.expat') }}</span>
                 <span class="font-semibold text-gray-700">${{ data.costForExpatInUsd }}/mo</span>
               </div>
               <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                <span class="text-sm text-gray-600">Local</span>
+                <span class="text-sm text-gray-600">{{ $t('city.local') }}</span>
                 <span class="font-semibold text-gray-700">${{ data.costForLocalInUsd }}/mo</span>
               </div>
               <div class="flex justify-between items-center py-2">
-                <span class="text-sm text-gray-600">Family</span>
+                <span class="text-sm text-gray-600">{{ $t('city.family') }}</span>
                 <span class="font-semibold text-gray-700">${{ data.costForFamilyInUsd }}/mo</span>
               </div>
             </div>
@@ -99,18 +99,18 @@
           <section class="bg-white rounded-xl shadow-sm p-6">
             <h2 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
               <LucideWifi :size="20" class="text-cyan-600" />
-              Internet & Infrastructure
+              {{ $t('city.internetInfrastructure') }}
             </h2>
             <div class="flex flex-col gap-3">
               <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                <span class="text-sm text-gray-600">City Speed</span>
+                <span class="text-sm text-gray-600">{{ $t('city.citySpeed') }}</span>
                 <div class="flex items-center gap-2">
                   <span class="font-semibold text-cyan-600">{{ data.internetSpeedCity }} Mbps</span>
                   <span v-if="data.internetSpeedCityRanking" class="text-xs text-gray-400">#{{ data.internetSpeedCityRanking }}</span>
                 </div>
               </div>
               <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                <span class="text-sm text-gray-600">Country Speed</span>
+                <span class="text-sm text-gray-600">{{ $t('city.countrySpeed') }}</span>
                 <div class="flex items-center gap-2">
                   <span class="font-semibold text-gray-700">{{ data.internetSpeedCountry }} Mbps</span>
                   <span v-if="data.internetSpeedCountryRanking" class="text-xs text-gray-400">#{{ data.internetSpeedCountryRanking }}</span>
@@ -123,28 +123,28 @@
           <section class="bg-white rounded-xl shadow-sm p-6">
             <h2 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
               <LucideLeaf :size="20" class="text-green-600" />
-              Environment & Health
+              {{ $t('city.environmentHealth') }}
             </h2>
             <div class="flex flex-col gap-3">
               <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                <span class="text-sm text-gray-600">Air Quality Now</span>
+                <span class="text-sm text-gray-600">{{ $t('city.airQualityNow') }}</span>
                 <span class="font-semibold">{{ data.airQualityNow }} AQI</span>
               </div>
               <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                <span class="text-sm text-gray-600">Air Quality Score</span>
+                <span class="text-sm text-gray-600">{{ $t('city.airQualityScore') }}</span>
                 <span class="font-semibold" :class="getAirQualityClass(data.airQualityScore)">{{ data.airQualityScore }}/5</span>
               </div>
               <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                <span class="text-sm text-gray-600">Humidity</span>
+                <span class="text-sm text-gray-600">{{ $t('city.humidity') }}</span>
                 <span class="font-semibold text-gray-700">{{ data.humidity }}</span>
               </div>
               <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                <span class="text-sm text-gray-600">Pollution</span>
-                <span class="font-semibold capitalize" :class="getLevelTextClass(data.pollution, true)">{{ data.pollution?.toLowerCase() ?? 'N/A' }}</span>
+                <span class="text-sm text-gray-600">{{ $t('city.pollution') }}</span>
+                <span class="font-semibold capitalize" :class="getLevelTextClass(data.pollution, true)">{{ formatLevel(data.pollution) }}</span>
               </div>
               <div class="flex justify-between items-center py-2">
-                <span class="text-sm text-gray-600">Climate</span>
-                <span class="font-semibold capitalize" :class="getLevelTextClass(data.climate)">{{ data.climate?.toLowerCase() ?? 'N/A' }}</span>
+                <span class="text-sm text-gray-600">{{ $t('city.climate') }}</span>
+                <span class="font-semibold capitalize" :class="getLevelTextClass(data.climate)">{{ formatLevel(data.climate) }}</span>
               </div>
             </div>
           </section>
@@ -153,16 +153,16 @@
           <section class="bg-white rounded-xl shadow-sm p-6">
             <h2 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
               <LucideHeart :size="20" class="text-rose-500" />
-              Quality of Life
+              {{ $t('city.qualityOfLife') }}
             </h2>
             <div class="flex flex-col gap-3">
               <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                <span class="text-sm text-gray-600">Safety</span>
-                <span class="font-semibold capitalize" :class="getLevelTextClass(data.safety)">{{ data.safety?.toLowerCase() ?? 'N/A' }}</span>
+                <span class="text-sm text-gray-600">{{ $t('city.safety') }}</span>
+                <span class="font-semibold capitalize" :class="getLevelTextClass(data.safety)">{{ formatLevel(data.safety) }}</span>
               </div>
               <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                <span class="text-sm text-gray-600">Healthcare</span>
-                <span class="font-semibold capitalize" :class="getLevelTextClass(data.healthCare)">{{ data.healthCare?.toLowerCase() ?? 'N/A' }}</span>
+                <span class="text-sm text-gray-600">{{ $t('city.healthcare') }}</span>
+                <span class="font-semibold capitalize" :class="getLevelTextClass(data.healthCare)">{{ formatLevel(data.healthCare) }}</span>
               </div>
             </div>
           </section>
@@ -172,7 +172,7 @@
         <section class="bg-white rounded-xl shadow-sm p-6">
           <h2 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
             <LucideCalendar :size="20" class="text-primary-600" />
-            Monthly Weather
+            {{ $t('city.monthlyWeather') }}
           </h2>
           <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-12 gap-3">
             <div
@@ -208,6 +208,15 @@
 <script lang="ts" setup>
 import type { Level } from '@prisma/client';
 import { formatNumber } from '~/shared/global.utils';
+
+defineI18nRoute({
+  paths: {
+    en: '/cities/[slug]',
+    pl: '/miasta/[slug]',
+  },
+})
+
+const { locale, t } = useCustomI18n()
 
 const route = useRoute()
 
@@ -254,7 +263,12 @@ const months = computed(() => {
 })
 
 const getMonthShort = (month: string) => {
-  return new Date(2023, Number(month) - 1).toLocaleString('en-US', { month: 'short' })
+  return new Date(2023, Number(month) - 1).toLocaleString(locale.value === 'pl' ? 'pl-PL' : 'en-US', { month: 'short' })
+}
+
+const formatLevel = (level: Level | undefined | null) => {
+  if (!level) return 'N/A'
+  return t(`levels.${level.toLowerCase()}`)
 }
 
 const getLevelDotClass = (level: Level | undefined | null) => {

@@ -12,31 +12,30 @@
       <div class="relative z-20 py-12 max-w-3xl mx-auto flex flex-col items-center gap-6">
         <div class="flex flex-col items-center">
           <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight leading-[1.1]">
-            Every city, decoded.<br class="hidden sm:block" />
-            <span class="text-primary-400">Pick yours.</span>
+            {{ $t('hero.titleLine1') }}<br class="hidden sm:block" />
+            <span class="text-primary-400">{{ $t('hero.titleLine2') }}</span>
           </h1>
           <p class="mt-4 text-lg md:text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed">
-            Compare cost of living, weather, internet speed, safety, and 12+ data points
-            across 500+ cities — filtered to exactly what you need.
+            {{ $t('hero.subtitle') }}
           </p>
         </div>
 
         <div class="flex flex-wrap justify-center gap-3">
           <span class="flex items-center gap-2 bg-white/[0.06] border border-white/[0.08] rounded-full px-4 py-2 text-sm text-gray-300">
             <LucideWallet :size="15" class="text-emerald-400" />
-            Cost breakdowns
+            {{ $t('hero.badgeCost') }}
           </span>
           <span class="flex items-center gap-2 bg-white/[0.06] border border-white/[0.08] rounded-full px-4 py-2 text-sm text-gray-300">
             <LucideThermometer :size="15" class="text-amber-400" />
-            Weather calendar
+            {{ $t('hero.badgeWeather') }}
           </span>
           <span class="flex items-center gap-2 bg-white/[0.06] border border-white/[0.08] rounded-full px-4 py-2 text-sm text-gray-300">
             <LucideWifi :size="15" class="text-cyan-400" />
-            Internet speed
+            {{ $t('hero.badgeInternet') }}
           </span>
           <span class="flex items-center gap-2 bg-white/[0.06] border border-white/[0.08] rounded-full px-4 py-2 text-sm text-gray-300">
             <LucideShieldCheck :size="15" class="text-emerald-400" />
-            Safety scores
+            {{ $t('hero.badgeSafety') }}
           </span>
         </div>
 
@@ -44,16 +43,16 @@
           href="#app"
           class="inline-flex items-center gap-2 bg-accent-500 hover:bg-accent-400 text-white font-semibold px-8 py-3.5 rounded-xl text-base"
         >
-          Explore Cities
+          {{ $t('hero.cta') }}
           <LucideChevronDown :size="18" />
         </a>
 
         <p class="text-xs text-gray-500 flex flex-wrap justify-center gap-x-3">
-          <span>500+ cities analyzed</span>
+          <span>{{ $t('hero.statCities') }}</span>
           <span class="text-gray-700">&middot;</span>
-          <span>Updated monthly</span>
+          <span>{{ $t('hero.statUpdated') }}</span>
           <span class="text-gray-700">&middot;</span>
-          <span>12+ data points per city</span>
+          <span>{{ $t('hero.statDataPoints') }}</span>
         </p>
       </div>
     </section>
@@ -68,8 +67,8 @@
           <SinglePicker
             name="orderBy"
             operation="equals"
-            :options="OPTIONS_ORDER_BY"
-            :customDefaultOption="OPTIONS_ORDER_BY[0]"
+            :options="translatedOrderByOptions"
+            :customDefaultOption="translatedOrderByOptions[0]"
           />
           <SortPicker />
         </div>
@@ -77,7 +76,7 @@
 
       <section class="flex max-md:flex-col gap-6 max-md:items-center">
         <aside class="rounded-2xl flex flex-col gap-3 w-full md:max-w-[268px]">
-          <h3 class="text-xl font-bold">Filters</h3>
+          <h3 class="text-xl font-bold">{{ $t('filters.title') }}</h3>
           <div
             @click="() => isClearFilter && router.push({ query: {} })"
             class="px-4 py-2 rounded-xl border text-center text-sm text-white"
@@ -86,7 +85,7 @@
               'cursor-not-allowed opacity-50 bg-gray-400 hover:bg-gray-400': !isClearFilter,
             }"
           >
-            Clear filters
+            {{ $t('filters.clear') }}
           </div>
           <MonthsPicker />
           <TemperaturesPicker />
@@ -110,10 +109,10 @@
             v-if="isClearFilter"
             class="text-sm flex gap-1 items-center"
           >
-            <b>Filters:</b>
+            <b>{{ $t('filters.filtersLabel') }}</b>
             <span>{{ Object.entries(queryParams).map(([key, value]) =>
               `${key.split('_').map(upperFirst).join(' ')} (${key === 'months'
-                ? new Date(2025, Number(value) - 1).toLocaleString('en-US', { month: 'long' }).toLowerCase()
+                ? new Date(2025, Number(value) - 1).toLocaleString(locale === 'pl' ? 'pl-PL' : 'en-US', { month: 'long' }).toLowerCase()
                 : `${filters?.pickers[key as keyof typeof filters['pickers']]?.operation === 'lte' ? '≤' : ''}${value}`.toLowerCase().split(',').join(', ').replace('gte:', '').replace('lte:', '')}${filters?.pickers[key as keyof typeof filters['pickers']]?.operation === 'gte' ? '≤' : ''})`).join(', ') }}
               </span>
           </div>
@@ -143,7 +142,7 @@
             <template v-else>
               <div class="relative w-full" v-for="city in cities?.data" :key="city.slug">
                 <NuxtLink
-                  :to="`/cities/${city.slug}`"
+                  :to="localePath({ name: 'cities-slug', params: { slug: city.slug } })"
                   class="bg-white cursor-pointer rounded-xl overflow-hidden border border-gray-200 w-full flex flex-col"
                 >
                   <!-- Photo -->
@@ -233,16 +232,16 @@
             class="w-16 h-16 rounded-full border-2 border-primary-200 flex-shrink-0"
           />
           <div>
-            <h4 class="font-semibold text-gray-900 mb-1">Built by Kamil</h4>
+            <h4 class="font-semibold text-gray-900 mb-1">{{ $t('about.builtBy') }}</h4>
             <p class="text-sm text-gray-600 mb-2">
-              I built this app to help digital nomads find the best cities to live, work, and thrive. It's actively evolving — your feedback shapes its future!
+              {{ $t('about.description') }}
             </p>
             <a
               href="mailto:kamilow97@gmail.com"
               class="inline-flex items-center gap-1 text-sm text-primary-700 hover:text-primary-800 font-medium"
             >
               <LucideMail :size="14" />
-              Share Feedback
+              {{ $t('about.shareFeedback') }}
             </a>
           </div>
         </div>
@@ -257,6 +256,16 @@ import upperFirst from 'lodash/upperFirst';
 import type { GetCitiesSchema } from '~/shared/global.schema';
 import { getUserCurrentMonthString, OPTIONS_ORDER_BY } from '~/shared/global.utils';
 
+defineI18nRoute({
+  paths: {
+    en: '/',
+    pl: '/',
+  },
+})
+
+const { locale, t } = useCustomI18n()
+const localePath = useLocalePath()
+
 useHead({
   script: [
     { src: 'https://beamback.whoisarjen.com/widget.js', 'data-api-key': 'ak_ED-ioa4wqla6_w1VdE6Hs', defer: true },
@@ -265,6 +274,10 @@ useHead({
 
 const route = useRoute()
 const router = useRouter()
+
+const translatedOrderByOptions = computed(() =>
+  OPTIONS_ORDER_BY.map(opt => ({ ...opt, label: t(`orderBy.${opt.value}`) }))
+)
 
 const isClearFilter = computed(() => Object.keys(route.query).length)
 const queryParams = computed(() => ({
@@ -289,9 +302,9 @@ const getSafetyDotColor = (level: Level | undefined | null) => {
 const formatSafetyLabel = (level: Level | undefined | null) => {
   if (!level) return 'N/A'
   const labels: Record<string, string> = {
-    HIGH: 'Safe',
-    MIDDLE: 'Moderate',
-    LOW: 'Caution',
+    HIGH: t('safety.safe'),
+    MIDDLE: t('safety.moderate'),
+    LOW: t('safety.caution'),
   }
   return labels[level] ?? level.toLowerCase()
 }

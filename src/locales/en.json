@@ -1,0 +1,113 @@
+{
+  "nav": {
+    "exploreCities": "Explore Cities",
+    "blog": "Blog"
+  },
+  "hero": {
+    "titleLine1": "Every city, decoded.",
+    "titleLine2": "Pick yours.",
+    "subtitle": "Compare cost of living, weather, internet speed, safety, and 12+ data points across 500+ cities — filtered to exactly what you need.",
+    "badgeCost": "Cost breakdowns",
+    "badgeWeather": "Weather calendar",
+    "badgeInternet": "Internet speed",
+    "badgeSafety": "Safety scores",
+    "cta": "Explore Cities",
+    "statCities": "500+ cities analyzed",
+    "statUpdated": "Updated monthly",
+    "statDataPoints": "12+ data points per city"
+  },
+  "filters": {
+    "title": "Filters",
+    "clear": "Clear filters",
+    "filtersLabel": "Filters:",
+    "months": "Months",
+    "temperatures": "Temperatures",
+    "weathers": "Weathers",
+    "regions": "Regions",
+    "prices": "Prices",
+    "to": "to",
+    "allPrefix": "All {name}"
+  },
+  "months": {
+    "jan": "Jan",
+    "feb": "Feb",
+    "mar": "Mar",
+    "apr": "Apr",
+    "may": "May",
+    "jun": "Jun",
+    "jul": "Jul",
+    "aug": "Aug",
+    "sep": "Sep",
+    "oct": "Oct",
+    "nov": "Nov",
+    "dec": "Dec"
+  },
+  "orderBy": {
+    "totalScore": "Total Score",
+    "costForNomadInUsd": "Cost of Living (Nomad)",
+    "internetSpeedCity": "Internet Speed",
+    "safety": "Safety Level",
+    "pollution": "Pollution Level",
+    "healthCare": "Healthcare Quality",
+    "purchasingPower": "Purchasing Power",
+    "propertyPriceToIncome": "Property Affordability",
+    "costOfLiving": "Cost of Living (Local)",
+    "trafficCommuteTime": "Traffic & Commute Time",
+    "population": "Population Size"
+  },
+  "levels": {
+    "low": "Low",
+    "middle": "Middle",
+    "high": "High"
+  },
+  "regions": {
+    "Europe": "Europe",
+    "Asia": "Asia",
+    "MiddleEast": "Middle East",
+    "LatinAmerica": "Latin America",
+    "NorthAmerica": "North America",
+    "Africa": "Africa",
+    "Oceania": "Oceania",
+    "Antarctica": "Antarctica"
+  },
+  "safety": {
+    "safe": "Safe",
+    "moderate": "Moderate",
+    "caution": "Caution"
+  },
+  "city": {
+    "nomadCost": "Nomad Cost",
+    "internet": "Internet",
+    "safety": "Safety",
+    "airQuality": "Air Quality",
+    "healthcare": "Healthcare",
+    "population": "Population",
+    "costOfLiving": "Cost of Living",
+    "nomad": "Nomad",
+    "expat": "Expat",
+    "local": "Local",
+    "family": "Family",
+    "internetInfrastructure": "Internet & Infrastructure",
+    "citySpeed": "City Speed",
+    "countrySpeed": "Country Speed",
+    "environmentHealth": "Environment & Health",
+    "airQualityNow": "Air Quality Now",
+    "airQualityScore": "Air Quality Score",
+    "humidity": "Humidity",
+    "pollution": "Pollution",
+    "climate": "Climate",
+    "qualityOfLife": "Quality of Life",
+    "monthlyWeather": "Monthly Weather"
+  },
+  "about": {
+    "builtBy": "Built by Kamil",
+    "description": "I built this app to help digital nomads find the best cities to live, work, and thrive. It's actively evolving — your feedback shapes its future!",
+    "shareFeedback": "Share Feedback"
+  },
+  "lang": {
+    "selectLanguage": "Select language"
+  },
+  "search": {
+    "placeholder": "Search for"
+  }
+}

@@ -17,8 +17,9 @@
 <script lang="ts" setup>
 import { SEARCH_BAR_MAXIMUM_Q_LENGTH } from '~/shared/global.utils';
 
+const { t } = useCustomI18n()
 const PLACEHOLDER_OPTIONS = ['Bangkok...', 'Shanghai...', 'Warsaw...', 'Thailand...', 'Japan...'];
-const typedPlaceholder = ref('Search for Bangkok...', );
+const typedPlaceholder = ref(`${t('search.placeholder')} Bangkok...`);
 
 const route = useRoute();
 const router = useRouter();
@@ -45,7 +46,7 @@ const typeEffect = () => {
     const currentCity = PLACEHOLDER_OPTIONS[cityIndex];
 
     if (!isDeleting) {
-      typedPlaceholder.value = `Search for ${currentCity.slice(0, charIndex++)}`;
+      typedPlaceholder.value = `${t('search.placeholder')} ${currentCity.slice(0, charIndex++)}`;
       if (charIndex > currentCity.length) {
         isDeleting = true;
         typingTimeout = setTimeout(typeNextChar, 1000); // Pause before deleting
@@ -53,7 +54,7 @@ const typeEffect = () => {
         typingTimeout = setTimeout(typeNextChar, 150);
       }
     } else {
-      typedPlaceholder.value = `Search for ${currentCity.slice(0, charIndex--)}`;
+      typedPlaceholder.value = `${t('search.placeholder')} ${currentCity.slice(0, charIndex--)}`;
       if (charIndex === 0) {
         isDeleting = false;
         cityIndex = (cityIndex + 1) % PLACEHOLDER_OPTIONS.length;

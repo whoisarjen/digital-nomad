@@ -1,5 +1,5 @@
 <template>
-  <div class="block text-sm font-medium text-gray-700">Regions</div>
+  <div class="block text-sm font-medium text-gray-700">{{ $t('filters.regions') }}</div>
   <div class="flex flex-wrap gap-1">
     <div
       v-for="region in OPTIONS_REGIONS"
@@ -10,7 +10,7 @@
         'custom-button-active': selectedOptions.includes(region.value),
       }"
     >
-      {{ region.label }}
+      {{ $t(`regions.${region.value}`) }}
     </div>
   </div>
 </template>

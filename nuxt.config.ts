@@ -1,4 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+import { LOCALES } from './src/constants/global.constant'
+
 export default defineNuxtConfig({
   srcDir: 'src/',
   compatibilityDate: '2024-11-01',
@@ -23,7 +25,27 @@ export default defineNuxtConfig({
     'nuxt-lucide-icons',
     '@nuxt/image',
     '@vueuse/nuxt',
+    '@nuxtjs/i18n',
   ],
+  i18n: {
+    baseUrl: 'https://nomad.whoisarjen.com',
+    detectBrowserLanguage: {
+      useCookie: true,
+      cookieKey: 'i18n_locale',
+      redirectOn: 'root',
+    },
+    locales: LOCALES.map(({ code, name }) => ({
+      code,
+      language: code,
+      file: `${code}.json`,
+      name,
+    })),
+    lazy: true,
+    langDir: '../src/locales',
+    defaultLocale: 'en',
+    strategy: 'prefix_except_default',
+    vueI18n: './src/i18n.config.ts',
+  },
   nitro: {
     vercel: {
       regions: ['fra1'],

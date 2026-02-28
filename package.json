@@ -31,6 +31,7 @@
   },
   "dependencies": {
     "@nuxt/image": "^1.10.0",
+    "@nuxtjs/i18n": "^10.2.3",
     "@nuxtjs/tailwindcss": "^6.13.2",
     "@prisma/adapter-neon": "^6.5.0",
     "@prisma/client": "^6.5.0",

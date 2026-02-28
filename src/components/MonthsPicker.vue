@@ -1,5 +1,5 @@
 <template>
-  <div class="block text-sm font-medium text-gray-700">Months</div>
+  <div class="block text-sm font-medium text-gray-700">{{ $t('filters.months') }}</div>
   <div class="flex flex-wrap gap-1">
     <div
       v-for="month in months"
@@ -18,23 +18,16 @@
 <script setup lang="ts">
 import { getUserCurrentMonthString } from '~/shared/global.utils';
 
+const { t } = useCustomI18n()
 const route = useRoute();
 const router = useRouter();
 
-const months = [
-  { value: '01', label: 'Jan' },
-  { value: '02', label: 'Feb' },
-  { value: '03', label: 'Mar' },
-  { value: '04', label: 'Apr' },
-  { value: '05', label: 'May' },
-  { value: '06', label: 'Jun' },
-  { value: '07', label: 'Jul' },
-  { value: '08', label: 'Aug' },
-  { value: '09', label: 'Sep' },
-  { value: '10', label: 'Oct' },
-  { value: '11', label: 'Nov' },
-  { value: '12', label: 'Dec' },
-];
+const MONTH_KEYS = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'] as const;
+
+const months = computed(() => MONTH_KEYS.map((key, i) => ({
+  value: String(i + 1).padStart(2, '0'),
+  label: t(`months.${key}`),
+})));
 
 const currentMonthString = computed(() => getUserCurrentMonthString())
 const selectedOption = ref<string | null>(route.query.months as string || currentMonthString.value);

@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col gap-2 w-full">
     <label class="block text-sm font-medium text-gray-700">
-      Prices
+      {{ $t('filters.prices') }}
     </label>
     <div class="flex items-center gap-2">
       <div class="relative w-full">
@@ -15,7 +15,7 @@
         />
         <span class="absolute right-2 top-1/2 transform -translate-y-1/2 text-sm">$</span>
       </div>
-      <span>to</span>
+      <span>{{ $t('filters.to') }}</span>
       <div class="relative w-full">
         <input
           type="number"
