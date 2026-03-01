@@ -18,11 +18,7 @@
       <p v-if="country" class="mt-1 text-lg text-gray-200 drop-shadow">
         {{ country }}<span v-if="region"> · {{ region.replace(/([A-Z])/g, ' $1').trim() }}</span>
       </p>
-      <div class="mt-2 text-[11px] text-white/0 group-hover:text-white/40 transition-colors duration-300">
-        <a target="_blank" rel="noopener noreferrer" :href="`https://unsplash.com/@${image.ownerUsername}?utm_source=Digital%20Nomad&utm_medium=referral`" class="hover:text-white/70 transition-colors">{{ image.ownerName }}</a>
-        <span class="mx-0.5">/</span>
-        <a target="_blank" rel="noopener noreferrer" href="https://unsplash.com/?utm_source=Digital%20Nomad&utm_medium=referral" class="hover:text-white/70 transition-colors">Unsplash</a>
-      </div>
+      <UnsplashCredit :owner-name="image.ownerName" :owner-username="image.ownerUsername" />
     </div>
   </section>
 </template>

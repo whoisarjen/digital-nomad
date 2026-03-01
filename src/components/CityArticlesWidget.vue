@@ -62,6 +62,7 @@
             <div v-else class="w-full h-full flex items-center justify-center">
               <LucideFileText :size="20" class="text-gray-300" />
             </div>
+            <UnsplashCredit v-if="article.featuredImageOwnerName" :owner-name="article.featuredImageOwnerName" :owner-username="article.featuredImageOwnerUsername" />
           </div>
           <div class="flex flex-col gap-1.5 py-1 min-w-0 flex-1">
             <h3 class="text-sm font-bold text-gray-900 leading-snug line-clamp-2 group-hover:text-primary-600 transition-colors">
