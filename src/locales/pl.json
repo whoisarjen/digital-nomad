@@ -1,6 +1,7 @@
 {
   "nav": {
     "exploreCities": "Odkryj miasta",
+    "compare": "Porównaj",
     "blog": "Blog"
   },
   "hero": {
@@ -200,7 +201,9 @@
     "statDataLabel": "wskaźników na miasto",
     "statAccessLabel": "pełny dostęp",
     "soon": "wkrótce",
-    "new": "nowość"
+    "new": "nowość",
+    "featureCompareTitle": "Porównanie miast",
+    "featureCompareDesc": "Porównaj dowolne dwa miasta obok siebie — koszty, pogoda, internet i więcej."
   },
   "favorites": {
     "save": "Zapisz",
@@ -210,8 +213,104 @@
     "signInRequired": "Zaloguj się, aby filtrować zapisane",
     "signInToSave": "Zaloguj się, aby zapisywać miasta"
   },
+  "compare": {
+    "title": "Porównaj miasta",
+    "subtitle": "Porównanie miast obok siebie dla cyfrowych nomadów",
+    "hubTitle": "Porównania miast",
+    "hubSubtitle": "Porównaj dowolne dwa miasta obok siebie — koszty, pogoda, internet, bezpieczeństwo i więcej",
+    "vs": "vs",
+    "metaTitle": "{cityA} vs {cityB} dla cyfrowych nomadów | Nomad Guide",
+    "metaDesc": "Porównaj {cityA} i {cityB} obok siebie — koszty życia, prędkość internetu, bezpieczeństwo, pogoda i jakość życia dla cyfrowych nomadów.",
+    "winner": "Lepszy",
+    "tie": "Remis",
+    "viewCity": "Zobacz profil miasta",
+    "compareWith": "Porównaj to miasto",
+    "popularComparisons": "Popularne porównania",
+    "pickCities": "Wybierz dwa miasta do porównania",
+    "compareNow": "Porównaj",
+    "searchCity": "Szukaj miasta...",
+    "costOfLiving": "Koszty życia",
+    "internetHeading": "Internet i infrastruktura",
+    "environmentHealth": "Środowisko i zdrowie",
+    "qualityOfLife": "Jakość życia",
+    "monthlyWeather": "Porównanie pogody miesięcznej",
+    "whoShouldChoose": "Kto powinien wybrać {city}?",
+    "overallVerdict": "Ogólny werdykt",
+    "dataAttribution": "Dane z Open-Meteo (pogoda), Numbeo (indeksy jakości) i globalnych rankingów prędkości internetu. Aktualizowane co miesiąc.",
+    "intro": {
+      "sameCountry": "{cityA} i {cityB} znajdują się w {countryA}, co czyni to jedno z najczęstszych porównań dla cyfrowych nomadów planujących bazę w regionie. Ten przewodnik przedstawia kluczowe różnice w kosztach, internecie, bezpieczeństwie, pogodzie i jakości życia.",
+      "sameRegion": "{cityA} ({countryA}) i {cityB} ({countryB}) leżą w regionie {regionA}, oferując różne podejście do życia nomada. Oto jak wypadają w najważniejszych kategoriach.",
+      "diffRegion": "{cityA} ({countryA}, {regionA}) i {cityB} ({countryB}, {regionB}) to zupełnie różne środowiska dla cyfrowych nomadów. To porównanie obejmuje koszty, łączność, bezpieczeństwo, pogodę i ogólną jakość życia."
+    },
+    "cost": {
+      "aWinsBig_v1": "{cityA} jest znacznie tańsze dla nomadów — ${costA}/mies. to {pct}% mniej niż ${costB}/mies. w {cityB}. Przez 12 miesięcy różnica wynosi ${annualSavings}.",
+      "aWinsBig_v2": "Nomadzi dbający o budżet: {cityA} kosztuje ${costA}/mies., oszczędzając {pct}% w porównaniu z ${costB}/mies. w {cityB} — to ${annualSavings} rocznie.",
+      "aWinsBig_v3": "Oszczędności są realne — {cityA} za ${costA}/mies. kosztuje {pct}% mniej niż {cityB} za ${costB}/mies., co daje ${annualSavings} rocznie.",
+      "aWinsSmall_v1": "{cityA} ma niewielką przewagę cenową — ${costA}/mies. wobec ${costB}/mies. w {cityB}, różnica {pct}% odczuwalna przy dłuższym pobycie.",
+      "aWinsSmall_v2": "Różnica w kosztach jest zauważalna: {cityA} za ${costA}/mies. jest {pct}% tańsze niż {cityB} za ${costB}/mies.",
+      "aWinsSmall_v3": "{cityA} wyprzedza cenowo — ${costA}/mies. wobec ${costB}/mies. w {cityB} — {pct}% różnicy, która ma znaczenie z czasem.",
+      "tied": "Oba miasta są w podobnym przedziale cenowym — {cityA} za ${costA}/mies. i {cityB} za ${costB}/mies. — sam koszt nie będzie tu decydujący.",
+      "bWinsSmall_v1": "{cityB} ma niewielką przewagę cenową — ${costB}/mies. wobec ${costA}/mies. w {cityA}, różnica {pct}% warta uwagi dla nomadów z budżetem.",
+      "bWinsSmall_v2": "Różnica w kosztach jest zauważalna: {cityB} za ${costB}/mies. jest {pct}% tańsze niż {cityA} za ${costA}/mies.",
+      "bWinsSmall_v3": "{cityB} wyprzedza cenowo — ${costB}/mies. wobec ${costA}/mies. w {cityA} — {pct}% różnicy, która ma znaczenie z czasem.",
+      "bWinsBig_v1": "{cityB} wygrywa budżetowo — ${costB}/mies. to {pct}% mniej niż ${costA}/mies. w {cityA}, oszczędność ${annualSavings} rocznie.",
+      "bWinsBig_v2": "Nomadzi dbający o budżet: {cityB} kosztuje ${costB}/mies., oszczędzając {pct}% w porównaniu z ${costA}/mies. w {cityA} — to ${annualSavings} rocznie.",
+      "bWinsBig_v3": "Oszczędności są realne — {cityB} za ${costB}/mies. kosztuje {pct}% mniej niż {cityA} za ${costA}/mies., co daje ${annualSavings} rocznie.",
+      "family": "Dla rodzin: {cityA} kosztuje ${famCostA}/mies. w porównaniu z ${famCostB}/mies. w {cityB}."
+    },
+    "internet": {
+      "aWinsBig_v1": "{cityA} prowadzi pod względem internetu — {speedA} Mbps (#{rankA} na świecie) wobec {speedB} Mbps (#{rankB}) w {cityB}. Różnica istotna przy pracy z wideo.",
+      "aWinsBig_v2": "Osoby pracujące zdalnie docenią {speedA} Mbps w {cityA} (#{rankA} globalnie) — znacznie szybciej niż {speedB} Mbps (#{rankB}) w {cityB}.",
+      "aWinsBig_v3": "Przy intensywnej pracy online {cityA} ma wyraźną przewagę — {speedA} Mbps (#{rankA}) wobec {speedB} Mbps (#{rankB}) w {cityB}.",
+      "aWinsSmall_v1": "{cityA} ma lekką przewagę internetową — {speedA} Mbps (#{rankA}) wobec {speedB} Mbps (#{rankB}) w {cityB}. Oba wystarczą do standardowej pracy zdalnej.",
+      "aWinsSmall_v2": "Prędkości internetu są porównywalne: {cityA} z {speedA} Mbps (#{rankA}) nieco wyprzedza {cityB} z {speedB} Mbps (#{rankB}).",
+      "aWinsSmall_v3": "{cityA} nieznacznie wyprzedza — {speedA} Mbps (#{rankA}) wobec {speedB} Mbps (#{rankB}) w {cityB} — niewielka różnica dla większości zadań.",
+      "tied": "Prędkości internetu są niemal identyczne — {cityA} z {speedA} Mbps i {cityB} z {speedB} Mbps. Oba obsłużą wideorozmowy bez problemu.",
+      "bWinsSmall_v1": "{cityB} ma lekką przewagę internetową — {speedB} Mbps (#{rankB}) wobec {speedA} Mbps (#{rankA}) w {cityA}. Oba wystarczą do standardowej pracy zdalnej.",
+      "bWinsSmall_v2": "Prędkości internetu są porównywalne: {cityB} z {speedB} Mbps (#{rankB}) nieco wyprzedza {cityA} z {speedA} Mbps (#{rankA}).",
+      "bWinsSmall_v3": "{cityB} nieznacznie wyprzedza — {speedB} Mbps (#{rankB}) wobec {speedA} Mbps (#{rankA}) w {cityA} — niewielka różnica dla większości zadań.",
+      "bWinsBig_v1": "{cityB} prowadzi pod względem internetu — {speedB} Mbps (#{rankB} na świecie) wobec {speedA} Mbps (#{rankA}) w {cityA}. Różnica istotna przy pracy z wideo.",
+      "bWinsBig_v2": "Osoby pracujące zdalnie docenią {speedB} Mbps w {cityB} (#{rankB} globalnie) — znacznie szybciej niż {speedA} Mbps (#{rankA}) w {cityA}.",
+      "bWinsBig_v3": "Przy intensywnej pracy online {cityB} ma wyraźną przewagę — {speedB} Mbps (#{rankB}) wobec {speedA} Mbps (#{rankA}) w {cityA}."
+    },
+    "safety": {
+      "tied": "Zarówno {cityA} jak i {cityB} mają taki sam poziom bezpieczeństwa — podróżnicy mogą czuć się komfortowo w obu miastach.",
+      "aWins": "{cityA} ma lepszy profil bezpieczeństwa niż {cityB}, co może być decydujące dla podróżujących solo lub z rodziną.",
+      "bWins": "{cityB} ma lepszy profil bezpieczeństwa niż {cityA}, co może być decydujące dla podróżujących solo lub z rodziną."
+    },
+    "healthcare": {
+      "tied": "Jakość opieki zdrowotnej jest podobna w {cityA} i {cityB}.",
+      "aWins": "{cityA} oferuje lepszą infrastrukturę medyczną niż {cityB} — ważne przy dłuższych pobytach.",
+      "bWins": "{cityB} oferuje lepszą infrastrukturę medyczną niż {cityA} — ważne przy dłuższych pobytach."
+    },
+    "weather": {
+      "narrative": "Najlepszy czas na wizytę w {cityA} to {bestMonthA} (około {tempA} stopni, {rainA}mm opadów, wynik {scoreA}), natomiast {cityB} osiąga szczyt w {bestMonthB} ({tempB} stopni, {rainB}mm opadów, wynik {scoreB}). Dopasowanie terminu pobytu do tych miesięcy może znacząco wpłynąć na komfort."
+    },
+    "profile": {
+      "budgetNomad": "Świetne dla nomadów z budżetem — koszty około ${cost}/mies.",
+      "bandwidthWork": "Doskonałe do wideorozmów i dużych plików z {speed} Mbps",
+      "safetySeeking": "Wysoki poziom bezpieczeństwa dla spokoju ducha",
+      "cleanAir": "Czyste powietrze — {score}/5 w skali jakości",
+      "familyNomad": "Przyjazne rodzinom — ${cost}/mies. dla rodzin",
+      "bigCityEnergy": "Energia dużego miasta z {pop} mieszkańców",
+      "smallTownFeel": "Klimat mniejszego miasta z {pop} mieszkańców",
+      "bestSeason": "Szczyt sezonu w {month} — {temp} stopni, wynik {score}"
+    },
+    "verdict": {
+      "aWins_v1": "Ogólnie {cityA} wypada lepiej dla większości cyfrowych nomadów. {cityB} ma swoje atuty, ale {cityA} oferuje lepszą kombinację kosztów, infrastruktury i jakości życia.",
+      "aWins_v2": "Dla typowego nomada {cityA} to mocniejszy wybór. {cityB} warto rozważyć w specyficznych przypadkach, ale {cityA} wygrywa w kluczowych kategoriach.",
+      "aWins_v3": "Dane wskazują na {cityA} jako bardziej wszechstronny wybór dla osób pracujących zdalnie. {cityB} konkuruje w niektórych obszarach, ale {cityA} wygrywa na bilansie.",
+      "bWins_v1": "Ogólnie {cityB} wypada lepiej dla większości cyfrowych nomadów. {cityA} ma swoje atuty, ale {cityB} oferuje lepszą kombinację kosztów, infrastruktury i jakości życia.",
+      "bWins_v2": "Dla typowego nomada {cityB} to mocniejszy wybór. {cityA} warto rozważyć w specyficznych przypadkach, ale {cityB} wygrywa w kluczowych kategoriach.",
+      "bWins_v3": "Dane wskazują na {cityB} jako bardziej wszechstronny wybór dla osób pracujących zdalnie. {cityA} konkuruje w niektórych obszarach, ale {cityB} wygrywa na bilansie.",
+      "tied_v1": "To naprawdę wyrównane. Zarówno {cityA} jak i {cityB} oferują świetną wartość dla nomadów — właściwy wybór zależy od Twoich priorytetów.",
+      "tied_v2": "Nie ma tu wyraźnego zwycięzcy — {cityA} i {cityB} celują w różnych kategoriach. Idealny wybór zależy od tego, co jest dla Ciebie najważniejsze.",
+      "tied_v3": "{cityA} i {cityB} są dobrze dopasowane ogólnie. Budżet, preferencje pogodowe i styl życia będą decydujące."
+    }
+  },
   "footer": {
     "exploreCities": "Odkryj miasta",
+    "compare": "Porównaj miasta",
     "blog": "Blog",
     "joinCommunity": "Dołącz do społeczności",
     "copyright": "Digital Nomad"

@@ -155,36 +155,37 @@
               <h3 class="font-semibold mb-1.5">{{ $t('landing.featureDataTitle') }}</h3>
               <p class="text-sm text-gray-400 leading-relaxed">{{ $t('landing.featureDataDesc') }}</p>
             </div>
-            <!-- Updated Monthly (soon) -->
-            <div class="bg-white/[0.04] border border-white/[0.06] rounded-2xl p-6 hover:bg-white/[0.07] transition-colors relative">
-              <span class="absolute top-4 right-4 text-[10px] font-semibold rounded-full px-2.5 py-0.5 bg-accent-500/15 text-accent-400">{{ $t('landing.soon') }}</span>
+            <!-- Updated Monthly -->
+            <div class="bg-white/[0.04] border border-white/[0.06] rounded-2xl p-6 hover:bg-white/[0.07] transition-colors">
               <div class="size-10 rounded-xl bg-accent-500/10 flex items-center justify-center mb-4">
                 <LucideCalendar :size="20" class="text-accent-400" />
               </div>
               <h3 class="font-semibold mb-1.5">{{ $t('landing.featureUpdatedTitle') }}</h3>
               <p class="text-sm text-gray-400 leading-relaxed">{{ $t('landing.featureUpdatedDesc') }}</p>
             </div>
-            <!-- Saved cities (new) -->
+            <!-- Saved cities -->
             <NuxtLink
               :to="localePath(isLoggedIn ? 'dashboard' : 'join')"
-              class="bg-white/[0.04] border border-white/[0.06] rounded-2xl p-6 hover:bg-white/[0.07] transition-colors relative block"
+              class="bg-white/[0.04] border border-white/[0.06] rounded-2xl p-6 hover:bg-white/[0.07] transition-colors block"
             >
-              <span class="absolute top-4 right-4 text-[10px] font-semibold rounded-full px-2.5 py-0.5 bg-emerald-500/15 text-emerald-400">{{ $t('landing.new') }}</span>
               <div class="size-10 rounded-xl bg-rose-500/10 flex items-center justify-center mb-4">
                 <LucideHeart :size="20" class="text-rose-400" />
               </div>
               <h3 class="font-semibold mb-1.5">Saved cities</h3>
               <p class="text-sm text-gray-400 leading-relaxed">Save cities to your personal list for quick access</p>
             </NuxtLink>
-            <!-- City comparison (soon) -->
-            <div class="bg-white/[0.04] border border-white/[0.06] rounded-2xl p-6 hover:bg-white/[0.07] transition-colors relative">
-              <span class="absolute top-4 right-4 text-[10px] font-semibold rounded-full px-2.5 py-0.5 bg-accent-500/15 text-accent-400">{{ $t('landing.soon') }}</span>
-              <div class="size-10 rounded-xl bg-white/[0.06] flex items-center justify-center mb-4">
-                <LucideSparkles :size="20" class="text-gray-400" />
+            <!-- City comparison -->
+            <NuxtLink
+              :to="localePath('compare')"
+              class="bg-white/[0.04] border border-white/[0.06] rounded-2xl p-6 hover:bg-white/[0.07] transition-colors relative block"
+            >
+              <span class="absolute top-4 right-4 text-[10px] font-semibold rounded-full px-2.5 py-0.5 bg-emerald-500/15 text-emerald-400">{{ $t('landing.new') }}</span>
+              <div class="size-10 rounded-xl bg-primary-500/10 flex items-center justify-center mb-4">
+                <LucideSparkles :size="20" class="text-primary-400" />
               </div>
-              <h3 class="font-semibold mb-1.5">City vs City comparison</h3>
-              <p class="text-sm text-gray-400 leading-relaxed">Compare two cities side by side across all metrics</p>
-            </div>
+              <h3 class="font-semibold mb-1.5">{{ $t('landing.featureCompareTitle') }}</h3>
+              <p class="text-sm text-gray-400 leading-relaxed">{{ $t('landing.featureCompareDesc') }}</p>
+            </NuxtLink>
             <!-- Monthly cost alerts (soon) -->
             <div class="bg-white/[0.04] border border-white/[0.06] rounded-2xl p-6 hover:bg-white/[0.07] transition-colors relative">
               <span class="absolute top-4 right-4 text-[10px] font-semibold rounded-full px-2.5 py-0.5 bg-accent-500/15 text-accent-400">{{ $t('landing.soon') }}</span>
@@ -249,10 +250,7 @@
                 </div>
               </div>
             </NuxtLink>
-            <!-- Photo credit -->
-            <div v-if="city.imageOwnerName" class="absolute top-0 left-0 right-0 z-20 text-[10px] text-white/60 text-center py-1 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity">
-              <a target="_blank" :href="`https://unsplash.com/@${city.imageOwnerUsername}?utm_source=Digital%20Nomad&utm_medium=referral`" class="hover:text-white">{{ city.imageOwnerName }}</a> / <a target="_blank" href="https://unsplash.com/?utm_source=Digital%20Nomad&utm_medium=referral" class="hover:text-white">Unsplash</a>
-            </div>
+            <UnsplashCredit v-if="city.imageOwnerName" :owner-name="city.imageOwnerName" :owner-username="city.imageOwnerUsername" position="bottom-right" />
           </div>
         </div>
       </div>
@@ -426,10 +424,7 @@
                     </AuthContainer>
                   </div>
 
-                  <!-- Photo credit -->
-                  <div v-if="city.image" class="absolute top-0 left-0 right-0 z-20 text-[10px] text-white/60 text-center py-1 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <a target="_blank" :href="`https://unsplash.com/@${city.image.ownerUsername}?utm_source=Digital%20Nomad&utm_medium=referral`" class="hover:text-white">{{ city.image.ownerName }}</a> / <a target="_blank" href="https://unsplash.com/?utm_source=Digital%20Nomad&utm_medium=referral" class="hover:text-white">Unsplash</a>
-                  </div>
+                  <UnsplashCredit v-if="city.image" :owner-name="city.image.ownerName" :owner-username="city.image.ownerUsername" position="bottom-right" />
                 </div>
               </template>
             </div>

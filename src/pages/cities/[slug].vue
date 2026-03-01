@@ -108,9 +108,7 @@
               class="absolute inset-0 w-full h-full object-cover"
             />
             <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
-            <div class="absolute bottom-0 right-0 text-[10px] text-white/60 py-1 px-2.5 bg-black/40 rounded-tl-lg opacity-0 group-hover/img:opacity-100 transition-opacity">
-              <a target="_blank" :href="`https://unsplash.com/@${heroImage.ownerUsername}?utm_source=Digital%20Nomad&utm_medium=referral`" class="hover:text-white">{{ heroImage.ownerName }}</a> / <a target="_blank" href="https://unsplash.com/?utm_source=Digital%20Nomad&utm_medium=referral" class="hover:text-white">Unsplash</a>
-            </div>
+            <UnsplashCredit :owner-name="heroImage.ownerName" :owner-username="heroImage.ownerUsername" />
           </div>
 
           <!-- ─── Key Metrics Strip ─── -->
@@ -341,8 +339,19 @@
           <!-- ─── Related Articles ─── -->
           <CityArticlesWidget :city-slug="citySlug" />
 
+          <!-- ─── Compare CTA ─── -->
+          <div class="mt-10">
+            <NuxtLink
+              :to="localePath('compare')"
+              class="inline-flex items-center gap-2 text-sm font-medium text-primary-600 hover:text-primary-700 transition-colors"
+            >
+              <LucideSparkles :size="14" />
+              {{ $t('compare.compareWith') }}
+            </NuxtLink>
+          </div>
+
           <!-- ─── Back to Explore ─── -->
-          <div class="mt-10 pb-4">
+          <div class="mt-4 pb-4">
             <NuxtLink
               :to="localePath('index')"
               class="inline-flex items-center gap-2 text-sm font-medium text-gray-400 hover:text-primary-600 transition-colors"

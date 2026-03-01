@@ -180,6 +180,24 @@ export const voteSchema = z.object({
     featureId: z.string().min(1),
 });
 
+// Compare schemas
+
+export const getCompareSchema = z.object({
+    slugs: z
+        .string()
+        .regex(/^[a-z0-9-]+-vs-[a-z0-9-]+$/, 'Invalid comparison format (expected city1-vs-city2)')
+        .transform((val) => {
+            const vsIndex = val.indexOf('-vs-')
+            return {
+                city1: val.slice(0, vsIndex),
+                city2: val.slice(vsIndex + 4),
+                raw: val,
+            }
+        }),
+})
+
+export type GetCompareSchema = z.infer<typeof getCompareSchema>
+
 // Favorites schemas
 
 export const favoriteToggleSchema = z.object({
