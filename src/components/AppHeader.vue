@@ -9,7 +9,7 @@
           alt="Digital Nomad"
           class="h-8 w-8"
         />
-        <span class="text-lg font-bold text-white">
+        <span class="hidden sm:inline text-lg font-bold text-white">
           Digital<span class="text-primary-400">Nomad</span>
         </span>
       </NuxtLink>
