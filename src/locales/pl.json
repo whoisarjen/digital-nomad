@@ -119,7 +119,8 @@
     "relatedArticles": "Powiązane artykuły",
     "noArticles": "Brak artykułów",
     "faqTitle": "Najczęściej zadawane pytania",
-    "backToBlog": "Wróć do bloga"
+    "backToBlog": "Wróć do bloga",
+    "latestPost": "Najnowszy"
   },
   "auth": {
     "signUp": "Rejestracja",

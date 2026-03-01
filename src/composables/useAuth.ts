@@ -20,6 +20,9 @@ export function useAuth() {
     error: null,
   }))
 
+  const router = useRouter()
+  const route = useRoute()
+
   const isAuthenticated = computed(() => !!authState.value.user)
 
   function signInWithGoogle() {
@@ -37,7 +40,7 @@ export function useAuth() {
         body: { email, password },
       })
       authState.value.user = data.user
-      await useRouter().push('/dashboard')
+      await router.push('/dashboard')
     } catch (err: any) {
       authState.value.error = err?.data?.message || 'Login failed'
       throw err
@@ -55,7 +58,7 @@ export function useAuth() {
         body: { email, password, name, referralCode },
       })
       authState.value.user = data.user
-      await useRouter().push('/dashboard')
+      await router.push('/dashboard')
     } catch (err: any) {
       authState.value.error = err?.data?.message || 'Registration failed'
       throw err
@@ -72,7 +75,7 @@ export function useAuth() {
     } finally {
       authState.value.user = null
       useCookie('nomad_logged_in').value = null
-      await useRouter().push('/')
+      await router.push('/')
     }
   }
 
@@ -92,12 +95,12 @@ export function useAuth() {
     } finally {
       authState.value.user = null
       useCookie('nomad_logged_in').value = null
-      await useRouter().push('/')
+      await router.push('/')
     }
   }
 
   function checkOAuthError() {
-    const error = useRoute().query.error as string | undefined
+    const error = route.query.error as string | undefined
     if (error) {
       const messages: Record<string, string> = {
         access_denied: 'Sign-in was cancelled.',

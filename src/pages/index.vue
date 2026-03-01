@@ -73,10 +73,10 @@
               <LucideChevronDown :size="18" />
             </a>
             <NuxtLink
-              :to="localePath('join')"
+              :to="localePath(isLoggedIn ? 'dashboard' : 'join')"
               class="inline-flex items-center gap-2 bg-white/[0.06] hover:bg-white/[0.1] border border-white/[0.12] text-white font-semibold px-8 py-3.5 rounded-xl text-base transition-all"
             >
-              {{ $t('landing.ctaJoin') }}
+              {{ isLoggedIn ? $t('dashboard.title') : $t('landing.ctaJoin') }}
               <LucideArrowRight :size="18" />
             </NuxtLink>
           </div>
@@ -180,7 +180,7 @@
           </div>
 
           <!-- Join to vote -->
-          <div class="mt-8 text-center">
+          <div v-if="!isLoggedIn" class="mt-8 text-center">
             <NuxtLink
               :to="localePath('join')"
               class="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-white transition-colors"
@@ -211,16 +211,12 @@
               :to="localePath({ name: 'cities-slug', params: { slug: city.slug } })"
               class="absolute inset-0 z-10"
             >
-              <NuxtImg
+              <img
                 v-if="city.imageUrl"
-                provider="unsplash"
-                :src="city.imageUrl.replace('https://images.unsplash.com', '')"
+                :src="unsplashUrl(city.imageUrl, 440, 586)"
                 :alt="city.name"
                 class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 loading="lazy"
-                quality="70"
-                width="300"
-                height="400"
               />
               <div v-else class="absolute inset-0 bg-gray-200" />
               <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
@@ -238,7 +234,7 @@
               </div>
             </NuxtLink>
             <!-- Photo credit -->
-            <div v-if="city.imageOwnerName" class="absolute top-0 right-0 z-20 text-[10px] text-white/70 bg-black/40 py-0.5 px-1.5 rounded-bl-md">
+            <div v-if="city.imageOwnerName" class="absolute top-0 left-0 right-0 z-20 text-[10px] text-white/60 text-center py-1 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity">
               <a target="_blank" :href="`https://unsplash.com/@${city.imageOwnerUsername}?utm_source=Digital%20Nomad&utm_medium=referral`" class="hover:text-white">{{ city.imageOwnerName }}</a> / <a target="_blank" href="https://unsplash.com/?utm_source=Digital%20Nomad&utm_medium=referral" class="hover:text-white">Unsplash</a>
             </div>
           </div>
@@ -332,16 +328,12 @@
                     :to="localePath({ name: 'cities-slug', params: { slug: city.slug } })"
                     class="absolute inset-0 z-10"
                   >
-                    <NuxtImg
-                      provider="unsplash"
-                      :src="city.image?.url.replace('https://images.unsplash.com', '')"
+                    <img
+                      v-if="city.image?.url"
+                      :src="unsplashUrl(city.image.url, 400, 530)"
                       :alt="city.name"
                       class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                       loading="lazy"
-                      quality="75"
-                      width="400"
-                      height="530"
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
                     />
                     <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
 
@@ -385,7 +377,7 @@
                   </NuxtLink>
 
                   <!-- Photo credit -->
-                  <div v-if="city.image" class="absolute top-0 right-0 z-20 text-[10px] text-white/70 bg-black/40 py-0.5 px-1.5 rounded-bl-md hidden group-hover:block">
+                  <div v-if="city.image" class="absolute top-0 left-0 right-0 z-20 text-[10px] text-white/60 text-center py-1 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity">
                     <a target="_blank" :href="`https://unsplash.com/@${city.image.ownerUsername}?utm_source=Digital%20Nomad&utm_medium=referral`" class="hover:text-white">{{ city.image.ownerName }}</a> / <a target="_blank" href="https://unsplash.com/?utm_source=Digital%20Nomad&utm_medium=referral" class="hover:text-white">Unsplash</a>
                   </div>
                 </div>
@@ -430,6 +422,17 @@ const localePath = useLocalePath()
 
 const route = useRoute()
 const router = useRouter()
+
+const isLoggedIn = computed(() => {
+  if (import.meta.server) return false
+  return useCookie('nomad_logged_in').value === 'true'
+})
+
+const unsplashUrl = (raw: string, w: number, h: number) => {
+  if (!raw) return ''
+  const sep = raw.includes('?') ? '&' : '?'
+  return `${raw}${sep}w=${w}&h=${h}&fit=crop&auto=format&q=75`
+}
 
 const hasFilters = computed(() => Object.keys(route.query).length > 0)
 

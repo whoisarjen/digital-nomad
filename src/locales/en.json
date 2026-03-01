@@ -119,7 +119,8 @@
     "relatedArticles": "Related Articles",
     "noArticles": "No articles found",
     "faqTitle": "Frequently Asked Questions",
-    "backToBlog": "Back to Blog"
+    "backToBlog": "Back to Blog",
+    "latestPost": "Latest"
   },
   "auth": {
     "signUp": "Sign Up",

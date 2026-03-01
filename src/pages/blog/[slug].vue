@@ -1,83 +1,112 @@
 <template>
-  <div class="min-h-screen bg-gray-100 text-gray-900">
+  <div class="min-h-screen bg-[#060E1B]">
     <!-- Loading -->
     <template v-if="!data || status !== 'success'">
-      <div class="h-[400px] skeleton rounded-none" />
-      <div class="max-w-screen-md mx-auto p-6 flex flex-col gap-4">
-        <div class="h-8 skeleton w-3/4" />
-        <div class="h-4 skeleton w-1/3" />
-        <div class="h-4 skeleton w-full mt-4" />
-        <div class="h-4 skeleton w-full" />
-        <div class="h-4 skeleton w-2/3" />
+      <section class="pt-24 pb-16 px-6">
+        <div class="max-w-screen-md mx-auto flex flex-col gap-4">
+          <div class="h-3 skeleton w-32" />
+          <div class="h-10 skeleton w-3/4" />
+          <div class="h-4 skeleton w-1/3" />
+        </div>
+      </section>
+      <div class="bg-gray-50 rounded-t-[2rem] -mt-2 relative z-10">
+        <div class="max-w-screen-md mx-auto px-6 py-12 flex flex-col gap-4">
+          <div class="h-4 skeleton w-full" />
+          <div class="h-4 skeleton w-full" />
+          <div class="h-4 skeleton w-2/3" />
+          <div class="h-64 skeleton w-full mt-4 rounded-xl" />
+          <div class="h-4 skeleton w-full mt-4" />
+          <div class="h-4 skeleton w-full" />
+          <div class="h-4 skeleton w-1/2" />
+        </div>
       </div>
     </template>
 
     <!-- Article -->
     <template v-else>
-      <!-- Hero image -->
-      <section v-if="data.featuredImageUrl" class="relative h-[400px] overflow-hidden bg-gray-200">
-        <img
-          :src="data.featuredImageUrl"
-          :alt="localizedField(data, 'title')"
-          class="w-full h-full object-cover"
-        />
-        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
-      </section>
+      <!-- Header zone -->
+      <section class="relative pt-24 pb-16 px-6 overflow-hidden">
+        <div class="absolute inset-0 opacity-40" style="background-image: url(&quot;data:image/svg+xml,%3Csvg width='24' height='24' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='12' cy='12' r='1' fill='rgba(255,255,255,0.025)'/%3E%3C/svg%3E&quot;);" />
+        <div class="absolute -top-[20%] -right-[10%] w-[40%] h-[40%] rounded-full bg-primary-500/[0.06] blur-[100px]" />
 
-      <article class="max-w-screen-md mx-auto px-6 pb-12" :class="data.featuredImageUrl ? '-mt-20 relative z-10' : 'pt-20'">
-        <!-- Back link -->
-        <NuxtLink
-          :to="localePath({ name: 'blog' })"
-          class="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 mb-4"
-          :class="data.featuredImageUrl ? 'text-white/80 hover:text-white' : ''"
-        >
-          <LucideArrowLeft :size="14" />
-          {{ $t('blog.backToBlog') }}
-        </NuxtLink>
+        <div class="relative max-w-screen-md mx-auto">
+          <!-- Breadcrumb -->
+          <div class="flex items-center gap-3 mb-6">
+            <NuxtLink :to="localePath('index')" class="text-sm text-white/40 hover:text-white/70 transition-colors">
+              {{ $t('nav.exploreCities') }}
+            </NuxtLink>
+            <span class="text-white/20">/</span>
+            <NuxtLink :to="localePath({ name: 'blog' })" class="text-sm text-white/40 hover:text-white/70 transition-colors">
+              {{ $t('blog.title') }}
+            </NuxtLink>
+            <span class="text-white/20">/</span>
+            <span class="text-sm text-primary-400 truncate max-w-[200px]">{{ localizedField(data, 'title') }}</span>
+          </div>
 
-        <!-- Title card -->
-        <div class="bg-white rounded-xl shadow-sm p-6 sm:p-8 border border-gray-200">
-          <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 leading-tight">
+          <!-- Title -->
+          <h1 class="text-3xl sm:text-4xl font-bold text-white leading-tight tracking-tight">
             {{ localizedField(data, 'title') }}
           </h1>
 
           <!-- Meta -->
-          <div class="flex flex-wrap items-center gap-3 mt-3 text-sm text-gray-500">
-            <time v-if="data.publishedAt" :datetime="data.publishedAt" class="flex items-center gap-1">
-              <LucideCalendar :size="14" />
+          <div class="flex flex-wrap items-center gap-4 mt-4 text-sm text-white/40">
+            <time v-if="data.publishedAt" :datetime="data.publishedAt" class="flex items-center gap-1.5">
+              <LucideCalendar :size="14" class="text-white/30" />
               {{ formatDate(data.publishedAt) }}
             </time>
-            <span class="flex items-center gap-1">
-              <LucideClock :size="14" />
+            <span class="flex items-center gap-1.5">
+              <LucideClock :size="14" class="text-white/30" />
               {{ $t('blog.minRead', { min: data.readingTimeMinutes }) }}
             </span>
           </div>
 
           <!-- City tags -->
-          <div v-if="data.cities?.length" class="flex flex-wrap gap-2 mt-4">
+          <div v-if="data.cities?.length" class="flex flex-wrap gap-2 mt-5">
             <NuxtLink
               v-for="mapping in data.cities"
               :key="mapping.city.slug"
               :to="localePath({ name: 'cities-slug', params: { slug: mapping.city.slug } })"
-              class="inline-flex items-center gap-1 bg-gray-100 hover:bg-gray-200 rounded-full px-3 py-1 text-xs font-medium text-gray-600 transition-colors"
+              class="inline-flex items-center gap-1.5 bg-white/[0.06] hover:bg-white/[0.1] border border-white/[0.08] rounded-full px-3.5 py-1.5 text-xs font-medium text-white/70 hover:text-white transition-colors"
             >
-              <LucideMapPin :size="12" />
+              <LucideMapPin :size="12" class="text-primary-400" />
               {{ mapping.city.name }}, {{ mapping.city.country }}
             </NuxtLink>
           </div>
         </div>
+      </section>
 
-        <!-- Content -->
-        <div
-          class="bg-white rounded-xl shadow-sm p-6 sm:p-8 border border-gray-200 mt-6 article-content"
-          v-html="localizedField(data, 'content')"
-        />
+      <!-- Content zone -->
+      <div class="bg-gray-50 rounded-t-[2rem] -mt-2 relative z-10">
+        <article class="max-w-screen-md mx-auto px-6 py-12">
+          <!-- Hero image -->
+          <div v-if="data.featuredImageUrl" class="relative -mt-20 mb-10 rounded-2xl overflow-hidden shadow-xl aspect-[2/1]">
+            <img
+              :src="data.featuredImageUrl"
+              :alt="localizedField(data, 'title')"
+              class="w-full h-full object-cover"
+            />
+          </div>
 
-        <!-- FAQ -->
-        <div class="mt-6">
-          <ArticleFaq v-if="data.faqs?.length" :faqs="data.faqs" />
-        </div>
-      </article>
+          <!-- Article content -->
+          <div class="article-content" v-html="localizedField(data, 'content')" />
+
+          <!-- FAQ -->
+          <div v-if="data.faqs?.length" class="mt-12 pt-10 border-t border-gray-200">
+            <ArticleFaq :faqs="data.faqs" />
+          </div>
+
+          <!-- Back to blog -->
+          <div class="mt-12 pt-8 border-t border-gray-200">
+            <NuxtLink
+              :to="localePath({ name: 'blog' })"
+              class="inline-flex items-center gap-2 text-sm font-medium text-gray-500 hover:text-primary-600 transition-colors"
+            >
+              <LucideArrowLeft :size="14" />
+              {{ $t('blog.backToBlog') }}
+            </NuxtLink>
+          </div>
+        </article>
+      </div>
     </template>
   </div>
 </template>
@@ -195,25 +224,25 @@ const formatDate = (date: string) => {
 </script>
 
 <style scoped>
-.article-content :deep(h1) { font-size: 1.75rem; font-weight: 700; margin-top: 2rem; margin-bottom: 0.75rem; color: #111827; }
-.article-content :deep(h2) { font-size: 1.375rem; font-weight: 700; margin-top: 1.75rem; margin-bottom: 0.5rem; color: #111827; }
-.article-content :deep(h3) { font-size: 1.125rem; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.5rem; color: #111827; }
-.article-content :deep(p) { margin-bottom: 1rem; line-height: 1.75; color: #374151; }
+.article-content :deep(h1) { font-size: 1.875rem; font-weight: 700; margin-top: 2.5rem; margin-bottom: 0.75rem; color: #111827; letter-spacing: -0.01em; }
+.article-content :deep(h2) { font-size: 1.5rem; font-weight: 700; margin-top: 2rem; margin-bottom: 0.75rem; color: #111827; letter-spacing: -0.01em; }
+.article-content :deep(h3) { font-size: 1.25rem; font-weight: 600; margin-top: 1.75rem; margin-bottom: 0.5rem; color: #111827; }
+.article-content :deep(p) { margin-bottom: 1.25rem; line-height: 1.8; color: #374151; font-size: 1.0625rem; }
 .article-content :deep(ul),
-.article-content :deep(ol) { margin-bottom: 1rem; padding-left: 1.5rem; color: #374151; }
-.article-content :deep(li) { margin-bottom: 0.25rem; line-height: 1.75; }
+.article-content :deep(ol) { margin-bottom: 1.25rem; padding-left: 1.5rem; color: #374151; }
+.article-content :deep(li) { margin-bottom: 0.375rem; line-height: 1.8; font-size: 1.0625rem; }
 .article-content :deep(ul) { list-style-type: disc; }
 .article-content :deep(ol) { list-style-type: decimal; }
-.article-content :deep(a) { color: #2A9D8F; text-decoration: underline; }
+.article-content :deep(a) { color: #2A9D8F; text-decoration: underline; text-underline-offset: 2px; }
 .article-content :deep(a:hover) { color: #1E7D72; }
-.article-content :deep(blockquote) { border-left: 3px solid #d1d5db; padding-left: 1rem; margin-bottom: 1rem; color: #6b7280; font-style: italic; }
+.article-content :deep(blockquote) { border-left: 3px solid #2A9D8F; padding-left: 1.25rem; margin: 1.5rem 0; color: #6b7280; font-style: italic; background: #f9fafb; padding: 1rem 1.25rem; border-radius: 0 0.5rem 0.5rem 0; }
 .article-content :deep(img) { max-width: 100%; height: auto; border-radius: 0.75rem; margin: 1.5rem 0; }
-.article-content :deep(pre) { background: #1f2937; color: #e5e7eb; padding: 1rem; border-radius: 0.5rem; overflow-x: auto; margin-bottom: 1rem; font-size: 0.875rem; }
-.article-content :deep(code) { background: #f3f4f6; padding: 0.125rem 0.375rem; border-radius: 0.25rem; font-size: 0.875rem; }
-.article-content :deep(pre code) { background: transparent; padding: 0; }
-.article-content :deep(hr) { border: none; border-top: 1px solid #e5e7eb; margin: 2rem 0; }
-.article-content :deep(table) { width: 100%; border-collapse: collapse; margin-bottom: 1rem; }
+.article-content :deep(pre) { background: #0f172a; color: #e2e8f0; padding: 1.25rem; border-radius: 0.75rem; overflow-x: auto; margin-bottom: 1.25rem; font-size: 0.875rem; border: 1px solid #1e293b; }
+.article-content :deep(code) { background: #f1f5f9; padding: 0.125rem 0.375rem; border-radius: 0.25rem; font-size: 0.875rem; color: #0f172a; }
+.article-content :deep(pre code) { background: transparent; padding: 0; color: inherit; }
+.article-content :deep(hr) { border: none; border-top: 1px solid #e5e7eb; margin: 2.5rem 0; }
+.article-content :deep(table) { width: 100%; border-collapse: collapse; margin-bottom: 1.25rem; border-radius: 0.5rem; overflow: hidden; }
 .article-content :deep(th),
-.article-content :deep(td) { border: 1px solid #e5e7eb; padding: 0.5rem 0.75rem; text-align: left; }
-.article-content :deep(th) { background: #f9fafb; font-weight: 600; }
+.article-content :deep(td) { border: 1px solid #e5e7eb; padding: 0.625rem 0.875rem; text-align: left; font-size: 0.9375rem; }
+.article-content :deep(th) { background: #f8fafc; font-weight: 600; color: #111827; }
 </style>
