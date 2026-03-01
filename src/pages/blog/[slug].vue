@@ -79,12 +79,15 @@
       <div class="bg-gray-50 rounded-t-[2rem] -mt-2 relative z-10">
         <article class="max-w-screen-md mx-auto px-6 py-12">
           <!-- Hero image -->
-          <div v-if="data.featuredImageUrl" class="relative -mt-20 mb-10 rounded-2xl overflow-hidden shadow-xl aspect-[2/1]">
+          <div v-if="data.featuredImageUrl" class="relative -mt-20 mb-10 rounded-2xl overflow-hidden shadow-xl aspect-[2/1] group/img">
             <img
               :src="data.featuredImageUrl"
               :alt="localizedField(data, 'title')"
               class="w-full h-full object-cover"
             />
+            <div v-if="data.featuredImageOwnerName" class="absolute top-0 left-0 right-0 z-20 text-[10px] text-white/60 text-center py-1 bg-black/30 opacity-0 group-hover/img:opacity-100 transition-opacity">
+              <a target="_blank" :href="`https://unsplash.com/@${data.featuredImageOwnerUsername}?utm_source=Digital%20Nomad&utm_medium=referral`" class="hover:text-white">{{ data.featuredImageOwnerName }}</a> / <a target="_blank" href="https://unsplash.com/?utm_source=Digital%20Nomad&utm_medium=referral" class="hover:text-white">Unsplash</a>
+            </div>
           </div>
 
           <!-- Article content -->

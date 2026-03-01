@@ -42,6 +42,8 @@ export default defineEventHandler(async (event) => {
         excerptPl: true,
         featuredImageUrl: true,
         featuredImageAlt: true,
+        featuredImageOwnerName: true,
+        featuredImageOwnerUsername: true,
         readingTimeMinutes: true,
         publishedAt: true,
         cities: {

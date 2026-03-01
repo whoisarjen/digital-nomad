@@ -229,9 +229,11 @@ model Article {
   metaTitlePl String?
   metaDescPl  String?
 
-  featuredImageUrl   String?
-  featuredImageAlt   String?
-  readingTimeMinutes Int @default(5)
+  featuredImageUrl           String?
+  featuredImageAlt           String?
+  featuredImageOwnerName     String?
+  featuredImageOwnerUsername String?
+  readingTimeMinutes         Int     @default(5)
 
   faqs Json?
 

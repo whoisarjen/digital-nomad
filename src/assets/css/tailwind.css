@@ -39,6 +39,7 @@ select::-ms-expand {
 .animate-float-slow { animation: float 30s ease-in-out infinite 5s; }
 
 html { scroll-behavior: smooth; }
+body { background-color: #060E1B; }
 
 /* Shimmer skeleton animation */
 @keyframes shimmer {
