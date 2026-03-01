@@ -85,9 +85,7 @@
               :alt="localizedField(data, 'title')"
               class="w-full h-full object-cover"
             />
-            <div v-if="data.featuredImageOwnerName" class="absolute top-0 left-0 right-0 z-20 text-[10px] text-white/60 text-center py-1 bg-black/30 opacity-0 group-hover/img:opacity-100 transition-opacity">
-              <a target="_blank" :href="`https://unsplash.com/@${data.featuredImageOwnerUsername}?utm_source=Digital%20Nomad&utm_medium=referral`" class="hover:text-white">{{ data.featuredImageOwnerName }}</a> / <a target="_blank" href="https://unsplash.com/?utm_source=Digital%20Nomad&utm_medium=referral" class="hover:text-white">Unsplash</a>
-            </div>
+            <UnsplashCredit v-if="data.featuredImageOwnerName" :owner-name="data.featuredImageOwnerName" :owner-username="data.featuredImageOwnerUsername" />
           </div>
 
           <!-- Article content -->

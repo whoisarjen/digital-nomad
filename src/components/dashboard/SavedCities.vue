@@ -58,6 +58,7 @@
                 <LucideStar :size="10" class="text-amber-400 fill-amber-400" />
                 {{ city.totalScore }}
               </div>
+              <UnsplashCredit v-if="city.image?.ownerName" :owner-name="city.image.ownerName" :owner-username="city.image.ownerUsername" position="bottom-right" />
             </div>
             <div class="p-3">
               <h4 class="text-sm font-semibold text-gray-900 leading-tight truncate">{{ city.name }}</h4>

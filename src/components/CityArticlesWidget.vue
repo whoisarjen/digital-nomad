@@ -25,6 +25,7 @@
           <div v-else class="w-full h-full flex items-center justify-center">
             <LucideFileText :size="32" class="text-gray-300" />
           </div>
+          <UnsplashCredit v-if="data.data[0].featuredImageOwnerName" :owner-name="data.data[0].featuredImageOwnerName" :owner-username="data.data[0].featuredImageOwnerUsername" />
         </div>
         <div class="p-5 flex flex-col gap-2 flex-1">
           <h3 class="text-lg font-bold text-gray-900 leading-snug line-clamp-2 group-hover:text-primary-600 transition-colors">
@@ -99,6 +100,7 @@
           <div v-else class="w-full h-full flex items-center justify-center">
             <LucideFileText :size="32" class="text-gray-300" />
           </div>
+          <UnsplashCredit v-if="article.featuredImageOwnerName" :owner-name="article.featuredImageOwnerName" :owner-username="article.featuredImageOwnerUsername" />
         </div>
         <div class="p-4 flex flex-col gap-1.5 flex-1">
           <h3 class="text-sm font-bold text-gray-900 leading-snug line-clamp-2 group-hover:text-primary-600 transition-colors">

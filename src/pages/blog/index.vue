@@ -74,9 +74,7 @@
                 <div v-else class="w-full h-full flex items-center justify-center">
                   <LucideFileText :size="48" class="text-gray-300" />
                 </div>
-                <div v-if="featured.featuredImageOwnerName" class="absolute top-0 left-0 right-0 z-20 text-[10px] text-white/60 text-center py-1 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <a target="_blank" :href="`https://unsplash.com/@${featured.featuredImageOwnerUsername}?utm_source=Digital%20Nomad&utm_medium=referral`" class="hover:text-white" @click.stop>{{ featured.featuredImageOwnerName }}</a> / <a target="_blank" href="https://unsplash.com/?utm_source=Digital%20Nomad&utm_medium=referral" class="hover:text-white" @click.stop>Unsplash</a>
-                </div>
+                <UnsplashCredit v-if="featured.featuredImageOwnerName" :owner-name="featured.featuredImageOwnerName" :owner-username="featured.featuredImageOwnerUsername" />
               </div>
               <div class="p-6 sm:p-8 flex flex-col justify-center">
                 <span class="inline-flex items-center gap-1.5 text-xs font-semibold text-primary-600 uppercase tracking-wider mb-3">
@@ -122,9 +120,7 @@
                 <div v-else class="w-full h-full flex items-center justify-center">
                   <LucideFileText :size="32" class="text-gray-300" />
                 </div>
-                <div v-if="article.featuredImageOwnerName" class="absolute top-0 left-0 right-0 z-20 text-[10px] text-white/60 text-center py-1 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <a target="_blank" :href="`https://unsplash.com/@${article.featuredImageOwnerUsername}?utm_source=Digital%20Nomad&utm_medium=referral`" class="hover:text-white" @click.stop>{{ article.featuredImageOwnerName }}</a> / <a target="_blank" href="https://unsplash.com/?utm_source=Digital%20Nomad&utm_medium=referral" class="hover:text-white" @click.stop>Unsplash</a>
-                </div>
+                <UnsplashCredit v-if="article.featuredImageOwnerName" :owner-name="article.featuredImageOwnerName" :owner-username="article.featuredImageOwnerUsername" />
               </div>
               <div class="p-5 flex flex-col flex-1">
                 <h3 class="text-base font-semibold text-gray-900 leading-snug line-clamp-2 group-hover:text-primary-700 transition-colors">

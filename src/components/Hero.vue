@@ -18,9 +18,11 @@
       <p v-if="country" class="mt-1 text-lg text-gray-200 drop-shadow">
         {{ country }}<span v-if="region"> · {{ region.replace(/([A-Z])/g, ' $1').trim() }}</span>
       </p>
-    </div>
-    <div class="absolute bottom-0 right-0 text-white bg-black/60 py-1 px-2 rounded-tl-lg text-xs z-10">
-      <NuxtLink target="_blank" :to="`https://unsplash.com/@${image.ownerUsername}?utm_source=Digital%20Nomad&utm_medium=referral`">{{ image?.ownerName }}</NuxtLink> on <NuxtLink target="_blank" to="https://unsplash.com/?utm_source=Digital%20Nomad&utm_medium=referral">Unsplash</NuxtLink>
+      <div class="mt-2 text-[11px] text-white/0 group-hover:text-white/40 transition-colors duration-300">
+        <a target="_blank" rel="noopener noreferrer" :href="`https://unsplash.com/@${image.ownerUsername}?utm_source=Digital%20Nomad&utm_medium=referral`" class="hover:text-white/70 transition-colors">{{ image.ownerName }}</a>
+        <span class="mx-0.5">/</span>
+        <a target="_blank" rel="noopener noreferrer" href="https://unsplash.com/?utm_source=Digital%20Nomad&utm_medium=referral" class="hover:text-white/70 transition-colors">Unsplash</a>
+      </div>
     </div>
   </section>
 </template>
