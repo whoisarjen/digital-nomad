@@ -155,27 +155,43 @@
               <h3 class="font-semibold mb-1.5">{{ $t('landing.featureDataTitle') }}</h3>
               <p class="text-sm text-gray-400 leading-relaxed">{{ $t('landing.featureDataDesc') }}</p>
             </div>
-            <!-- Updated Monthly (soon) -->
-            <div class="bg-white/[0.04] border border-white/[0.06] rounded-2xl p-6 hover:bg-white/[0.07] transition-colors relative">
-              <span class="absolute top-4 right-4 text-[10px] font-semibold bg-accent-500/15 text-accent-400 rounded-full px-2.5 py-0.5">{{ $t('landing.soon') }}</span>
+            <!-- Updated Monthly -->
+            <div class="bg-white/[0.04] border border-white/[0.06] rounded-2xl p-6 hover:bg-white/[0.07] transition-colors">
               <div class="size-10 rounded-xl bg-accent-500/10 flex items-center justify-center mb-4">
                 <LucideCalendar :size="20" class="text-accent-400" />
               </div>
               <h3 class="font-semibold mb-1.5">{{ $t('landing.featureUpdatedTitle') }}</h3>
               <p class="text-sm text-gray-400 leading-relaxed">{{ $t('landing.featureUpdatedDesc') }}</p>
             </div>
-            <!-- Roadmap features (soon) -->
-            <div
-              v-for="feature in roadmapFeatures"
-              :key="feature.id"
-              class="bg-white/[0.04] border border-white/[0.06] rounded-2xl p-6 hover:bg-white/[0.07] transition-colors relative"
+            <!-- Saved cities (new) -->
+            <NuxtLink
+              :to="localePath(isLoggedIn ? 'dashboard' : 'join')"
+              class="bg-white/[0.04] border border-white/[0.06] rounded-2xl p-6 hover:bg-white/[0.07] transition-colors relative block"
             >
-              <span class="absolute top-4 right-4 text-[10px] font-semibold bg-accent-500/15 text-accent-400 rounded-full px-2.5 py-0.5">{{ $t('landing.soon') }}</span>
+              <span class="absolute top-4 right-4 text-[10px] font-semibold rounded-full px-2.5 py-0.5 bg-emerald-500/15 text-emerald-400">{{ $t('landing.new') }}</span>
+              <div class="size-10 rounded-xl bg-rose-500/10 flex items-center justify-center mb-4">
+                <LucideHeart :size="20" class="text-rose-400" />
+              </div>
+              <h3 class="font-semibold mb-1.5">Saved cities</h3>
+              <p class="text-sm text-gray-400 leading-relaxed">Save cities to your personal list for quick access</p>
+            </NuxtLink>
+            <!-- City comparison (soon) -->
+            <div class="bg-white/[0.04] border border-white/[0.06] rounded-2xl p-6 hover:bg-white/[0.07] transition-colors relative">
+              <span class="absolute top-4 right-4 text-[10px] font-semibold rounded-full px-2.5 py-0.5 bg-accent-500/15 text-accent-400">{{ $t('landing.soon') }}</span>
               <div class="size-10 rounded-xl bg-white/[0.06] flex items-center justify-center mb-4">
                 <LucideSparkles :size="20" class="text-gray-400" />
               </div>
-              <h3 class="font-semibold mb-1.5">{{ feature.name }}</h3>
-              <p v-if="feature.description" class="text-sm text-gray-400 leading-relaxed">{{ feature.description }}</p>
+              <h3 class="font-semibold mb-1.5">City vs City comparison</h3>
+              <p class="text-sm text-gray-400 leading-relaxed">Compare two cities side by side across all metrics</p>
+            </div>
+            <!-- Monthly cost alerts (soon) -->
+            <div class="bg-white/[0.04] border border-white/[0.06] rounded-2xl p-6 hover:bg-white/[0.07] transition-colors relative">
+              <span class="absolute top-4 right-4 text-[10px] font-semibold rounded-full px-2.5 py-0.5 bg-accent-500/15 text-accent-400">{{ $t('landing.soon') }}</span>
+              <div class="size-10 rounded-xl bg-white/[0.06] flex items-center justify-center mb-4">
+                <LucideBell :size="20" class="text-gray-400" />
+              </div>
+              <h3 class="font-semibold mb-1.5">Monthly cost alerts</h3>
+              <p class="text-sm text-gray-400 leading-relaxed">Get notified when cost of living changes in your saved cities</p>
             </div>
           </div>
 
@@ -228,7 +244,6 @@
                     <LucideStar :size="11" class="text-amber-400 fill-amber-400" />
                     {{ city.totalScore }}
                   </span>
-                  <span v-if="city.cost">${{ city.cost }}</span>
                   <span>{{ Number(city.temperature).toFixed(0) }}&deg;</span>
                 </div>
               </div>
@@ -284,6 +299,33 @@
             >
               {{ $t('filters.clear') }}
             </div>
+            <!-- Favorites only toggle -->
+            <AuthGate :message="$t('favorites.signInRequired')" position="bottom" align="left" v-slot="{ isLocked }">
+              <button
+                @click="toggleFavoritesFilter"
+                :disabled="isLocked"
+                class="w-full flex items-center justify-between gap-2 px-4 py-2.5 rounded-xl border text-sm transition-all"
+                :class="isLocked
+                  ? 'bg-gray-50 border-gray-200 text-gray-400 cursor-not-allowed'
+                  : isFavoritesFilterActive
+                    ? 'bg-rose-50 border-rose-200 text-rose-700 cursor-pointer'
+                    : 'bg-white border-gray-200 text-gray-700 hover:border-gray-300 cursor-pointer'"
+              >
+                <span class="flex items-center gap-2">
+                  <LucideHeart :size="14" :class="isFavoritesFilterActive && !isLocked ? 'text-rose-500 fill-rose-500' : ''" />
+                  {{ $t('favorites.onlyFavorites') }}
+                </span>
+                <span
+                  v-if="!isLocked"
+                  class="size-4 rounded border flex items-center justify-center transition-colors"
+                  :class="isFavoritesFilterActive ? 'bg-rose-500 border-rose-500' : 'border-gray-300'"
+                >
+                  <LucideCheck v-if="isFavoritesFilterActive" :size="10" class="text-white" />
+                </span>
+                <LucideLock v-else :size="12" class="text-gray-400" />
+              </button>
+            </AuthGate>
+
             <MonthsPicker />
             <TemperaturesPicker />
             <WeathersPicker />
@@ -343,11 +385,6 @@
                       <span>{{ Number(city.temperature).toFixed(0) }}&deg;</span>
                     </div>
 
-                    <!-- Price pill (top right) -->
-                    <div class="absolute top-3 right-3 bg-black/50 rounded-full px-2.5 py-1 text-sm font-semibold text-emerald-400 tabular-nums">
-                      ${{ city.costForNomadInUsd }}<span class="text-[11px] font-normal text-white/60">/mo</span>
-                    </div>
-
                     <!-- Bottom info -->
                     <div class="absolute bottom-0 left-0 right-0 p-4">
                       <h3 class="text-white font-semibold text-base leading-tight truncate">
@@ -375,6 +412,13 @@
                       </div>
                     </div>
                   </NuxtLink>
+                  <!-- Price + Favorite (top right, above link) -->
+                  <div class="absolute top-3 right-3 z-20 flex items-center gap-2">
+                    <div class="bg-black/50 rounded-full px-2.5 py-1 text-sm font-semibold text-emerald-400 tabular-nums pointer-events-none">
+                      ${{ city.costForNomadInUsd }}<span class="text-[11px] font-normal text-white/60">/mo</span>
+                    </div>
+                    <FavoriteButton :city-slug="city.slug" />
+                  </div>
 
                   <!-- Photo credit -->
                   <div v-if="city.image" class="absolute top-0 left-0 right-0 z-20 text-[10px] text-white/60 text-center py-1 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -448,6 +492,18 @@ const translatedOrderByOptions = computed(() =>
 )
 
 const isClearFilter = computed(() => Object.keys(route.query).length)
+const isFavoritesFilterActive = computed(() => route.query.favoritesOnly === 'true')
+
+function toggleFavoritesFilter() {
+  if (!isLoggedIn.value) return
+  const query = { ...route.query }
+  if (isFavoritesFilterActive.value) {
+    delete query.favoritesOnly
+  } else {
+    query.favoritesOnly = 'true'
+  }
+  router.push({ query })
+}
 const queryParams = computed(() => ({
   ...route.query,
   months: route.query.months ?? getUserCurrentMonthString(),
@@ -456,13 +512,8 @@ const queryParams = computed(() => ({
 const { data: cities, status } = await useCities(queryParams)
 const { data: filters } = await useCitiesFilters()
 const { data: highlightsData } = await useLandingHighlights({ lazy: true })
-const { data: featuresData } = await useFeatures({ lazy: true })
 
 const highlights = computed(() => highlightsData.value as any)
-const roadmapFeatures = computed(() => {
-  const features = (featuresData.value as any)?.data ?? []
-  return features.slice(0, 3)
-})
 
 watch(() => queryParams.value.page, () => {
   window?.scrollTo({ top: 0 });

@@ -156,7 +156,11 @@
     "deleteAccount": "Delete Account",
     "deleteConfirm": "Are you sure? This will permanently delete your account and all data. This cannot be undone.",
     "deleteButton": "Yes, delete my account",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "savedCities": "Saved Cities",
+    "savedCount": "{count} saved",
+    "noSavedCities": "You haven't saved any cities yet.",
+    "exploreCTA": "Explore Cities"
   },
   "roadmap": {
     "title": "What's Coming Next",
@@ -195,7 +199,16 @@
     "statCitiesLabel": "cities analyzed",
     "statDataLabel": "data points per city",
     "statAccessLabel": "full access",
-    "soon": "soon"
+    "soon": "soon",
+    "new": "new"
+  },
+  "favorites": {
+    "save": "Save",
+    "saved": "Saved",
+    "signUpToSave": "Sign up to save cities",
+    "onlyFavorites": "Saved cities only",
+    "signInRequired": "Sign in to filter by saved cities",
+    "signInToSave": "Sign in to save cities"
   },
   "footer": {
     "exploreCities": "Explore Cities",

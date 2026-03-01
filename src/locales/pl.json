@@ -156,7 +156,11 @@
     "deleteAccount": "Usuń konto",
     "deleteConfirm": "Czy na pewno? To trwale usunie Twoje konto i wszystkie dane. Nie można tego cofnąć.",
     "deleteButton": "Tak, usuń moje konto",
-    "cancel": "Anuluj"
+    "cancel": "Anuluj",
+    "savedCities": "Zapisane miasta",
+    "savedCount": "{count} zapisanych",
+    "noSavedCities": "Nie masz jeszcze żadnych zapisanych miast.",
+    "exploreCTA": "Odkryj miasta"
   },
   "roadmap": {
     "title": "Co nas czeka",
@@ -195,7 +199,16 @@
     "statCitiesLabel": "przeanalizowanych miast",
     "statDataLabel": "wskaźników na miasto",
     "statAccessLabel": "pełny dostęp",
-    "soon": "wkrótce"
+    "soon": "wkrótce",
+    "new": "nowość"
+  },
+  "favorites": {
+    "save": "Zapisz",
+    "saved": "Zapisane",
+    "signUpToSave": "Zarejestruj się, aby zapisywać miasta",
+    "onlyFavorites": "Tylko zapisane miasta",
+    "signInRequired": "Zaloguj się, aby filtrować zapisane",
+    "signInToSave": "Zaloguj się, aby zapisywać miasta"
   },
   "footer": {
     "exploreCities": "Odkryj miasta",

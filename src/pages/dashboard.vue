@@ -6,6 +6,8 @@
       :member-count="communityStats?.memberCount ?? 0"
     />
 
+    <DashboardSavedCities />
+
     <DashboardRoadmapBoard
       :features="features?.data ?? []"
       :status="featuresStatus"

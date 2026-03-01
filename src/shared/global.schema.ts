@@ -118,6 +118,10 @@ export const getCitiesSchema = z.object({
         .enum(OPTIONS_LEVEL_GTE.map(({ value }) => value) as [string, ...string[]])
         .transform(value => mapLevelToQuery(value, 'gte'))
         .optional(),
+    favoritesOnly: z
+        .string()
+        .optional()
+        .transform((val) => val === 'true'),
 });
 
 export type GetCitiesSchema = z.infer<typeof getCitiesSchema>;
@@ -174,4 +178,23 @@ export const loginSchema = z.object({
 
 export const voteSchema = z.object({
     featureId: z.string().min(1),
+});
+
+// Favorites schemas
+
+export const favoriteToggleSchema = z.object({
+    citySlug: z.string().min(1),
+});
+
+export const getFavoritesSchema = z.object({
+    page: z
+        .string()
+        .optional()
+        .transform((val) => (val ? Number(val) : undefined))
+        .pipe(z.number().positive().optional().default(1)),
+    limit: z
+        .string()
+        .optional()
+        .transform((val) => (val ? Number(val) : undefined))
+        .pipe(z.number().positive().max(50).optional().default(12)),
 });

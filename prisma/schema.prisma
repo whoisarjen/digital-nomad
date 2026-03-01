@@ -104,7 +104,8 @@ model City {
   qualityIndexId String?   @map("numbeoId")
   qualityIndex   QualityIndex?
 
-  articles ArticleCityMap[]
+  articles  ArticleCityMap[]
+  favorites Favorite[]
 }
 
 model Weather {
@@ -266,6 +267,7 @@ model User {
   updatedAt    DateTime  @default(now()) @updatedAt
   sessions     Session[]
   votes        Vote[]
+  favorites    Favorite[]
 }
 
 model Session {
@@ -298,4 +300,15 @@ model Vote {
   createdAt DateTime @default(now())
 
   @@id([userId, featureId])
+}
+
+model Favorite {
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  citySlug  String
+  city      City     @relation(fields: [citySlug], references: [slug], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@id([userId, citySlug])
+  @@index([userId])
 }

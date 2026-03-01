@@ -134,8 +134,24 @@ const getCityPrismaQuery = (query: z.infer<typeof getCitiesSchema>) => {
 
 export default defineEventHandler(async (event) => {
     const validatedQuery = await getValidatedQuery(event, (body) => getCitiesSchema.parse(body));
-    const where = getCityPrismaQuery(validatedQuery)
-  
+    let where = getCityPrismaQuery(validatedQuery)
+
+    if (validatedQuery.favoritesOnly) {
+        const user = await getSessionUser(event)
+        if (user) {
+            const favs = await prisma.favorite.findMany({
+                where: { userId: user.id },
+                select: { citySlug: true },
+            })
+            const slugFilter: Prisma.CityWhereInput = { slug: { in: favs.map(f => f.citySlug) } }
+            if (where?.AND) {
+                where.AND.push(slugFilter)
+            } else {
+                where = { AND: [slugFilter] }
+            }
+        }
+    }
+
     const {
       page,
       limit,

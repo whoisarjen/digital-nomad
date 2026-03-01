@@ -82,6 +82,7 @@
               <LucideUsers :size="14" class="text-white/40" />
               {{ formatNumber(data.population) }}
             </span>
+            <FavoriteButton :city-slug="citySlug" variant="inline" size="md" />
           </div>
         </div>
       </section>
