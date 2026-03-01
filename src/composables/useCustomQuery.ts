@@ -58,6 +58,7 @@ export const useCustomQuery = async <T = unknown>(
         method: 'get',
         credentials: 'include',
         signal,
+        headers: useRequestHeaders(['cookie']),
         query: query?.value ?? {},
       }) as Promise<T>
     },

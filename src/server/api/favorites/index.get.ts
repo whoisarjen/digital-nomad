@@ -1,14 +1,14 @@
 import { getFavoritesSchema } from '~/shared/global.schema'
 import { getUserCurrentMonthString } from '~/shared/global.utils'
 
-export default defineEventHandler(async (event) => {
-  const user = await requireAuth(event)
+export default defineProtectedEventHandler(async (event, session) => {
   const { page, limit } = await getValidatedQuery(event, getFavoritesSchema.parse)
   const currentMonth = getUserCurrentMonthString()
+  const userId = session.user.id
 
   const [favorites, count] = await Promise.all([
     prisma.favorite.findMany({
-      where: { userId: user.id },
+      where: { userId },
       orderBy: { createdAt: 'desc' },
       skip: (page - 1) * limit,
       take: limit,
@@ -38,7 +38,7 @@ export default defineEventHandler(async (event) => {
         },
       },
     }),
-    prisma.favorite.count({ where: { userId: user.id } }),
+    prisma.favorite.count({ where: { userId } }),
   ])
 
   return {

@@ -72,14 +72,14 @@ const isFav = computed(() => isFavorited(props.citySlug))
 const overlayClasses = computed(() => [
   'flex items-center justify-center rounded-full backdrop-blur-md',
   'bg-black/30 border border-white/[0.08]',
-  isLoggedIn.value ? 'hover:bg-black/50 hover:border-white/[0.15]' : '',
+  'hover:bg-black/50 hover:border-white/[0.15]',
   props.size === 'sm' ? 'size-9' : 'size-11',
 ].join(' '))
 
 const inlineClasses = computed(() => [
   'flex items-center gap-2 rounded-full',
   'bg-white/[0.06] border border-white/[0.08]',
-  isLoggedIn.value ? 'hover:bg-white/[0.1] hover:border-white/[0.15]' : '',
+  'hover:bg-white/[0.1] hover:border-white/[0.15]',
   props.size === 'sm' ? 'px-3 py-1.5' : 'px-4 py-2',
 ].join(' '))
 

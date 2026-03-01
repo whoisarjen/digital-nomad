@@ -1,6 +1,8 @@
+import { getServerSession } from '#auth'
+
 export default defineEventHandler(async (event) => {
-  const user = await getSessionUser(event)
-  const userId = user?.id
+  const session = await getServerSession(event)
+  const userId = session?.user?.id
 
   const features = await prisma.feature.findMany({
     orderBy: [{ order: 'asc' }],

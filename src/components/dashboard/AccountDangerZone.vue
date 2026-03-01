@@ -37,16 +37,16 @@
 </template>
 
 <script setup lang="ts">
-const { deleteAccount } = useAuth()
+const { signOut } = useAuth()
 const confirming = ref(false)
 const deleting = ref(false)
 
 async function handleDelete() {
   deleting.value = true
   try {
-    await deleteAccount()
+    await $fetch('/api/auth/delete', { method: 'DELETE' })
   } finally {
-    deleting.value = false
+    await signOut({ callbackUrl: '/' })
   }
 }
 </script>

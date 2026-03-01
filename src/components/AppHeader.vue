@@ -49,8 +49,6 @@
 
 <script setup lang="ts">
 const localePath = useLocalePath()
-const isLoggedIn = computed(() => {
-  if (import.meta.server) return false
-  return useCookie('nomad_logged_in').value === 'true'
-})
+const { status } = useAuth()
+const isLoggedIn = computed(() => status.value === 'authenticated')
 </script>

@@ -1,9 +1,4 @@
-export default defineEventHandler(async (event) => {
-  const user = await requireAuth(event)
-
-  await prisma.user.delete({ where: { id: user.id } })
-
-  clearSessionCookie(event)
-
+export default defineProtectedEventHandler(async (_event, session) => {
+  await prisma.user.delete({ where: { id: session.user.id } })
   return { success: true }
 })

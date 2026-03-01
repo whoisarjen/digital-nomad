@@ -3,6 +3,7 @@ import _ from 'lodash';
 import { z } from 'zod';
 import { getCitiesSchema } from '~/shared/global.schema';
 import { formatNumber } from '~/shared/global.utils';
+import { getServerSession } from '#auth';
 
 const getCityPrismaQuery = (query: z.infer<typeof getCitiesSchema>) => {
     const AND: Prisma.CityWhereInput[] = []
@@ -137,18 +138,15 @@ export default defineEventHandler(async (event) => {
     let where = getCityPrismaQuery(validatedQuery)
 
     if (validatedQuery.favoritesOnly) {
-        const user = await getSessionUser(event)
-        if (user) {
-            const favs = await prisma.favorite.findMany({
-                where: { userId: user.id },
-                select: { citySlug: true },
-            })
-            const slugFilter: Prisma.CityWhereInput = { slug: { in: favs.map(f => f.citySlug) } }
-            if (where?.AND) {
-                where.AND.push(slugFilter)
-            } else {
-                where = { AND: [slugFilter] }
-            }
+        const session = await getServerSession(event)
+        const userId = (session?.user as any)?.id
+        const favFilter: Prisma.CityWhereInput = {
+            favorites: userId ? { some: { userId } } : { none: {} },
+        }
+        if (where?.AND) {
+            where.AND.push(favFilter)
+        } else {
+            where = { AND: [favFilter] }
         }
     }
 

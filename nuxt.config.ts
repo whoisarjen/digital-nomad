@@ -1,10 +1,17 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import { LOCALES } from './src/constants/global.constant'
 
+const fullSitePath = process.env.NUXT_PUBLIC_VERCEL_URL
+  ? `https://${process.env.NUXT_PUBLIC_VERCEL_URL}`
+  : 'http://localhost:3000'
+
 export default defineNuxtConfig({
   srcDir: 'src/',
   compatibilityDate: '2024-11-01',
   devtools: { enabled: process.env.NODE_ENV === 'development' },
+  runtimeConfig: {
+    NUXT_AUTH_SECRET: process.env.NUXT_AUTH_SECRET,
+  },
   app: {
     head: {
       title: 'Digital Nomad - Find Your Next Nomad City',
@@ -26,7 +33,20 @@ export default defineNuxtConfig({
     '@nuxt/image',
     '@vueuse/nuxt',
     '@nuxtjs/i18n',
+    '@sidebase/nuxt-auth',
   ],
+  auth: {
+    baseURL: `${fullSitePath}/api/auth`,
+    originEnvKey: '',
+    provider: {
+      type: 'authjs',
+      trustHost: false,
+    },
+    sessionRefresh: {
+      enableOnWindowFocus: false,
+      enablePeriodically: 3600000,
+    },
+  },
   i18n: {
     baseUrl: 'https://nomad.whoisarjen.com',
     detectBrowserLanguage: {

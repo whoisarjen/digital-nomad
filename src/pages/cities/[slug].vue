@@ -82,7 +82,15 @@
               <LucideUsers :size="14" class="text-white/40" />
               {{ formatNumber(data.population) }}
             </span>
-            <FavoriteButton :city-slug="citySlug" variant="inline" size="md" />
+            <AuthContainer>
+              <FavoriteButton :city-slug="citySlug" variant="inline" size="md" />
+              <template #fallback>
+                <div class="flex items-center gap-2 bg-white/[0.06] border border-white/[0.08] rounded-full px-4 py-2">
+                  <div class="size-[18px] rounded-full bg-white/10 animate-pulse" />
+                  <div class="h-4 w-10 rounded bg-white/10 animate-pulse" />
+                </div>
+              </template>
+            </AuthContainer>
           </div>
         </div>
       </section>

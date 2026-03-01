@@ -27,7 +27,8 @@ defineI18nRoute({
   },
 })
 
-const { user } = useAuth()
+const { data: session } = useAuth()
+const user = computed(() => (session.value as any)?.user ?? null)
 const { data: featuresData, status: featuresStatus } = await useFeatures()
 const { data: communityData } = await useCommunityStats()
 

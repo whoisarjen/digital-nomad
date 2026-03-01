@@ -155,8 +155,9 @@
               <h3 class="font-semibold mb-1.5">{{ $t('landing.featureDataTitle') }}</h3>
               <p class="text-sm text-gray-400 leading-relaxed">{{ $t('landing.featureDataDesc') }}</p>
             </div>
-            <!-- Updated Monthly -->
-            <div class="bg-white/[0.04] border border-white/[0.06] rounded-2xl p-6 hover:bg-white/[0.07] transition-colors">
+            <!-- Updated Monthly (soon) -->
+            <div class="bg-white/[0.04] border border-white/[0.06] rounded-2xl p-6 hover:bg-white/[0.07] transition-colors relative">
+              <span class="absolute top-4 right-4 text-[10px] font-semibold rounded-full px-2.5 py-0.5 bg-accent-500/15 text-accent-400">{{ $t('landing.soon') }}</span>
               <div class="size-10 rounded-xl bg-accent-500/10 flex items-center justify-center mb-4">
                 <LucideCalendar :size="20" class="text-accent-400" />
               </div>
@@ -417,7 +418,12 @@
                     <div class="bg-black/50 rounded-full px-2.5 py-1 text-sm font-semibold text-emerald-400 tabular-nums pointer-events-none">
                       ${{ city.costForNomadInUsd }}<span class="text-[11px] font-normal text-white/60">/mo</span>
                     </div>
-                    <FavoriteButton :city-slug="city.slug" />
+                    <AuthContainer>
+                      <FavoriteButton :city-slug="city.slug" />
+                      <template #fallback>
+                        <div class="size-9 rounded-full bg-white/10 animate-pulse" />
+                      </template>
+                    </AuthContainer>
                   </div>
 
                   <!-- Photo credit -->
@@ -467,10 +473,8 @@ const localePath = useLocalePath()
 const route = useRoute()
 const router = useRouter()
 
-const isLoggedIn = computed(() => {
-  if (import.meta.server) return false
-  return useCookie('nomad_logged_in').value === 'true'
-})
+const { status: authStatus } = useAuth()
+const isLoggedIn = computed(() => authStatus.value === 'authenticated')
 
 const unsplashUrl = (raw: string, w: number, h: number) => {
   if (!raw) return ''
