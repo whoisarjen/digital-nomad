@@ -93,6 +93,7 @@
           <!-- Hero Image (floating over boundary) -->
           <div class="relative -mt-24 mb-10 rounded-2xl overflow-hidden shadow-2xl aspect-[21/9] group/img">
             <img
+              v-if="heroImage.url"
               :src="unsplashUrl(heroImage.url, 1280, 548)"
               :alt="data.name"
               class="absolute inset-0 w-full h-full object-cover"

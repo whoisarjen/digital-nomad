@@ -12,7 +12,7 @@ export default defineEventHandler(async (event) => {
       { isPrimary: 'desc' },
       { article: { publishedAt: 'desc' } },
     ],
-    take: 3,
+    take: 2,
     select: {
       isPrimary: true,
       article: {
