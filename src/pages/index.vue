@@ -155,10 +155,11 @@
               <h3 class="font-semibold mb-1.5">{{ $t('landing.featureDataTitle') }}</h3>
               <p class="text-sm text-gray-400 leading-relaxed">{{ $t('landing.featureDataDesc') }}</p>
             </div>
-            <!-- Updated Monthly -->
-            <div class="bg-white/[0.04] border border-white/[0.06] rounded-2xl p-6 hover:bg-white/[0.07] transition-colors">
-              <div class="size-10 rounded-xl bg-accent-500/10 flex items-center justify-center mb-4">
-                <LucideCalendar :size="20" class="text-accent-400" />
+            <!-- Updated Monthly (soon) -->
+            <div class="bg-white/[0.04] border border-white/[0.06] rounded-2xl p-6 hover:bg-white/[0.07] transition-colors relative">
+              <span class="absolute top-4 right-4 text-[10px] font-semibold rounded-full px-2.5 py-0.5 bg-accent-500/15 text-accent-400">{{ $t('landing.soon') }}</span>
+              <div class="size-10 rounded-xl bg-white/[0.06] flex items-center justify-center mb-4">
+                <LucideCalendar :size="20" class="text-gray-400" />
               </div>
               <h3 class="font-semibold mb-1.5">{{ $t('landing.featureUpdatedTitle') }}</h3>
               <p class="text-sm text-gray-400 leading-relaxed">{{ $t('landing.featureUpdatedDesc') }}</p>
