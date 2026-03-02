@@ -1,7 +1,7 @@
 <template>
   <div class="order-last sm:order-2 w-full pb-0">
     <div
-      class="bg-white rounded-xl px-4 py-2 flex items-center gap-2 group border border-gray-300"
+      class="bg-white rounded-lg px-4 py-2 flex items-center gap-2 group border border-gray-300"
     >
       <input
         v-model="q"

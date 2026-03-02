@@ -225,7 +225,7 @@
 
       <div class="flex flex-col gap-6 max-w-[1600px] mx-auto w-full">
         <!-- Search + Sort + Filter trigger -->
-        <section ref="toolbarRef" class="flex gap-3 flex-col md:flex-row items-center">
+        <section ref="toolbarRef" class="flex gap-1.5 flex-col md:flex-row items-center">
           <div class="flex-1 max-md:w-full">
             <SearchBar />
           </div>
@@ -237,9 +237,30 @@
               :customDefaultOption="translatedOrderByOptions[0]"
             />
             <SortPicker />
+            <AuthGate :message="$t('favorites.signInRequired')" position="bottom" align="center" v-slot="{ isLocked }">
+              <button
+                @click="toggleFavoritesFilter"
+                :disabled="isLocked"
+                class="h-full px-4 py-2 flex items-center justify-center rounded-lg border transition-all duration-200"
+                :class="isLocked
+                  ? 'bg-gray-50 border-gray-200 text-gray-300 cursor-not-allowed'
+                  : isFavoritesFilterActive
+                    ? 'bg-rose-50 border-rose-300 text-rose-500 hover:bg-rose-100 cursor-pointer shadow-sm shadow-rose-200/50'
+                    : 'bg-white border-gray-300 text-gray-400 hover:text-rose-400 hover:border-rose-200 hover:bg-rose-50/50 cursor-pointer'"
+                :aria-label="$t('favorites.onlyFavorites')"
+              >
+                <LucideHeart
+                  :size="16"
+                  :class="[
+                    'transition-all duration-200',
+                    isFavoritesFilterActive && !isLocked && 'fill-rose-500 scale-110',
+                  ]"
+                />
+              </button>
+            </AuthGate>
             <button
               @click="filtersOpen = true"
-              class="flex items-center gap-2 px-4 py-2 rounded-xl border text-sm font-medium transition-colors cursor-pointer max-md:flex-1"
+              class="flex items-center gap-2 px-4 py-2 rounded-lg border text-sm font-medium transition-colors cursor-pointer max-md:flex-1"
               :class="activeFilterCount
                 ? 'bg-primary-50 text-primary-800 border-primary-300 hover:bg-primary-100'
                 : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100'"
@@ -247,28 +268,18 @@
               <LucideSlidersHorizontal :size="15" />
               <span>{{ $t('filters.title') }}</span>
               <span
-                v-if="activeFilterCount"
-                class="min-w-[18px] h-[18px] rounded-full bg-accent-500 text-white text-[10px] font-bold flex items-center justify-center px-1 tabular-nums"
+                class="min-w-[18px] h-[18px] rounded-full text-[10px] font-bold flex items-center justify-center px-1 tabular-nums"
+                :class="activeFilterCount
+                  ? 'bg-accent-500 text-white'
+                  : 'invisible'"
               >
-                {{ activeFilterCount }}
+                {{ activeFilterCount || '0' }}
               </span>
             </button>
           </div>
         </section>
 
         <!-- Cards + Pagination -->
-            <div
-              v-if="isClearFilter"
-              class="text-sm flex gap-1 items-center"
-            >
-              <b>{{ $t('filters.filtersLabel') }}</b>
-              <span>{{ Object.entries(queryParams).map(([key, value]) =>
-                `${key.split('_').map(upperFirst).join(' ')} (${key === 'months'
-                  ? new Date(2025, Number(value) - 1).toLocaleString(getLocaleBcp47(locale), { month: 'long' }).toLowerCase()
-                  : `${filters?.pickers[key as keyof typeof filters['pickers']]?.operation === 'lte' ? '≤' : ''}${value}`.toLowerCase().split(',').join(', ').replace('gte:', '').replace('lte:', '')}${filters?.pickers[key as keyof typeof filters['pickers']]?.operation === 'gte' ? '≤' : ''})`).join(', ') }}
-                </span>
-            </div>
-
             <!-- Cards Grid -->
             <div class="gap-4 w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
               <!-- Skeleton Loading -->
@@ -398,7 +409,6 @@
 
 <script setup lang="ts">
 import type { Level } from '@prisma/client';
-import upperFirst from 'lodash/upperFirst';
 import type { GetCitiesSchema } from '~/shared/global.schema';
 import { getUserCurrentMonthString, OPTIONS_ORDER_BY } from '~/shared/global.utils';
 
@@ -437,7 +447,6 @@ const translatedOrderByOptions = computed(() =>
   OPTIONS_ORDER_BY.map(opt => ({ ...opt, label: t(`orderBy.${opt.value}`) }))
 )
 
-const isClearFilter = computed(() => Object.keys(route.query).length)
 const isFavoritesFilterActive = computed(() => route.query.favoritesOnly === 'true')
 
 function toggleFavoritesFilter() {
