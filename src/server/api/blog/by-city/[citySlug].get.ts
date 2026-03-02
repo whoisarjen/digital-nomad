@@ -16,20 +16,18 @@ export default defineEventHandler(async (event) => {
       { article: { publishedAt: 'desc' } },
     ],
     take: 2,
-    include: {
+    select: {
+      isPrimary: true,
       article: {
-        omit: {
-          contentEn: true, contentPl: true, contentEs: true, contentDe: true,
-          contentPt: true, contentFr: true, contentKo: true, contentAr: true,
-          contentTr: true, contentJa: true, contentIt: true,
-          metaTitleEn: true, metaTitlePl: true, metaTitleEs: true, metaTitleDe: true,
-          metaTitlePt: true, metaTitleFr: true, metaTitleKo: true, metaTitleAr: true,
-          metaTitleTr: true, metaTitleJa: true, metaTitleIt: true,
-          metaDescEn: true, metaDescPl: true, metaDescEs: true, metaDescDe: true,
-          metaDescPt: true, metaDescFr: true, metaDescKo: true, metaDescAr: true,
-          metaDescTr: true, metaDescJa: true, metaDescIt: true,
-          faqs: true,
-          createdAt: true,
+        select: {
+          slug: true,
+          [`title${select}` as const]: true,
+          [`excerpt${select}` as const]: true,
+          featuredImageUrl: true,
+          featuredImageOwnerName: true,
+          featuredImageOwnerUsername: true,
+          readingTimeMinutes: true,
+          publishedAt: true,
         },
       },
     },
@@ -37,8 +35,8 @@ export default defineEventHandler(async (event) => {
 
   const data = mappings.map((item) => ({
     slug: item.article.slug,
-    title: item.article[`title${select}`] ?? null,
-    excerpt: item.article[`excerpt${select}`] ?? null,
+    title: item.article[`title${select}` as const] ?? null,
+    excerpt: item.article[`excerpt${select}` as const] ?? null,
     featuredImageUrl: item.article.featuredImageUrl,
     featuredImageOwnerName: item.article.featuredImageOwnerName,
     featuredImageOwnerUsername: item.article.featuredImageOwnerUsername,

@@ -18,7 +18,7 @@ export default defineEventHandler(async (event) => {
 
   if (validatedQuery.q) {
     AND.push({
-      [`title${select}`]: {
+      [`title${select}` as const]: {
         contains: validatedQuery.q,
         mode: 'insensitive',
       },
@@ -35,28 +35,15 @@ export default defineEventHandler(async (event) => {
     prisma.article.findMany({
       where,
       orderBy: { publishedAt: 'desc' },
-      omit: {
-        contentEn: true, contentPl: true, contentEs: true, contentDe: true,
-        contentPt: true, contentFr: true, contentKo: true, contentAr: true,
-        contentTr: true, contentJa: true, contentIt: true,
-        metaTitleEn: true, metaTitlePl: true, metaTitleEs: true, metaTitleDe: true,
-        metaTitlePt: true, metaTitleFr: true, metaTitleKo: true, metaTitleAr: true,
-        metaTitleTr: true, metaTitleJa: true, metaTitleIt: true,
-        metaDescEn: true, metaDescPl: true, metaDescEs: true, metaDescDe: true,
-        metaDescPt: true, metaDescFr: true, metaDescKo: true, metaDescAr: true,
-        metaDescTr: true, metaDescJa: true, metaDescIt: true,
-        faqs: true,
-        createdAt: true,
-      },
-      include: {
-        cities: {
-          select: {
-            isPrimary: true,
-            city: {
-              select: { slug: true, name: true, country: true },
-            },
-          },
-        },
+      select: {
+        slug: true,
+        [`title${select}` as const]: true,
+        [`excerpt${select}` as const]: true,
+        featuredImageUrl: true,
+        featuredImageOwnerName: true,
+        featuredImageOwnerUsername: true,
+        readingTimeMinutes: true,
+        publishedAt: true,
       },
       skip: (page - 1) * limit,
       take: limit,
@@ -66,15 +53,13 @@ export default defineEventHandler(async (event) => {
 
   const data = articlesRaw.map((item) => ({
     slug: item.slug,
-    title: item[`title${select}`] ?? null,
-    excerpt: item[`excerpt${select}`] ?? null,
+    title: item[`title${select}` as const] ?? null,
+    excerpt: item[`excerpt${select}` as const] ?? null,
     featuredImageUrl: item.featuredImageUrl,
-    featuredImageAlt: item.featuredImageAlt,
     featuredImageOwnerName: item.featuredImageOwnerName,
     featuredImageOwnerUsername: item.featuredImageOwnerUsername,
     readingTimeMinutes: item.readingTimeMinutes,
     publishedAt: item.publishedAt,
-    cities: item.cities,
   }));
 
   const pagesCount = Math.ceil(count / limit);

@@ -15,7 +15,21 @@ export default defineEventHandler(async (event) => {
       isPublished: true,
       publishedAt: { lte: new Date() },
     },
-    include: {
+    select: {
+      slug: true,
+      [`title${select}` as const]: true,
+      [`excerpt${select}` as const]: true,
+      [`content${select}` as const]: true,
+      [`metaTitle${select}` as const]: true,
+      [`metaDesc${select}` as const]: true,
+      featuredImageUrl: true,
+      featuredImageAlt: true,
+      featuredImageOwnerName: true,
+      featuredImageOwnerUsername: true,
+      readingTimeMinutes: true,
+      publishedAt: true,
+      updatedAt: true,
+      faqs: true,
       cities: {
         select: {
           isPrimary: true,
@@ -40,11 +54,11 @@ export default defineEventHandler(async (event) => {
 
   return {
     slug: article.slug,
-    title: article[`title${select}`] ?? null,
-    excerpt: article[`excerpt${select}`] ?? null,
-    content: article[`content${select}`] ?? null,
-    metaTitle: article[`metaTitle${select}`] ?? null,
-    metaDesc: article[`metaDesc${select}`] ?? null,
+    title: article[`title${select}` as const] ?? null,
+    excerpt: article[`excerpt${select}` as const] ?? null,
+    content: article[`content${select}` as const] ?? null,
+    metaTitle: article[`metaTitle${select}` as const] ?? null,
+    metaDesc: article[`metaDesc${select}` as const] ?? null,
     featuredImageUrl: article.featuredImageUrl,
     featuredImageAlt: article.featuredImageAlt,
     featuredImageOwnerName: article.featuredImageOwnerName,
