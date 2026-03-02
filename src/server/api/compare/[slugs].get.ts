@@ -1,4 +1,5 @@
 import { getCompareSchema } from '~/shared/global.schema'
+import { buildCompareSlug } from '~/shared/global.utils'
 
 const CITY_SELECT = {
   slug: true,
@@ -46,9 +47,9 @@ export default defineEventHandler(async (event) => {
   const { slugs } = await getValidatedRouterParams(event, getCompareSchema.parse)
 
   // Enforce canonical alphabetical ordering
-  if (slugs.city1 > slugs.city2) {
-    const canonical = `/api/compare/${slugs.city2}-vs-${slugs.city1}`
-    await sendRedirect(event, canonical, 301)
+  const canonical = buildCompareSlug(slugs.city1, slugs.city2)
+  if (canonical !== slugs.raw) {
+    await sendRedirect(event, `/api/compare/${canonical}`, 301)
     return
   }
 

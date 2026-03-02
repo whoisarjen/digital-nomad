@@ -116,3 +116,8 @@ export const getRangesFromQuery = (defaultMin: number, defaultMax: number) => (t
     max: Number(max ?? defaultMax),
   };
 }
+
+export const buildCompareSlug = (slugA: string, slugB: string) => {
+  const [first, second] = slugA < slugB ? [slugA, slugB] : [slugB, slugA];
+  return `${first}-vs-${second}`;
+}

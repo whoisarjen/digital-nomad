@@ -191,6 +191,7 @@
 
 <script lang="ts" setup>
 import { LOCALES } from '~/constants/global.constant'
+import { buildCompareSlug } from '~/shared/global.utils'
 
 defineI18nRoute({
   paths: {
@@ -261,10 +262,7 @@ function handleBlurB() {
 
 function goCompare() {
   if (!selectedA.value || !selectedB.value) return
-  const [first, second] = selectedA.value.slug < selectedB.value.slug
-    ? [selectedA.value, selectedB.value]
-    : [selectedB.value, selectedA.value]
-  const slugs = `${first.slug}-vs-${second.slug}`
+  const slugs = buildCompareSlug(selectedA.value.slug, selectedB.value.slug)
   router.push(localePath({ name: 'compare-slugs', params: { slugs } }))
 }
 

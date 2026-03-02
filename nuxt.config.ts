@@ -33,6 +33,7 @@ export default defineNuxtConfig({
     '@nuxt/image',
     '@vueuse/nuxt',
     '@nuxtjs/i18n',
+    '@nuxtjs/sitemap',
     '@sidebase/nuxt-auth',
   ],
   auth: {
@@ -66,9 +67,34 @@ export default defineNuxtConfig({
     strategy: 'prefix_except_default',
     vueI18n: './src/i18n.config.ts',
   },
+  sitemap: {
+    autoI18n: {
+      locales: LOCALES.map(({ code }) => ({ code, language: code, _sitemap: code, _hreflang: code })),
+      defaultLocale: 'en',
+      strategy: 'prefix_except_default',
+    },
+    exclude: [
+      '/dashboard',
+      '/join',
+    ],
+    cacheMaxAgeSeconds: 86400,
+    defaultSitemapsChunkSize: 1000,
+    sitemaps: true,
+    defaults: {
+      changefreq: 'weekly',
+    },
+    sources: [
+      '/api/__sitemap__/cities',
+      '/api/__sitemap__/articles',
+      '/api/__sitemap__/comparisons',
+    ],
+  },
   nitro: {
     vercel: {
       regions: ['fra1'],
+    },
+    routeRules: {
+      '/__sitemap__/**': { isr: true },
     },
   },
   image: {

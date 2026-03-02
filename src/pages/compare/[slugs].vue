@@ -603,7 +603,7 @@
 
 <script lang="ts" setup>
 import type { Level } from '@prisma/client'
-import { formatNumber } from '~/shared/global.utils'
+import { formatNumber, buildCompareSlug } from '~/shared/global.utils'
 import { LOCALES } from '~/constants/global.constant'
 
 defineI18nRoute({
@@ -620,12 +620,14 @@ const route = useRoute()
 // ─── Canonical redirect ───
 const rawSlugs = computed(() => route.params.slugs as string)
 const parts = rawSlugs.value.split('-vs-')
-if (parts.length === 2 && parts[0] > parts[1]) {
-  const canonical = `${parts[1]}-vs-${parts[0]}`
-  await navigateTo(localePath({ name: 'compare-slugs', params: { slugs: canonical } }), {
-    redirectCode: 301,
-    replace: true,
-  })
+if (parts.length === 2) {
+  const canonical = buildCompareSlug(parts[0], parts[1])
+  if (canonical !== rawSlugs.value) {
+    await navigateTo(localePath({ name: 'compare-slugs', params: { slugs: canonical } }), {
+      redirectCode: 301,
+      replace: true,
+    })
+  }
 }
 
 // ─── Data fetching ───
