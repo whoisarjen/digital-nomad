@@ -65,6 +65,9 @@
       "mcp__Neon__load_resource",
       "Bash(npm install @sidebase/nuxt-auth next-auth @next-auth/prisma-adapter)",
       "Bash(npx nuxt typecheck)"
+    ],
+    "additionalDirectories": [
+      "/tmp"
     ]
   }
 }
