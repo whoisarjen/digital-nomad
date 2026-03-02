@@ -41,6 +41,27 @@ select::-ms-expand {
 html { scroll-behavior: smooth; }
 body { background-color: #060E1B; }
 
+/* Filter drawer — backdrop */
+.drawer-backdrop-enter-active,
+.drawer-backdrop-leave-active { transition: opacity 300ms ease; }
+.drawer-backdrop-enter-from,
+.drawer-backdrop-leave-to { opacity: 0; }
+
+/* Filter drawer — sheet (Apple-style spring curve) */
+.drawer-sheet-enter-active { transition: transform 500ms cubic-bezier(0.32, 0.72, 0, 1); }
+.drawer-sheet-leave-active { transition: transform 300ms cubic-bezier(0.32, 0.72, 0, 1); }
+.drawer-sheet-enter-from,
+.drawer-sheet-leave-to { transform: translateY(100%); }
+
+/* Filter drawer — iOS safe area footer */
+.drawer-footer-safe { padding-bottom: env(safe-area-inset-bottom, 0px); }
+
+/* Floating filter pill */
+.floating-pill-enter-active { transition: opacity 400ms cubic-bezier(0.32, 0.72, 0, 1); }
+.floating-pill-leave-active { transition: opacity 200ms ease-in; }
+.floating-pill-enter-from,
+.floating-pill-leave-to { opacity: 0; }
+
 /* Shimmer skeleton animation */
 @keyframes shimmer {
     0% { background-position: -200% 0; }

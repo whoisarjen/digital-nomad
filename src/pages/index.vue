@@ -268,13 +268,13 @@
         <p class="text-gray-500">{{ $t('landing.exploreAllSubtitle') }}</p>
       </div>
 
-      <div class="flex flex-col gap-6">
-        <!-- Search + Sort -->
-        <section class="flex gap-6 justify-end flex-col md:flex-row items-center">
-          <div class="flex-1 bg-white">
+      <div class="flex flex-col gap-6 max-w-[1600px] mx-auto w-full">
+        <!-- Search + Sort + Filter trigger -->
+        <section ref="toolbarRef" class="flex gap-3 flex-col md:flex-row items-center">
+          <div class="flex-1 max-md:w-full">
             <SearchBar />
           </div>
-          <div class="flex gap-1 max-md:w-full">
+          <div class="flex gap-2 max-md:w-full">
             <SinglePicker
               name="orderBy"
               operation="equals"
@@ -282,68 +282,26 @@
               :customDefaultOption="translatedOrderByOptions[0]"
             />
             <SortPicker />
+            <button
+              @click="filtersOpen = true"
+              class="flex items-center gap-2 px-4 py-2 rounded-xl border text-sm font-medium transition-colors cursor-pointer max-md:flex-1"
+              :class="activeFilterCount
+                ? 'bg-primary-50 text-primary-800 border-primary-300 hover:bg-primary-100'
+                : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100'"
+            >
+              <LucideSlidersHorizontal :size="15" />
+              <span>{{ $t('filters.title') }}</span>
+              <span
+                v-if="activeFilterCount"
+                class="min-w-[18px] h-[18px] rounded-full bg-accent-500 text-white text-[10px] font-bold flex items-center justify-center px-1 tabular-nums"
+              >
+                {{ activeFilterCount }}
+              </span>
+            </button>
           </div>
         </section>
 
-        <!-- Filters + Cards -->
-        <section class="flex max-md:flex-col gap-6 max-md:items-center">
-          <aside class="rounded-2xl flex flex-col gap-3 w-full md:max-w-[268px]">
-            <h3 class="text-xl font-bold">{{ $t('filters.title') }}</h3>
-            <div
-              @click="() => isClearFilter && router.push({ query: {} })"
-              class="px-4 py-2 rounded-xl border text-center text-sm text-white"
-              :class="{
-                'bg-red-600 hover:bg-red-700 cursor-pointer': isClearFilter,
-                'cursor-not-allowed opacity-50 bg-gray-400 hover:bg-gray-400': !isClearFilter,
-              }"
-            >
-              {{ $t('filters.clear') }}
-            </div>
-            <!-- Favorites only toggle -->
-            <AuthGate :message="$t('favorites.signInRequired')" position="bottom" align="left" v-slot="{ isLocked }">
-              <button
-                @click="toggleFavoritesFilter"
-                :disabled="isLocked"
-                class="w-full flex items-center justify-between gap-2 px-4 py-2.5 rounded-xl border text-sm transition-all"
-                :class="isLocked
-                  ? 'bg-gray-50 border-gray-200 text-gray-400 cursor-not-allowed'
-                  : isFavoritesFilterActive
-                    ? 'bg-rose-50 border-rose-200 text-rose-700 cursor-pointer'
-                    : 'bg-white border-gray-200 text-gray-700 hover:border-gray-300 cursor-pointer'"
-              >
-                <span class="flex items-center gap-2">
-                  <LucideHeart :size="14" :class="isFavoritesFilterActive && !isLocked ? 'text-rose-500 fill-rose-500' : ''" />
-                  {{ $t('favorites.onlyFavorites') }}
-                </span>
-                <span
-                  v-if="!isLocked"
-                  class="size-4 rounded border flex items-center justify-center transition-colors"
-                  :class="isFavoritesFilterActive ? 'bg-rose-500 border-rose-500' : 'border-gray-300'"
-                >
-                  <LucideCheck v-if="isFavoritesFilterActive" :size="10" class="text-white" />
-                </span>
-                <LucideLock v-else :size="12" class="text-gray-400" />
-              </button>
-            </AuthGate>
-
-            <MonthsPicker />
-            <TemperaturesPicker />
-            <WeathersPicker />
-            <RegionsPicker />
-            <PricesPicker :min="filters?.data.costs.costMin ?? 0" :max="filters?.data.costs.costMax ?? 0" />
-            <template v-if="filters?.pickers">
-              <SinglePicker
-                v-for="key of Object.keys(filters?.pickers)"
-                :key="key"
-                :name="key"
-                :operation="filters['pickers'][key as keyof typeof filters['pickers']].operation"
-                :options="filters['pickers'][key as keyof typeof filters['pickers']].options"
-                isLabel
-              />
-            </template>
-          </aside>
-
-          <div class="flex flex-col gap-6 flex-1 w-full">
+        <!-- Cards + Pagination -->
             <div
               v-if="isClearFilter"
               class="text-sm flex gap-1 items-center"
@@ -357,7 +315,7 @@
             </div>
 
             <!-- Cards Grid -->
-            <div class="gap-4 w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            <div class="gap-4 w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
               <!-- Skeleton Loading -->
               <template v-if="status === 'pending'">
                 <div v-for="city in 12" :key="city" class="aspect-[3/4] rounded-2xl skeleton" />
@@ -442,11 +400,44 @@
               </section>
               <Pagination v-else :pages-count="cities?.pagesCount ?? 0" />
             </div>
-          </div>
-        </section>
 
       </div>
     </section>
+
+    <!-- Filters Drawer -->
+    <FiltersDrawer
+      v-model="filtersOpen"
+      :cost-min="filters?.data.costs.costMin ?? 0"
+      :cost-max="filters?.data.costs.costMax ?? 0"
+      :pickers="filters?.pickers"
+      :active-filter-count="activeFilterCount"
+      :is-favorites-active="isFavoritesFilterActive"
+      @toggle-favorites="toggleFavoritesFilter"
+      @clear-filters="clearAllFilters"
+    />
+
+    <!-- Floating filter pill (appears when toolbar scrolls out of view) -->
+    <Transition name="floating-pill">
+      <div
+        v-if="showFloatingFilter"
+        class="fixed inset-x-0 z-50 flex justify-center pointer-events-none"
+        style="bottom: max(1.5rem, calc(0.5rem + env(safe-area-inset-bottom, 0px)))"
+      >
+        <button
+          @click="filtersOpen = true"
+          class="pointer-events-auto flex items-center gap-2 px-5 py-3 rounded-full bg-[#060E1B] text-white shadow-xl shadow-black/20 hover:bg-[#0d1c34] transition-colors cursor-pointer"
+        >
+          <LucideSlidersHorizontal :size="15" />
+          <span class="text-sm font-medium">{{ $t('filters.title') }}</span>
+          <span
+            v-if="activeFilterCount"
+            class="min-w-[18px] h-[18px] rounded-full bg-accent-500 text-white text-[10px] font-bold flex items-center justify-center px-1 tabular-nums"
+          >
+            {{ activeFilterCount }}
+          </span>
+        </button>
+      </div>
+    </Transition>
   </div>
 </template>
 
@@ -535,4 +526,30 @@ const formatSafetyLabel = (level: Level | undefined | null) => {
   }
   return labels[level] ?? level.toLowerCase()
 }
+
+// Filters drawer
+const filtersOpen = ref(false)
+
+const FILTER_EXCLUDE_PARAMS = ['page', 'q', 'orderBy', 'sort']
+const activeFilterCount = computed(() =>
+  Object.keys(route.query).filter(k => !FILTER_EXCLUDE_PARAMS.includes(k)).length
+)
+
+function clearAllFilters() {
+  router.push({ query: {} })
+}
+
+// Floating filter pill — appears when toolbar scrolls out of view
+const toolbarRef = ref<HTMLElement | null>(null)
+const hasReachedExplore = ref(false)
+const isToolbarInView = ref(true)
+
+useIntersectionObserver(toolbarRef, ([{ isIntersecting }]) => {
+  if (isIntersecting) hasReachedExplore.value = true
+  isToolbarInView.value = isIntersecting
+})
+
+const showFloatingFilter = computed(() =>
+  hasReachedExplore.value && !isToolbarInView.value && !filtersOpen.value
+)
 </script>

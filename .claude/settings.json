@@ -64,10 +64,18 @@
       "mcp__Neon__fetch",
       "mcp__Neon__load_resource",
       "Bash(npm install @sidebase/nuxt-auth next-auth @next-auth/prisma-adapter)",
-      "Bash(npx nuxt typecheck)"
+      "Bash(npx nuxt typecheck)",
+      "Bash(node -e \":*)",
+      "Bash(npx tsx /tmp/nomad-translations/update-db.ts)",
+      "Bash(npx tsx update-db.ts)",
+      "Bash(npx tsx -e \":*)",
+      "Read(//Users/kamilowczarek/.claude/**)",
+      "Bash(npx nuxi build)",
+      "Bash(npx nuxi prepare)"
     ],
     "additionalDirectories": [
-      "/tmp"
+      "/tmp",
+      "/Users/kamilowczarek/.claude"
     ]
   }
 }
