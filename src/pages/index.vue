@@ -212,51 +212,6 @@
       </section>
     </div>
 
-    <!-- Top Cities Showcase -->
-    <section v-if="highlights?.topCities?.length" class="bg-gray-50 py-20 px-6">
-      <div class="max-w-6xl mx-auto">
-        <div class="text-center mb-10">
-          <h2 class="text-3xl font-bold text-gray-900 mb-2">{{ $t('landing.topCitiesTitle') }}</h2>
-          <p class="text-gray-500">{{ $t('landing.topCitiesSubtitle') }}</p>
-        </div>
-
-        <div class="flex gap-4 overflow-x-auto pb-4 lg:grid lg:grid-cols-5 lg:overflow-visible lg:pb-0">
-          <div
-            v-for="city in highlights.topCities"
-            :key="city.slug"
-            class="relative flex-shrink-0 w-[220px] lg:w-auto aspect-[3/4] rounded-2xl overflow-hidden group"
-          >
-            <NuxtLink
-              :to="localePath({ name: 'cities-slug', params: { slug: city.slug } })"
-              class="absolute inset-0 z-10"
-            >
-              <img
-                v-if="city.imageUrl"
-                :src="unsplashUrl(city.imageUrl, 440, 586)"
-                :alt="city.name"
-                class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                loading="lazy"
-              />
-              <div v-else class="absolute inset-0 bg-gray-200" />
-              <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
-              <div class="absolute bottom-0 left-0 right-0 p-4">
-                <h3 class="text-white font-semibold text-base leading-tight">{{ city.name }}</h3>
-                <p class="text-white/60 text-sm">{{ city.country }}</p>
-                <div class="flex items-center gap-3 mt-2 text-xs text-white/80">
-                  <span class="flex items-center gap-1">
-                    <LucideStar :size="11" class="text-amber-400 fill-amber-400" />
-                    {{ city.totalScore }}
-                  </span>
-                  <span>{{ Number(city.temperature).toFixed(0) }}&deg;</span>
-                </div>
-              </div>
-            </NuxtLink>
-            <UnsplashCredit v-if="city.imageOwnerName" :owner-name="city.imageOwnerName" :owner-username="city.imageOwnerUsername" position="bottom-right" />
-          </div>
-        </div>
-      </div>
-    </section>
-
     <!-- ══════════════════════════════════════════ -->
     <!-- PART 2 — APP FUNCTIONALITY                -->
     <!-- ══════════════════════════════════════════ -->
@@ -502,9 +457,6 @@ const queryParams = computed(() => ({
 
 const { data: cities, status } = await useCities(queryParams)
 const { data: filters } = await useCitiesFilters()
-const { data: highlightsData } = await useLandingHighlights({ lazy: true })
-
-const highlights = computed(() => highlightsData.value as any)
 
 watch(() => queryParams.value.page, () => {
   window?.scrollTo({ top: 0 });

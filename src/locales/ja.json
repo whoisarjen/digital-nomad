@@ -193,8 +193,6 @@
     "featureDataDesc": "大気質、医療、汚染、購買力など。",
     "featureUpdatedTitle": "毎月更新",
     "featureUpdatedDesc": "信頼できるグローバルソースから毎月最新データを提供。",
-    "topCitiesTitle": "現在のトレンド",
-    "topCitiesSubtitle": "今月の総合スコアによるトップ評価都市",
     "exploreAllTitle": "すべての都市を探す",
     "exploreAllSubtitle": "実データで500以上の都市を検索、フィルタリング、比較",
     "statCitiesLabel": "分析された都市",

@@ -193,8 +193,6 @@
     "featureDataDesc": "대기질, 의료, 오염, 구매력 등.",
     "featureUpdatedTitle": "매월 업데이트",
     "featureUpdatedDesc": "매월 신뢰할 수 있는 글로벌 출처의 최신 데이터.",
-    "topCitiesTitle": "현재 인기 도시",
-    "topCitiesSubtitle": "이번 달 종합 점수 기준 최고 평가 도시",
     "exploreAllTitle": "모든 도시 탐색",
     "exploreAllSubtitle": "실제 데이터로 500개 이상의 도시를 검색, 필터링, 비교하세요",
     "statCitiesLabel": "분석된 도시",
