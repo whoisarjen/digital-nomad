@@ -128,6 +128,26 @@ All content produced must be:
 | Numbeo | Not nomad-specific, ugly UI | "Built specifically for digital nomads" |
 | Others | Incomplete data, outdated | "500+ cities, real API data, updated monthly" |
 
+## Database Access
+
+**Neon PostgreSQL** (Kamil profile) — use Neon MCP tools to query real data for content.
+
+- **Project ID:** `flat-shape-62285932`
+- **Database:** `neondb`
+- **Org:** Kamil (`org-sparkling-thunder-24326464`)
+
+### Key Tables
+
+| Table | Purpose |
+|-------|---------|
+| `Article` | Blog/editorial content |
+| `Category` | Content categories |
+| `AgentWorkQueue` | Agent task queue |
+
+### How to Use
+
+When content requires real data, query the database directly using `mcp__Neon__run_sql` with `projectId: "flat-shape-62285932"`.
+
 ## Rules
 
 1. **Community first, promotion second.** Every piece of content must provide genuine value.
