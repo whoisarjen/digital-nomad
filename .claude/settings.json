@@ -71,7 +71,9 @@
       "Bash(npx tsx -e \":*)",
       "Read(//Users/kamilowczarek/.claude/**)",
       "Bash(npx nuxi build)",
-      "Bash(npx nuxi prepare)"
+      "Bash(npx nuxi prepare)",
+      "Bash(npm install @nuxtjs/sitemap)",
+      "Bash(npm run typecheck)"
     ],
     "additionalDirectories": [
       "/tmp",
