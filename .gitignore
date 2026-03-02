@@ -29,3 +29,6 @@ Thumbs.db
 
 # Seed data
 data.json
+
+# Claude Code worktrees
+.claude/worktrees/
