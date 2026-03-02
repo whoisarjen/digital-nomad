@@ -1,6 +1,8 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import { LOCALES } from './src/constants/global.constant'
 
+const COMPARISON_CHUNKS = 50
+
 const fullSitePath = process.env.NUXT_PUBLIC_VERCEL_URL
   ? `https://${process.env.NUXT_PUBLIC_VERCEL_URL}`
   : 'http://localhost:3000'
@@ -86,7 +88,9 @@ export default defineNuxtConfig({
     sources: [
       '/api/__sitemap__/cities',
       '/api/__sitemap__/articles',
-      '/api/__sitemap__/comparisons',
+      ...Array.from({ length: COMPARISON_CHUNKS }, (_, i) =>
+        `/api/__sitemap__/comparisons?chunk=${i}&total=${COMPARISON_CHUNKS}`,
+      ),
     ],
   },
   nitro: {
