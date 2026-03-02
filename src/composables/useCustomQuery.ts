@@ -5,7 +5,7 @@ import toPairs from 'lodash/toPairs'
 import { useQuery, type UseQueryOptions, type UseQueryReturnType } from '@tanstack/vue-query';
 import type { z } from 'zod';
 
-export type QueryOptions<TQueryFnData = unknown, TError = unknown, TData = TQueryFnData> = 
+export type QueryOptions<TQueryFnData = unknown, TError = unknown, TData = TQueryFnData> =
   Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey' | 'queryFn'> & {
     lazy?: boolean;
     enabled?: boolean;
@@ -19,6 +19,8 @@ export const useCustomQuery = async <T = unknown>(
   queryOptions: QueryOptions<T> | undefined,
   schema: z.Schema<object> | undefined,
 ) => {
+  const { locale } = useCustomI18n()
+
   const query = computed(() => {
     if (!queryRaw?.value) {
       return {}
@@ -46,7 +48,7 @@ export const useCustomQuery = async <T = unknown>(
     const sortedObj = fromPairs(sortBy(toPairs(query?.value ?? {})));
     const uniqueKey = JSON.stringify(sortedObj);
 
-    return `${url}${uniqueKey}`
+    return `${url}${uniqueKey}${locale.value}`
   })
 
   const queryKey = computed(() => [url, customKey]) // This is weird, but correct way
@@ -56,10 +58,14 @@ export const useCustomQuery = async <T = unknown>(
     queryFn: ({ signal }) => {
       return $fetch<T>(url, {
         method: 'get',
+        cache: 'no-store',
         credentials: 'include',
         signal,
         headers: useRequestHeaders(['cookie']),
-        query: query?.value ?? {},
+        query: {
+          ...query?.value ?? {},
+          lang: locale.value,
+        },
       }) as Promise<T>
     },
     ...queryOptions,

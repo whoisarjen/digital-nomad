@@ -18,7 +18,7 @@
           <img
             v-if="data.data[0].featuredImageUrl"
             :src="data.data[0].featuredImageUrl"
-            :alt="localizedField(data.data[0], 'title')"
+            :alt="data.data[0].title"
             class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
             loading="lazy"
           />
@@ -29,10 +29,10 @@
         </div>
         <div class="p-5 flex flex-col gap-2 flex-1">
           <h3 class="text-lg font-bold text-gray-900 leading-snug line-clamp-2 group-hover:text-primary-600 transition-colors">
-            {{ localizedField(data.data[0], 'title') }}
+            {{ data.data[0].title }}
           </h3>
           <p class="text-sm text-gray-500 leading-relaxed line-clamp-2">
-            {{ localizedField(data.data[0], 'excerpt') }}
+            {{ data.data[0].excerpt }}
           </p>
           <div class="flex items-center gap-3 text-xs text-gray-400 mt-auto pt-2">
             <span>{{ $t('blog.minRead', { min: data.data[0].readingTimeMinutes }) }}</span>
@@ -55,7 +55,7 @@
             <img
               v-if="article.featuredImageUrl"
               :src="article.featuredImageUrl"
-              :alt="localizedField(article, 'title')"
+              :alt="article.title"
               class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
               loading="lazy"
             />
@@ -66,10 +66,10 @@
           </div>
           <div class="flex flex-col gap-1.5 py-1 min-w-0 flex-1">
             <h3 class="text-sm font-bold text-gray-900 leading-snug line-clamp-2 group-hover:text-primary-600 transition-colors">
-              {{ localizedField(article, 'title') }}
+              {{ article.title }}
             </h3>
             <p class="text-xs text-gray-500 leading-relaxed line-clamp-2 flex-1">
-              {{ localizedField(article, 'excerpt') }}
+              {{ article.excerpt }}
             </p>
             <div class="flex items-center gap-3 text-[11px] text-gray-400">
               <span>{{ $t('blog.minRead', { min: article.readingTimeMinutes }) }}</span>
@@ -94,7 +94,7 @@
           <img
             v-if="article.featuredImageUrl"
             :src="article.featuredImageUrl"
-            :alt="localizedField(article, 'title')"
+            :alt="article.title"
             class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
             loading="lazy"
           />
@@ -105,10 +105,10 @@
         </div>
         <div class="p-4 flex flex-col gap-1.5 flex-1">
           <h3 class="text-sm font-bold text-gray-900 leading-snug line-clamp-2 group-hover:text-primary-600 transition-colors">
-            {{ localizedField(article, 'title') }}
+            {{ article.title }}
           </h3>
           <p class="text-xs text-gray-500 leading-relaxed line-clamp-2">
-            {{ localizedField(article, 'excerpt') }}
+            {{ article.excerpt }}
           </p>
           <div class="flex items-center gap-3 text-[11px] text-gray-400 mt-auto pt-1">
             <span>{{ $t('blog.minRead', { min: article.readingTimeMinutes }) }}</span>
@@ -125,8 +125,6 @@
 <script setup lang="ts">
 const { locale } = useCustomI18n()
 const localePath = useLocalePath()
-const localizedField = useLocalizedField()
-
 const props = defineProps<{ citySlug: string }>()
 
 const queryParams = ref({ citySlug: props.citySlug })
@@ -141,7 +139,7 @@ watch(
 const { data } = await useArticlesByCity(queryParams, { lazy: true })
 
 const formatDate = (date: string) => {
-  return new Date(date).toLocaleDateString(locale.value === 'pl' ? 'pl-PL' : 'en-US', {
+  return new Date(date).toLocaleDateString(getLocaleBcp47(locale.value), {
     year: 'numeric',
     month: 'short',
     day: 'numeric',

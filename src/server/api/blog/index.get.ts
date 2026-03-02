@@ -1,45 +1,44 @@
-import { Prisma } from '@prisma/client';
+import { type Prisma } from '@prisma/client';
 import { getArticlesSchema } from '~/shared/global.schema';
+import { LOCALE_SUFFIX_MAP } from '~/constants/global.constant';
 
-const getArticlePrismaQuery = (query: ReturnType<typeof getArticlesSchema.parse>) => {
+export default defineEventHandler(async (event) => {
+  const language = getLocale(event);
+  const select = getLocalizedSelect(language, 'title', 'excerpt');
+
+  const validatedQuery = await getValidatedQuery(event, (body) =>
+    getArticlesSchema.parse(body),
+  );
+
+  const { page, limit } = validatedQuery;
+
   const AND: Prisma.ArticleWhereInput[] = [
     { isPublished: true },
     { publishedAt: { lte: new Date() } },
   ];
 
-  if (query.q) {
+  if (validatedQuery.q) {
     AND.push({
-      OR: [
-        { titleEn: { contains: query.q, mode: 'insensitive' } },
-        { titlePl: { contains: query.q, mode: 'insensitive' } },
-      ],
+      [`title${LOCALE_SUFFIX_MAP[language]}`]: {
+        contains: validatedQuery.q,
+        mode: 'insensitive',
+      },
     });
   }
 
-  if (query.city) {
-    AND.push({ cities: { some: { citySlug: query.city } } });
+  if (validatedQuery.city) {
+    AND.push({ cities: { some: { citySlug: validatedQuery.city } } });
   }
 
-  return { AND };
-};
+  const where = { AND };
 
-export default defineEventHandler(async (event) => {
-  const validatedQuery = await getValidatedQuery(event, (body) =>
-    getArticlesSchema.parse(body)
-  );
-  const where = getArticlePrismaQuery(validatedQuery);
-  const { page, limit } = validatedQuery;
-
-  const [articles, count] = await Promise.all([
+  const [articlesRaw, count] = await Promise.all([
     prisma.article.findMany({
       where,
       orderBy: { publishedAt: 'desc' },
       select: {
         slug: true,
-        titleEn: true,
-        titlePl: true,
-        excerptEn: true,
-        excerptPl: true,
+        ...select,
         featuredImageUrl: true,
         featuredImageAlt: true,
         featuredImageOwnerName: true,
@@ -61,9 +60,24 @@ export default defineEventHandler(async (event) => {
     prisma.article.count({ where }),
   ]);
 
+  const data = articlesRaw.map((item) => ({
+    slug: item.slug,
+    title: localized(item, 'title', language),
+    excerpt: localized(item, 'excerpt', language),
+    featuredImageUrl: item.featuredImageUrl,
+    featuredImageAlt: item.featuredImageAlt,
+    featuredImageOwnerName: item.featuredImageOwnerName,
+    featuredImageOwnerUsername: item.featuredImageOwnerUsername,
+    readingTimeMinutes: item.readingTimeMinutes,
+    publishedAt: item.publishedAt,
+    cities: item.cities,
+  }));
+
+  const pagesCount = Math.ceil(count / limit);
+
   return {
-    data: articles,
+    data,
     count,
-    pagesCount: Math.ceil(count / limit),
+    pagesCount,
   };
 });

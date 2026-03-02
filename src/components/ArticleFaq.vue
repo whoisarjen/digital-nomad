@@ -15,7 +15,7 @@
           @click="toggle(index)"
         >
           <span class="text-sm font-medium text-gray-900">
-            {{ localizedField(faq, 'question') }}
+            {{ faq.question }}
           </span>
           <LucideChevronDown
             :size="16"
@@ -27,7 +27,7 @@
           v-if="openIndexes.has(index)"
           class="mt-2 text-sm text-gray-600 leading-relaxed"
         >
-          {{ localizedField(faq, 'answer') }}
+          {{ faq.answer }}
         </div>
       </div>
     </div>
@@ -35,15 +35,8 @@
 </template>
 
 <script setup lang="ts">
-const localizedField = useLocalizedField()
-
 defineProps<{
-  faqs: Array<{
-    questionEn: string
-    answerEn: string
-    questionPl: string
-    answerPl: string
-  }>
+  faqs: Array<{ question: string; answer: string }>
 }>()
 
 const openIndexes = ref<Set<number>>(new Set())

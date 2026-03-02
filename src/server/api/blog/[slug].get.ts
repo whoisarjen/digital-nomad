@@ -1,9 +1,12 @@
 import { getArticleBySlugSchema } from '~/shared/global.schema';
 
 export default defineEventHandler(async (event) => {
+  const language = getLocale(event);
+  const select = getLocalizedSelect(language, 'title', 'excerpt', 'content', 'metaTitle', 'metaDesc');
+
   const { slug } = await getValidatedRouterParams(event, getArticleBySlugSchema.parse);
 
-  return await prisma.article.findFirstOrThrow({
+  const article = await prisma.article.findFirstOrThrow({
     where: {
       slug,
       isPublished: true,
@@ -11,16 +14,7 @@ export default defineEventHandler(async (event) => {
     },
     select: {
       slug: true,
-      titleEn: true,
-      titlePl: true,
-      excerptEn: true,
-      excerptPl: true,
-      contentEn: true,
-      contentPl: true,
-      metaTitleEn: true,
-      metaDescEn: true,
-      metaTitlePl: true,
-      metaDescPl: true,
+      ...select,
       featuredImageUrl: true,
       featuredImageAlt: true,
       featuredImageOwnerName: true,
@@ -44,4 +38,27 @@ export default defineEventHandler(async (event) => {
       faqs: true,
     },
   });
+
+  const faqs = (article.faqs as any[] ?? []).map((faq: any) => ({
+    question: localized(faq, 'question', language),
+    answer: localized(faq, 'answer', language),
+  }));
+
+  return {
+    slug: article.slug,
+    title: localized(article, 'title', language),
+    excerpt: localized(article, 'excerpt', language),
+    content: localized(article, 'content', language),
+    metaTitle: localized(article, 'metaTitle', language),
+    metaDesc: localized(article, 'metaDesc', language),
+    featuredImageUrl: article.featuredImageUrl,
+    featuredImageAlt: article.featuredImageAlt,
+    featuredImageOwnerName: article.featuredImageOwnerName,
+    featuredImageOwnerUsername: article.featuredImageOwnerUsername,
+    readingTimeMinutes: article.readingTimeMinutes,
+    publishedAt: article.publishedAt,
+    updatedAt: article.updatedAt,
+    cities: article.cities,
+    faqs,
+  };
 });

@@ -68,7 +68,7 @@ const getBestMonth = (monthSummary: CityData['monthSummary']) => {
 }
 
 const getMonthName = (month: string, locale: string): string => {
-  return new Date(2023, Number(month) - 1).toLocaleString(locale === 'pl' ? 'pl-PL' : 'en-US', { month: 'long' })
+  return new Date(2023, Number(month) - 1).toLocaleString(getLocaleBcp47(locale), { month: 'long' })
 }
 
 export const useComparisonContent = (cityA: CityData, cityB: CityData) => {

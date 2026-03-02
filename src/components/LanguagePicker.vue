@@ -16,11 +16,11 @@
         <h3 class="px-3 font-medium mb-2 block text-center text-gray-900 text-sm">
           {{ $t('lang.selectLanguage') }}
         </h3>
-        <div class="divide-y">
+        <div class="divide-y max-h-80 overflow-y-auto">
           <NuxtLink
             v-for="language in locales"
             :key="language.code"
-            :to="switchLocalePath(language.code as string)"
+            :to="switchLocalePath(language.code as any)"
             class="py-2.5 flex justify-between hover:bg-gray-100 focus:bg-gray-100 focus:outline-none transition-all cursor-pointer px-3 items-center min-h-11 text-gray-900 text-sm"
           >
             {{ language.name }}

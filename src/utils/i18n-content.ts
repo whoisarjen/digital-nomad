@@ -1,11 +1,5 @@
-export const useLocalizedField = () => {
-  const { locale } = useCustomI18n();
+import { LOCALE_BCP47_MAP } from '~/constants/global.constant';
 
-  return <T extends Record<string, any>>(
-    item: T,
-    fieldBase: string,
-  ): string => {
-    const suffix = locale.value === 'pl' ? 'Pl' : 'En';
-    return (item as any)[`${fieldBase}${suffix}`] ?? (item as any)[`${fieldBase}En`] ?? '';
-  };
+export const getLocaleBcp47 = (locale: string): string => {
+  return LOCALE_BCP47_MAP[locale as keyof typeof LOCALE_BCP47_MAP] ?? 'en-US';
 };

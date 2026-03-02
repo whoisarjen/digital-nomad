@@ -351,7 +351,7 @@
               <b>{{ $t('filters.filtersLabel') }}</b>
               <span>{{ Object.entries(queryParams).map(([key, value]) =>
                 `${key.split('_').map(upperFirst).join(' ')} (${key === 'months'
-                  ? new Date(2025, Number(value) - 1).toLocaleString(locale === 'pl' ? 'pl-PL' : 'en-US', { month: 'long' }).toLowerCase()
+                  ? new Date(2025, Number(value) - 1).toLocaleString(getLocaleBcp47(locale), { month: 'long' }).toLowerCase()
                   : `${filters?.pickers[key as keyof typeof filters['pickers']]?.operation === 'lte' ? '≤' : ''}${value}`.toLowerCase().split(',').join(', ').replace('gte:', '').replace('lte:', '')}${filters?.pickers[key as keyof typeof filters['pickers']]?.operation === 'gte' ? '≤' : ''})`).join(', ') }}
                 </span>
             </div>

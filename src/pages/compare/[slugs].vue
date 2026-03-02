@@ -604,6 +604,7 @@
 <script lang="ts" setup>
 import type { Level } from '@prisma/client'
 import { formatNumber } from '~/shared/global.utils'
+import { LOCALES } from '~/constants/global.constant'
 
 defineI18nRoute({
   paths: {
@@ -793,7 +794,7 @@ const getAirQualityClass = (score: number | null) => {
 }
 
 const getMonthShort = (month: string) => {
-  return new Date(2023, Number(month) - 1).toLocaleString(locale.value === 'pl' ? 'pl-PL' : 'en-US', { month: 'short' })
+  return new Date(2023, Number(month) - 1).toLocaleString(getLocaleBcp47(locale.value), { month: 'short' })
 }
 
 // ─── SEO ───
@@ -808,8 +809,14 @@ useHead(() => {
   const title = t('compare.metaTitle', { cityA: cityAName, cityB: cityBName })
   const description = t('compare.metaDesc', { cityA: cityAName, cityB: cityBName })
   const enUrl = `${BASE_URL}/compare/${slugs}`
-  const plUrl = `${BASE_URL}/pl/porownaj/${slugs}`
-  const currentUrl = locale.value === 'pl' ? plUrl : enUrl
+  const currentUrl = locale.value === 'en' ? enUrl : `${BASE_URL}/${locale.value}/porownaj/${slugs}`
+
+  const hreflangLinks: { rel: string; hreflang: string; href: string }[] = LOCALES.map(l => ({
+    rel: 'alternate',
+    hreflang: l.code as string,
+    href: l.code === 'en' ? `${BASE_URL}/compare/${slugs}` : `${BASE_URL}/${l.code}/porownaj/${slugs}`,
+  }))
+  hreflangLinks.push({ rel: 'alternate', hreflang: 'x-default', href: enUrl })
 
   // noindex if missing key data
   const missingData = !data.value.cityA.costForNomadInUsd || !data.value.cityB.costForNomadInUsd ||
@@ -834,7 +841,7 @@ useHead(() => {
       '@type': 'BreadcrumbList',
       'itemListElement': [
         { '@type': 'ListItem', 'position': 1, 'name': 'Home', 'item': BASE_URL },
-        { '@type': 'ListItem', 'position': 2, 'name': t('compare.hubTitle'), 'item': `${BASE_URL}${locale.value === 'pl' ? '/pl/porownaj' : '/compare'}` },
+        { '@type': 'ListItem', 'position': 2, 'name': t('compare.hubTitle'), 'item': `${BASE_URL}${locale.value === 'en' ? '' : `/${locale.value}`}/compare` },
         { '@type': 'ListItem', 'position': 3, 'name': `${cityAName} vs ${cityBName}`, 'item': currentUrl },
       ],
     },
@@ -852,9 +859,7 @@ useHead(() => {
     ],
     link: [
       { rel: 'canonical', href: currentUrl },
-      { rel: 'alternate', hreflang: 'en', href: enUrl },
-      { rel: 'alternate', hreflang: 'pl', href: plUrl },
-      { rel: 'alternate', hreflang: 'x-default', href: enUrl },
+      ...hreflangLinks,
     ],
     script: jsonLd.map(ld => ({
       type: 'application/ld+json',

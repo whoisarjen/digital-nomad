@@ -40,12 +40,12 @@
               {{ $t('blog.title') }}
             </NuxtLink>
             <span class="text-white/20">/</span>
-            <span class="text-sm text-primary-400 truncate max-w-[200px]">{{ localizedField(data, 'title') }}</span>
+            <span class="text-sm text-primary-400 truncate max-w-[200px]">{{ data.title }}</span>
           </div>
 
           <!-- Title -->
           <h1 class="text-3xl sm:text-4xl font-bold text-white leading-tight tracking-tight">
-            {{ localizedField(data, 'title') }}
+            {{ data.title }}
           </h1>
 
           <!-- Meta -->
@@ -82,14 +82,14 @@
           <div v-if="data.featuredImageUrl" class="relative -mt-20 mb-10 rounded-2xl overflow-hidden shadow-xl aspect-[2/1] group/img">
             <img
               :src="data.featuredImageUrl"
-              :alt="localizedField(data, 'title')"
+              :alt="data.title"
               class="w-full h-full object-cover"
             />
             <UnsplashCredit v-if="data.featuredImageOwnerName" :owner-name="data.featuredImageOwnerName" :owner-username="data.featuredImageOwnerUsername" />
           </div>
 
           <!-- Article content -->
-          <div class="article-content" v-html="localizedField(data, 'content')" />
+          <div class="article-content" v-html="data.content" />
 
           <!-- FAQ -->
           <div v-if="data.faqs?.length" class="mt-12 pt-10 border-t border-gray-200">
@@ -113,6 +113,8 @@
 </template>
 
 <script setup lang="ts">
+import { LOCALES } from '~/constants/global.constant'
+
 defineI18nRoute({
   paths: {
     en: '/blog/[slug]',
@@ -122,7 +124,6 @@ defineI18nRoute({
 
 const { locale } = useCustomI18n()
 const localePath = useLocalePath()
-const localizedField = useLocalizedField()
 
 const route = useRoute()
 
@@ -142,18 +143,24 @@ const BASE_URL = 'https://nomad.whoisarjen.com'
 useHead(() => {
   if (!data.value) return {}
 
-  const title = localizedField(data.value, 'metaTitle') || localizedField(data.value, 'title')
-  const description = localizedField(data.value, 'metaDesc') || localizedField(data.value, 'excerpt')
+  const title = data.value.metaTitle || data.value.title
+  const description = data.value.metaDesc || data.value.excerpt
   const slug = data.value.slug
   const enUrl = `${BASE_URL}/blog/${slug}`
-  const plUrl = `${BASE_URL}/pl/blog/${slug}`
-  const currentUrl = locale.value === 'pl' ? plUrl : enUrl
+  const currentUrl = locale.value === 'en' ? enUrl : `${BASE_URL}/${locale.value}/blog/${slug}`
+
+  const hreflangLinks: { rel: string; hreflang: string; href: string }[] = LOCALES.map(l => ({
+    rel: 'alternate',
+    hreflang: l.code as string,
+    href: l.code === 'en' ? `${BASE_URL}/blog/${slug}` : `${BASE_URL}/${l.code}/blog/${slug}`,
+  }))
+  hreflangLinks.push({ rel: 'alternate', hreflang: 'x-default', href: enUrl })
 
   const jsonLd: any[] = [
     {
       '@context': 'https://schema.org',
       '@type': 'Article',
-      'headline': localizedField(data.value, 'title'),
+      'headline': data.value.title,
       'description': description,
       'image': data.value.featuredImageUrl || undefined,
       'datePublished': data.value.publishedAt,
@@ -171,8 +178,8 @@ useHead(() => {
       '@type': 'BreadcrumbList',
       'itemListElement': [
         { '@type': 'ListItem', 'position': 1, 'name': 'Home', 'item': BASE_URL },
-        { '@type': 'ListItem', 'position': 2, 'name': 'Blog', 'item': `${BASE_URL}${locale.value === 'pl' ? '/pl' : ''}/blog` },
-        { '@type': 'ListItem', 'position': 3, 'name': localizedField(data.value, 'title'), 'item': currentUrl },
+        { '@type': 'ListItem', 'position': 2, 'name': 'Blog', 'item': `${BASE_URL}${locale.value === 'en' ? '' : `/${locale.value}`}/blog` },
+        { '@type': 'ListItem', 'position': 3, 'name': data.value.title, 'item': currentUrl },
       ],
     },
   ]
@@ -181,12 +188,12 @@ useHead(() => {
     jsonLd.push({
       '@context': 'https://schema.org',
       '@type': 'FAQPage',
-      'mainEntity': data.value.faqs.map(faq => ({
+      'mainEntity': (data.value.faqs as any[]).map((faq: any) => ({
         '@type': 'Question',
-        'name': localizedField(faq, 'question'),
+        'name': faq.question,
         'acceptedAnswer': {
           '@type': 'Answer',
-          'text': localizedField(faq, 'answer'),
+          'text': faq.answer,
         },
       })),
     })
@@ -204,9 +211,7 @@ useHead(() => {
     ],
     link: [
       { rel: 'canonical', href: currentUrl },
-      { rel: 'alternate', hreflang: 'en', href: enUrl },
-      { rel: 'alternate', hreflang: 'pl', href: plUrl },
-      { rel: 'alternate', hreflang: 'x-default', href: enUrl },
+      ...hreflangLinks,
     ],
     script: jsonLd.map(ld => ({
       type: 'application/ld+json',
@@ -216,7 +221,7 @@ useHead(() => {
 })
 
 const formatDate = (date: string) => {
-  return new Date(date).toLocaleDateString(locale.value === 'pl' ? 'pl-PL' : 'en-US', {
+  return new Date(date).toLocaleDateString(getLocaleBcp47(locale.value), {
     year: 'numeric',
     month: 'long',
     day: 'numeric',

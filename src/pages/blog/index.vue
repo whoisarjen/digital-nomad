@@ -68,7 +68,7 @@
                 <img
                   v-if="featured.featuredImageUrl"
                   :src="featured.featuredImageUrl"
-                  :alt="localizedField(featured, 'title')"
+                  :alt="featured.title"
                   class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
                 />
                 <div v-else class="w-full h-full flex items-center justify-center">
@@ -82,10 +82,10 @@
                   {{ $t('blog.latestPost') }}
                 </span>
                 <h2 class="text-xl sm:text-2xl font-bold text-gray-900 leading-snug group-hover:text-primary-700 transition-colors line-clamp-3">
-                  {{ localizedField(featured, 'title') }}
+                  {{ featured.title }}
                 </h2>
                 <p class="mt-3 text-sm text-gray-500 leading-relaxed line-clamp-3">
-                  {{ localizedField(featured, 'excerpt') }}
+                  {{ featured.excerpt }}
                 </p>
                 <div class="flex items-center gap-4 mt-6 text-xs text-gray-400">
                   <time v-if="featured.publishedAt" :datetime="featured.publishedAt" class="flex items-center gap-1">
@@ -113,7 +113,7 @@
                 <img
                   v-if="article.featuredImageUrl"
                   :src="article.featuredImageUrl"
-                  :alt="localizedField(article, 'title')"
+                  :alt="article.title"
                   class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
                   loading="lazy"
                 />
@@ -124,10 +124,10 @@
               </div>
               <div class="p-5 flex flex-col flex-1">
                 <h3 class="text-base font-semibold text-gray-900 leading-snug line-clamp-2 group-hover:text-primary-700 transition-colors">
-                  {{ localizedField(article, 'title') }}
+                  {{ article.title }}
                 </h3>
                 <p class="mt-2 text-sm text-gray-500 leading-relaxed line-clamp-2 flex-1">
-                  {{ localizedField(article, 'excerpt') }}
+                  {{ article.excerpt }}
                 </p>
                 <div class="flex items-center justify-between text-xs text-gray-400 pt-4 mt-3 border-t border-gray-100">
                   <time v-if="article.publishedAt" :datetime="article.publishedAt">
@@ -158,6 +158,7 @@
 
 <script setup lang="ts">
 import type { GetArticlesSchema } from '~/shared/global.schema';
+import { LOCALES } from '~/constants/global.constant'
 
 defineI18nRoute({
   paths: {
@@ -168,12 +169,18 @@ defineI18nRoute({
 
 const { locale, t } = useCustomI18n()
 const localePath = useLocalePath()
-const localizedField = useLocalizedField()
+const BASE_URL = 'https://nomad.whoisarjen.com'
 
 useHead(() => {
-  const enUrl = 'https://nomad.whoisarjen.com/blog'
-  const plUrl = 'https://nomad.whoisarjen.com/pl/blog'
-  const currentUrl = locale.value === 'pl' ? plUrl : enUrl
+  const enUrl = `${BASE_URL}/blog`
+  const currentUrl = locale.value === 'en' ? enUrl : `${BASE_URL}/${locale.value}/blog`
+
+  const hreflangLinks: { rel: string; hreflang: string; href: string }[] = LOCALES.map(l => ({
+    rel: 'alternate',
+    hreflang: l.code as string,
+    href: l.code === 'en' ? `${BASE_URL}/blog` : `${BASE_URL}/${l.code}/blog`,
+  }))
+  hreflangLinks.push({ rel: 'alternate', hreflang: 'x-default', href: enUrl })
 
   return {
     title: `${t('blog.title')} - Digital Nomad`,
@@ -185,9 +192,7 @@ useHead(() => {
     ],
     link: [
       { rel: 'canonical', href: currentUrl },
-      { rel: 'alternate', hreflang: 'en', href: enUrl },
-      { rel: 'alternate', hreflang: 'pl', href: plUrl },
-      { rel: 'alternate', hreflang: 'x-default', href: enUrl },
+      ...hreflangLinks,
     ],
   }
 })
@@ -204,7 +209,7 @@ const featured = computed(() => articles.value?.data?.[0] ?? null)
 const remaining = computed(() => articles.value?.data?.slice(1) ?? [])
 
 const formatDate = (date: string) => {
-  return new Date(date).toLocaleDateString(locale.value === 'pl' ? 'pl-PL' : 'en-US', {
+  return new Date(date).toLocaleDateString(getLocaleBcp47(locale.value), {
     year: 'numeric',
     month: 'long',
     day: 'numeric',

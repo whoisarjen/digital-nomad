@@ -1,3 +1,5 @@
+import { LOCALES } from '~/constants/global.constant';
+
 const BASE_URL = 'https://nomad.whoisarjen.com';
 
 const toUrl = (
@@ -19,21 +21,28 @@ const toUrl = (
 };
 
 const i18nAlternates = (path: string) => [
-  { lang: 'en', href: `${BASE_URL}${path}` },
-  { lang: 'pl', href: `${BASE_URL}/pl${path}` },
+  ...LOCALES.map(l => ({
+    lang: l.code,
+    href: l.code === 'en' ? `${BASE_URL}${path}` : `${BASE_URL}/${l.code}${path}`,
+  })),
   { lang: 'x-default', href: `${BASE_URL}${path}` },
 ];
+
+const localeUrls = (path: string, lastmod: string | null) =>
+  LOCALES.map(l =>
+    toUrl(
+      l.code === 'en' ? `${BASE_URL}${path}` : `${BASE_URL}/${l.code}${path}`,
+      lastmod,
+      i18nAlternates(path),
+    )
+  );
 
 export default defineEventHandler(async (event) => {
   const today = new Date().toISOString().split('T')[0];
 
   // Static pages
-  const staticUrls = [
-    toUrl(`${BASE_URL}/`, today, i18nAlternates('/')),
-    toUrl(`${BASE_URL}/pl/`, today, i18nAlternates('/')),
-    toUrl(`${BASE_URL}/blog`, today, i18nAlternates('/blog')),
-    toUrl(`${BASE_URL}/pl/blog`, today, i18nAlternates('/blog')),
-  ];
+  const staticPaths = ['/', '/blog'];
+  const staticUrls = staticPaths.flatMap(path => localeUrls(path, today));
 
   // City pages
   const cities = await prisma.city.findMany({
@@ -43,11 +52,7 @@ export default defineEventHandler(async (event) => {
 
   const cityUrls = cities.flatMap((city) => {
     const lastmod = city.updatedAt.toISOString().split('T')[0];
-    const alts = i18nAlternates(`/cities/${city.slug}`);
-    return [
-      toUrl(`${BASE_URL}/cities/${city.slug}`, lastmod, alts),
-      toUrl(`${BASE_URL}/pl/cities/${city.slug}`, lastmod, alts),
-    ];
+    return localeUrls(`/cities/${city.slug}`, lastmod);
   });
 
   // Blog articles
@@ -59,11 +64,7 @@ export default defineEventHandler(async (event) => {
 
   const articleUrls = articles.flatMap((article) => {
     const lastmod = article.updatedAt.toISOString().split('T')[0];
-    const alts = i18nAlternates(`/blog/${article.slug}`);
-    return [
-      toUrl(`${BASE_URL}/blog/${article.slug}`, lastmod, alts),
-      toUrl(`${BASE_URL}/pl/blog/${article.slug}`, lastmod, alts),
-    ];
+    return localeUrls(`/blog/${article.slug}`, lastmod);
   });
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>

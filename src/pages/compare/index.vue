@@ -190,6 +190,8 @@
 </template>
 
 <script lang="ts" setup>
+import { LOCALES } from '~/constants/global.constant'
+
 defineI18nRoute({
   paths: {
     en: '/compare',
@@ -279,8 +281,11 @@ useHead({
   ],
   link: [
     { rel: 'canonical', href: `${BASE_URL}${canonicalPath}` },
-    { rel: 'alternate', hreflang: 'en', href: `${BASE_URL}/compare` },
-    { rel: 'alternate', hreflang: 'pl', href: `${BASE_URL}/pl/porownaj` },
+    ...LOCALES.map(l => ({
+      rel: 'alternate',
+      hreflang: l.code,
+      href: l.code === 'en' ? `${BASE_URL}/compare` : `${BASE_URL}/${l.code}/porownaj`,
+    })),
     { rel: 'alternate', hreflang: 'x-default', href: `${BASE_URL}/compare` },
   ],
   script: [

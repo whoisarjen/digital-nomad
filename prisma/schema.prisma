@@ -230,6 +230,60 @@ model Article {
   metaTitlePl String?
   metaDescPl  String?
 
+  titleEs     String   @default("")
+  excerptEs   String   @default("")
+  contentEs   String   @default("")
+  metaTitleEs String?
+  metaDescEs  String?
+
+  titleDe     String   @default("")
+  excerptDe   String   @default("")
+  contentDe   String   @default("")
+  metaTitleDe String?
+  metaDescDe  String?
+
+  titlePt     String   @default("")
+  excerptPt   String   @default("")
+  contentPt   String   @default("")
+  metaTitlePt String?
+  metaDescPt  String?
+
+  titleFr     String   @default("")
+  excerptFr   String   @default("")
+  contentFr   String   @default("")
+  metaTitleFr String?
+  metaDescFr  String?
+
+  titleKo     String   @default("")
+  excerptKo   String   @default("")
+  contentKo   String   @default("")
+  metaTitleKo String?
+  metaDescKo  String?
+
+  titleAr     String   @default("")
+  excerptAr   String   @default("")
+  contentAr   String   @default("")
+  metaTitleAr String?
+  metaDescAr  String?
+
+  titleTr     String   @default("")
+  excerptTr   String   @default("")
+  contentTr   String   @default("")
+  metaTitleTr String?
+  metaDescTr  String?
+
+  titleJa     String   @default("")
+  excerptJa   String   @default("")
+  contentJa   String   @default("")
+  metaTitleJa String?
+  metaDescJa  String?
+
+  titleIt     String   @default("")
+  excerptIt   String   @default("")
+  contentIt   String   @default("")
+  metaTitleIt String?
+  metaDescIt  String?
+
   featuredImageUrl           String?
   featuredImageAlt           String?
   featuredImageOwnerName     String?

@@ -438,7 +438,7 @@ const months = computed(() => {
 })
 
 const getMonthShort = (month: string) => {
-  return new Date(2023, Number(month) - 1).toLocaleString(locale.value === 'pl' ? 'pl-PL' : 'en-US', { month: 'short' })
+  return new Date(2023, Number(month) - 1).toLocaleString(getLocaleBcp47(locale.value), { month: 'short' })
 }
 
 const formatLevel = (level: Level | undefined | null) => {
