@@ -36,7 +36,7 @@
 
 <script setup lang="ts">
 defineProps<{
-  faqs: Array<{ question: string; answer: string }>
+  faqs: Array<{ question: string | null; answer: string | null }>
 }>()
 
 const openIndexes = ref<Set<number>>(new Set())

@@ -1,8 +1,11 @@
 import { getArticleBySlugSchema } from '~/shared/global.schema';
+import type { Suffix } from '~/constants/global.constant';
+
+type FaqJson = Record<`${'question' | 'answer'}${Suffix}`, string | null>;
 
 export default defineEventHandler(async (event) => {
   const language = getLocale(event);
-  const select = getLocalizedSelect(language, 'title', 'excerpt', 'content', 'metaTitle', 'metaDesc');
+  const select = getLocalizedSelect(language);
 
   const { slug } = await getValidatedRouterParams(event, getArticleBySlugSchema.parse);
 
@@ -12,16 +15,7 @@ export default defineEventHandler(async (event) => {
       isPublished: true,
       publishedAt: { lte: new Date() },
     },
-    select: {
-      slug: true,
-      ...select,
-      featuredImageUrl: true,
-      featuredImageAlt: true,
-      featuredImageOwnerName: true,
-      featuredImageOwnerUsername: true,
-      readingTimeMinutes: true,
-      publishedAt: true,
-      updatedAt: true,
+    include: {
       cities: {
         select: {
           isPrimary: true,
@@ -35,22 +29,22 @@ export default defineEventHandler(async (event) => {
           },
         },
       },
-      faqs: true,
     },
   });
 
-  const faqs = (article.faqs as any[] ?? []).map((faq: any) => ({
-    question: localized(faq, 'question', language),
-    answer: localized(faq, 'answer', language),
+  const rawFaqs = Array.isArray(article.faqs) ? (article.faqs as FaqJson[]) : [];
+  const faqs = rawFaqs.map((faq) => ({
+    question: faq[`question${select}`] ?? null,
+    answer: faq[`answer${select}`] ?? null,
   }));
 
   return {
     slug: article.slug,
-    title: localized(article, 'title', language),
-    excerpt: localized(article, 'excerpt', language),
-    content: localized(article, 'content', language),
-    metaTitle: localized(article, 'metaTitle', language),
-    metaDesc: localized(article, 'metaDesc', language),
+    title: article[`title${select}`] ?? null,
+    excerpt: article[`excerpt${select}`] ?? null,
+    content: article[`content${select}`] ?? null,
+    metaTitle: article[`metaTitle${select}`] ?? null,
+    metaDesc: article[`metaDesc${select}`] ?? null,
     featuredImageUrl: article.featuredImageUrl,
     featuredImageAlt: article.featuredImageAlt,
     featuredImageOwnerName: article.featuredImageOwnerName,

@@ -18,7 +18,7 @@
           <img
             v-if="data.data[0].featuredImageUrl"
             :src="data.data[0].featuredImageUrl"
-            :alt="data.data[0].title"
+            :alt="data.data[0].title ?? undefined"
             class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
             loading="lazy"
           />
@@ -55,7 +55,7 @@
             <img
               v-if="article.featuredImageUrl"
               :src="article.featuredImageUrl"
-              :alt="article.title"
+              :alt="article.title ?? undefined"
               class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
               loading="lazy"
             />
@@ -94,7 +94,7 @@
           <img
             v-if="article.featuredImageUrl"
             :src="article.featuredImageUrl"
-            :alt="article.title"
+            :alt="article.title ?? undefined"
             class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
             loading="lazy"
           />

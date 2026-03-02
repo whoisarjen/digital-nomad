@@ -16,7 +16,7 @@ export type Language = (typeof LOCALES)[number]['code'];
 
 export const LANGUAGES = LOCALES.map(l => l.code) as unknown as readonly [Language, ...Language[]];
 
-export const LOCALE_SUFFIX_MAP: Record<Language, string> = {
+export const LOCALE_SUFFIX_MAP = {
   en: 'En',
   pl: 'Pl',
   es: 'Es',
@@ -28,7 +28,9 @@ export const LOCALE_SUFFIX_MAP: Record<Language, string> = {
   tr: 'Tr',
   ja: 'Ja',
   it: 'It',
-};
+} as const satisfies Record<Language, string>;
+
+export type Suffix = (typeof LOCALE_SUFFIX_MAP)[Language];
 
 export const LOCALE_BCP47_MAP: Record<Language, string> = {
   en: 'en-US',
