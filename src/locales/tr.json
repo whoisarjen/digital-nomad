@@ -308,5 +308,11 @@
     "blog": "Blog",
     "joinCommunity": "Topluluğa Katıl",
     "copyright": "Digital Nomad"
+  },
+  "tooltip": {
+    "orderBy": "Şehirleri metriğe göre sırala",
+    "sort": "Artan / azalan sırayı değiştir",
+    "favorites": "Yalnızca kaydedilen şehirleri göster",
+    "filters": "Gelişmiş filtreleri aç"
   }
 }

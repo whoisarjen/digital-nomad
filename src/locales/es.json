@@ -308,5 +308,11 @@
     "blog": "Blog",
     "joinCommunity": "Únete a la Comunidad",
     "copyright": "Digital Nomad"
+  },
+  "tooltip": {
+    "orderBy": "Ordenar ciudades por métrica",
+    "sort": "Alternar ascendente / descendente",
+    "favorites": "Mostrar solo ciudades guardadas",
+    "filters": "Abrir filtros avanzados"
   }
 }

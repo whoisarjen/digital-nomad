@@ -203,52 +203,60 @@
             <SearchBar />
           </div>
           <div class="flex gap-2 max-md:w-full">
-            <SinglePicker
-              name="orderBy"
-              operation="equals"
-              :options="translatedOrderByOptions"
-              :customDefaultOption="translatedOrderByOptions[0]"
-            />
-            <SortPicker />
-            <AuthGate :message="$t('favorites.signInRequired')" position="bottom" align="center" v-slot="{ isLocked }">
+            <Tooltip :message="$t('tooltip.orderBy')">
+              <SinglePicker
+                name="orderBy"
+                operation="equals"
+                :options="translatedOrderByOptions"
+                :customDefaultOption="translatedOrderByOptions[0]"
+              />
+            </Tooltip>
+            <Tooltip :message="$t('tooltip.sort')">
+              <SortPicker />
+            </Tooltip>
+            <Tooltip :message="$t('tooltip.favorites')" :disabled="!isLoggedIn">
+              <AuthGate :message="$t('favorites.signInRequired')" position="bottom" align="center" v-slot="{ isLocked }">
+                <button
+                  @click="toggleFavoritesFilter"
+                  :disabled="isLocked"
+                  class="h-full px-4 py-2 flex items-center justify-center rounded-lg border transition-all duration-200"
+                  :class="isLocked
+                    ? 'bg-gray-50 border-gray-200 text-gray-300 cursor-not-allowed'
+                    : isFavoritesFilterActive
+                      ? 'bg-rose-50 border-rose-300 text-rose-500 hover:bg-rose-100 cursor-pointer shadow-sm shadow-rose-200/50'
+                      : 'bg-white border-gray-300 text-gray-400 hover:text-rose-400 hover:border-rose-200 hover:bg-rose-50/50 cursor-pointer'"
+                  :aria-label="$t('favorites.onlyFavorites')"
+                >
+                  <LucideHeart
+                    :size="16"
+                    :class="[
+                      'transition-all duration-200',
+                      isFavoritesFilterActive && !isLocked && 'fill-rose-500 scale-110',
+                    ]"
+                  />
+                </button>
+              </AuthGate>
+            </Tooltip>
+            <Tooltip :message="$t('tooltip.filters')" align="right">
               <button
-                @click="toggleFavoritesFilter"
-                :disabled="isLocked"
-                class="h-full px-4 py-2 flex items-center justify-center rounded-lg border transition-all duration-200"
-                :class="isLocked
-                  ? 'bg-gray-50 border-gray-200 text-gray-300 cursor-not-allowed'
-                  : isFavoritesFilterActive
-                    ? 'bg-rose-50 border-rose-300 text-rose-500 hover:bg-rose-100 cursor-pointer shadow-sm shadow-rose-200/50'
-                    : 'bg-white border-gray-300 text-gray-400 hover:text-rose-400 hover:border-rose-200 hover:bg-rose-50/50 cursor-pointer'"
-                :aria-label="$t('favorites.onlyFavorites')"
-              >
-                <LucideHeart
-                  :size="16"
-                  :class="[
-                    'transition-all duration-200',
-                    isFavoritesFilterActive && !isLocked && 'fill-rose-500 scale-110',
-                  ]"
-                />
-              </button>
-            </AuthGate>
-            <button
-              @click="filtersOpen = true"
-              class="flex items-center gap-2 px-4 py-2 rounded-lg border text-sm font-medium transition-colors cursor-pointer max-md:flex-1"
-              :class="activeFilterCount
-                ? 'bg-primary-50 text-primary-800 border-primary-300 hover:bg-primary-100'
-                : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100'"
-            >
-              <LucideSlidersHorizontal :size="15" />
-              <span>{{ $t('filters.title') }}</span>
-              <span
-                class="min-w-[18px] h-[18px] rounded-full text-[10px] font-bold flex items-center justify-center px-1 tabular-nums"
+                @click="filtersOpen = true"
+                class="flex items-center gap-2 px-4 py-2 rounded-lg border text-sm font-medium transition-colors cursor-pointer max-md:flex-1"
                 :class="activeFilterCount
-                  ? 'bg-accent-500 text-white'
-                  : 'invisible'"
+                  ? 'bg-primary-50 text-primary-800 border-primary-300 hover:bg-primary-100'
+                  : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100'"
               >
-                {{ activeFilterCount || '0' }}
-              </span>
-            </button>
+                <LucideSlidersHorizontal :size="15" />
+                <span>{{ $t('filters.title') }}</span>
+                <span
+                  class="min-w-[18px] h-[18px] rounded-full text-[10px] font-bold flex items-center justify-center px-1 tabular-nums"
+                  :class="activeFilterCount
+                    ? 'bg-accent-500 text-white'
+                    : 'invisible'"
+                >
+                  {{ activeFilterCount || '0' }}
+                </span>
+              </button>
+            </Tooltip>
           </div>
         </section>
 

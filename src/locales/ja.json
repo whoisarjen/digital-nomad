@@ -308,5 +308,11 @@
     "blog": "ブログ",
     "joinCommunity": "コミュニティに参加",
     "copyright": "Digital Nomad"
+  },
+  "tooltip": {
+    "orderBy": "指標で都市を並べ替え",
+    "sort": "昇順 / 降順を切り替え",
+    "favorites": "保存した都市のみ表示",
+    "filters": "詳細フィルターを開く"
   }
 }
