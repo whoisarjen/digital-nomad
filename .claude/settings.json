@@ -63,7 +63,8 @@
       "mcp__Neon__search",
       "mcp__Neon__fetch",
       "mcp__Neon__load_resource",
-      "Bash(npm install @sidebase/nuxt-auth next-auth @next-auth/prisma-adapter)"
+      "Bash(npm install @sidebase/nuxt-auth next-auth @next-auth/prisma-adapter)",
+      "Bash(npx nuxt typecheck)"
     ]
   }
 }
