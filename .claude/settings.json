@@ -64,7 +64,12 @@
       "mcp__Neon__fetch",
       "mcp__Neon__load_resource",
       "Bash(npm install @sidebase/nuxt-auth next-auth @next-auth/prisma-adapter)",
-      "Bash(npx nuxt typecheck)"
+      "Bash(npx nuxt typecheck)",
+      "Bash(gh pr close 1 --delete-branch)"
+    ],
+    "additionalDirectories": [
+      "/Users/kamilowczarek/Documents/GitHub/digital-nomad/.claude/worktrees/include-file/.claude",
+      "/Users/kamilowczarek/Documents/GitHub/digital-nomad"
     ]
   }
 }
