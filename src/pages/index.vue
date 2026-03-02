@@ -123,13 +123,13 @@
               <h3 class="font-semibold mb-1.5">{{ $t('landing.featureCostTitle') }}</h3>
               <p class="text-sm text-gray-400 leading-relaxed">{{ $t('landing.featureCostDesc') }}</p>
             </div>
-            <!-- Weather -->
+            <!-- 12+ Data Points -->
             <div class="bg-white/[0.04] border border-white/[0.06] rounded-2xl p-6 hover:bg-white/[0.07] transition-colors">
-              <div class="size-10 rounded-xl bg-amber-500/10 flex items-center justify-center mb-4">
-                <LucideCloudSun :size="20" class="text-amber-400" />
+              <div class="size-10 rounded-xl bg-primary-500/10 flex items-center justify-center mb-4">
+                <LucideBarChart3 :size="20" class="text-primary-400" />
               </div>
-              <h3 class="font-semibold mb-1.5">{{ $t('landing.featureWeatherTitle') }}</h3>
-              <p class="text-sm text-gray-400 leading-relaxed">{{ $t('landing.featureWeatherDesc') }}</p>
+              <h3 class="font-semibold mb-1.5">{{ $t('landing.featureDataTitle') }}</h3>
+              <p class="text-sm text-gray-400 leading-relaxed">{{ $t('landing.featureDataDesc') }}</p>
             </div>
             <!-- Internet -->
             <div class="bg-white/[0.04] border border-white/[0.06] rounded-2xl p-6 hover:bg-white/[0.07] transition-colors">
@@ -139,33 +139,6 @@
               <h3 class="font-semibold mb-1.5">{{ $t('landing.featureInternetTitle') }}</h3>
               <p class="text-sm text-gray-400 leading-relaxed">{{ $t('landing.featureInternetDesc') }}</p>
             </div>
-            <!-- Safety -->
-            <div class="bg-white/[0.04] border border-white/[0.06] rounded-2xl p-6 hover:bg-white/[0.07] transition-colors">
-              <div class="size-10 rounded-xl bg-emerald-500/10 flex items-center justify-center mb-4">
-                <LucideShieldCheck :size="20" class="text-emerald-400" />
-              </div>
-              <h3 class="font-semibold mb-1.5">{{ $t('landing.featureSafetyTitle') }}</h3>
-              <p class="text-sm text-gray-400 leading-relaxed">{{ $t('landing.featureSafetyDesc') }}</p>
-            </div>
-            <!-- 12+ Data Points -->
-            <div class="bg-white/[0.04] border border-white/[0.06] rounded-2xl p-6 hover:bg-white/[0.07] transition-colors">
-              <div class="size-10 rounded-xl bg-primary-500/10 flex items-center justify-center mb-4">
-                <LucideBarChart3 :size="20" class="text-primary-400" />
-              </div>
-              <h3 class="font-semibold mb-1.5">{{ $t('landing.featureDataTitle') }}</h3>
-              <p class="text-sm text-gray-400 leading-relaxed">{{ $t('landing.featureDataDesc') }}</p>
-            </div>
-            <!-- Saved cities -->
-            <NuxtLink
-              :to="localePath(isLoggedIn ? 'dashboard' : 'join')"
-              class="bg-white/[0.04] border border-white/[0.06] rounded-2xl p-6 hover:bg-white/[0.07] transition-colors block"
-            >
-              <div class="size-10 rounded-xl bg-rose-500/10 flex items-center justify-center mb-4">
-                <LucideHeart :size="20" class="text-rose-400" />
-              </div>
-              <h3 class="font-semibold mb-1.5">Saved cities</h3>
-              <p class="text-sm text-gray-400 leading-relaxed">Save cities to your personal list for quick access</p>
-            </NuxtLink>
             <!-- City comparison -->
             <NuxtLink
               :to="localePath('compare')"
