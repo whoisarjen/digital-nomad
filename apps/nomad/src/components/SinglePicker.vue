@@ -1,6 +1,6 @@
 <template>
     <div class="flex flex-col gap-2 w-full">
-      <label v-if="isLabel" :for="name" class="block text-sm font-medium text-gray-700">{{ props.name.split('_').map(upperFirst).join(' ') }}</label>
+      <label v-if="isLabel" :for="name" class="block text-sm font-medium text-gray-700">{{ props.name.split('_').map(s => s[0]?.toUpperCase() + s.slice(1)).join(' ') }}</label>
       <div class="relative">
         <select
           :id="name"
@@ -34,8 +34,6 @@
 </template>
 
 <script setup lang="ts">
-import uniqBy from 'lodash/uniqBy';
-import upperFirst from 'lodash/upperFirst'
 
 type Option = {
     label: string
@@ -71,10 +69,8 @@ const getLabel = (option: Option) => {
 }
 
 const preparedOptions = computed(() => {
-    return uniqBy([
-        defaultOption.value,
-        ...props.options,
-    ], option => option.value)
+    const all = [defaultOption.value, ...props.options]
+    return [...new Map(all.map(o => [o.value, o])).values()]
 })
 
 const route = useRoute()

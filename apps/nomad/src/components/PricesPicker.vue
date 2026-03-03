@@ -32,8 +32,6 @@
 </template>
 
 <script setup lang="ts">
-import concat from 'lodash/concat'
-import compact from 'lodash/compact'
 import { getRangesFromQuery } from '~/shared/global.utils';
 
 const route = useRoute();
@@ -41,7 +39,10 @@ const router = useRouter();
 
 const props = defineProps<{ min: number; max: number }>()
 
-const prices = computed(() => getRangesFromQuery(props.min, props.max)(compact(concat(route.query['prices'])) as string[]))
+const toStringArray = (val: string | string[] | undefined): string[] =>
+  Array.isArray(val) ? val : val ? [val] : []
+
+const prices = computed(() => getRangesFromQuery(props.min, props.max)(toStringArray(route.query['prices'] as string | string[] | undefined)))
 
 const minValue = ref<number>(prices.value.min);
 const maxValue = ref<number>(prices.value.max);

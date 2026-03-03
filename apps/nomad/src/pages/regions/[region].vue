@@ -359,9 +359,14 @@ const toolbarRef = ref<HTMLElement | null>(null)
 const hasReachedGrid = ref(false)
 const isToolbarInView = ref(true)
 
-useIntersectionObserver(toolbarRef, ([{ isIntersecting }]) => {
-  if (isIntersecting) hasReachedGrid.value = true
-  isToolbarInView.value = isIntersecting
+onMounted(() => {
+  if (!toolbarRef.value) return
+  const observer = new IntersectionObserver(([entry]) => {
+    if (entry.isIntersecting) hasReachedGrid.value = true
+    isToolbarInView.value = entry.isIntersecting
+  })
+  observer.observe(toolbarRef.value)
+  onUnmounted(() => observer.disconnect())
 })
 
 const showFloatingFilter = computed(() =>

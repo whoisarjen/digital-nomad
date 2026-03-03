@@ -1,7 +1,4 @@
 import type { NitroFetchRequest, TypedInternalResponse } from 'nitropack';
-import fromPairs from 'lodash/fromPairs'
-import sortBy from 'lodash/sortBy'
-import toPairs from 'lodash/toPairs'
 import { useQuery, type UseQueryOptions, type UseQueryReturnType } from '@tanstack/vue-query';
 import type { z } from 'zod';
 
@@ -45,7 +42,7 @@ export const useCustomQuery = async <T = unknown>(
   })
 
   const customKey = computed(() => {
-    const sortedObj = fromPairs(sortBy(toPairs(query?.value ?? {})));
+    const sortedObj = Object.fromEntries(Object.entries(query?.value ?? {}).sort());
     const uniqueKey = JSON.stringify(sortedObj);
 
     return `${url}${uniqueKey}${locale.value}`

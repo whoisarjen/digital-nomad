@@ -16,14 +16,15 @@
 </template>
 
 <script setup lang="ts">
-import concat from 'lodash/concat'
-import compact from 'lodash/compact'
 import { OPTIONS_REGIONS } from '~/shared/global.utils';
 
 const route = useRoute();
 const router = useRouter();
 
-const selectedOptions = ref<string[]>(compact(concat(route.query.regions as string | string[] | undefined)));
+const toStringArray = (val: string | string[] | undefined): string[] =>
+  Array.isArray(val) ? val : val ? [val] : []
+
+const selectedOptions = ref<string[]>(toStringArray(route.query.regions as string | string[] | undefined));
 
 function selectRegion(value: string) {
   const index = selectedOptions.value.indexOf(value);

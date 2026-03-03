@@ -34,10 +34,10 @@ export default defineNuxtConfig({
     '@nuxtjs/tailwindcss',
     'nuxt-lucide-icons',
     '@nuxt/image',
-    '@vueuse/nuxt',
     '@nuxtjs/i18n',
     '@nuxtjs/sitemap',
     '@sidebase/nuxt-auth',
+    '@nuxt/test-utils/module',
   ],
   auth: {
     baseURL: `${fullSitePath}/api/auth`,

@@ -120,8 +120,6 @@
 </template>
 
 <script setup lang="ts">
-import { watchDebounced } from '@vueuse/core'
-
 defineI18nRoute({
   paths: {
     en: '/countries',
@@ -154,9 +152,11 @@ const sortKey = ref<SortKey>('cityCount')
 const searchQ = ref('')
 const debouncedQ = ref('')
 
-watchDebounced(searchQ, (val) => {
-  debouncedQ.value = val
-}, { debounce: 300 })
+let debounceTimer: ReturnType<typeof setTimeout>
+watch(searchQ, (val) => {
+  clearTimeout(debounceTimer)
+  debounceTimer = setTimeout(() => { debouncedQ.value = val }, 300)
+})
 
 const sortOptions: { key: SortKey; label: string }[] = [
   { key: 'cityCount', label: 'Most Cities' },

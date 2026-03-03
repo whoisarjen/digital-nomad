@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import { formatNumber, OPTIONS_LEVEL_GTE, OPTIONS_LEVEL_LTE, OPTIONS_RANKS } from '~/shared/global.utils';
 
 const getOptions = (array: number[], numOptionsRaw: number) => {

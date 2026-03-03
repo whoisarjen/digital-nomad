@@ -32,14 +32,15 @@
 </template>
 
 <script setup lang="ts">
-import concat from 'lodash/concat'
-import compact from 'lodash/compact'
 import { getRangesFromQuery } from '~/shared/global.utils';
 
 const route = useRoute();
 const router = useRouter();
 
-const temperatures = computed(() => getRangesFromQuery(-50, 50)(compact(concat(route.query['temperatures'])) as string[]))
+const toStringArray = (val: string | string[] | undefined): string[] =>
+  Array.isArray(val) ? val : val ? [val] : []
+
+const temperatures = computed(() => getRangesFromQuery(-50, 50)(toStringArray(route.query['temperatures'] as string | string[] | undefined)))
 
 const minValue = ref<number>(temperatures.value.min);
 const maxValue = ref<number>(temperatures.value.max);

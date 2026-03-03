@@ -1,5 +1,4 @@
 import { Prisma, WeatherIcon } from '@prisma/client';
-import _ from 'lodash';
 import { z } from 'zod';
 import { getCitiesSchema } from '~/shared/global.schema';
 import { formatNumber } from '~/shared/global.utils';
@@ -40,7 +39,7 @@ const getCityPrismaQuery = (query: z.infer<typeof getCitiesSchema>) => {
     }
 
     if (query.regions) {
-        AND.push({ region: { in: _.concat(query.regions) } })
+        AND.push({ region: { in: (Array.isArray(query.regions) ? query.regions : query.regions ? [query.regions] : []) } })
     }
 
     if (query.costs) {
@@ -88,7 +87,7 @@ const getCityPrismaQuery = (query: z.infer<typeof getCitiesSchema>) => {
             monthSummary: {
                 some: {
                     weatherIcon: {
-                        in: [..._.concat(query.weathers) as WeatherIcon[], 'NULL']
+                        in: [...(Array.isArray(query.weathers) ? query.weathers : query.weathers ? [query.weathers] : []) as WeatherIcon[], 'NULL']
                     },
                     month: query.months,
                 }
