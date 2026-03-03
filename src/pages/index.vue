@@ -219,7 +219,7 @@
                 <button
                   @click="toggleFavoritesFilter"
                   :disabled="isLocked"
-                  class="h-full px-4 py-2 flex items-center justify-center rounded-lg border transition-all duration-200"
+                  class="px-4 py-2.5 flex items-center justify-center rounded-lg border transition-all duration-200"
                   :class="isLocked
                     ? 'bg-gray-50 border-gray-200 text-gray-300 cursor-not-allowed'
                     : isFavoritesFilterActive
