@@ -544,6 +544,11 @@ useHead(() => {
     },
   ]
 
+  const imageUrl = data.value.image?.url
+  const ogImage = imageUrl?.startsWith('https://')
+    ? `${imageUrl}${imageUrl.includes('?') ? '&' : '?'}w=1200&h=630&fit=crop&auto=format&q=80`
+    : undefined
+
   return {
     title,
     meta: [
@@ -552,6 +557,12 @@ useHead(() => {
       { property: 'og:description', content: description },
       { property: 'og:url', content: currentUrl },
       { property: 'og:type', content: 'website' },
+      ...(ogImage ? [
+        { property: 'og:image', content: ogImage },
+        { property: 'og:image:width', content: '1200' },
+        { property: 'og:image:height', content: '630' },
+      ] : []),
+      { name: 'twitter:card', content: 'summary_large_image' },
     ],
     link: [
       { rel: 'canonical', href: currentUrl },
