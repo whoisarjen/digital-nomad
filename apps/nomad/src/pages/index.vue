@@ -260,6 +260,17 @@
           </div>
         </section>
 
+        <!-- Active month indicator -->
+        <div v-if="!isMonthDefault" class="flex items-center gap-2">
+          <div class="flex items-center gap-1.5 bg-primary-50 border border-primary-200 text-primary-700 rounded-full px-3 py-1.5 text-sm font-medium">
+            <LucideCalendar :size="13" />
+            {{ $t('explore.showingForMonth', { month: activeMonthName }) }}
+            <button @click="clearMonthFilter" class="ml-1 text-primary-400 hover:text-primary-700 cursor-pointer transition-colors">
+              <LucideX :size="13" />
+            </button>
+          </div>
+        </div>
+
         <!-- Cards + Pagination -->
             <!-- Cards Grid -->
             <div class="gap-4 w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
@@ -477,6 +488,16 @@ const activeFilterCount = computed(() =>
 
 function clearAllFilters() {
   router.push({ query: {} })
+}
+
+const activeMonth = computed(() => (route.query.months as string) ?? getUserCurrentMonthString())
+const activeMonthName = computed(() => new Intl.DateTimeFormat(locale.value, { month: 'long' }).format(new Date(2024, parseInt(activeMonth.value) - 1, 1)))
+const isMonthDefault = computed(() => !route.query.months)
+
+function clearMonthFilter() {
+  const query = { ...route.query }
+  delete query.months
+  router.push({ query })
 }
 
 // Floating filter pill — appears when toolbar scrolls out of view

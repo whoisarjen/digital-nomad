@@ -319,6 +319,6 @@
     "filters": "Gelişmiş filtreleri aç"
   },
   "explore": {
-    "showingForMonth": "PLACEHOLDER"
+    "showingForMonth": "{month} için sonuçlar"
   }
 }

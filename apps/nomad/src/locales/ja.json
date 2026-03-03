@@ -319,6 +319,6 @@
     "filters": "詳細フィルターを開く"
   },
   "explore": {
-    "showingForMonth": "PLACEHOLDER"
+    "showingForMonth": "{month}の結果"
   }
 }

@@ -319,6 +319,6 @@
     "filters": "고급 필터 열기"
   },
   "explore": {
-    "showingForMonth": "PLACEHOLDER"
+    "showingForMonth": "{month} 결과"
   }
 }

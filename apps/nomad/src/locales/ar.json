@@ -319,6 +319,6 @@
     "filters": "فتح الفلاتر المتقدمة"
   },
   "explore": {
-    "showingForMonth": "PLACEHOLDER"
+    "showingForMonth": "نتائج لشهر {month}"
   }
 }

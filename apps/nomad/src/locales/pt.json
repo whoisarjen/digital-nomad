@@ -319,6 +319,6 @@
     "filters": "Abrir filtros avançados"
   },
   "explore": {
-    "showingForMonth": "PLACEHOLDER"
+    "showingForMonth": "Resultados para {month}"
   }
 }
