@@ -1,5 +1,9 @@
 # Project Rules
 
+## Security (Non-Negotiable)
+- **Never include database connection strings, passwords, or credentials in any Claude settings file** (`.claude/settings.json`, `.claude/settings.local.json`, etc.)
+- Use `psql` or other DB tools via environment variables or `.env` files only — never inline credentials in allowed Bash commands
+
 ## Prisma Queries (Non-Negotiable)
 - **Always use `select`, never `include` or `omit`** — only fetch the exact fields needed
 - Follow the deante-monorepo pattern exactly
