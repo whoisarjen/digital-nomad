@@ -824,7 +824,7 @@ useHead(() => {
   const missingData = !data.value.cityA.costForNomadInUsd || !data.value.cityB.costForNomadInUsd ||
     !data.value.cityA.internetSpeedCity || !data.value.cityB.internetSpeedCity
 
-  const jsonLd = [
+  const jsonLd: Record<string, unknown>[] = [
     {
       '@context': 'https://schema.org',
       '@type': 'Article',
@@ -848,6 +848,74 @@ useHead(() => {
       ],
     },
   ]
+
+  // ── FAQPage JSON-LD ──
+  const faqItems: Record<string, unknown>[] = []
+
+  const faqCostA = Number(data.value.cityA.costForNomadInUsd ?? 0)
+  const faqCostB = Number(data.value.cityB.costForNomadInUsd ?? 0)
+  if (faqCostA && faqCostB) {
+    const cheaper = faqCostA < faqCostB ? cityAName : cityBName
+    const faqPct = Math.round(Math.abs(faqCostA - faqCostB) / Math.max(faqCostA, faqCostB) * 100)
+    faqItems.push({
+      '@type': 'Question',
+      'name': `Is ${cityAName} cheaper than ${cityBName} for digital nomads?`,
+      'acceptedAnswer': {
+        '@type': 'Answer',
+        'text': `${cheaper} is cheaper for digital nomads. ${cityAName} costs $${faqCostA}/month and ${cityBName} costs $${faqCostB}/month — a ${faqPct}% difference.`,
+      },
+    })
+  }
+
+  const faqSpeedA = data.value.cityA.internetSpeedCity
+  const faqSpeedB = data.value.cityB.internetSpeedCity
+  if (faqSpeedA && faqSpeedB) {
+    const faster = faqSpeedA > faqSpeedB ? cityAName : cityBName
+    faqItems.push({
+      '@type': 'Question',
+      'name': `Which city has better internet for remote work, ${cityAName} or ${cityBName}?`,
+      'acceptedAnswer': {
+        '@type': 'Answer',
+        'text': `${faster} has faster internet. ${cityAName} averages ${faqSpeedA} Mbps and ${cityBName} averages ${faqSpeedB} Mbps in city-level speed rankings.`,
+      },
+    })
+  }
+
+  if (data.value.cityA.safety && data.value.cityB.safety) {
+    faqItems.push({
+      '@type': 'Question',
+      'name': `Is ${cityAName} safer than ${cityBName}?`,
+      'acceptedAnswer': {
+        '@type': 'Answer',
+        'text': `${cityAName} has a ${data.value.cityA.safety.toLowerCase()} safety rating and ${cityBName} has a ${data.value.cityB.safety.toLowerCase()} safety rating based on Numbeo data.`,
+      },
+    })
+  }
+
+  const summaryA = data.value.cityA.monthSummary
+  const summaryB = data.value.cityB.monthSummary
+  if (summaryA.length && summaryB.length) {
+    const bestA = summaryA.reduce((acc, m) => m.totalScore > acc.totalScore ? m : acc, summaryA[0])
+    const bestB = summaryB.reduce((acc, m) => m.totalScore > acc.totalScore ? m : acc, summaryB[0])
+    const mA = new Date(2023, Number(bestA.month) - 1).toLocaleString('en-US', { month: 'long' })
+    const mB = new Date(2023, Number(bestB.month) - 1).toLocaleString('en-US', { month: 'long' })
+    faqItems.push({
+      '@type': 'Question',
+      'name': `When is the best time to visit ${cityAName} compared to ${cityBName}?`,
+      'acceptedAnswer': {
+        '@type': 'Answer',
+        'text': `The best month to visit ${cityAName} is ${mA} (weather score: ${bestA.totalScore}). For ${cityBName}, the best month is ${mB} (score: ${bestB.totalScore}).`,
+      },
+    })
+  }
+
+  if (faqItems.length > 0) {
+    jsonLd.push({
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      'mainEntity': faqItems,
+    })
+  }
 
   return {
     title,

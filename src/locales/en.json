@@ -290,16 +290,17 @@
       "smallTownFeel": "Smaller city feel with {pop} residents",
       "bestSeason": "Peak season in {month} — {temp} degrees, score {score}"
     },
+    "cheaper": "cheaper",
     "verdict": {
-      "aWins_v1": "Overall, {cityA} comes out ahead for most digital nomads. While {cityB} has its strengths, {cityA} offers a stronger combination of affordability, infrastructure, and quality of life.",
-      "aWins_v2": "For the typical digital nomad, {cityA} is the stronger pick. {cityB} is worth considering for specific needs, but {cityA} delivers better across the key metrics.",
-      "aWins_v3": "The data favors {cityA} as the more well-rounded choice for remote workers. {cityB} competes in certain areas, but {cityA} wins on the overall balance.",
-      "bWins_v1": "Overall, {cityB} comes out ahead for most digital nomads. While {cityA} has its strengths, {cityB} offers a stronger combination of affordability, infrastructure, and quality of life.",
-      "bWins_v2": "For the typical digital nomad, {cityB} is the stronger pick. {cityA} is worth considering for specific needs, but {cityB} delivers better across the key metrics.",
-      "bWins_v3": "The data favors {cityB} as the more well-rounded choice for remote workers. {cityA} competes in certain areas, but {cityB} wins on the overall balance.",
-      "tied_v1": "This one is genuinely close. Both {cityA} and {cityB} offer strong value for digital nomads — the right choice depends on your personal priorities.",
-      "tied_v2": "There is no clear winner here — {cityA} and {cityB} each excel in different areas. Your ideal pick depends on what matters most to you.",
-      "tied_v3": "{cityA} and {cityB} are well-matched overall. Budget, weather preferences, and lifestyle priorities will be the tiebreakers."
+      "aWins_v1": "Overall, {cityA} edges ahead for most digital nomads — at ${costA}/mo it runs {pct}% cheaper than {cityB}'s ${costB}/mo, with {speedA} Mbps internet for reliable remote work.",
+      "aWins_v2": "For the typical digital nomad, {cityA} is the stronger pick. At ${costA}/mo it beats {cityB}'s ${costB}/mo by {pct}%, and the {speedA} Mbps internet handles video calls without issues.",
+      "aWins_v3": "The data favors {cityA} as the more well-rounded choice. At ${costA}/mo versus {cityB}'s ${costB}/mo, that is a {pct}% saving that adds up significantly on an extended stay.",
+      "bWins_v1": "Overall, {cityB} edges ahead for most digital nomads — at ${costB}/mo it runs {pct}% cheaper than {cityA}'s ${costA}/mo, with {speedB} Mbps internet for reliable remote work.",
+      "bWins_v2": "For the typical digital nomad, {cityB} is the stronger pick. At ${costB}/mo it beats {cityA}'s ${costA}/mo by {pct}%, and the {speedB} Mbps internet handles video calls without issues.",
+      "bWins_v3": "The data favors {cityB} as the more well-rounded choice. At ${costB}/mo versus {cityA}'s ${costA}/mo, that is a {pct}% saving that adds up significantly on an extended stay.",
+      "tied_v1": "This one is genuinely close. Both {cityA} (${costA}/mo) and {cityB} (${costB}/mo) offer strong value for digital nomads — the right choice depends on your personal priorities.",
+      "tied_v2": "There is no clear overall winner — {cityA} at ${costA}/mo and {cityB} at ${costB}/mo are in the same price bracket. Your lifestyle priorities will be the tiebreaker.",
+      "tied_v3": "{cityA} (${costA}/mo) and {cityB} (${costB}/mo) are well-matched overall. Budget, weather preferences, and lifestyle priorities will determine the better fit."
     }
   },
   "footer": {

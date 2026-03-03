@@ -39,7 +39,7 @@ select::-ms-expand {
 .animate-float-slow { animation: float 30s ease-in-out infinite 5s; }
 
 html { scroll-behavior: smooth; }
-body { background-color: #060E1B; }
+body { background-color: #f3f4f6; }
 
 /* Filter drawer — backdrop */
 .drawer-backdrop-enter-active,

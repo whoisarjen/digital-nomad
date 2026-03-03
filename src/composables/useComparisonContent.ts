@@ -202,6 +202,7 @@ export const useComparisonContent = (cityA: CityData, cityB: CityData) => {
   const verdictScoreA = computeVerdictScore(cityA)
   const verdictScoreB = computeVerdictScore(cityB)
   const verdictBranch = verdictScoreA > verdictScoreB ? 'aWins' : verdictScoreA < verdictScoreB ? 'bWins' : 'tied'
+  const verdictCostPct = costA && costB ? Math.round(Math.abs(costA - costB) / Math.max(costA, costB) * 100) : 0
   sections.push({
     key: `compare.verdict.${verdictBranch}_v${v}`,
     params: {
@@ -209,6 +210,11 @@ export const useComparisonContent = (cityA: CityData, cityB: CityData) => {
       cityB: cityB.name,
       countryA: cityA.country,
       countryB: cityB.country,
+      costA: costA || 0,
+      costB: costB || 0,
+      pct: verdictCostPct,
+      speedA: cityA.internetSpeedCity ?? 0,
+      speedB: cityB.internetSpeedCity ?? 0,
     },
   })
 
