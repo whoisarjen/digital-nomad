@@ -38,7 +38,7 @@ select::-ms-expand {
 .animate-float-reverse { animation: float 25s ease-in-out infinite reverse; }
 .animate-float-slow { animation: float 30s ease-in-out infinite 5s; }
 
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; background-color: #060E1B; }
 body { background-color: #f3f4f6; }
 
 /* Filter drawer — backdrop */

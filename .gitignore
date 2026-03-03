@@ -8,6 +8,10 @@ dist
 
 # Node dependencies
 node_modules
+**/node_modules
+
+# Turborepo
+.turbo
 
 # Logs
 logs
@@ -26,6 +30,9 @@ Thumbs.db
 !.env.example
 .vercel
 .env*.local
+
+# Prisma custom output (stale, no longer used — safe to delete with sudo)
+packages/db/generated/
 
 # Seed data
 data.json

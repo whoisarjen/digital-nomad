@@ -1,6 +1,7 @@
 {
   "nav": {
     "exploreCities": "Explore Cities",
+    "regions": "Regions",
     "compare": "Compare",
     "blog": "Blog"
   },
@@ -303,8 +304,26 @@
       "tied_v3": "{cityA} (${costA}/mo) and {cityB} (${costB}/mo) are well-matched overall. Budget, weather preferences, and lifestyle priorities will determine the better fit."
     }
   },
+  "regionPage": {
+    "indexSubtitle": "Explore digital nomad cities by region — ranked by cost, internet, safety, and weather.",
+    "cityCount": "{count} cities",
+    "explore": "Explore",
+    "breadcrumb": "Regions",
+    "metaTitle": "Best Cities in {region} for Digital Nomads {year}",
+    "metaDesc": "Explore the top digital nomad cities in {region}. Compare costs, internet speed, safety, and weather across {count} ranked cities.",
+    "h1": "Best Cities in {region} for Digital Nomads",
+    "subtitle": "{count} cities ranked by nomad score for {month}",
+    "statCities": "Cities ranked",
+    "statCostRange": "Cost range",
+    "statAvgInternet": "Avg. internet",
+    "statSafeCities": "Safe cities",
+    "costRangeValue": "${min} – ${max}/mo",
+    "speedValue": "{speed} Mbps",
+    "exploreCta": "Explore all cities"
+  },
   "footer": {
     "exploreCities": "Explore Cities",
+    "regions": "Regions",
     "compare": "Compare Cities",
     "blog": "Blog",
     "joinCommunity": "Join Community",

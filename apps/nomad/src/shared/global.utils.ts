@@ -121,3 +121,20 @@ export const buildCompareSlug = (slugA: string, slugB: string) => {
   const [first, second] = slugA < slugB ? [slugA, slugB] : [slugB, slugA];
   return `${first}-vs-${second}`;
 }
+
+export const REGION_SLUG_MAP = {
+  'europe': 'Europe',
+  'asia': 'Asia',
+  'latin-america': 'LatinAmerica',
+  'middle-east': 'MiddleEast',
+  'north-america': 'NorthAmerica',
+  'africa': 'Africa',
+  'oceania': 'Oceania',
+} as const satisfies Record<string, Region>
+
+export const REGION_SLUGS = Object.keys(REGION_SLUG_MAP) as Array<keyof typeof REGION_SLUG_MAP>
+
+// Locale-specific path segments for the /regions/ prefix
+export const REGION_PATH_BY_LOCALE: Partial<Record<string, string>> = {
+  pl: 'regiony',
+}

@@ -1,0 +1,21 @@
+{
+  "name": "nomad-workspace",
+  "private": true,
+  "scripts": {
+    "build": "turbo run build",
+    "predev": "npx syncpack fix",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "check": "turbo run check",
+    "reinstall": "find . -name 'node_modules' -type d -prune -exec rm -rf '{}' + && rm -rf .turbo && npm i"
+  },
+  "devDependencies": {
+    "syncpack": "^14.0.0",
+    "turbo": "^2.8.3"
+  },
+  "packageManager": "npm@10.2.3",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
+}

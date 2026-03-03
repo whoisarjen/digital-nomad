@@ -73,11 +73,15 @@
       "Bash(npx nuxi build)",
       "Bash(npx nuxi prepare)",
       "Bash(npm install @nuxtjs/sitemap)",
-      "Bash(npm run typecheck)"
+      "Bash(npm run typecheck)",
+      "Read(//dev/**)",
+      "Bash(open /tmp/regions-ux-mockup.html)",
+      "Bash(chmod -R u+w /Users/kamilowczarek/Documents/GitHub/digital-nomad/packages/db/generated)"
     ],
     "additionalDirectories": [
       "/tmp",
-      "/Users/kamilowczarek/.claude"
+      "/Users/kamilowczarek/.claude",
+      "/Users/kamilowczarek/Documents/GitHub/digital-nomad/apps"
     ]
   }
 }

@@ -1,0 +1,23 @@
+{
+  "name": "@nomad/db",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./client": "./src/client.ts",
+    "./types": "./src/types.ts"
+  },
+  "scripts": {
+    "db:generate": "prisma generate"
+  },
+  "dependencies": {
+    "@neondatabase/serverless": "^0.10.4",
+    "@prisma/adapter-neon": "^7.3.0",
+    "@prisma/client": "^7.3.0",
+    "dotenv": "^16.4.4"
+  },
+  "devDependencies": {
+    "prisma": "^7.3.0"
+  }
+}

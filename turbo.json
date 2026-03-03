@@ -1,0 +1,51 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "tasks": {
+    "db:generate": {
+      "cache": false,
+      "inputs": ["prisma/schema.prisma", "prisma/prisma.config.mjs"],
+      "outputs": ["generated/**"]
+    },
+    "build": {
+      "dependsOn": ["^build", "^db:generate"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "outputs": [".nuxt/**", ".output/**", "dist/**"],
+      "env": [
+        "NODE_ENV",
+        "DATABASE_URL",
+        "NUXT_AUTH_SECRET",
+        "NUXT_PUBLIC_VERCEL_URL",
+        "GOOGLE_CLIENT_ID",
+        "GOOGLE_CLIENT_SECRET",
+        "QOL_DATA_URL",
+        "CLIMATE_DATA_URL",
+        "INTERNET_INDEX_URL",
+        "IMAGE_API_URL",
+        "IMAGE_API_KEY",
+        "IMAGE_COLLECTION_IDS",
+        "VERCEL",
+        "VERCEL_ENV",
+        "VERCEL_URL",
+        "VERCEL_GIT_COMMIT_SHA",
+        "VERCEL_GIT_COMMIT_REF"
+      ]
+    },
+    "lint": {},
+    "check": {},
+    "dev": {
+      "dependsOn": ["^db:generate"],
+      "cache": false,
+      "persistent": true
+    },
+    "dev:worktree": {
+      "dependsOn": ["^db:generate"],
+      "cache": false,
+      "persistent": true
+    },
+    "dev:prod": {
+      "dependsOn": ["^db:generate"],
+      "cache": false,
+      "persistent": true
+    }
+  }
+}

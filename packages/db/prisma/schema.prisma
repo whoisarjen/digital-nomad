@@ -1,11 +1,9 @@
 generator client {
-  provider        = "prisma-client-js"
-  previewFeatures = ["driverAdapters"]
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
 enum Level {
@@ -114,7 +112,7 @@ model Weather {
   updatedAt DateTime @default(now()) @updatedAt
 
   date                     DateTime
-  weatherCode              Int
+  weatherCode              Int?
   apparentTemperatureMax   Decimal?
   rainSum                  Decimal?
   windGusts10mMax          Decimal?

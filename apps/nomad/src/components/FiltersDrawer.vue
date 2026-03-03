@@ -99,7 +99,7 @@
             </div>
 
             <!-- Regions (full width on desktop) -->
-            <div class="md:col-span-2">
+            <div v-if="!hideRegions" class="md:col-span-2">
               <RegionsPicker />
             </div>
 
@@ -151,6 +151,7 @@ const props = defineProps<{
   pickers: any
   activeFilterCount: number
   isFavoritesActive: boolean
+  hideRegions?: boolean
 }>()
 
 const emit = defineEmits<{

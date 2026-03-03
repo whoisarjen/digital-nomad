@@ -11,6 +11,7 @@ export default defineNuxtConfig({
   srcDir: 'src/',
   compatibilityDate: '2024-11-01',
   devtools: { enabled: process.env.NODE_ENV === 'development' },
+  devServer: { port: 3000 },
   runtimeConfig: {
     NUXT_AUTH_SECRET: process.env.NUXT_AUTH_SECRET,
   },
@@ -88,6 +89,7 @@ export default defineNuxtConfig({
     sources: [
       '/api/__sitemap__/cities',
       '/api/__sitemap__/articles',
+      '/api/__sitemap__/regions',
       ...Array.from({ length: COMPARISON_CHUNKS }, (_, i) =>
         `/api/__sitemap__/comparisons?chunk=${i}&total=${COMPARISON_CHUNKS}`,
       ),
