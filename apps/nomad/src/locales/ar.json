@@ -317,5 +317,8 @@
     "sort": "تبديل تصاعدي / تنازلي",
     "favorites": "عرض المدن المحفوظة فقط",
     "filters": "فتح الفلاتر المتقدمة"
+  },
+  "explore": {
+    "showingForMonth": "PLACEHOLDER"
   }
 }

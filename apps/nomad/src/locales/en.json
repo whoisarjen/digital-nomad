@@ -337,5 +337,8 @@
     "sort": "Toggle ascending / descending",
     "favorites": "Show only saved cities",
     "filters": "Open advanced filters"
+  },
+  "explore": {
+    "showingForMonth": "Showing results for {month}"
   }
 }

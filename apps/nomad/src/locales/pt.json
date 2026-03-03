@@ -317,5 +317,8 @@
     "sort": "Alternar ascendente / descendente",
     "favorites": "Mostrar apenas cidades salvas",
     "filters": "Abrir filtros avançados"
+  },
+  "explore": {
+    "showingForMonth": "PLACEHOLDER"
   }
 }

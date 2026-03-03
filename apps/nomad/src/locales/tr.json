@@ -317,5 +317,8 @@
     "sort": "Artan / azalan sırayı değiştir",
     "favorites": "Yalnızca kaydedilen şehirleri göster",
     "filters": "Gelişmiş filtreleri aç"
+  },
+  "explore": {
+    "showingForMonth": "PLACEHOLDER"
   }
 }
