@@ -97,7 +97,11 @@
     "pollution": "التلوث",
     "climate": "المناخ",
     "qualityOfLife": "جودة الحياة",
-    "monthlyWeather": "الطقس الشهري"
+    "monthlyWeather": "الطقس الشهري",
+    "bestMonths": "أفضل الأشهر: {months}",
+    "avoidMonths": "تجنب: {months}",
+    "bestLabel": "الأفضل",
+    "avoidLabel": "تجنب"
   },
   "about": {
     "builtBy": "بناه Kamil",

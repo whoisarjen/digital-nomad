@@ -97,7 +97,11 @@
     "pollution": "오염",
     "climate": "기후",
     "qualityOfLife": "삶의 질",
-    "monthlyWeather": "월별 날씨"
+    "monthlyWeather": "월별 날씨",
+    "bestMonths": "최적의 달: {months}",
+    "avoidMonths": "피해야 할 달: {months}",
+    "bestLabel": "최적",
+    "avoidLabel": "비추천"
   },
   "about": {
     "builtBy": "Kamil이 만들었습니다",

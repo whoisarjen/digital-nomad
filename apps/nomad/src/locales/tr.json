@@ -97,7 +97,11 @@
     "pollution": "Kirlilik",
     "climate": "İklim",
     "qualityOfLife": "Yaşam Kalitesi",
-    "monthlyWeather": "Aylık Hava Durumu"
+    "monthlyWeather": "Aylık Hava Durumu",
+    "bestMonths": "En iyi aylar: {months}",
+    "avoidMonths": "Kaçınılacak aylar: {months}",
+    "bestLabel": "En İyi",
+    "avoidLabel": "Kaçın"
   },
   "about": {
     "builtBy": "Kamil tarafından geliştirildi",
