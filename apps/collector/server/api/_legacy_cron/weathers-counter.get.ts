@@ -36,7 +36,7 @@ const median = (numbers: number[]): number => {
 }
 
 export default defineEventHandler(async () => {
-  const cities = (await Promise.all(_.range(5).map(index => 
+  const cities = (await Promise.all(_.range(5).map(index =>
     prisma.city.findMany({
       select: {
         slug: true,
@@ -94,12 +94,12 @@ export default defineEventHandler(async () => {
     })); // Initialize an array for each month
     city.weathers.forEach((weather) => {
       const month = new Date(weather.date).getMonth(); // Get the month (0-11)
-      
+
       // Track frequency of weather codes
       const weatherCode = Number(weather.weatherCode);
-      monthlyTemps[month].weatherCodeMap[weatherCode] = 
+      monthlyTemps[month].weatherCodeMap[weatherCode] =
         (monthlyTemps[month].weatherCodeMap[weatherCode] || 0) + 1;
-    
+
       // Existing logic
       !_.isNil(weather.apparentTemperatureMax) && monthlyTemps[month].apparentTemperatureMax.push(Number(weather.apparentTemperatureMax));
       !_.isNil(weather.rainSum) && monthlyTemps[month].rainSum.push(Number(weather.rainSum));
@@ -118,13 +118,13 @@ export default defineEventHandler(async () => {
       !_.isNil(weather.precipitationSum) && monthlyTemps[month].precipitationSum.push(Number(weather.precipitationSum));
       !_.isNil(weather.temperature2mMean) && monthlyTemps[month].temperature2mMean.push(Number(weather.temperature2mMean));
     });
-    
+
     // Calculate the most common weather code
     const medianTemperatures = monthlyTemps.map((data, index) => {
-      const mostCommonWeatherCode = data.weatherCodeMap 
+      const mostCommonWeatherCode = data.weatherCodeMap
         ? Object.entries(data.weatherCodeMap).reduce((a: [string, number], b: [string, number]) => (a[1] > b[1] ? a : b))[0]
         : null;
-    
+
       return {
         month: index + 1 < 10 ? `0${index + 1}` : `${index + 1}`,  // Month number (1-12)
         weatherCode: mostCommonWeatherCode,  // <- Most common weather code logic

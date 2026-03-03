@@ -22,21 +22,21 @@ export default defineEventHandler(async () => {
     };
     const url = process.env.WEATHER_API_URL!;
     const responses = await fetchWeatherApi(url, params);
-    
+
     // Helper function to form time ranges
     const range = (start: number, stop: number, step: number) =>
       Array.from({ length: (stop - start) / step }, (_, i) => start + i * step);
-    
+
     // Process first location. Add a for-loop for multiple locations or weather models
     const response = responses[0];
-    
+
     // Attributes for timezone and location
     const utcOffsetSeconds = response.utcOffsetSeconds();
     const timezone = response.timezone();
     const timezoneAbbreviation = response.timezoneAbbreviation();
-    
+
     const daily = response.daily()!;
-    
+
     // Note: The order of weather variables in the URL query and the indices below need to match!
     const weatherData = {
       daily: {
@@ -61,9 +61,9 @@ export default defineEventHandler(async () => {
         precipitationSum: daily.variables(15)!.valuesArray()!,
         temperature2mMean: daily.variables(16)!.valuesArray()!,
       },
-    
+
     };
-    
+
     const res = [] as any[]
     // `weatherData` now contains a simple structure with arrays for datetime and weather data
     for (let i = 0; i < weatherData.daily.date.length; i++) {
