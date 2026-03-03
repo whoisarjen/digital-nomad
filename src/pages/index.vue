@@ -420,9 +420,6 @@ const hasFilters = computed(() => Object.keys(route.query).length > 0)
 
 useHead({
   meta: computed(() => hasFilters.value ? [{ name: 'robots', content: 'noindex, nofollow' }] : []),
-  script: [
-    { src: 'https://beamback.whoisarjen.com/widget.js', 'data-api-key': 'ak_ED-ioa4wqla6_w1VdE6Hs', defer: true },
-  ],
 })
 
 const translatedOrderByOptions = computed(() =>
