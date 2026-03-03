@@ -267,6 +267,7 @@
 <script setup lang="ts">
 import type { Level } from '@prisma/client'
 import type { GetCitiesSchema } from '~/shared/global.schema'
+import { LOCALES } from '~/constants/global.constant'
 import { DEFAULT_CITIES_LIMIT } from '~/shared/global.schema'
 import { getUserCurrentMonthString, OPTIONS_ORDER_BY, REGION_SLUG_MAP } from '~/shared/global.utils'
 
@@ -274,6 +275,15 @@ defineI18nRoute({
   paths: {
     en: '/regions/[region]',
     pl: '/regiony/[region]',
+    es: '/regiones/[region]',
+    de: '/regionen/[region]',
+    pt: '/regioes/[region]',
+    fr: '/regions/[region]',
+    ko: '/regions/[region]',
+    ar: '/regions/[region]',
+    tr: '/bolgeler/[region]',
+    ja: '/regions/[region]',
+    it: '/regioni/[region]',
   },
 })
 
@@ -390,6 +400,18 @@ const formatSafetyLabel = (level: Level | undefined | null) => {
 }
 
 // SEO
+const BASE_URL = 'https://nomad.whoisarjen.com'
+
+const REGION_SEGMENT: Partial<Record<string, string>> = {
+  pl: 'regiony', es: 'regiones', de: 'regionen', pt: 'regioes', tr: 'bolgeler', it: 'regioni',
+}
+
+const regionHref = (code: string) => {
+  const prefix = code === 'en' ? '' : `/${code}`
+  const segment = REGION_SEGMENT[code] ?? 'regions'
+  return `${BASE_URL}${prefix}/${segment}/${regionSlug.value}`
+}
+
 useHead(computed(() => {
   if (!regionData.value) return {}
 
@@ -402,6 +424,13 @@ useHead(computed(() => {
     { property: 'og:description', content: description },
     { property: 'og:type', content: 'website' },
   ]
+
+  metaTags.push({ property: 'og:url', content: regionHref(locale.value) })
+
+  const firstCityImageUrl = regionData.value.cities[0]?.image?.url
+  if (firstCityImageUrl) {
+    metaTags.push({ property: 'og:image', content: unsplashUrl(firstCityImageUrl, 1200, 630) })
+  }
 
   if (hasFilters.value) {
     metaTags.push({ name: 'robots', content: 'noindex, nofollow' })
@@ -417,6 +446,15 @@ useHead(computed(() => {
   return {
     title,
     meta: metaTags,
+    link: [
+      { rel: 'canonical', href: regionHref(locale.value) },
+      ...LOCALES.map(l => ({
+        rel: 'alternate',
+        hreflang: l.code as string,
+        href: regionHref(l.code),
+      })),
+      { rel: 'alternate', hreflang: 'x-default', href: regionHref('en') },
+    ],
     script: [
       {
         type: 'application/ld+json',

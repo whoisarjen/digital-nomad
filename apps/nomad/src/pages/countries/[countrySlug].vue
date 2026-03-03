@@ -156,6 +156,15 @@ defineI18nRoute({
   paths: {
     en: '/countries/[countrySlug]',
     pl: '/kraje/[countrySlug]',
+    es: '/paises/[countrySlug]',
+    de: '/laender/[countrySlug]',
+    pt: '/paises/[countrySlug]',
+    fr: '/pays/[countrySlug]',
+    ko: '/countries/[countrySlug]',
+    ar: '/countries/[countrySlug]',
+    tr: '/ulkeler/[countrySlug]',
+    ja: '/countries/[countrySlug]',
+    it: '/paesi/[countrySlug]',
   },
 })
 
