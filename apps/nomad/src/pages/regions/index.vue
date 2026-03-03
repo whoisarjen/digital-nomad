@@ -151,9 +151,13 @@ const unsplashUrl = (raw: string, w: number, h: number) => {
 
 const BASE_URL = 'https://nomad.whoisarjen.com'
 
+const REGION_SEGMENT: Partial<Record<string, string>> = {
+  pl: 'regiony', es: 'regiones', de: 'regionen', pt: 'regioes', tr: 'bolgeler', it: 'regioni',
+}
+
 const indexHref = (code: string) => {
   const prefix = code === 'en' ? '' : `/${code}`
-  const segment = code === 'pl' ? 'regiony' : 'regions'
+  const segment = REGION_SEGMENT[code] ?? 'regions'
   return `${BASE_URL}${prefix}/${segment}`
 }
 

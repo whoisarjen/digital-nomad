@@ -50,7 +50,6 @@ type Result = {
       links: {
           self: string;
           html: string;
-          html: string;
           photos: string;
           likes: string;
           portfolio: string;

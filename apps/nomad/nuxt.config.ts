@@ -64,7 +64,6 @@ export default defineNuxtConfig({
       file: `${code}.json`,
       name,
     })),
-    lazy: true,
     langDir: '../src/locales',
     defaultLocale: 'en',
     strategy: 'prefix_except_default',

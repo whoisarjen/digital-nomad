@@ -1,6 +1,8 @@
 {
   "nav": {
     "exploreCities": "Şehirleri Keşfet",
+    "regions": "Bölgeler",
+    "countries": "Ülkeler",
     "compare": "Karşılaştır",
     "blog": "Blog"
   },
@@ -305,6 +307,23 @@
       "tied_v2": "Burada net bir kazanan yok — {cityA} ve {cityB} farklı alanlarda öne çıkıyor. İdeal seçiminiz sizin için en önemli olan şeye bağlı.",
       "tied_v3": "{cityA} ve {cityB} genel olarak iyi dengelenmiş. Bütçe, hava durumu tercihleri ve yaşam tarzı öncelikleri belirleyici olacak."
     }
+  },
+  "regionPage": {
+    "indexSubtitle": "Dijital göçebe şehirlerini bölgeye göre keşfedin — maliyet, internet, güvenlik ve hava durumuna göre sıralanmış.",
+    "cityCount": "{count} şehir",
+    "explore": "Keşfet",
+    "breadcrumb": "Bölgeler",
+    "metaTitle": "Dijital Göçebeler için {region} Bölgesindeki En İyi Şehirler {year}",
+    "metaDesc": "{region} bölgesindeki en iyi dijital göçebe şehirlerini keşfedin. {count} sıralı şehirde maliyet, internet hızı, güvenlik ve hava durumunu karşılaştırın.",
+    "h1": "Dijital Göçebeler için {region} Bölgesindeki En İyi Şehirler",
+    "subtitle": "{month} için göçebe puanına göre sıralanan {count} şehir",
+    "statCities": "Sıralanan şehirler",
+    "statCostRange": "Maliyet aralığı",
+    "statAvgInternet": "Ort. internet",
+    "statSafeCities": "Güvenli şehirler",
+    "costRangeValue": "${min} – ${max}/ay",
+    "speedValue": "{speed} Mbps",
+    "exploreCta": "Tüm şehirleri keşfet"
   },
   "footer": {
     "exploreCities": "Şehirleri Keşfet",
