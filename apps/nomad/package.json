@@ -30,7 +30,7 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "typecheck": "vue-tsc --noEmit",
-    "check": "vue-tsc --noEmit",
+    "check": "vue-tsc --noEmit && vitest run",
     "test": "vitest",
     "test:run": "vitest run",
     "test:coverage": "vitest run --coverage"

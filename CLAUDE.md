@@ -42,6 +42,17 @@ Every server API endpoint must follow this exact pattern from `src/server/api/bl
 
 6. **Only `as` allowed**: `as const` on computed keys, `as FaqJson[]` on JSON columns. No `as unknown as X` or `as any` on Prisma results.
 
+## Git Hooks
+
+| Hook | What runs | When |
+|---|---|---|
+| `pre-commit` | `turbo run typecheck` (vue-tsc in both apps) | Every commit |
+| `commit-msg` | `commitlint` (conventional format enforced) | Every commit |
+| `pre-push` | `turbo run test:run` (vitest in both apps) | Before push |
+
+Commit message format: `type(scope): description` — e.g. `feat(blog):`, `fix(i18n):`, `chore:`.
+Turbo caches results — unchanged apps are skipped automatically.
+
 ## TDD Workflow (Non-Negotiable)
 
 Every task goes through Red → Green → Refactor. No exceptions.

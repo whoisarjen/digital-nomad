@@ -31,7 +31,13 @@
       ]
     },
     "lint": {},
-    "check": {},
+    "typecheck": {
+      "inputs": ["src/**", ".nuxt/**", "tsconfig.json"]
+    },
+    "check": {
+      "inputs": ["src/**", "test/**", "vitest.config.ts", "tsconfig.json"],
+      "outputs": ["coverage/**"]
+    },
     "test:run": {
       "dependsOn": ["^db:generate"],
       "inputs": ["src/**", "test/**", "vitest.config.ts"],
