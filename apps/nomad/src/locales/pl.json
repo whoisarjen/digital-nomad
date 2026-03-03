@@ -97,7 +97,11 @@
     "pollution": "Zanieczyszczenie",
     "climate": "Klimat",
     "qualityOfLife": "Jakość życia",
-    "monthlyWeather": "Pogoda miesięczna"
+    "monthlyWeather": "Pogoda miesięczna",
+    "bestMonths": "Najlepsze miesiące: {months}",
+    "avoidMonths": "Unikaj: {months}",
+    "bestLabel": "Najlepszy",
+    "avoidLabel": "Unikaj"
   },
   "about": {
     "builtBy": "Stworzone przez Kamila",

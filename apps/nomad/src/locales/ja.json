@@ -97,7 +97,11 @@
     "pollution": "汚染",
     "climate": "気候",
     "qualityOfLife": "生活の質",
-    "monthlyWeather": "月別の天気"
+    "monthlyWeather": "月別の天気",
+    "bestMonths": "ベストシーズン: {months}",
+    "avoidMonths": "避けるべき月: {months}",
+    "bestLabel": "ベスト",
+    "avoidLabel": "避ける"
   },
   "about": {
     "builtBy": "Kamilが開発",

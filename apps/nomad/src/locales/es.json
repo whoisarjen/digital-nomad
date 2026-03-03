@@ -97,7 +97,11 @@
     "pollution": "Contaminación",
     "climate": "Clima",
     "qualityOfLife": "Calidad de Vida",
-    "monthlyWeather": "Clima Mensual"
+    "monthlyWeather": "Clima Mensual",
+    "bestMonths": "Mejores meses: {months}",
+    "avoidMonths": "Evitar: {months}",
+    "bestLabel": "Mejor",
+    "avoidLabel": "Evitar"
   },
   "about": {
     "builtBy": "Creado por Kamil",

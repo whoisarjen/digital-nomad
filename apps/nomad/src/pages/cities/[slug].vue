@@ -297,6 +297,11 @@
               </div>
               {{ $t('city.monthlyWeather') }}
             </h2>
+            <p v-if="bestMonthLabels" class="text-sm text-gray-500 mb-4">
+              <span class="font-medium text-emerald-600">{{ $t('city.bestMonths', { months: bestMonthLabels }) }}</span>
+              <span class="mx-2 text-gray-300">·</span>
+              <span class="font-medium text-red-500">{{ $t('city.avoidMonths', { months: avoidMonthLabels }) }}</span>
+            </p>
             <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-12 gap-2">
               <div
                 v-for="(monthData, index) in months"
@@ -332,6 +337,14 @@
                     'text-gray-400': monthData.totalScoreLevel === 'LOW',
                   }"
                 >{{ monthData.totalScore }}</span>
+                <span
+                  v-if="bestMonthNumbers.has(monthData.month)"
+                  class="mt-1 text-[9px] font-bold uppercase tracking-wide text-emerald-600 bg-emerald-50 rounded px-1.5 py-0.5"
+                >{{ $t('city.bestLabel') }}</span>
+                <span
+                  v-else-if="avoidMonthNumbers.has(monthData.month)"
+                  class="mt-1 text-[9px] font-bold uppercase tracking-wide text-red-500 bg-red-50 rounded px-1.5 py-0.5"
+                >{{ $t('city.avoidLabel') }}</span>
               </div>
             </div>
           </section>
@@ -369,6 +382,7 @@
 <script lang="ts" setup>
 import type { Level } from '@prisma/client';
 import { formatNumber } from '~/shared/global.utils';
+import { LOCALES } from '~/constants/global.constant';
 
 defineI18nRoute({
   paths: {
@@ -437,9 +451,18 @@ const months = computed(() => {
   })
 })
 
+const sortedByScore = computed(() =>
+  [...(data.value?.monthSummary ?? [])].sort((a, b) => b.totalScore - a.totalScore)
+)
+const bestMonthNumbers = computed(() => new Set(sortedByScore.value.slice(0, 3).map(m => m.month)))
+const avoidMonthNumbers = computed(() => new Set(sortedByScore.value.slice(-3).map(m => m.month)))
+
 const getMonthShort = (month: string) => {
   return new Date(2023, Number(month) - 1).toLocaleString(getLocaleBcp47(locale.value), { month: 'short' })
 }
+
+const bestMonthLabels = computed(() => sortedByScore.value.slice(0, 3).map(m => getMonthShort(m.month)).join(', '))
+const avoidMonthLabels = computed(() => sortedByScore.value.slice(-3).map(m => getMonthShort(m.month)).join(', '))
 
 const formatLevel = (level: Level | undefined | null) => {
   if (!level) return 'N/A'
@@ -474,4 +497,70 @@ const getAirQualityClass = (score: number) => {
   if (score >= 3) return 'text-yellow-600'
   return 'text-red-600'
 }
+
+const BASE_URL = 'https://nomad.whoisarjen.com'
+
+useHead(() => {
+  if (!data.value) return {}
+
+  const { name, country, costForNomadInUsd, internetSpeedCity, safety } = data.value
+  const slug = citySlug.value
+  const title = `${name}, ${country} — Digital Nomad Guide`
+  const description = `Live and work in ${name}. Nomad cost $${costForNomadInUsd}/mo, ${internetSpeedCity} Mbps internet, ${formatLevel(safety)} safety rating.`
+
+  const getCityUrl = (code: string) => {
+    if (code === 'en') return `${BASE_URL}/cities/${slug}`
+    if (code === 'pl') return `${BASE_URL}/pl/miasta/${slug}`
+    return `${BASE_URL}/${code}/cities/${slug}`
+  }
+
+  const currentUrl = getCityUrl(locale.value)
+
+  const hreflangLinks = [
+    ...LOCALES.map(l => ({ rel: 'alternate', hreflang: l.code as string, href: getCityUrl(l.code) })),
+    { rel: 'alternate', hreflang: 'x-default', href: getCityUrl('en') },
+  ]
+
+  const jsonLd = [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      'itemListElement': [
+        { '@type': 'ListItem', 'position': 1, 'name': 'Home', 'item': BASE_URL },
+        { '@type': 'ListItem', 'position': 2, 'name': 'Cities', 'item': `${BASE_URL}/cities` },
+        { '@type': 'ListItem', 'position': 3, 'name': name, 'item': currentUrl },
+      ],
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'Place',
+      'name': name,
+      'url': currentUrl,
+      'address': {
+        '@type': 'PostalAddress',
+        'addressLocality': name,
+        'addressCountry': country,
+      },
+    },
+  ]
+
+  return {
+    title,
+    meta: [
+      { name: 'description', content: description },
+      { property: 'og:title', content: title },
+      { property: 'og:description', content: description },
+      { property: 'og:url', content: currentUrl },
+      { property: 'og:type', content: 'website' },
+    ],
+    link: [
+      { rel: 'canonical', href: currentUrl },
+      ...hreflangLinks,
+    ],
+    script: jsonLd.map(ld => ({
+      type: 'application/ld+json',
+      innerHTML: JSON.stringify(ld),
+    })),
+  }
+})
 </script>
