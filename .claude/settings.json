@@ -76,12 +76,24 @@
       "Bash(npm run typecheck)",
       "Read(//dev/**)",
       "Bash(open /tmp/regions-ux-mockup.html)",
-      "Bash(chmod -R u+w /Users/kamilowczarek/Documents/GitHub/digital-nomad/packages/db/generated)"
+      "Bash(chmod -R u+w /Users/kamilowczarek/Documents/GitHub/digital-nomad/packages/db/generated)",
+      "Bash(node -e \"require\\(''/Users/kamilowczarek/Documents/GitHub/digital-nomad/apps/nomad/src/locales/en.json''\\)\")",
+      "Bash(for f in /Users/kamilowczarek/Documents/GitHub/digital-nomad/apps/nomad/src/locales/*.json)",
+      "Bash(do)",
+      "Bash(node -e \"require\\(''$f''\\)\")",
+      "Bash(psql \"postgresql://neondb_owner:npg_n0kXqyEH2Dcs@ep-frosty-boat-alaa0uj5-pooler.c-3.eu-central-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require\" -c \"SELECT id, slug, name, country, region FROM \"\"City\"\" WHERE region = ''Antarctica'' ORDER BY name;\")",
+      "Bash(psql \"postgresql://neondb_owner:npg_n0kXqyEH2Dcs@ep-frosty-boat-alaa0uj5-pooler.c-3.eu-central-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require\" -c \"\\\\d \"\"City\"\"\")",
+      "Bash(psql \"postgresql://neondb_owner:npg_n0kXqyEH2Dcs@ep-frosty-boat-alaa0uj5-pooler.c-3.eu-central-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require\" -c \"SELECT slug, name, country FROM \"\"City\"\" WHERE region = ''Antarctica'' ORDER BY name;\")",
+      "Bash(psql \"postgresql://neondb_owner:npg_n0kXqyEH2Dcs@ep-frosty-boat-alaa0uj5-pooler.c-3.eu-central-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require\" -c \"SELECT COUNT\\(*\\) AS month_summaries FROM \"\"MonthSummary\"\" WHERE \"\"citySlug\"\" IN \\(''amundsen-scott-antarctica'',''mcmurdo-station-antarctica''\\);:*)",
+      "Bash(psql \"postgresql://neondb_owner:npg_n0kXqyEH2Dcs@ep-frosty-boat-alaa0uj5-pooler.c-3.eu-central-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require\" -c \"SELECT tc.table_name, kcu.column_name, rc.delete_rule:*)",
+      "Bash(psql \"postgresql://neondb_owner:npg_n0kXqyEH2Dcs@ep-frosty-boat-alaa0uj5-pooler.c-3.eu-central-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require\" -c \"SELECT:*)",
+      "Bash(psql \"postgresql://neondb_owner:npg_n0kXqyEH2Dcs@ep-frosty-boat-alaa0uj5-pooler.c-3.eu-central-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require\":*)"
     ],
     "additionalDirectories": [
       "/tmp",
       "/Users/kamilowczarek/.claude",
-      "/Users/kamilowczarek/Documents/GitHub/digital-nomad/apps"
+      "/Users/kamilowczarek/Documents/GitHub/digital-nomad/apps",
+      "/Users/kamilowczarek/Documents/GitHub/digital-nomad"
     ]
   }
 }
