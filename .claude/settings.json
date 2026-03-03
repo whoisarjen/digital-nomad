@@ -80,7 +80,12 @@
       "Bash(node -e \"require\\(''/Users/kamilowczarek/Documents/GitHub/digital-nomad/apps/nomad/src/locales/en.json''\\)\")",
       "Bash(for f in /Users/kamilowczarek/Documents/GitHub/digital-nomad/apps/nomad/src/locales/*.json)",
       "Bash(do)",
-      "Bash(node -e \"require\\(''$f''\\)\")"
+      "Bash(node -e \"require\\(''$f''\\)\")",
+      "Read(//Users/kamilowczarek/Documents/GitHub/digital-nomad/apps/nomad/src/locales/**)",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\(json.dumps\\({k:v for k,v in d.items\\(\\) if ''region'' in k.lower\\(\\) or k==''nav''}, indent=2\\)\\)\")",
+      "Bash(for locale in pl de es fr it ja ko ar pt tr)",
+      "Bash(python3 -c \":*)",
+      "Bash(done)"
     ],
     "additionalDirectories": [
       "/tmp",

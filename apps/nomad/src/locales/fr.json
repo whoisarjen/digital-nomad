@@ -27,7 +27,8 @@
     "regions": "Régions",
     "prices": "Prix",
     "to": "à",
-    "allPrefix": "Tous les {name}"
+    "allPrefix": "Tous les {name}",
+    "favorites": "Favoris"
   },
   "months": {
     "jan": "Jan",
@@ -316,7 +317,8 @@
     "orderBy": "Trier les villes par métrique",
     "sort": "Basculer croissant / décroissant",
     "favorites": "Afficher uniquement les villes sauvegardées",
-    "filters": "Ouvrir les filtres avancés"
+    "filters": "Ouvrir les filtres avancés",
+    "resetFilters": "Réinitialiser tous les filtres actifs"
   },
   "explore": {
     "showingForMonth": "Résultats pour {month}"

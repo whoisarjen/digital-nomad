@@ -27,7 +27,8 @@
     "regions": "Bölgeler",
     "prices": "Fiyatlar",
     "to": "-",
-    "allPrefix": "Tüm {name}"
+    "allPrefix": "Tüm {name}",
+    "favorites": "Favoriler"
   },
   "months": {
     "jan": "Oca",
@@ -316,7 +317,8 @@
     "orderBy": "Şehirleri metriğe göre sırala",
     "sort": "Artan / azalan sırayı değiştir",
     "favorites": "Yalnızca kaydedilen şehirleri göster",
-    "filters": "Gelişmiş filtreleri aç"
+    "filters": "Gelişmiş filtreleri aç",
+    "resetFilters": "Tüm aktif filtreleri sıfırla"
   },
   "explore": {
     "showingForMonth": "{month} için sonuçlar"

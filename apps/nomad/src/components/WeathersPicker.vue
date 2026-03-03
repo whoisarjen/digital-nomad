@@ -1,16 +1,18 @@
 <template>
-  <div class="block text-sm font-medium text-gray-700">{{ $t('filters.weathers') }}</div>
-  <div class="flex flex-wrap gap-1">
-    <div
-      v-for="icon in (Object.keys(WEATHERS_ICONS) as WeatherIcon[])"
-      :key="icon"
-      @click="selectWeather(icon)"
-      class="custom-button flex flex-grow justify-center"
-      :class="{
-        'custom-button-active': selectedOptions.includes(icon),
-      }"
-    >
-      <WeatherIcon :weather-icon="icon" />
+  <div class="flex flex-col gap-2">
+    <div class="text-sm font-medium text-gray-700">{{ $t('filters.weathers') }}</div>
+    <div class="flex flex-wrap gap-1">
+      <div
+        v-for="icon in (Object.keys(WEATHERS_ICONS) as WeatherIcon[])"
+        :key="icon"
+        @click="selectWeather(icon)"
+        class="custom-button flex flex-grow justify-center"
+        :class="{
+          'custom-button-active': selectedOptions.includes(icon),
+        }"
+      >
+        <WeatherIcon :weather-icon="icon" />
+      </div>
     </div>
   </div>
 </template>

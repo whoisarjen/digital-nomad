@@ -257,6 +257,19 @@
                 </span>
               </button>
             </Tooltip>
+            <Tooltip :message="$t('tooltip.resetFilters')" align="right">
+              <button
+                @click="clearAllFilters"
+                :disabled="!activeFilterCount"
+                class="px-3 py-2.5 flex items-center justify-center rounded-lg border transition-colors"
+                :class="activeFilterCount
+                  ? 'bg-white border-gray-300 text-gray-500 hover:text-red-500 hover:border-red-300 hover:bg-red-50 cursor-pointer'
+                  : 'bg-white border-gray-200 text-gray-300 cursor-not-allowed'"
+                :aria-label="$t('tooltip.resetFilters')"
+              >
+                <LucideRotateCcw :size="15" />
+              </button>
+            </Tooltip>
           </div>
         </section>
 

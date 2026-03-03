@@ -48,9 +48,10 @@
 
         <!-- Scrollable filter content -->
         <div class="flex-1 overflow-y-auto overscroll-contain" style="-webkit-overflow-scrolling: touch">
-          <div class="px-5 py-5 grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-5">
+          <div class="px-5 py-5 grid grid-cols-1 md:grid-cols-2 gap-4">
             <!-- Favorites toggle -->
-            <div>
+            <div class="bg-white rounded-xl border border-gray-100 p-4 flex flex-col gap-2">
+              <div class="text-sm font-medium text-gray-700">{{ $t('filters.favorites') }}</div>
               <AuthGate :message="$t('favorites.signInRequired')" position="bottom" align="left" v-slot="{ isLocked }">
                 <button
                   @click="$emit('toggleFavorites')"
@@ -79,33 +80,33 @@
             </div>
 
             <!-- Weather -->
-            <div>
+            <div class="bg-white rounded-xl border border-gray-100 p-4 flex flex-col">
               <WeathersPicker />
             </div>
 
             <!-- Months (full width on desktop) -->
-            <div class="md:col-span-2">
+            <div class="md:col-span-2 bg-white rounded-xl border border-gray-100 p-4">
               <MonthsPicker />
             </div>
 
             <!-- Temperature -->
-            <div>
+            <div class="bg-white rounded-xl border border-gray-100 p-4 flex flex-col">
               <TemperaturesPicker />
             </div>
 
             <!-- Price -->
-            <div>
+            <div class="bg-white rounded-xl border border-gray-100 p-4 flex flex-col">
               <PricesPicker :min="costMin" :max="costMax" />
             </div>
 
             <!-- Regions (full width on desktop) -->
-            <div v-if="!hideRegions" class="md:col-span-2">
+            <div v-if="!hideRegions" class="md:col-span-2 bg-white rounded-xl border border-gray-100 p-4">
               <RegionsPicker />
             </div>
 
             <!-- Dynamic pickers from API -->
             <template v-if="pickers">
-              <div v-for="key of Object.keys(pickers)" :key="key">
+              <div v-for="key of Object.keys(pickers)" :key="key" class="bg-white rounded-xl border border-gray-100 p-4 flex flex-col">
                 <SinglePicker
                   :name="key"
                   :operation="(pickers as any)[key].operation"

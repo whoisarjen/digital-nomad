@@ -27,7 +27,8 @@
     "regions": "Regioni",
     "prices": "Prezzi",
     "to": "a",
-    "allPrefix": "Tutti i {name}"
+    "allPrefix": "Tutti i {name}",
+    "favorites": "Preferiti"
   },
   "months": {
     "jan": "Gen",
@@ -316,7 +317,8 @@
     "orderBy": "Ordina le città per metrica",
     "sort": "Alterna crescente / decrescente",
     "favorites": "Mostra solo le città salvate",
-    "filters": "Apri i filtri avanzati"
+    "filters": "Apri i filtri avanzati",
+    "resetFilters": "Ripristina tutti i filtri attivi"
   },
   "explore": {
     "showingForMonth": "Risultati per {month}"

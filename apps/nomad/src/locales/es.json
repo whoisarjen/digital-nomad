@@ -27,7 +27,8 @@
     "regions": "Regiones",
     "prices": "Precios",
     "to": "a",
-    "allPrefix": "Todos los {name}"
+    "allPrefix": "Todos los {name}",
+    "favorites": "Favoritos"
   },
   "months": {
     "jan": "Ene",
@@ -316,7 +317,8 @@
     "orderBy": "Ordenar ciudades por métrica",
     "sort": "Alternar ascendente / descendente",
     "favorites": "Mostrar solo ciudades guardadas",
-    "filters": "Abrir filtros avanzados"
+    "filters": "Abrir filtros avanzados",
+    "resetFilters": "Restablecer todos los filtros activos"
   },
   "explore": {
     "showingForMonth": "Resultados para {month}"

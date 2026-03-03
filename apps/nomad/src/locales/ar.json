@@ -27,7 +27,8 @@
     "regions": "المناطق",
     "prices": "الأسعار",
     "to": "إلى",
-    "allPrefix": "جميع {name}"
+    "allPrefix": "جميع {name}",
+    "favorites": "المفضلة"
   },
   "months": {
     "jan": "يناير",
@@ -316,7 +317,8 @@
     "orderBy": "ترتيب المدن حسب المعيار",
     "sort": "تبديل تصاعدي / تنازلي",
     "favorites": "عرض المدن المحفوظة فقط",
-    "filters": "فتح الفلاتر المتقدمة"
+    "filters": "فتح الفلاتر المتقدمة",
+    "resetFilters": "إعادة تعيين جميع الفلاتر النشطة"
   },
   "explore": {
     "showingForMonth": "نتائج لشهر {month}"

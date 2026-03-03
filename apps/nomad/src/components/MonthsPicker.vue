@@ -1,16 +1,18 @@
 <template>
-  <div class="block text-sm font-medium text-gray-700">{{ $t('filters.months') }}</div>
-  <div class="flex flex-wrap gap-1">
-    <div
-      v-for="month in months"
-      :key="month.value"
-      @click="selectMonth(month.value)"
-      class="custom-button min-w-16 flex-grow"
-      :class="{
-        'custom-button-active': selectedOption === month.value,
-      }"
-    >
-      {{ month.label }}
+  <div class="flex flex-col gap-2">
+    <div class="text-sm font-medium text-gray-700">{{ $t('filters.months') }}</div>
+    <div class="flex flex-wrap gap-1">
+      <div
+        v-for="month in months"
+        :key="month.value"
+        @click="selectMonth(month.value)"
+        class="custom-button min-w-16 flex-grow"
+        :class="{
+          'custom-button-active': selectedOption === month.value,
+        }"
+      >
+        {{ month.label }}
+      </div>
     </div>
   </div>
 </template>

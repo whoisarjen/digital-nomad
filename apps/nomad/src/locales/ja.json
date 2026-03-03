@@ -27,7 +27,8 @@
     "regions": "地域",
     "prices": "価格",
     "to": "〜",
-    "allPrefix": "すべての{name}"
+    "allPrefix": "すべての{name}",
+    "favorites": "お気に入り"
   },
   "months": {
     "jan": "1月",
@@ -316,7 +317,8 @@
     "orderBy": "指標で都市を並べ替え",
     "sort": "昇順 / 降順を切り替え",
     "favorites": "保存した都市のみ表示",
-    "filters": "詳細フィルターを開く"
+    "filters": "詳細フィルターを開く",
+    "resetFilters": "すべてのフィルターをリセット"
   },
   "explore": {
     "showingForMonth": "{month}の結果"
