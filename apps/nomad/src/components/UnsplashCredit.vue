@@ -1,8 +1,8 @@
 <template>
   <div
     class="absolute z-20 flex items-center rounded-full cursor-default
-           max-w-6 opacity-60 bg-black/35 backdrop-blur text-white/55
-           hover:max-w-72 hover:opacity-100 hover:bg-black/55 hover:text-white/75
+           max-w-6 bg-black/50 backdrop-blur text-white/70
+           hover:max-w-72 hover:bg-black/60 hover:text-white
            transition-all duration-300 group/credit"
     :class="positionClasses"
   >

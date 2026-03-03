@@ -22,8 +22,8 @@
           isFav
             ? 'text-rose-500 fill-rose-500 drop-shadow-[0_0_6px_rgba(244,63,94,0.4)]'
             : !isLocked
-              ? 'text-white/60 group-hover/fav:text-rose-400 group-hover/fav:drop-shadow-[0_0_4px_rgba(251,113,133,0.3)]'
-              : 'text-white/40',
+              ? 'text-white group-hover/fav:text-rose-400 group-hover/fav:drop-shadow-[0_0_4px_rgba(251,113,133,0.3)]'
+              : 'text-white/50',
           justToggled && 'scale-125',
           !justToggled && 'scale-100',
         ]"
@@ -71,8 +71,8 @@ const isFav = computed(() => isFavorited(props.citySlug))
 
 const overlayClasses = computed(() => [
   'flex items-center justify-center rounded-full backdrop-blur-md',
-  'bg-black/30 border border-white/[0.08]',
-  'hover:bg-black/50 hover:border-white/[0.15]',
+  'bg-black/50 border border-white/[0.08]',
+  'hover:bg-black/60 hover:border-white/[0.15]',
   props.size === 'sm' ? 'size-9' : 'size-11',
 ].join(' '))
 
