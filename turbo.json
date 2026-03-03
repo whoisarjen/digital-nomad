@@ -39,7 +39,6 @@
       "outputs": ["coverage/**"]
     },
     "test:run": {
-      "dependsOn": ["^db:generate"],
       "inputs": ["src/**", "test/**", "vitest.config.ts"],
       "outputs": ["coverage/**"]
     },
