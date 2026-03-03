@@ -85,7 +85,21 @@
       "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\(json.dumps\\({k:v for k,v in d.items\\(\\) if ''region'' in k.lower\\(\\) or k==''nav''}, indent=2\\)\\)\")",
       "Bash(for locale in pl de es fr it ja ko ar pt tr)",
       "Bash(python3 -c \":*)",
-      "Bash(done)"
+      "Bash(done)",
+      "Bash(npm install --save-dev husky)",
+      "Bash(chmod +x /Users/kamilowczarek/Documents/GitHub/digital-nomad/.husky/pre-commit)",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\(json.dumps\\(d.get\\(''scripts'', {}\\), indent=2\\)\\)\")",
+      "Bash(node -e \"const pkg = require\\(''./node_modules/@nuxtjs/i18n/package.json''\\); console.log\\(pkg.version\\)\")",
+      "Bash(npm view vitest version)",
+      "Bash(npm view @nuxt/test-utils version)",
+      "Bash(npm view @vue/test-utils version)",
+      "Bash(npm view @vitest/coverage-v8 version)",
+      "Bash(npm view happy-dom version)",
+      "Bash(npm view msw version)",
+      "Bash(npm install --save-dev vitest@^4.0 @nuxt/test-utils@^4.0 @vue/test-utils@^2.4 @vitest/coverage-v8@^4.0 happy-dom@^20.0 msw@^2)",
+      "Bash(npm install --save-dev --ignore-scripts vitest@^4.0 @nuxt/test-utils@^4.0 @vue/test-utils@^2.4 @vitest/coverage-v8@^4.0 happy-dom@^20.0 msw@^2)",
+      "Bash(npm install --workspace=apps/nomad)",
+      "Bash(npm install --ignore-scripts)"
     ],
     "additionalDirectories": [
       "/tmp",

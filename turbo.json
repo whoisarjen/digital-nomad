@@ -32,6 +32,11 @@
     },
     "lint": {},
     "check": {},
+    "test:run": {
+      "dependsOn": ["^db:generate"],
+      "inputs": ["src/**", "test/**", "vitest.config.ts"],
+      "outputs": ["coverage/**"]
+    },
     "dev": {
       "dependsOn": ["^db:generate"],
       "cache": false,
