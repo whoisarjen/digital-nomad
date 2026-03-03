@@ -29,7 +29,8 @@
     "dev:prod": "vercel env pull .env -y --environment=production && nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "typecheck": "vue-tsc --noEmit"
+    "typecheck": "vue-tsc --noEmit",
+    "check": "vue-tsc --noEmit"
   },
   "dependencies": {
     "@nomad/db": "0.0.0",

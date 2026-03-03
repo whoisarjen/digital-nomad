@@ -1,6 +1,8 @@
 {
   "nav": {
     "exploreCities": "도시 탐색",
+    "regions": "지역",
+    "countries": "국가",
     "compare": "비교",
     "blog": "블로그"
   },
@@ -305,6 +307,23 @@
       "tied_v2": "확실한 승자가 없습니다 — {cityA}와(과) {cityB}는 각각 다른 영역에서 뛰어납니다. 이상적인 선택은 무엇이 가장 중요한지에 달려 있습니다.",
       "tied_v3": "{cityA}와(과) {cityB}는 전반적으로 잘 맞서고 있습니다. 예산, 날씨 선호도, 라이프스타일 우선순위가 결정적 요인이 될 것입니다."
     }
+  },
+  "regionPage": {
+    "indexSubtitle": "지역별 디지털 노마드 도시 탐색 — 비용, 인터넷, 안전, 날씨로 순위 매김.",
+    "cityCount": "{count}개 도시",
+    "explore": "탐색",
+    "breadcrumb": "지역",
+    "metaTitle": "디지털 노마드를 위한 {region} 최고의 도시 {year}",
+    "metaDesc": "{region}의 최고 디지털 노마드 도시를 탐색하세요. {count}개의 순위 도시에서 비용, 인터넷 속도, 안전, 날씨를 비교하세요.",
+    "h1": "디지털 노마드를 위한 {region} 최고의 도시",
+    "subtitle": "{month} 노마드 점수 기준 {count}개 도시 순위",
+    "statCities": "순위 도시 수",
+    "statCostRange": "비용 범위",
+    "statAvgInternet": "평균 인터넷",
+    "statSafeCities": "안전 도시",
+    "costRangeValue": "${min} – ${max}/월",
+    "speedValue": "{speed} Mbps",
+    "exploreCta": "모든 도시 탐색"
   },
   "footer": {
     "exploreCities": "도시 탐색",

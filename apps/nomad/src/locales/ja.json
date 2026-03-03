@@ -1,6 +1,8 @@
 {
   "nav": {
     "exploreCities": "都市を探す",
+    "regions": "地域",
+    "countries": "国",
     "compare": "比較",
     "blog": "ブログ"
   },
@@ -305,6 +307,23 @@
       "tied_v2": "明確な勝者はいません — {cityA}と{cityB}はそれぞれ異なる分野で優れています。理想的な選択はあなたにとって最も重要なことに依存します。",
       "tied_v3": "{cityA}と{cityB}は全体的によく均衡しています。予算、天気の好み、ライフスタイルの優先事項が決め手になるでしょう。"
     }
+  },
+  "regionPage": {
+    "indexSubtitle": "地域別にデジタルノマドの都市を探す — 費用、インターネット、安全性、天気でランキング。",
+    "cityCount": "{count}都市",
+    "explore": "探す",
+    "breadcrumb": "地域",
+    "metaTitle": "デジタルノマドのための{region}のベスト都市 {year}",
+    "metaDesc": "{region}のデジタルノマドに最適な都市を探す。{count}のランキング都市の費用、インターネット速度、安全性、天気を比較。",
+    "h1": "デジタルノマドのための{region}のベスト都市",
+    "subtitle": "{month}のノマドスコアでランキングされた{count}都市",
+    "statCities": "ランキング都市数",
+    "statCostRange": "費用範囲",
+    "statAvgInternet": "平均インターネット",
+    "statSafeCities": "安全な都市",
+    "costRangeValue": "${min} – ${max}/月",
+    "speedValue": "{speed} Mbps",
+    "exploreCta": "すべての都市を探す"
   },
   "footer": {
     "exploreCities": "都市を探す",
