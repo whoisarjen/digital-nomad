@@ -11,7 +11,7 @@
       />
     </div>
 
-    <div class="absolute invisible opacity-0 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100 transition-all duration-200 top-full mt-1 z-[9999] right-0">
+    <div class="absolute invisible opacity-0 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100 transition-all duration-200 z-[9999] right-0" :class="direction === 'above' ? 'bottom-full mb-1' : 'top-full mt-1'">
       <div class="bg-white min-w-40 shadow-xl py-2 rounded-xl border">
         <h3 class="px-3 font-medium mb-2 block text-center text-gray-900 text-sm">
           {{ $t('lang.selectLanguage') }}
@@ -37,6 +37,11 @@
 </template>
 
 <script setup lang="ts">
+withDefaults(defineProps<{
+  direction?: 'above' | 'below'
+}>(), {
+  direction: 'below',
+})
 const { locale, locales } = useCustomI18n();
 const switchLocalePath = useSwitchLocalePath();
 </script>

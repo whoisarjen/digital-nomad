@@ -21,6 +21,12 @@
             {{ $t('footer.exploreCities') }}
           </NuxtLink>
           <NuxtLink
+            :to="localePath('regions')"
+            class="text-sm text-white/50 hover:text-white/80 transition-colors"
+          >
+            {{ $t('footer.regions') }}
+          </NuxtLink>
+          <NuxtLink
             :to="localePath('compare')"
             class="text-sm text-white/50 hover:text-white/80 transition-colors"
           >
@@ -45,7 +51,7 @@
         <p class="text-xs text-white/30">
           &copy; {{ new Date().getFullYear() }} {{ $t('footer.copyright') }}
         </p>
-        <LanguagePicker />
+        <LanguagePicker direction="above" />
       </div>
     </div>
   </footer>
