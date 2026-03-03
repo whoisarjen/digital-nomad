@@ -41,7 +41,11 @@ const pushSearch = () => {
   });
 };
 
-watchDebounced(q, pushSearch, { debounce: 400 });
+let debounceTimer: NodeJS.Timeout | null = null;
+watch(q, () => {
+  if (debounceTimer) clearTimeout(debounceTimer);
+  debounceTimer = setTimeout(pushSearch, 400);
+});
 
 watch(() => route.query.q, (val) => {
   q.value = (val as string) ?? '';
@@ -83,6 +87,7 @@ const typeEffect = () => {
 onMounted(typeEffect);
 
 onUnmounted(() => {
+  if (debounceTimer) clearTimeout(debounceTimer);
   if (typingTimeout) clearTimeout(typingTimeout);
 });
 </script>

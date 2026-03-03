@@ -1,21 +1,15 @@
-import { defineVitestConfig } from '@nuxt/test-utils/config'
+import { defineConfig } from 'vitest/config'
 
-export default defineVitestConfig({
+export default defineConfig({
   test: {
-    environment: 'nuxt',
-    environmentOptions: {
-      nuxt: {
-        domEnvironment: 'happy-dom',
-      },
-    },
-    include: ['src/**/__tests__/**/*.{test,spec}.ts'],
-    passWithNoTests: true,
+    environment: 'node',
+    include: ['server/**/__tests__/**/*.{test,spec}.ts'],
     setupFiles: ['./test/setup.ts'],
     coverage: {
       provider: 'v8',
-      include: ['src/**/*.{ts,vue}'],
+      include: ['server/**/*.{ts,vue}'],
       exclude: [
-        'src/**/__tests__/**',
+        'server/**/__tests__/**',
         '**/*.d.ts',
       ],
       reporter: ['text', 'html', 'lcov'],

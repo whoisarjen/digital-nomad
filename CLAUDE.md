@@ -42,6 +42,19 @@ Every server API endpoint must follow this exact pattern from `src/server/api/bl
 
 6. **Only `as` allowed**: `as const` on computed keys, `as FaqJson[]` on JSON columns. No `as unknown as X` or `as any` on Prisma results.
 
+## No Workarounds (Non-Negotiable)
+
+Never skip, bypass, or work around tests, linting, type-checking, or git hooks. Every problem must be fixed at its root cause:
+
+- **No `passWithNoTests`** — if vitest finds no test files, write a real test or fix the `include` pattern
+- **No `// @vitest-environment node`** on server route tests — fix the environment config instead
+- **No `--no-verify`** on git — fix the hook failure instead
+- **No `as any` / `as unknown as X`** — fix the type instead
+- **No disabled ESLint rules** — fix the code instead
+- **No `.skip` or `.only` left in tests** — only in temporary local debugging, never committed
+
+If the test environment crashes (e.g. `window is not defined`), find and fix the root cause (e.g. add `overrides` to vitest config to exclude the offending module). Do not change the environment or suppress the error.
+
 ## Git Hooks
 
 | Hook | What runs | When |
@@ -98,7 +111,7 @@ Mock `prisma` and `getLocale`/`getLocalizedSelect` with `vi.hoisted()` + `vi.moc
 
 ```ts
 import { describe, it, expect, vi, beforeAll } from 'vitest'
-import { createMockH3Event } from '~/test/mocks/h3-event'
+import { createMockH3Event } from '../../../../../test/mocks/h3-event'
 
 const { prismaMock, getLocaleMock } = vi.hoisted(() => ({
   prismaMock: { article: { findFirstOrThrow: vi.fn() } },
