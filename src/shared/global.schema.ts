@@ -5,6 +5,7 @@ import { z } from 'zod';
 import { DEFAULT_SORT_VALUE, OPTIONS_ORDER_BY, OPTIONS_LEVEL_LTE, OPTIONS_RANKS, SEARCH_BAR_MAXIMUM_Q_LENGTH, OPTIONS_LEVEL_GTE, getRangesFromQuery, type OrderByOptionValue, OPTIONS_REGIONS } from '~/shared/global.utils';
 
 const MAX_LIMIT_OF_ITEMS_TO_LOAD = 100
+export const DEFAULT_CITIES_LIMIT = 40
 
 const LEVEL = {
     LOW: 'LOW',
@@ -46,7 +47,7 @@ export const getCitiesSchema = z.object({
         .string()
         .optional()
         .transform((val) => (val ? Number(val) : undefined))
-        .pipe(z.number().positive().max(MAX_LIMIT_OF_ITEMS_TO_LOAD).optional().default(40)),
+        .pipe(z.number().positive().max(MAX_LIMIT_OF_ITEMS_TO_LOAD).optional().default(DEFAULT_CITIES_LIMIT)),
     q: z
         .string()
         .max(SEARCH_BAR_MAXIMUM_Q_LENGTH)

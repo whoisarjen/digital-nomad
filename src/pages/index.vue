@@ -265,7 +265,7 @@
             <div class="gap-4 w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
               <!-- Skeleton Loading -->
               <template v-if="status === 'pending'">
-                <div v-for="city in 12" :key="city" class="aspect-[3/4] rounded-2xl skeleton" />
+                <div v-for="city in skeletonCount" :key="city" class="aspect-[3/4] rounded-2xl skeleton" />
               </template>
 
               <!-- City Cards -->
@@ -391,6 +391,7 @@
 <script setup lang="ts">
 import type { Level } from '@prisma/client';
 import type { GetCitiesSchema } from '~/shared/global.schema';
+import { DEFAULT_CITIES_LIMIT } from '~/shared/global.schema';
 import { getUserCurrentMonthString, OPTIONS_ORDER_BY } from '~/shared/global.utils';
 
 defineI18nRoute({
@@ -494,4 +495,6 @@ useIntersectionObserver(toolbarRef, ([{ isIntersecting }]) => {
 const showFloatingFilter = computed(() =>
   hasReachedExplore.value && !isToolbarInView.value && !filtersOpen.value
 )
+
+const skeletonCount = computed(() => Number(route.query.limit) || DEFAULT_CITIES_LIMIT)
 </script>
