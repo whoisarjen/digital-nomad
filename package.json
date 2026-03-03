@@ -23,7 +23,6 @@
   "scripts": {
     "postinstall": "nuxt prepare && npx prisma generate",
     "build": "nuxt build",
-    "predev": "vercel env pull .env -y --environment=development",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
