@@ -69,8 +69,7 @@
     "LatinAmerica": "Latin America",
     "NorthAmerica": "North America",
     "Africa": "Africa",
-    "Oceania": "Oceania",
-    "Antarctica": "Antarctica"
+    "Oceania": "Oceania"
   },
   "safety": {
     "safe": "Safe",

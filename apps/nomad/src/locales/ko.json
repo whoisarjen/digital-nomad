@@ -68,8 +68,7 @@
     "LatinAmerica": "중남미",
     "NorthAmerica": "북미",
     "Africa": "아프리카",
-    "Oceania": "오세아니아",
-    "Antarctica": "남극"
+    "Oceania": "오세아니아"
   },
   "safety": {
     "safe": "안전",

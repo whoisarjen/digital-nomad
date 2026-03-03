@@ -49,40 +49,21 @@ export const OPTIONS_ORDER_BY = [
   { label: 'Population Size', value: 'population' },
 ] satisfies { label: string; value: OrderByOptionValue }[]
 
-export const OPTIONS_REGIONS = [
-    {
-        "label": "Europe",
-        "value": "Europe"
-    },
-    {
-        "label": "Asia",
-        "value": "Asia"
-    },
-    {
-        "label": "Middle East",
-        "value": "MiddleEast"
-    },
-    {
-        "label": "Latin America",
-        "value": "LatinAmerica"
-    },
-    {
-        "label": "North America",
-        "value": "NorthAmerica"
-    },
-    {
-        "label": "Africa",
-        "value": "Africa"
-    },
-    {
-        "label": "Oceania",
-        "value": "Oceania"
-    },
-    {
-        "label": "Antarctica",
-        "value": "Antarctica"
-    },
-] satisfies { label: string; value: Region }[]
+export const REGION_SLUG_MAP = {
+  'europe': 'Europe',
+  'asia': 'Asia',
+  'latin-america': 'LatinAmerica',
+  'middle-east': 'MiddleEast',
+  'north-america': 'NorthAmerica',
+  'africa': 'Africa',
+  'oceania': 'Oceania',
+} as const satisfies Record<string, Region>
+
+export const REGION_SLUGS = Object.keys(REGION_SLUG_MAP) as Array<keyof typeof REGION_SLUG_MAP>
+
+export const OPTIONS_REGIONS = REGION_SLUGS.map(slug => ({
+  value: REGION_SLUG_MAP[slug],
+})) satisfies { value: Region }[]
 
 export const getUserCurrentMonthString = () => {
     const currentMonth = new Date().getMonth() + 1;
@@ -121,18 +102,6 @@ export const buildCompareSlug = (slugA: string, slugB: string) => {
   const [first, second] = slugA < slugB ? [slugA, slugB] : [slugB, slugA];
   return `${first}-vs-${second}`;
 }
-
-export const REGION_SLUG_MAP = {
-  'europe': 'Europe',
-  'asia': 'Asia',
-  'latin-america': 'LatinAmerica',
-  'middle-east': 'MiddleEast',
-  'north-america': 'NorthAmerica',
-  'africa': 'Africa',
-  'oceania': 'Oceania',
-} as const satisfies Record<string, Region>
-
-export const REGION_SLUGS = Object.keys(REGION_SLUG_MAP) as Array<keyof typeof REGION_SLUG_MAP>
 
 // Locale-specific path segments for the /regions/ prefix
 export const REGION_PATH_BY_LOCALE: Partial<Record<string, string>> = {
