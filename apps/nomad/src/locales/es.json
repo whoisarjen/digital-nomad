@@ -1,6 +1,8 @@
 {
   "nav": {
     "exploreCities": "Explorar Ciudades",
+    "regions": "Regiones",
+    "countries": "Países",
     "compare": "Comparar",
     "blog": "Blog"
   },
@@ -305,6 +307,23 @@
       "tied_v2": "No hay un ganador claro aquí — {cityA} y {cityB} destacan en áreas diferentes. Tu elección ideal depende de lo que más te importe.",
       "tied_v3": "{cityA} y {cityB} están muy igualadas en general. El presupuesto, las preferencias climáticas y las prioridades de estilo de vida serán los factores de desempate."
     }
+  },
+  "regionPage": {
+    "indexSubtitle": "Explora ciudades para nómadas digitales por región — clasificadas por coste, internet, seguridad y clima.",
+    "cityCount": "{count} ciudades",
+    "explore": "Explorar",
+    "breadcrumb": "Regiones",
+    "metaTitle": "Mejores Ciudades en {region} para Nómadas Digitales {year}",
+    "metaDesc": "Explora las mejores ciudades para nómadas digitales en {region}. Compara costes, velocidad de internet, seguridad y clima en {count} ciudades clasificadas.",
+    "h1": "Mejores Ciudades en {region} para Nómadas Digitales",
+    "subtitle": "{count} ciudades clasificadas por puntuación nómada para {month}",
+    "statCities": "Ciudades clasificadas",
+    "statCostRange": "Rango de costes",
+    "statAvgInternet": "Internet prom.",
+    "statSafeCities": "Ciudades seguras",
+    "costRangeValue": "${min} – ${max}/mes",
+    "speedValue": "{speed} Mbps",
+    "exploreCta": "Explorar todas las ciudades"
   },
   "footer": {
     "exploreCities": "Explorar Ciudades",

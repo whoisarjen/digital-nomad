@@ -106,4 +106,20 @@ export const buildCompareSlug = (slugA: string, slugB: string) => {
 // Locale-specific path segments for the /regions/ prefix
 export const REGION_PATH_BY_LOCALE: Partial<Record<string, string>> = {
   pl: 'regiony',
+  es: 'regiones',
+  de: 'regionen',
+  pt: 'regioes',
+  tr: 'bolgeler',
+  it: 'regioni',
+}
+
+// Locale-specific path segments for the /countries/ prefix
+export const COUNTRY_PATH_BY_LOCALE: Partial<Record<string, string>> = {
+  pl: 'kraje',
+  es: 'paises',
+  de: 'laender',
+  pt: 'paises',
+  fr: 'pays',
+  tr: 'ulkeler',
+  it: 'paesi',
 }

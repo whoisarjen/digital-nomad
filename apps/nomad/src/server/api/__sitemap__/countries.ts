@@ -1,8 +1,5 @@
 import { LANGUAGES } from '~/constants/global.constant'
-
-const COUNTRY_PATH_BY_LOCALE: Partial<Record<string, string>> = {
-  pl: 'kraje',
-}
+import { COUNTRY_PATH_BY_LOCALE } from '~/shared/global.utils'
 
 export default defineSitemapEventHandler(async () => {
   const cities = await prisma.city.findMany({
