@@ -9,6 +9,7 @@ export default defineVitestConfig({
       },
     },
     include: ['src/**/__tests__/**/*.{test,spec}.ts'],
+    passWithNoTests: true,
     setupFiles: ['./test/setup.ts'],
     coverage: {
       provider: 'v8',
