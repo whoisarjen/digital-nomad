@@ -90,6 +90,7 @@ export default defineNuxtConfig({
       '/api/__sitemap__/cities',
       '/api/__sitemap__/articles',
       '/api/__sitemap__/regions',
+      '/api/__sitemap__/countries',
       ...Array.from({ length: COMPARISON_CHUNKS }, (_, i) =>
         `/api/__sitemap__/comparisons?chunk=${i}&total=${COMPARISON_CHUNKS}`,
       ),

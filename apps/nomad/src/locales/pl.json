@@ -322,5 +322,15 @@
   },
   "explore": {
     "showingForMonth": "Wyniki dla {month}"
+  },
+  "countryPage": {
+    "title": "Najlepsze miasta dla digital nomadów w {country} {year} | Koszty, internet i bezpieczeństwo",
+    "description": "{count} miast dla digital nomadów w {country}. Porównaj koszty, prędkości internetu i bezpieczeństwo.",
+    "heading": "Miasta dla digital nomadów w {country}",
+    "allCountries": "Kraje",
+    "allCountriesTitle": "Miasta dla digital nomadów według krajów",
+    "allCountriesDesc": "Przeglądaj {count} krajów z danymi dla digital nomadów.",
+    "cityCount": "{count} miast",
+    "moreIn": "Więcej miast w {country}"
   }
 }

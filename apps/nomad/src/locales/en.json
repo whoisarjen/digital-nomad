@@ -342,5 +342,15 @@
   },
   "explore": {
     "showingForMonth": "Showing results for {month}"
+  },
+  "countryPage": {
+    "title": "Best Digital Nomad Cities in {country} {year} | Cost, Internet & Safety",
+    "description": "{count} digital nomad cities in {country}. Compare costs, internet speeds, and safety ratings.",
+    "heading": "Digital Nomad Cities in {country}",
+    "allCountries": "Countries",
+    "allCountriesTitle": "Digital Nomad Cities by Country",
+    "allCountriesDesc": "Browse {count} countries with digital nomad city data.",
+    "cityCount": "{count} cities",
+    "moreIn": "More cities in {country}"
   }
 }

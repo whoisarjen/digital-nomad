@@ -8,6 +8,7 @@ export default defineEventHandler(async (event) => {
     select: {
       name: true,
       country: true,
+      countrySlug: true,
       region: true,
       costForNomadInUsd: true,
       costForExpatInUsd: true,

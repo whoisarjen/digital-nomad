@@ -54,7 +54,12 @@
 
           <!-- Country & Region -->
           <div class="flex flex-wrap items-center gap-3 mt-3">
-            <span class="text-lg text-white/60">{{ data.country }}</span>
+            <NuxtLink
+              v-if="data.countrySlug"
+              :to="localePath({ name: 'countries-countrySlug', params: { countrySlug: data.countrySlug } })"
+              class="text-lg text-white/60 hover:text-white/90 transition-colors"
+            >{{ data.country }}</NuxtLink>
+            <span v-else class="text-lg text-white/60">{{ data.country }}</span>
             <span
               v-if="data.region"
               class="inline-flex items-center gap-1.5 bg-white/[0.06] border border-white/[0.08] rounded-full px-3 py-1 text-xs font-medium text-white/50"

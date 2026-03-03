@@ -56,7 +56,7 @@
                 <button
                   @click="$emit('toggleFavorites')"
                   :disabled="isLocked"
-                  class="w-full flex items-center justify-between gap-2 px-4 py-2.5 rounded-xl border text-sm transition-all"
+                  class="w-full flex items-center justify-between gap-2 px-4 h-9 rounded-lg border text-sm transition-all"
                   :class="isLocked
                     ? 'bg-gray-50 border-gray-200 text-gray-400 cursor-not-allowed'
                     : isFavoritesActive

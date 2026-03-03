@@ -6,7 +6,7 @@
         v-for="icon in (Object.keys(WEATHERS_ICONS) as WeatherIcon[])"
         :key="icon"
         @click="selectWeather(icon)"
-        class="custom-button flex flex-grow justify-center"
+        class="custom-button flex flex-grow items-center justify-center h-9"
         :class="{
           'custom-button-active': selectedOptions.includes(icon),
         }"
