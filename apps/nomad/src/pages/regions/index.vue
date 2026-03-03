@@ -100,14 +100,25 @@
 </template>
 
 <script setup lang="ts">
+import { LOCALES } from '~/constants/global.constant'
+
 defineI18nRoute({
   paths: {
     en: '/regions',
     pl: '/regiony',
+    es: '/regiones',
+    de: '/regionen',
+    pt: '/regioes',
+    fr: '/regions',
+    ko: '/regions',
+    ar: '/regions',
+    tr: '/bolgeler',
+    ja: '/regions',
+    it: '/regioni',
   },
 })
 
-const { t } = useCustomI18n()
+const { t, locale } = useCustomI18n()
 const localePath = useLocalePath()
 
 // Bento grid config — ordered to match REGION_SLUGS order
@@ -138,10 +149,50 @@ const unsplashUrl = (raw: string, w: number, h: number) => {
   return `${raw}${sep}w=${w}&h=${h}&fit=crop&auto=format&q=75`
 }
 
-useHead({
-  title: t('nav.regions') + ' | Digital Nomad',
-  meta: [
-    { name: 'description', content: t('regionPage.indexSubtitle') },
-  ],
+const BASE_URL = 'https://nomad.whoisarjen.com'
+
+const indexHref = (code: string) => {
+  const prefix = code === 'en' ? '' : `/${code}`
+  const segment = code === 'pl' ? 'regiony' : 'regions'
+  return `${BASE_URL}${prefix}/${segment}`
+}
+
+useHead(() => {
+  const title = t('nav.regions') + ' | Digital Nomad'
+  const description = t('regionPage.indexSubtitle')
+  const currentUrl = indexHref(locale.value)
+
+  return {
+    title,
+    meta: [
+      { name: 'description', content: description },
+      { property: 'og:title', content: title },
+      { property: 'og:description', content: description },
+      { property: 'og:url', content: currentUrl },
+      { property: 'og:type', content: 'website' },
+    ],
+    link: [
+      { rel: 'canonical', href: currentUrl },
+      ...LOCALES.map(l => ({
+        rel: 'alternate',
+        hreflang: l.code as string,
+        href: indexHref(l.code),
+      })),
+      { rel: 'alternate', hreflang: 'x-default', href: indexHref('en') },
+    ],
+    script: [
+      {
+        type: 'application/ld+json',
+        innerHTML: JSON.stringify({
+          '@context': 'https://schema.org',
+          '@type': 'BreadcrumbList',
+          'itemListElement': [
+            { '@type': 'ListItem', 'position': 1, 'name': 'Home', 'item': BASE_URL },
+            { '@type': 'ListItem', 'position': 2, 'name': t('nav.regions'), 'item': currentUrl },
+          ],
+        }),
+      },
+    ],
+  }
 })
 </script>

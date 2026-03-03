@@ -2,6 +2,7 @@
   "nav": {
     "exploreCities": "Explore Cities",
     "regions": "Regions",
+    "countries": "Countries",
     "compare": "Compare",
     "blog": "Blog"
   },
@@ -328,6 +329,7 @@
   "footer": {
     "exploreCities": "Explore Cities",
     "regions": "Regions",
+    "countries": "Countries",
     "compare": "Compare Cities",
     "blog": "Blog",
     "joinCommunity": "Join Community",

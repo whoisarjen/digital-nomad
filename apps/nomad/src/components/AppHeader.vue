@@ -28,6 +28,12 @@
           {{ $t('nav.regions') }}
         </NuxtLink>
         <NuxtLink
+          :to="localePath('countries')"
+          class="text-sm text-white/70 hover:text-white font-medium"
+        >
+          {{ $t('nav.countries') }}
+        </NuxtLink>
+        <NuxtLink
           :to="localePath('compare')"
           class="text-sm text-white/70 hover:text-white font-medium"
         >

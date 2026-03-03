@@ -27,6 +27,12 @@
             {{ $t('footer.regions') }}
           </NuxtLink>
           <NuxtLink
+            :to="localePath('countries')"
+            class="text-sm text-white/50 hover:text-white/80 transition-colors"
+          >
+            {{ $t('footer.countries') }}
+          </NuxtLink>
+          <NuxtLink
             :to="localePath('compare')"
             class="text-sm text-white/50 hover:text-white/80 transition-colors"
           >

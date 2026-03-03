@@ -1,6 +1,8 @@
 {
   "nav": {
     "exploreCities": "Odkryj miasta",
+    "regions": "Regiony",
+    "countries": "Kraje",
     "compare": "Porównaj",
     "blog": "Blog"
   },
@@ -306,8 +308,26 @@
       "tied_v3": "{cityA} i {cityB} są dobrze dopasowane ogólnie. Budżet, preferencje pogodowe i styl życia będą decydujące."
     }
   },
+  "regionPage": {
+    "indexSubtitle": "Odkryj miasta dla cyfrowych nomadów według regionu — ranking kosztów, internetu, bezpieczeństwa i pogody.",
+    "cityCount": "{count} miast",
+    "explore": "Odkryj",
+    "breadcrumb": "Regiony",
+    "metaTitle": "Najlepsze miasta w {region} dla cyfrowych nomadów {year}",
+    "metaDesc": "Odkryj najlepsze miasta dla cyfrowych nomadów w regionie {region}. Porównaj koszty, prędkość internetu, bezpieczeństwo i pogodę w {count} rankingowanych miastach.",
+    "h1": "Najlepsze miasta w {region} dla cyfrowych nomadów",
+    "subtitle": "{count} miast w rankingu nomadów na {month}",
+    "statCities": "Rankingowane miasta",
+    "statCostRange": "Przedział kosztów",
+    "statAvgInternet": "Śr. internet",
+    "statSafeCities": "Bezpieczne miasta",
+    "costRangeValue": "${min} – ${max}/mies.",
+    "speedValue": "{speed} Mbps",
+    "exploreCta": "Odkryj wszystkie miasta"
+  },
   "footer": {
     "exploreCities": "Odkryj miasta",
+    "countries": "Kraje",
     "compare": "Porównaj miasta",
     "blog": "Blog",
     "joinCommunity": "Dołącz do społeczności",
