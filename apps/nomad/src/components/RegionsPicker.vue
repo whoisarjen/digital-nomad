@@ -5,10 +5,10 @@
       v-for="region in OPTIONS_REGIONS"
       :key="region.value"
       @click="selectRegion(region.value)"
-      class="custom-button flex-grow"
-      :class="{
-        'custom-button-active': selectedOptions.includes(region.value),
-      }"
+      class="px-4 py-2 rounded-lg border cursor-pointer text-center text-sm transition-colors flex-grow"
+      :class="selectedOptions.includes(region.value)
+        ? 'bg-primary-50 border-primary-300 text-primary-800 hover:bg-primary-100'
+        : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100'"
     >
       {{ $t(`regions.${region.value}`) }}
     </div>

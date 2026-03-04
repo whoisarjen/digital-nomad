@@ -116,7 +116,8 @@
       "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\(d.get\\(''packages'', {}\\).get\\(''node_modules/@sidebase/nuxt-auth'', {}\\).get\\(''version'', ''not found''\\)\\)\")",
       "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); packages=d.get\\(''packages'', {}\\); print\\(''nuxt:'', packages.get\\(''node_modules/nuxt'', {}\\).get\\(''version'', ''not found''\\)\\); print\\(''nitropack:'', packages.get\\(''node_modules/nitropack'', {}\\).get\\(''version'', ''not found''\\)\\); print\\(''h3:'', packages.get\\(''node_modules/h3'', {}\\).get\\(''version'', ''not found''\\)\\)\")",
       "Bash(npm run postinstall)",
-      "Bash(chmod -R u+w /Users/kamilowczarek/Documents/GitHub/digital-nomad/apps/nomad/.nuxt)"
+      "Bash(chmod -R u+w /Users/kamilowczarek/Documents/GitHub/digital-nomad/apps/nomad/.nuxt)",
+      "Bash(npx vitest run src/components/__tests__/)"
     ],
     "additionalDirectories": [
       "/tmp",

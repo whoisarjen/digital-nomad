@@ -10,7 +10,7 @@
           v-model.number="minValue"
           :min="-50"
           :max="50"
-          class="w-full p-2 pl-4 pr-10 rounded-lg focus:outline-none custom-button"
+          class="w-full p-2 pl-4 pr-10 rounded-lg border bg-white text-gray-700 border-gray-300 focus:outline-none text-sm"
           @input="validateRange"
         />
         <span class="absolute right-2 top-1/2 transform -translate-y-1/2 text-sm">°C</span>
@@ -22,7 +22,7 @@
           v-model.number="maxValue"
           :min="-50"
           :max="50"
-          class="w-full p-2 pl-4 pr-10 rounded-lg focus:outline-none custom-button"
+          class="w-full p-2 pl-4 pr-10 rounded-lg border bg-white text-gray-700 border-gray-300 focus:outline-none text-sm"
           @input="validateRange"
         />
         <span class="absolute right-2 top-1/2 transform -translate-y-1/2 text-sm">°C</span>

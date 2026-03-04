@@ -1,10 +1,18 @@
 <template>
-  <div v-if="selectedOption === DEFAULT_SORT_VALUE" class="custom-button py-2.5 flex justify-center items-center" @click="() => updateQuery('asc')">
+  <button
+    v-if="selectedOption === DEFAULT_SORT_VALUE"
+    class="px-4 py-2.5 flex items-center justify-center rounded-lg border bg-white border-gray-300 text-gray-700 hover:bg-gray-100 cursor-pointer transition-colors"
+    @click="() => updateQuery('asc')"
+  >
     <LucideArrowDownWideNarrow :size="16" />
-  </div>
-  <div v-else class="custom-button py-2.5 flex justify-center items-center custom-button-active" @click="() => updateQuery('desc')">
+  </button>
+  <button
+    v-else
+    class="px-4 py-2.5 flex items-center justify-center rounded-lg border bg-primary-50 border-primary-300 text-primary-800 hover:bg-primary-100 cursor-pointer transition-colors"
+    @click="() => updateQuery('desc')"
+  >
     <LucideArrowUpNarrowWide :size="16" />
-  </div>
+  </button>
 </template>
 
 <script lang="ts" setup>

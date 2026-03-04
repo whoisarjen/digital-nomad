@@ -10,7 +10,7 @@
           v-model.number="minValue"
           :min="props.min"
           :max="props.max"
-          class="w-full rounded-lg focus:outline-none custom-button p-2 pl-4 pr-5"
+          class="w-full rounded-lg border bg-white text-gray-700 border-gray-300 focus:outline-none text-sm p-2 pl-4 pr-5"
           @input="validateRange"
         />
         <span class="absolute right-2 top-1/2 transform -translate-y-1/2 text-sm">$</span>
@@ -22,7 +22,7 @@
           v-model.number="maxValue"
           :min="props.min"
           :max="props.max"
-          class="w-full rounded-lg focus:outline-none custom-button p-2 pl-4 pr-5"
+          class="w-full rounded-lg border bg-white text-gray-700 border-gray-300 focus:outline-none text-sm p-2 pl-4 pr-5"
           @input="validateRange"
         />
         <span class="absolute right-2 top-1/2 transform -translate-y-1/2 text-sm">$</span>

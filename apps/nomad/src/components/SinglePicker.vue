@@ -6,10 +6,10 @@
           :id="name"
           v-model="selectedOption"
           @change="updateQuery"
-          class="w-full p-2 pl-4 pr-10 rounded-lg focus:outline-none custom-button text-left"
-          :class="{
-            'custom-button-active': selectedOption !== defaultOption.value,
-          }"
+          class="w-full p-2 pl-4 pr-10 rounded-lg border cursor-pointer text-sm transition-colors focus:outline-none text-left"
+          :class="selectedOption !== defaultOption.value
+            ? 'bg-primary-50 border-primary-300 text-primary-800 hover:bg-primary-100'
+            : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100'"
         >
           <option
             v-for="option of preparedOptions"
@@ -24,7 +24,7 @@
           <lucideChevronDown
             class="w-5 h-5"
             :class="{
-              'text-white': selectedOption !== defaultOption.value,
+              'text-primary-600': selectedOption !== defaultOption.value,
               'text-gray-500': selectedOption === defaultOption.value,
             }"
           />
