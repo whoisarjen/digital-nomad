@@ -1,1 +1,0 @@
-rename from digital nomad to nomad
