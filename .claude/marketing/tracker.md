@@ -1,89 +1,56 @@
 # Marketing Tracker - nomad.whoisarjen.com
 
-## Strategy: Community First
+## Strategy: Dynamic Weekly Batch (5 articles/trigger, EN+PL)
 **Started:** 2026-02-28
-**Focus:** Build digital nomad community, drive engagement, establish platform reputation
-**On-site SEO:** Deferred to Phase 2 (will be handled separately)
+**Updated:** 2026-03-04 (v3 -- dynamic keyword selection, no static queue)
+**Master plan:** `.claude/marketing/content/strategy/daily-content-automation-plan.md`
+**Published log:** `.claude/marketing/published-log.md`
 
 ---
 
-## Current Phase: Phase 1 — Community Foundation (Weeks 1-8)
+## How It Works
 
-### Weekly Content Calendar
-| Day | Platform | Action |
-|-----|----------|--------|
-| Monday | Reddit | Data-driven post for r/digitalnomad |
-| Tuesday | Twitter/X | Thread or data drop + Reddit commenting plan |
-| Wednesday | Content | Shareable data piece (listicle, comparison, guide) |
-| Thursday | HN / IndieHackers | Technical or data-driven post |
-| Friday | Review | Weekly metrics review, plan next week |
+One trigger per week:
+1. **Analyst agent** reads published log + DB state, picks 5 best keywords
+2. **5 writer agents** run in parallel, each writes EN+PL, validates, inserts independently
+3. **Master** logs results to published-log.md
+
+No static queue. System decides what to write every time based on what exists and what's missing.
 
 ---
 
-## This Week
+## SEO Metrics
 
-### Week 1 (2026-02-28)
-- [x] Marketing agent system restructured for community focus
-- [ ] Create first Reddit data post
-- [ ] Set up Twitter/X account, first tweets
-- [ ] Write first city comparison piece
-- [ ] Post on HN or IndieHackers
-- [ ] Friday review
-
----
-
-## Content Published
-
-| # | Date | Platform | Title | Type | File | Engagement |
-|---|------|----------|-------|------|------|------------|
-| — | — | — | Not started | — | — | — |
+| Metric | Current | W6 Target | M3 Target | M6 Target | M12 Target | Last Updated |
+|--------|---------|-----------|-----------|-----------|------------|-------------|
+| Articles published (EN+PL) | 0 | 30 | 60 | 80 | 150+ | 2026-03-04 |
+| Articles indexed | 0 | 5-10 | 20 | 50 | 100+ | 2026-03-04 |
+| Page 1 rankings | 0 | 0 | 2-3 | 10-15 | 30+ | 2026-03-04 |
+| Monthly organic visitors | ~0 | 0-50 | 300-1,500 | 5,000-15,000 | 15,000-50,000 | 2026-03-04 |
+| Languages with content | 2 (EN+PL) | 2 | 3 (+ES) | 5 | 6+ | 2026-03-04 |
 
 ---
 
-## Community Metrics
+## Batch History
 
-| Platform | Metric | Current | M1 Target | M3 Target | M6 Target | Last Updated |
-|----------|--------|---------|-----------|-----------|-----------|-------------|
-| Reddit | Karma | 0 | 500 | 2,000 | 5,000 | 2026-02-28 |
-| Twitter/X | Followers | 0 | 100 | 500 | 2,000 | 2026-02-28 |
-| Product Hunt | Upvotes | — | — | 200+ | — | — |
-| Email List | Subscribers | 0 | 50 | 500 | 2,000 | — |
-| Site | Monthly Visitors | ~0 | 500 | 5,000 | 20,000 | 2026-02-28 |
-| Backlinks | Count | 0 | 5 | 20 | 50 | 2026-02-28 |
+| # | Date | Published | Failed | Types | Notes |
+|---|------|-----------|--------|-------|-------|
+| -- | -- | -- | -- | -- | -- |
 
 ---
 
-## Weekly Scores
+## Next Action
 
-| Week | Content Pieces | Reddit Posts | Twitter Posts | HN Posts | Best Performer | Score |
-|------|---------------|-------------|-------------|---------|---------------|-------|
-| W1 | 0 | 0 | 0 | 0 | — | 0 |
-
----
-
-## Next Actions (Priority Order)
-
-1. **Reddit:** Create first data analysis post for r/digitalnomad
-2. **Twitter:** Set up @whoisarjen presence, start tweeting city data
-3. **Content:** Write "Bangkok vs Chiang Mai" comparison with real data
-4. **HN:** Prepare "Show HN" post for launch
-5. **IndieHackers:** Write first build-in-public post
+Run first batch. Before that, verify:
+- [ ] Google Search Console set up for nomad.whoisarjen.com
+- [ ] Sitemap URLs submitted to GSC
+- [ ] Basic analytics in place (Vercel Analytics / GA4)
 
 ---
 
 ## Positioning
 
-- **Tagline:** "The Free NomadList" — 500+ cities, no paywall, no signup
-- **Key differentiator:** Completely free vs NomadList's $100+ paywall
-- **Data advantage:** Real API data (Open-Meteo, Numbeo), not user-submitted guesses
-- **Content strategy:** Lead with data, mention tool naturally
-
----
-
-## Notes
-
-- 500+ cities in database with cost, weather, internet, safety, air quality data
-- NomadList charges $100-300. We show everything for free.
-- Market: 43M nomads worldwide, growing to 80M by 2030
-- No blog infrastructure yet — all content stored in `.claude/marketing/content/` as ready-to-post markdown
-- On-site SEO (sitemap, meta tags, structured data) will be tackled in Phase 2
+- **Free vs NomadList's $100+ paywall**
+- **Real API data** (Open-Meteo, Numbeo) vs user-submitted guesses
+- **EN + PL from day 1** -- Polish nomad content has near-zero competition
+- **Every article contains real DB numbers** -- the moat AI content mills can't copy

@@ -101,13 +101,31 @@
       "Bash(npm install --workspace=apps/nomad)",
       "Bash(npm install --ignore-scripts)",
       "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(json.dumps\\(d.get\\(''allowedTools'', d.get\\(''permissions'',{}\\)\\), indent=2\\)\\)\")",
-      "Bash(npm install --save-dev --ignore-scripts @commitlint/cli @commitlint/config-conventional)"
+      "Bash(npm install --save-dev --ignore-scripts @commitlint/cli @commitlint/config-conventional)",
+      "Bash(npm run test:run)",
+      "Bash(npx vitest run --reporter=verbose)",
+      "Bash(npm view @nuxt/test-utils versions --json)",
+      "Bash(npm view nuxt versions --json)",
+      "Bash(python3 -c \"import sys,json; versions=json.load\\(sys.stdin\\); print\\(''\\\\n''.join\\(versions[-10:]\\)\\)\")",
+      "Bash(apps/nomad/src/__tests__/window.test.ts:*)",
+      "Bash(/Users/kamilowczarek/Documents/GitHub/digital-nomad/apps/nomad/src/__tests__/window.test.ts:*)",
+      "Bash(npm run test:run -- --reporter=verbose)",
+      "Bash(npx turbo run test:run)",
+      "Bash(npx turbo run typecheck)",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\(json.dumps\\(d.get\\(''compilerOptions'',{}\\), indent=2\\)\\)\")",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\(d.get\\(''packages'', {}\\).get\\(''node_modules/@sidebase/nuxt-auth'', {}\\).get\\(''version'', ''not found''\\)\\)\")",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); packages=d.get\\(''packages'', {}\\); print\\(''nuxt:'', packages.get\\(''node_modules/nuxt'', {}\\).get\\(''version'', ''not found''\\)\\); print\\(''nitropack:'', packages.get\\(''node_modules/nitropack'', {}\\).get\\(''version'', ''not found''\\)\\); print\\(''h3:'', packages.get\\(''node_modules/h3'', {}\\).get\\(''version'', ''not found''\\)\\)\")",
+      "Bash(npm run postinstall)",
+      "Bash(chmod -R u+w /Users/kamilowczarek/Documents/GitHub/digital-nomad/apps/nomad/.nuxt)"
     ],
     "additionalDirectories": [
       "/tmp",
       "/Users/kamilowczarek/.claude",
       "/Users/kamilowczarek/Documents/GitHub/digital-nomad/apps",
-      "/Users/kamilowczarek/Documents/GitHub/digital-nomad"
+      "/Users/kamilowczarek/Documents/GitHub/digital-nomad",
+      "/Users/kamilowczarek/Documents/GitHub/digital-nomad/.claude/marketing/content",
+      "/Users/kamilowczarek/Documents/GitHub/digital-nomad/.claude/marketing",
+      "/Users/kamilowczarek/Documents/GitHub/digital-nomad/.claude"
     ]
   }
 }
