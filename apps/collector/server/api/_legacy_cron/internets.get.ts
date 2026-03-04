@@ -43,7 +43,7 @@ export default defineEventHandler(async () => {
     await prisma.city.updateMany({
       where: {
         name: {
-          contains: city.country.split(',')[0].toLowerCase(),
+          contains: city.country.split(',')[0]!.toLowerCase(),
           mode: 'insensitive',
         }
       },

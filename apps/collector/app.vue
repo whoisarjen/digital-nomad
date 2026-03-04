@@ -168,7 +168,7 @@ onMounted(() => {
   pulseTimer = setInterval(() => { pulse.value = !pulse.value }, 900)
 
   const addLog = () => {
-    const entry = logMessages[logIdx % logMessages.length]
+    const entry = logMessages[logIdx % logMessages.length]!
     log.value.push({ ...entry, time: getTime() })
     logIdx++
     if (log.value.length > 12) log.value.shift()

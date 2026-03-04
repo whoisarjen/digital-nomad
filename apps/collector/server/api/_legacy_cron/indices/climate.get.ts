@@ -34,7 +34,7 @@ export default defineEventHandler(async () => {
     const isPerfectAllYearAround = $('body').text().includes( "all year round");
     const firstTextAfterH2 = $('h2').nextUntil('p').next('p').text().trim()
     const match = firstTextAfterH2.match(/visit:\s*(.*)/i);
-    const bestMonthsToVisit = match ? match[1].trim().replace('.', '').split(', ') : []
+    const bestMonthsToVisit = match ? match[1]!.trim().replace('.', '').split(', ') : []
 
     await prisma.qualityIndex.update({
       where: {

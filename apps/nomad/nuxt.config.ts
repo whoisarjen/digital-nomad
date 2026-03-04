@@ -9,7 +9,8 @@ const fullSitePath = process.env.NUXT_PUBLIC_VERCEL_URL
 
 export default defineNuxtConfig({
   srcDir: 'src/',
-  compatibilityDate: '2024-11-01',
+  serverDir: 'src/server',
+  compatibilityDate: '2025-03-11',
   devtools: { enabled: process.env.NODE_ENV === 'development' },
   devServer: { port: 3000 },
   runtimeConfig: {
@@ -37,7 +38,6 @@ export default defineNuxtConfig({
     '@nuxtjs/i18n',
     '@nuxtjs/sitemap',
     '@sidebase/nuxt-auth',
-    '@nuxt/test-utils/module',
   ],
   auth: {
     baseURL: `${fullSitePath}/api/auth`,

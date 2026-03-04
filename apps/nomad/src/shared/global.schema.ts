@@ -60,7 +60,7 @@ export const getCitiesSchema = z.object({
         .enum(OPTIONS_ORDER_BY.map(option => option.value) as [string, ...string[]])
         .optional()
         .transform(value => value as OrderByOptionValue)
-        .default(OPTIONS_ORDER_BY[0].value),
+        .default(OPTIONS_ORDER_BY[0]!.value),
     months: z
         .string(),
     weathers: z

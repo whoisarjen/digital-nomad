@@ -19,7 +19,7 @@ export default defineSitemapEventHandler(async (event) => {
 
     for (let i = startCity; i < endCity; i++) {
         for (let j = i + 1; j < cities.length; j++) {
-            const slug = buildCompareSlug(cities[i].slug, cities[j].slug);
+            const slug = buildCompareSlug(cities[i]!.slug, cities[j]!.slug);
             const path = `/compare/${slug}`;
 
             const variants = LANGUAGES.map((lang) => ({

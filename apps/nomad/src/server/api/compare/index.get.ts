@@ -44,13 +44,15 @@ export default defineEventHandler(async () => {
     for (let j = i + 1; j < Math.min(cities.length, 12); j++) {
       if (pairs.length >= 12) break
 
-      const a = cities[i]
-      const b = cities[j]
+      const a = cities[i]!
+      const b = cities[j]!
 
       // Prefer cross-region pairs for more interesting comparisons
       if (a.region === b.region && pairs.length > 4) continue
 
-      const [first, second] = a.slug < b.slug ? [a, b] : [b, a]
+      const pair = a.slug < b.slug ? [a, b] : [b, a]
+      const first = pair[0]!
+      const second = pair[1]!
       const key = `${first.slug}-vs-${second.slug}`
 
       if (!pairSet.has(key)) {

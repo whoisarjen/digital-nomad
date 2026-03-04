@@ -63,7 +63,7 @@ const getLevelBranch = (a: Level | null, b: Level | null, inverted = false): str
 
 const getBestMonth = (monthSummary: CityData['monthSummary']) => {
   if (!monthSummary.length) return null
-  const best = monthSummary.reduce((acc, m) => m.totalScore > acc.totalScore ? m : acc, monthSummary[0])
+  const best = monthSummary.reduce((acc, m) => m.totalScore > acc.totalScore ? m : acc, monthSummary[0]!)
   return best
 }
 

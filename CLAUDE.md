@@ -50,6 +50,7 @@ Never skip, bypass, or work around tests, linting, type-checking, or git hooks. 
 - **No `// @vitest-environment node`** on server route tests — fix the environment config instead
 - **No `--no-verify`** on git — fix the hook failure instead
 - **No `as any` / `as unknown as X`** — fix the type instead
+- **No `// @ts-nocheck`** — fix the TypeScript errors at their root cause instead
 - **No disabled ESLint rules** — fix the code instead
 - **No `.skip` or `.only` left in tests** — only in temporary local debugging, never committed
 

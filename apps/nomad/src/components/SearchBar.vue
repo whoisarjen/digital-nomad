@@ -59,7 +59,7 @@ const typeEffect = () => {
   let isDeleting = false;
 
   const typeNextChar = () => {
-    const currentCity = PLACEHOLDER_OPTIONS[cityIndex];
+    const currentCity = PLACEHOLDER_OPTIONS[cityIndex]!;
 
     if (!isDeleting) {
       typedPlaceholder.value = `${t('search.placeholder')} ${currentCity.slice(0, charIndex++)}`;

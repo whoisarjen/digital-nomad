@@ -1,5 +1,3 @@
-import _ from "lodash";
-
 interface MonthlyTemp {
   weatherCodeMap: Record<string, number>;
   apparentTemperatureMax: number[];
@@ -28,15 +26,15 @@ const median = (numbers: number[]): number => {
 
   // If the array length is odd, return the middle element
   if (sortedNumbers.length % 2 !== 0) {
-    return sortedNumbers[middleIndex];
+    return sortedNumbers[middleIndex]!;
   }
 
   // If the array length is even, return the average of the two middle elements
-  return (sortedNumbers[middleIndex - 1] + sortedNumbers[middleIndex]) / 2;
+  return (sortedNumbers[middleIndex - 1]! + sortedNumbers[middleIndex]!) / 2;
 }
 
 export default defineEventHandler(async () => {
-  const cities = (await Promise.all(_.range(5).map(index =>
+  const cities = (await Promise.all(Array.from({ length: 5 }, (_, index) =>
     prisma.city.findMany({
       select: {
         slug: true,
@@ -97,32 +95,33 @@ export default defineEventHandler(async () => {
 
       // Track frequency of weather codes
       const weatherCode = Number(weather.weatherCode);
-      monthlyTemps[month].weatherCodeMap[weatherCode] =
-        (monthlyTemps[month].weatherCodeMap[weatherCode] || 0) + 1;
+      monthlyTemps[month]!.weatherCodeMap[weatherCode] =
+        (monthlyTemps[month]!.weatherCodeMap[weatherCode] ?? 0) + 1;
 
       // Existing logic
-      !_.isNil(weather.apparentTemperatureMax) && monthlyTemps[month].apparentTemperatureMax.push(Number(weather.apparentTemperatureMax));
-      !_.isNil(weather.rainSum) && monthlyTemps[month].rainSum.push(Number(weather.rainSum));
-      !_.isNil(weather.windGusts10mMax) && monthlyTemps[month].windGusts10mMax.push(Number(weather.windGusts10mMax));
-      !_.isNil(weather.snowfallSum) && monthlyTemps[month].snowfallSum.push(Number(weather.snowfallSum));
-      !_.isNil(weather.windDirection10mDominant) && monthlyTemps[month].windDirection10mDominant.push(Number(weather.windDirection10mDominant));
-      !_.isNil(weather.daylightDuration) && monthlyTemps[month].daylightDuration.push(Number(weather.daylightDuration));
-      !_.isNil(weather.apparentTemperatureMin) && monthlyTemps[month].apparentTemperatureMin.push(Number(weather.apparentTemperatureMin));
-      !_.isNil(weather.temperature2mMax) && monthlyTemps[month].temperature2mMax.push(Number(weather.temperature2mMax));
-      !_.isNil(weather.temperature2mMin) && monthlyTemps[month].temperature2mMin.push(Number(weather.temperature2mMin));
-      !_.isNil(weather.apparentTemperatureMean) && monthlyTemps[month].apparentTemperatureMean.push(Number(weather.apparentTemperatureMean));
-      !_.isNil(weather.sunshineDuration) && monthlyTemps[month].sunshineDuration.push(Number(weather.sunshineDuration));
-      !_.isNil(weather.precipitationHours) && monthlyTemps[month].precipitationHours.push(Number(weather.precipitationHours));
-      !_.isNil(weather.shortwaveRadiationSum) && monthlyTemps[month].shortwaveRadiationSum.push(Number(weather.shortwaveRadiationSum));
-      !_.isNil(weather.windSpeed10mMax) && monthlyTemps[month].windSpeed10mMax.push(Number(weather.windSpeed10mMax));
-      !_.isNil(weather.precipitationSum) && monthlyTemps[month].precipitationSum.push(Number(weather.precipitationSum));
-      !_.isNil(weather.temperature2mMean) && monthlyTemps[month].temperature2mMean.push(Number(weather.temperature2mMean));
+      weather.apparentTemperatureMax != null && monthlyTemps[month]!.apparentTemperatureMax.push(Number(weather.apparentTemperatureMax));
+      weather.rainSum != null && monthlyTemps[month]!.rainSum.push(Number(weather.rainSum));
+      weather.windGusts10mMax != null && monthlyTemps[month]!.windGusts10mMax.push(Number(weather.windGusts10mMax));
+      weather.snowfallSum != null && monthlyTemps[month]!.snowfallSum.push(Number(weather.snowfallSum));
+      weather.windDirection10mDominant != null && monthlyTemps[month]!.windDirection10mDominant.push(Number(weather.windDirection10mDominant));
+      weather.daylightDuration != null && monthlyTemps[month]!.daylightDuration.push(Number(weather.daylightDuration));
+      weather.apparentTemperatureMin != null && monthlyTemps[month]!.apparentTemperatureMin.push(Number(weather.apparentTemperatureMin));
+      weather.temperature2mMax != null && monthlyTemps[month]!.temperature2mMax.push(Number(weather.temperature2mMax));
+      weather.temperature2mMin != null && monthlyTemps[month]!.temperature2mMin.push(Number(weather.temperature2mMin));
+      weather.apparentTemperatureMean != null && monthlyTemps[month]!.apparentTemperatureMean.push(Number(weather.apparentTemperatureMean));
+      weather.sunshineDuration != null && monthlyTemps[month]!.sunshineDuration.push(Number(weather.sunshineDuration));
+      weather.precipitationHours != null && monthlyTemps[month]!.precipitationHours.push(Number(weather.precipitationHours));
+      weather.shortwaveRadiationSum != null && monthlyTemps[month]!.shortwaveRadiationSum.push(Number(weather.shortwaveRadiationSum));
+      weather.windSpeed10mMax != null && monthlyTemps[month]!.windSpeed10mMax.push(Number(weather.windSpeed10mMax));
+      weather.precipitationSum != null && monthlyTemps[month]!.precipitationSum.push(Number(weather.precipitationSum));
+      weather.temperature2mMean != null && monthlyTemps[month]!.temperature2mMean.push(Number(weather.temperature2mMean));
     });
 
     // Calculate the most common weather code
     const medianTemperatures = monthlyTemps.map((data, index) => {
-      const mostCommonWeatherCode = data.weatherCodeMap
-        ? Object.entries(data.weatherCodeMap).reduce((a: [string, number], b: [string, number]) => (a[1] > b[1] ? a : b))[0]
+      const entries = Object.entries(data.weatherCodeMap);
+      const mostCommonWeatherCode = entries.length
+        ? entries.reduce((a: [string, number], b: [string, number]) => (a[1] > b[1] ? a : b))[0]
         : null;
 
       return {

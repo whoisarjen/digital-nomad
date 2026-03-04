@@ -1,4 +1,3 @@
-import _ from "lodash"
 
 type Result = {
   id: string;
@@ -137,7 +136,7 @@ export default defineEventHandler(async () => {
       }),
     ])
 
-    const results = _.orderBy(data.flatMap(option => option.results), ['likes'], ['desc']);
+    const results = data.flatMap(option => option.results).sort((a, b) => b.likes - a.likes);
 
     for (const photo of results) {
       const success = await tryUpdateImage(slug, photo);

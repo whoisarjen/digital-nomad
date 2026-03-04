@@ -362,6 +362,7 @@ const isToolbarInView = ref(true)
 onMounted(() => {
   if (!toolbarRef.value) return
   const observer = new IntersectionObserver(([entry]) => {
+    if (!entry) return
     if (entry.isIntersecting) hasReachedGrid.value = true
     isToolbarInView.value = entry.isIntersecting
   })

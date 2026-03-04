@@ -1,5 +1,4 @@
 import type { City, MonthSummary } from "@prisma/client"
-import _ from "lodash"
 
 class TotalScoreFactory {
   private city = null as City | null

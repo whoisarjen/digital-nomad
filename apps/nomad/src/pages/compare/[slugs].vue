@@ -621,7 +621,7 @@ const route = useRoute()
 const rawSlugs = computed(() => route.params.slugs as string)
 const parts = rawSlugs.value.split('-vs-')
 if (parts.length === 2) {
-  const canonical = buildCompareSlug(parts[0], parts[1])
+  const canonical = buildCompareSlug(parts[0]!, parts[1]!)
   if (canonical !== rawSlugs.value) {
     await navigateTo(localePath({ name: 'compare-slugs', params: { slugs: canonical } }), {
       redirectCode: 301,
@@ -730,7 +730,7 @@ const costRows = computed(() => {
 const getMedian = (arr: number[]) => {
   const sorted = arr.slice().sort((a, b) => a - b)
   const mid = Math.floor(sorted.length / 2)
-  return sorted.length % 2 !== 0 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2
+  return sorted.length % 2 !== 0 ? sorted[mid]! : (sorted[mid - 1]! + sorted[mid]!) / 2
 }
 
 const getScoreLevel = (score: number, allScores: number[]) => {
@@ -895,8 +895,8 @@ useHead(() => {
   const summaryA = data.value.cityA.monthSummary
   const summaryB = data.value.cityB.monthSummary
   if (summaryA.length && summaryB.length) {
-    const bestA = summaryA.reduce((acc, m) => m.totalScore > acc.totalScore ? m : acc, summaryA[0])
-    const bestB = summaryB.reduce((acc, m) => m.totalScore > acc.totalScore ? m : acc, summaryB[0])
+    const bestA = summaryA.reduce((acc, m) => m.totalScore > acc.totalScore ? m : acc, summaryA[0]!)
+    const bestB = summaryB.reduce((acc, m) => m.totalScore > acc.totalScore ? m : acc, summaryB[0]!)
     const mA = new Date(2023, Number(bestA.month) - 1).toLocaleString('en-US', { month: 'long' })
     const mB = new Date(2023, Number(bestB.month) - 1).toLocaleString('en-US', { month: 'long' })
     faqItems.push({

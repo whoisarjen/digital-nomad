@@ -10,6 +10,6 @@
 import type { WeatherIcon } from '@prisma/client';
 
 const props = defineProps<{
-  weatherIcon: WeatherIcon
+  weatherIcon?: WeatherIcon
 }>()
 </script>

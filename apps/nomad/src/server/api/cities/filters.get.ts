@@ -4,13 +4,13 @@ const getOptions = (array: number[], numOptionsRaw: number) => {
     const numOptions = numOptionsRaw + 2 // we need one more to drop 0 later (we already have 0 as all options)
     const sortedArray = [...new Set([...array])].sort((a, b) => a - b);
 
-    const result = [sortedArray[0], sortedArray[sortedArray.length - 1]];
+    const result = [sortedArray[0]!, sortedArray[sortedArray.length - 1]!];
 
     const step = Math.floor((sortedArray.length - 2) / (numOptions - 2));
   
     for (let i = 1; i < numOptions - 1; i++) {
         const index = 1 + i * step;
-        result.splice(i, 0, sortedArray[index]);
+        result.splice(i, 0, sortedArray[index]!);
     }
 
     return {

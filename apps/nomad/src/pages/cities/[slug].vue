@@ -438,8 +438,8 @@ const months = computed(() => {
     const mid = Math.floor(sorted.length / 2)
 
     return sorted.length % 2 !== 0
-      ? sorted[mid]
-      : (sorted[mid - 1] + sorted[mid]) / 2
+      ? sorted[mid]!
+      : (sorted[mid - 1]! + sorted[mid]!) / 2
   }
 
   const low = getMedian(data.value?.monthSummary.map((item) => item.totalScore) ?? [])
