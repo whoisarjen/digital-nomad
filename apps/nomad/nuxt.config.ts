@@ -1,7 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import { LOCALES } from './src/constants/global.constant'
 
-const COMPARISON_CHUNKS = 50
+const COMPARISON_CHUNKS = 500
 
 const fullSitePath = process.env.NUXT_PUBLIC_VERCEL_URL
   ? `https://${process.env.NUXT_PUBLIC_VERCEL_URL}`
