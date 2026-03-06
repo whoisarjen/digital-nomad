@@ -12,7 +12,6 @@ export default defineSitemapEventHandler(() => {
 
     return variants.map((v) => ({
       loc: v.loc,
-      _sitemap: v.lang,
       alternatives,
     }))
   })

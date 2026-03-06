@@ -81,19 +81,39 @@ export default defineNuxtConfig({
     ],
     cacheMaxAgeSeconds: 86400,
     defaultSitemapsChunkSize: 1000,
-    sitemaps: true,
     defaults: {
       changefreq: 'weekly',
     },
-    sources: [
-      '/api/__sitemap__/cities',
-      '/api/__sitemap__/articles',
-      '/api/__sitemap__/regions',
-      '/api/__sitemap__/countries',
-      ...Array.from({ length: COMPARISON_CHUNKS }, (_, i) =>
-        `/api/__sitemap__/comparisons?chunk=${i}&total=${COMPARISON_CHUNKS}`,
+    sitemaps: {
+      pages: {
+        includeAppSources: true,
+      },
+      cities: {
+        sources: ['/api/__sitemap__/cities'],
+        includeAppSources: false,
+      },
+      articles: {
+        sources: ['/api/__sitemap__/articles'],
+        includeAppSources: false,
+      },
+      regions: {
+        sources: ['/api/__sitemap__/regions'],
+        includeAppSources: false,
+      },
+      countries: {
+        sources: ['/api/__sitemap__/countries'],
+        includeAppSources: false,
+      },
+      ...Object.fromEntries(
+        Array.from({ length: COMPARISON_CHUNKS }, (_, i) => [
+          `comparisons-${i}`,
+          {
+            sources: [`/api/__sitemap__/comparisons?chunk=${i}&total=${COMPARISON_CHUNKS}`],
+            includeAppSources: false,
+          },
+        ]),
       ),
-    ],
+    },
   },
   nitro: {
     vercel: {

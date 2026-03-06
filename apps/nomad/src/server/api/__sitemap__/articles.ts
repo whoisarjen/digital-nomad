@@ -17,7 +17,6 @@ export default defineSitemapEventHandler(async () => {
 
         return variants.map((v) => ({
             loc: v.loc,
-            _sitemap: v.lang,
             lastmod: new Date(article.updatedAt).toISOString(),
             alternatives,
         }));

@@ -15,7 +15,7 @@ export default defineSitemapEventHandler(async (event) => {
     const startCity = chunk * citiesPerChunk;
     const endCity = Math.min(startCity + citiesPerChunk, cities.length);
 
-    const entries: { loc: string; _sitemap: string; alternatives: { hreflang: string; href: string }[] }[] = [];
+    const entries: { loc: string; alternatives: { hreflang: string; href: string }[] }[] = [];
 
     for (let i = startCity; i < endCity; i++) {
         for (let j = i + 1; j < cities.length; j++) {
@@ -32,7 +32,6 @@ export default defineSitemapEventHandler(async (event) => {
             for (const v of variants) {
                 entries.push({
                     loc: v.loc,
-                    _sitemap: v.lang,
                     alternatives,
                 });
             }

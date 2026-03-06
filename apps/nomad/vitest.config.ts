@@ -19,10 +19,13 @@ export default defineConfig({
         if (!id.includes('/src/server/') || id.includes('__tests__')) return
         const autoImports = [
           'defineEventHandler',
+          'defineSitemapEventHandler',
           'getLocale',
           'getLocalizedSelect',
           'getValidatedRouterParams',
+          'getQuery',
           'prisma',
+          'buildSitemapAlternatives',
         ]
         const used = autoImports.filter((name) => code.includes(name))
         if (used.length) {
