@@ -10,9 +10,8 @@ const { prismaMock } = vi.hoisted(() => ({
 vi.mock('#imports', () => ({
   defineSitemapEventHandler: (handler: Function) => handler,
   prisma: prismaMock,
-  buildSitemapAlternatives: (variants: { lang: string; loc: string }[]) => [
-    ...variants.map((v) => ({ hreflang: v.lang, href: v.loc })),
-    { hreflang: 'x-default', href: variants[0]!.loc },
+  buildLocalizedEntries: (buildLoc: (lang: string) => string) => [
+    { loc: buildLoc('en'), alternatives: [] },
   ],
 }))
 

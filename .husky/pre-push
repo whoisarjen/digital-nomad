@@ -1,1 +1,1 @@
-turbo run test:run
+npx turbo run test:run

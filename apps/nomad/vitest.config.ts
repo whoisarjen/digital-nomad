@@ -25,7 +25,7 @@ export default defineConfig({
           'getValidatedRouterParams',
           'getQuery',
           'prisma',
-          'buildSitemapAlternatives',
+          'buildLocalizedEntries',
         ]
         const used = autoImports.filter((name) => code.includes(name))
         if (used.length) {

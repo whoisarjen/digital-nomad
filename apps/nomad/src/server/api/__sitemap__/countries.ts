@@ -1,4 +1,3 @@
-import { LANGUAGES } from '~/constants/global.constant'
 import { COUNTRY_PATH_BY_LOCALE } from '~/shared/global.utils'
 
 export default defineSitemapEventHandler(async () => {
@@ -7,17 +6,9 @@ export default defineSitemapEventHandler(async () => {
     select: { countrySlug: true },
   })
 
-  return cities.flatMap(({ countrySlug }) => {
-    const variants = LANGUAGES.map((lang) => ({
-      lang,
-      loc: `${lang !== 'en' ? `/${lang}` : ''}/${COUNTRY_PATH_BY_LOCALE[lang] ?? 'countries'}/${countrySlug}`,
-    }))
-
-    const alternatives = buildSitemapAlternatives(variants)
-
-    return variants.map((v) => ({
-      loc: v.loc,
-      alternatives,
-    }))
-  })
+  return cities.flatMap(({ countrySlug }) =>
+    buildLocalizedEntries(
+      (lang) => `${lang !== 'en' ? `/${lang}` : ''}/${COUNTRY_PATH_BY_LOCALE[lang] ?? 'countries'}/${countrySlug}`,
+    ),
+  )
 })

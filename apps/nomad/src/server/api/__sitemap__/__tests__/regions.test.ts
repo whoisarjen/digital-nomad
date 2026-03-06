@@ -3,9 +3,8 @@ import { createMockH3Event } from '../../../../../test/mocks/h3-event'
 
 vi.mock('#imports', () => ({
   defineSitemapEventHandler: (handler: Function) => handler,
-  buildSitemapAlternatives: (variants: { lang: string; loc: string }[]) => [
-    ...variants.map((v) => ({ hreflang: v.lang, href: v.loc })),
-    { hreflang: 'x-default', href: variants[0]!.loc },
+  buildLocalizedEntries: (buildLoc: (lang: string) => string) => [
+    { loc: buildLoc('en'), alternatives: [] },
   ],
 }))
 

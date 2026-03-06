@@ -1,4 +1,3 @@
-import { LANGUAGES } from '~/constants/global.constant';
 import { buildCompareSlug } from '~/shared/global.utils';
 
 export default defineSitemapEventHandler(async (event) => {
@@ -19,22 +18,8 @@ export default defineSitemapEventHandler(async (event) => {
 
     for (let i = startCity; i < endCity; i++) {
         for (let j = i + 1; j < cities.length; j++) {
-            const slug = buildCompareSlug(cities[i]!.slug, cities[j]!.slug);
-            const path = `/compare/${slug}`;
-
-            const variants = LANGUAGES.map((lang) => ({
-                lang,
-                loc: `${lang !== 'en' ? `/${lang}` : ''}${path}`,
-            }));
-
-            const alternatives = buildSitemapAlternatives(variants);
-
-            for (const v of variants) {
-                entries.push({
-                    loc: v.loc,
-                    alternatives,
-                });
-            }
+            const path = `/compare/${buildCompareSlug(cities[i]!.slug, cities[j]!.slug)}`;
+            entries.push(...buildLocalizedEntries((lang) => `${lang !== 'en' ? `/${lang}` : ''}${path}`));
         }
     }
 
