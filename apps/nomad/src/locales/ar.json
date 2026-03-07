@@ -104,7 +104,19 @@
     "bestMonths": "أفضل الأشهر: {months}",
     "avoidMonths": "تجنب: {months}",
     "bestLabel": "الأفضل",
-    "avoidLabel": "تجنب"
+    "avoidLabel": "تجنب",
+    "faq": {
+      "affordableQuestion": "هل {city} بأسعار معقولة للرحّالة الرقميين؟",
+      "affordableAnswer": "تكلفة المعيشة في {city} حوالي ${cost}/شهر لأسلوب حياة الرحّالة الرقمي.",
+      "internetQuestion": "ما سرعة الإنترنت في {city}؟",
+      "internetAnswer": "متوسط سرعة الإنترنت في {city} هو {speed} ميغابت/ثانية (المرتبة #{rank} عالمياً)، مناسب للعمل عن بُعد.",
+      "safetyQuestion": "هل {city} آمنة للرحّالة الرقميين؟",
+      "safetyAnswer": "تحصل {city} على تقييم أمان {safety} بناءً على مؤشرات جودة الحياة.",
+      "weatherQuestion": "كيف يكون الطقس في {city}؟",
+      "weatherAnswer": "أفضل شهر لزيارة {city} هو {month}، بدرجات حرارة حوالي {temp}°C وهطول أمطار {rain}mm.",
+      "airQualityQuestion": "ما جودة الهواء في {city}؟",
+      "airQualityAnswer": "حصلت {city} على درجة جودة هواء {score}/5 مع مؤشر AQI الحالي {aqiNow}."
+    }
   },
   "about": {
     "builtBy": "بناه Kamil",

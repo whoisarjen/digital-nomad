@@ -1,33 +1,133 @@
 <template>
   <div class="min-h-screen bg-[#060E1B]">
-    <!-- Loading state -->
-    <template v-if="!data || status !== 'success'">
+    <Transition name="city-fade" mode="out-in">
+    <div v-if="!data || status !== 'success'" key="skeleton">
+      <!-- Dark Header Zone -->
       <section class="pt-24 pb-20 px-6">
         <div class="max-w-screen-xl mx-auto flex flex-col gap-4">
-          <div class="h-3 skeleton w-40" />
-          <div class="h-12 skeleton w-2/3" />
-          <div class="h-5 skeleton w-48" />
-          <div class="flex gap-2.5 mt-2">
-            <div v-for="i in 4" :key="i" class="h-9 skeleton w-28 rounded-full" />
+          <div class="h-3 w-40 bg-white/10 animate-pulse rounded" />
+          <div class="h-14 w-2/3 bg-white/10 animate-pulse rounded-lg" />
+          <div class="flex items-center gap-3">
+            <div class="h-5 w-32 bg-white/10 animate-pulse rounded" />
+            <div class="h-6 w-28 bg-white/10 animate-pulse rounded-full" />
+          </div>
+          <div class="flex flex-wrap gap-2.5 mt-2">
+            <div v-for="i in 5" :key="i" class="h-9 w-28 bg-white/10 animate-pulse rounded-full" />
           </div>
         </div>
       </section>
+
+      <!-- Light Content Zone -->
       <div class="bg-gray-50 rounded-t-[2rem] -mt-2 relative z-10">
         <div class="max-w-screen-xl mx-auto px-6 py-12">
-          <div class="h-64 sm:h-80 skeleton w-full rounded-2xl -mt-24 mb-10" />
+
+          <!-- Hero image -->
+          <div class="relative -mt-24 mb-10 rounded-2xl overflow-hidden aspect-[21/9] skeleton" />
+
+          <!-- Key Metrics Strip: 6 cards -->
           <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 mb-10">
-            <div v-for="i in 6" :key="i" class="h-[104px] skeleton rounded-2xl" />
+            <div v-for="i in 6" :key="i" class="bg-white rounded-2xl border border-gray-100 p-4">
+              <div class="flex items-center gap-2 mb-2">
+                <div class="size-7 skeleton rounded-lg" />
+                <div class="h-2.5 w-14 skeleton rounded" />
+              </div>
+              <div class="h-8 w-16 skeleton rounded" />
+            </div>
           </div>
+
+          <!-- Detail Sections: 4 cards -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-10">
-            <div v-for="i in 4" :key="i" class="h-56 skeleton rounded-2xl" />
+            <!-- Cost of Living: 4 rows -->
+            <div class="bg-white rounded-2xl border border-gray-100 p-6">
+              <div class="flex items-center gap-2.5 mb-5">
+                <div class="size-8 skeleton rounded-xl" />
+                <div class="h-4 w-32 skeleton rounded" />
+              </div>
+              <div v-for="i in 4" :key="i" class="flex justify-between items-center py-3" :class="{ 'border-b border-gray-50': i < 4 }">
+                <div class="h-3.5 w-20 skeleton rounded" />
+                <div class="h-3.5 w-16 skeleton rounded" />
+              </div>
+            </div>
+
+            <!-- Internet & Infrastructure: 2 rows -->
+            <div class="bg-white rounded-2xl border border-gray-100 p-6">
+              <div class="flex items-center gap-2.5 mb-5">
+                <div class="size-8 skeleton rounded-xl" />
+                <div class="h-4 w-44 skeleton rounded" />
+              </div>
+              <div v-for="i in 2" :key="i" class="flex justify-between items-center py-3" :class="{ 'border-b border-gray-50': i < 2 }">
+                <div class="h-3.5 w-24 skeleton rounded" />
+                <div class="h-3.5 w-24 skeleton rounded" />
+              </div>
+            </div>
+
+            <!-- Environment & Health: 5 rows -->
+            <div class="bg-white rounded-2xl border border-gray-100 p-6">
+              <div class="flex items-center gap-2.5 mb-5">
+                <div class="size-8 skeleton rounded-xl" />
+                <div class="h-4 w-40 skeleton rounded" />
+              </div>
+              <div v-for="i in 5" :key="i" class="flex justify-between items-center py-3" :class="{ 'border-b border-gray-50': i < 5 }">
+                <div class="h-3.5 w-28 skeleton rounded" />
+                <div class="h-3.5 w-16 skeleton rounded" />
+              </div>
+            </div>
+
+            <!-- Quality of Life: 2 rows -->
+            <div class="bg-white rounded-2xl border border-gray-100 p-6">
+              <div class="flex items-center gap-2.5 mb-5">
+                <div class="size-8 skeleton rounded-xl" />
+                <div class="h-4 w-28 skeleton rounded" />
+              </div>
+              <div v-for="i in 2" :key="i" class="flex justify-between items-center py-3" :class="{ 'border-b border-gray-50': i < 2 }">
+                <div class="h-3.5 w-16 skeleton rounded" />
+                <div class="h-3.5 w-16 skeleton rounded" />
+              </div>
+            </div>
           </div>
-          <div class="h-48 skeleton rounded-2xl" />
+
+          <!-- Monthly Weather: header + 12 month cards -->
+          <div class="bg-white rounded-2xl border border-gray-100 p-6 mb-10">
+            <div class="flex items-center gap-2.5 mb-5">
+              <div class="size-8 skeleton rounded-xl" />
+              <div class="h-4 w-36 skeleton rounded" />
+            </div>
+            <div class="h-3.5 w-64 skeleton rounded mb-4" />
+            <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-12 gap-2">
+              <div v-for="i in 12" :key="i" class="h-[110px] skeleton rounded-xl" />
+            </div>
+          </div>
+
+          <!-- Articles: magazine layout skeleton -->
+          <div class="grid grid-cols-1 lg:grid-cols-5 gap-4 mb-10">
+            <div class="lg:col-span-3 bg-white rounded-2xl overflow-hidden border border-gray-100">
+              <div class="aspect-[16/10] skeleton" />
+              <div class="p-5 flex flex-col gap-2">
+                <div class="h-5 w-4/5 skeleton rounded" />
+                <div class="h-4 w-full skeleton rounded" />
+                <div class="h-3 w-24 skeleton rounded mt-2" />
+              </div>
+            </div>
+            <div class="lg:col-span-2 flex flex-col gap-4">
+              <div v-for="i in 2" :key="i" class="flex gap-4 bg-white rounded-2xl border border-gray-100 p-3 flex-1">
+                <div class="w-28 sm:w-32 flex-shrink-0 skeleton rounded-xl min-h-[100px]" />
+                <div class="flex flex-col gap-1.5 py-1 flex-1">
+                  <div class="h-4 w-full skeleton rounded" />
+                  <div class="h-3 w-4/5 skeleton rounded" />
+                  <div class="h-3 w-20 skeleton rounded mt-auto" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom links -->
+          <div class="h-4 w-32 skeleton rounded mt-2" />
+          <div class="h-4 w-28 skeleton rounded mt-4 mb-4" />
         </div>
       </div>
-    </template>
-
+    </div>
     <!-- Loaded state -->
-    <template v-else>
+    <div v-else key="loaded">
       <!-- ─── Dark Header Zone ─── -->
       <section class="relative pt-24 pb-20 px-6 overflow-hidden">
         <div
@@ -384,13 +484,16 @@
           </div>
         </div>
       </div>
-    </template>
+    </div>
+    </Transition>
   </div>
 </template>
 
 <script lang="ts" setup>
 import type { Level } from '@prisma/client';
 import { formatNumber } from '~/shared/global.utils';
+import { buildCityFaqItems } from '~/utils/cityFaq';
+import { getLocaleBcp47 } from '~/utils/i18n-content';
 
 defineI18nRoute({
   paths: {
@@ -532,7 +635,7 @@ useHead(() => {
 useSchemaOrg(() => {
   if (!data.value) return []
 
-  return [
+  const schemas: Record<string, unknown>[] = [
     defineBreadcrumb({
       itemListElement: [
         { name: 'Home', item: '/' },
@@ -550,5 +653,12 @@ useSchemaOrg(() => {
       },
     },
   ]
+
+  const faqItems = buildCityFaqItems(data.value, t, getLocaleBcp47(locale.value))
+  if (faqItems.length > 0) {
+    schemas.push({ '@context': 'https://schema.org', '@type': 'FAQPage', 'mainEntity': faqItems })
+  }
+
+  return schemas
 })
 </script>

@@ -104,7 +104,19 @@
     "bestMonths": "최적의 달: {months}",
     "avoidMonths": "피해야 할 달: {months}",
     "bestLabel": "최적",
-    "avoidLabel": "비추천"
+    "avoidLabel": "비추천",
+    "faq": {
+      "affordableQuestion": "{city}는 디지털 노마드에게 저렴한가요?",
+      "affordableAnswer": "{city}의 디지털 노마드 생활비는 약 ${cost}/월입니다.",
+      "internetQuestion": "{city}의 인터넷 속도는 어떤가요?",
+      "internetAnswer": "{city}의 평균 인터넷 속도는 {speed} Mbps(세계 #{rank}위)로 원격 근무에 적합합니다.",
+      "safetyQuestion": "{city}는 디지털 노마드에게 안전한가요?",
+      "safetyAnswer": "{city}의 안전 등급은 삶의 질 지수 기준 {safety}입니다.",
+      "weatherQuestion": "{city}의 날씨는 어떤가요?",
+      "weatherAnswer": "{city} 방문에 가장 좋은 달은 {month}로, 기온은 약 {temp}°C, 강수량은 {rain}mm입니다.",
+      "airQualityQuestion": "{city}의 대기질은 어떤가요?",
+      "airQualityAnswer": "{city}의 대기질 점수는 {score}/5이며 현재 AQI는 {aqiNow}입니다."
+    }
   },
   "about": {
     "builtBy": "Kamil이 만들었습니다",

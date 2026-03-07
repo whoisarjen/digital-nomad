@@ -104,7 +104,19 @@
     "bestMonths": "En iyi aylar: {months}",
     "avoidMonths": "Kaçınılacak aylar: {months}",
     "bestLabel": "En İyi",
-    "avoidLabel": "Kaçın"
+    "avoidLabel": "Kaçın",
+    "faq": {
+      "affordableQuestion": "{city} dijital göçebeler için uygun fiyatlı mı?",
+      "affordableAnswer": "{city}'de dijital göçebe yaşam tarzı için aylık yaklaşık ${cost} harcama yapılmaktadır.",
+      "internetQuestion": "{city}'deki internet hızı nedir?",
+      "internetAnswer": "{city}, ortalama {speed} Mbps internet hızına sahip (dünya sıralaması #{rank}), uzaktan çalışmaya uygundur.",
+      "safetyQuestion": "{city} dijital göçebeler için güvenli mi?",
+      "safetyAnswer": "{city}, yaşam kalitesi endekslerine göre {safety} güvenlik derecesine sahiptir.",
+      "weatherQuestion": "{city}'de hava nasıl?",
+      "weatherAnswer": "{city}'yi ziyaret için en iyi ay {month}'dır; sıcaklık yaklaşık {temp}°C ve yağış {rain}mm'dir.",
+      "airQualityQuestion": "{city}'deki hava kalitesi nedir?",
+      "airQualityAnswer": "{city}'nin hava kalitesi skoru {score}/5 olup mevcut AQI değeri {aqiNow}'dir."
+    }
   },
   "about": {
     "builtBy": "Kamil tarafından geliştirildi",

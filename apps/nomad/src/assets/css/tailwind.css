@@ -62,6 +62,12 @@ body { background-color: #f3f4f6; }
 .floating-pill-enter-from,
 .floating-pill-leave-to { opacity: 0; }
 
+/* City page skeleton ↔ loaded fade */
+.city-fade-enter-active { transition: opacity 0.2s ease; }
+.city-fade-leave-active { transition: opacity 0.15s ease; }
+.city-fade-enter-from,
+.city-fade-leave-to { opacity: 0; }
+
 /* Shimmer skeleton animation */
 @keyframes shimmer {
     0% { background-position: -200% 0; }

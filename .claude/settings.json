@@ -132,7 +132,10 @@
       "Bash(/Users/kamilowczarek/Documents/GitHub/digital-nomad/apps/nomad/src/components/__tests__/RegionsPicker.test.ts:*)",
       "Bash(npm run test:run -- --reporter=verbose src/components/__tests__/CustomNuxtImg.test.ts)",
       "Bash(npm run test:run -- src/utils/__tests__/i18n-content.test.ts)",
-      "Bash(npm run test:run -- src/components/__tests__/CustomNuxtImg.test.ts)"
+      "Bash(npm run test:run -- src/components/__tests__/CustomNuxtImg.test.ts)",
+      "Bash(npm run test:run -- src/utils/__tests__/cityFaq.test.ts)",
+      "Bash(npm run test:run -- src/__tests__/app.test.ts)",
+      "Bash(npm run test:run -- --reporter=verbose src/server/api/countries)"
     ],
     "additionalDirectories": [
       "/tmp",

@@ -104,7 +104,19 @@
     "bestMonths": "ベストシーズン: {months}",
     "avoidMonths": "避けるべき月: {months}",
     "bestLabel": "ベスト",
-    "avoidLabel": "避ける"
+    "avoidLabel": "避ける",
+    "faq": {
+      "affordableQuestion": "{city}はデジタルノマドにとって手頃ですか？",
+      "affordableAnswer": "{city}のデジタルノマドの生活費は約${cost}/月です。",
+      "internetQuestion": "{city}のインターネット速度はどのくらいですか？",
+      "internetAnswer": "{city}の平均インターネット速度は{speed} Mbps（世界ランキング#{rank}）で、リモートワークに適しています。",
+      "safetyQuestion": "{city}はデジタルノマドにとって安全ですか？",
+      "safetyAnswer": "{city}の安全評価は生活の質指数に基づき{safety}です。",
+      "weatherQuestion": "{city}の気候はどうですか？",
+      "weatherAnswer": "{city}への訪問に最適な月は{month}で、気温は約{temp}°C、降水量は{rain}mmです。",
+      "airQualityQuestion": "{city}の大気質はどうですか？",
+      "airQualityAnswer": "{city}の大気質スコアは{score}/5で、現在のAQIは{aqiNow}です。"
+    }
   },
   "about": {
     "builtBy": "Kamilが開発",

@@ -104,7 +104,19 @@
     "bestMonths": "Melhores meses: {months}",
     "avoidMonths": "Evitar: {months}",
     "bestLabel": "Melhor",
-    "avoidLabel": "Evitar"
+    "avoidLabel": "Evitar",
+    "faq": {
+      "affordableQuestion": "{city} é acessível para nômades digitais?",
+      "affordableAnswer": "{city} custa aproximadamente ${cost}/mês para um estilo de vida de nômade digital.",
+      "internetQuestion": "Qual é a velocidade da internet em {city}?",
+      "internetAnswer": "{city} tem em média {speed} Mbps de velocidade de internet (classificação #{rank} global), adequado para trabalho remoto.",
+      "safetyQuestion": "{city} é segura para nômades digitais?",
+      "safetyAnswer": "{city} tem uma classificação de segurança {safety} baseada em índices de qualidade de vida.",
+      "weatherQuestion": "Como é o clima em {city}?",
+      "weatherAnswer": "O melhor mês para visitar {city} é {month}, com temperaturas em torno de {temp}°C e {rain}mm de chuva.",
+      "airQualityQuestion": "Qual é a qualidade do ar em {city}?",
+      "airQualityAnswer": "{city} tem uma pontuação de qualidade do ar de {score}/5 com um AQI atual de {aqiNow}."
+    }
   },
   "about": {
     "builtBy": "Criado por Kamil",
