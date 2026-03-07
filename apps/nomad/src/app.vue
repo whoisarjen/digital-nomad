@@ -5,6 +5,15 @@
 </template>
 
 <script setup lang="ts">
+const i18nHead = useLocaleHead({ seo: true })
+
+useHead({
+  htmlAttrs: {
+    lang: () => i18nHead.value.htmlAttrs?.lang,
+    dir: () => getHtmlDir(i18nHead.value.htmlAttrs?.lang ?? 'en'),
+  },
+})
+
 useSchemaOrg([
   defineWebSite({
     name: 'Digital Nomad',

@@ -1,1 +1,0 @@
-we need to support mirrored layout for arabic language
