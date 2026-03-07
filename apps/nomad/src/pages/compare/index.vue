@@ -63,10 +63,13 @@
                   class="w-full px-4 py-2.5 text-left text-sm hover:bg-gray-50 transition-colors flex items-center gap-3"
                   @mousedown.prevent="selectCityA(city)"
                 >
-                  <img
+                  <CustomNuxtImg
                     v-if="city.imageUrl"
-                    :src="unsplashUrl(city.imageUrl, 40, 40)"
+                    :src="city.imageUrl"
                     :alt="city.name"
+                    width="40"
+                    height="40"
+                    quality="75"
                     class="size-8 rounded-lg object-cover flex-shrink-0"
                   />
                   <div v-else class="size-8 rounded-lg bg-gray-100 flex-shrink-0" />
@@ -108,10 +111,13 @@
                   class="w-full px-4 py-2.5 text-left text-sm hover:bg-gray-50 transition-colors flex items-center gap-3"
                   @mousedown.prevent="selectCityB(city)"
                 >
-                  <img
+                  <CustomNuxtImg
                     v-if="city.imageUrl"
-                    :src="unsplashUrl(city.imageUrl, 40, 40)"
+                    :src="city.imageUrl"
                     :alt="city.name"
+                    width="40"
+                    height="40"
+                    quality="75"
                     class="size-8 rounded-lg object-cover flex-shrink-0"
                   />
                   <div v-else class="size-8 rounded-lg bg-gray-100 flex-shrink-0" />
@@ -204,12 +210,6 @@ const localePath = useLocalePath()
 const router = useRouter()
 
 const { data, status } = await useComparePairs({ lazy: true })
-
-const unsplashUrl = (raw: string, w: number, h: number) => {
-  if (!raw) return ''
-  const sep = raw.includes('?') ? '&' : '?'
-  return `${raw}${sep}w=${w}&h=${h}&fit=crop&auto=format&q=75`
-}
 
 // City picker state
 const searchA = ref('')

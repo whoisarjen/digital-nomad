@@ -106,10 +106,14 @@
 
           <!-- Hero Image (floating over boundary) -->
           <div class="relative -mt-24 mb-10 rounded-2xl overflow-hidden shadow-2xl aspect-[21/9] group/img">
-            <img
+            <CustomNuxtImg
               v-if="heroImage.url"
-              :src="unsplashUrl(heroImage.url, 1280, 548)"
+              :src="heroImage.url"
               :alt="data.name"
+              width="1280"
+              height="548"
+              quality="75"
+              loading="eager"
               class="absolute inset-0 w-full h-full object-cover"
             />
             <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
@@ -418,12 +422,6 @@ watch(
 const { data, status } = await useCitiesBySlug(queryParams, {
   lazy: true,
 })
-
-const unsplashUrl = (raw: string, w: number, h: number) => {
-  if (!raw) return ''
-  const sep = raw.includes('?') ? '&' : '?'
-  return `${raw}${sep}w=${w}&h=${h}&fit=crop&auto=format&q=75`
-}
 
 const heroImage = computed(() => data.value?.image ?? {
   ownerName: 'Tan Kaninthanond',

@@ -97,10 +97,14 @@
           <!-- ─── Side-by-side Hero Images ─── -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 -mt-24 mb-10">
             <div class="relative rounded-2xl overflow-hidden shadow-2xl aspect-[16/9] group/img">
-              <img
+              <CustomNuxtImg
                 v-if="imageA.url"
-                :src="unsplashUrl(imageA.url, 640, 360)"
+                :src="imageA.url"
                 :alt="data.cityA.name"
+                width="640"
+                height="360"
+                sizes="md:50vw 100vw"
+                quality="75"
                 class="absolute inset-0 w-full h-full object-cover"
               />
               <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
@@ -108,10 +112,14 @@
               <UnsplashCredit :owner-name="imageA.ownerName" :owner-username="imageA.ownerUsername" position="bottom-right" />
             </div>
             <div class="relative rounded-2xl overflow-hidden shadow-2xl aspect-[16/9] group/img">
-              <img
+              <CustomNuxtImg
                 v-if="imageB.url"
-                :src="unsplashUrl(imageB.url, 640, 360)"
+                :src="imageB.url"
                 :alt="data.cityB.name"
+                width="640"
+                height="360"
+                sizes="md:50vw 100vw"
+                quality="75"
                 class="absolute inset-0 w-full h-full object-cover"
               />
               <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
@@ -701,12 +709,6 @@ const speedDiffLabel = computed(() => {
   return `${faster} +${diff} Mbps`
 })
 
-// ─── Image helpers ───
-const unsplashUrl = (raw: string, w: number, h: number) => {
-  if (!raw) return ''
-  const sep = raw.includes('?') ? '&' : '?'
-  return `${raw}${sep}w=${w}&h=${h}&fit=crop&auto=format&q=75`
-}
 
 const defaultImage = { ownerName: '', ownerUsername: '', url: '' }
 const imageA = computed(() => data.value?.cityA.image ?? defaultImage)

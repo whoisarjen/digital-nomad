@@ -53,12 +53,15 @@
               :class="BENTO[i]?.cls ?? 'col-span-12 aspect-[4/3] sm:aspect-auto'"
             >
               <!-- Image -->
-              <img
+              <CustomNuxtImg
                 v-if="region.imageUrl"
-                :src="unsplashUrl(region.imageUrl, 800, 600)"
+                :src="region.imageUrl"
                 :alt="$t(`regions.${region.region}`)"
+                width="800"
+                height="600"
+                sizes="lg:50vw 100vw"
+                quality="75"
                 class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                loading="lazy"
               />
               <div v-else class="absolute inset-0 bg-gradient-to-br from-primary-900 to-primary-700" />
 
@@ -141,12 +144,6 @@ const { data, status } = await useCustomQuery(
   undefined,
   undefined,
 )
-
-const unsplashUrl = (raw: string, w: number, h: number) => {
-  if (!raw) return ''
-  const sep = raw.includes('?') ? '&' : '?'
-  return `${raw}${sep}w=${w}&h=${h}&fit=crop&auto=format&q=75`
-}
 
 useSeoMeta({
   title: () => t('nav.regions'),

@@ -47,12 +47,14 @@
             class="block"
           >
             <div class="relative aspect-[16/10] bg-gray-100 overflow-hidden">
-              <img
+              <CustomNuxtImg
                 v-if="city.image?.url"
-                :src="unsplashUrl(city.image.url, 280, 175)"
+                :src="city.image.url"
                 :alt="city.name"
+                width="280"
+                height="175"
+                quality="75"
                 class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                loading="lazy"
               />
               <div v-if="city.totalScore" class="absolute bottom-1.5 left-1.5 flex items-center gap-1 bg-black/50 backdrop-blur-sm rounded-full px-2 py-0.5 text-[11px] font-semibold text-white">
                 <LucideStar :size="10" class="text-amber-400 fill-amber-400" />
@@ -91,12 +93,6 @@ const { data: favoritesData, status } = await useFavorites(query, { lazy: true }
 
 const favorites = computed(() => (favoritesData.value as any)?.data ?? [])
 const count = computed(() => (favoritesData.value as any)?.count ?? 0)
-
-const unsplashUrl = (raw: string, w: number, h: number) => {
-  if (!raw) return ''
-  const sep = raw.includes('?') ? '&' : '?'
-  return `${raw}${sep}w=${w}&h=${h}&fit=crop&auto=format&q=75`
-}
 
 async function handleUnfavorite(slug: string) {
   await toggleFavorite(slug)

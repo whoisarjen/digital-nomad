@@ -301,8 +301,12 @@
                   >
                     <CustomNuxtImg
                       v-if="city.image?.url"
-                      :src="unsplashUrl(city.image.url, 400, 530)"
+                      :src="city.image.url"
                       :alt="city.name"
+                      width="400"
+                      height="530"
+                      sizes="sm:50vw md:33vw lg:25vw xl:20vw 100vw"
+                      quality="75"
                       class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                     <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
@@ -430,11 +434,6 @@ const localePath = useLocalePath()
 const route = useRoute()
 const router = useRouter()
 
-const unsplashUrl = (raw: string, w: number, h: number) => {
-  if (!raw) return ''
-  const sep = raw.includes('?') ? '&' : '?'
-  return `${raw}${sep}w=${w}&h=${h}&fit=crop&auto=format&q=75`
-}
 
 const { status: authStatus } = useAuth()
 const isLoggedIn = computed(() => authStatus.value === 'authenticated')

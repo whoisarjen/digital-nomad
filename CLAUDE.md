@@ -42,6 +42,14 @@ Every server API endpoint must follow this exact pattern from `src/server/api/bl
 
 6. **Only `as` allowed**: `as const` on computed keys, `as FaqJson[]` on JSON columns. No `as unknown as X` or `as any` on Prisma results.
 
+## Images (Non-Negotiable)
+
+- **Always use `<CustomNuxtImg>` for all Unsplash city/region images** — never `<img>` or `<NuxtImg>` directly
+- **Always provide `width` and `height` props** — required for proper srcset generation and CLS prevention
+- **Pass `loading="eager"` for above-the-fold images** (hero images, first-render content); default is `lazy`
+- Exception: logo/flag/icon images (local static files) and blog `featuredImageUrl` (direct external URLs) may use plain `<img>`
+- `unsplashUrl()` helper may only be used for non-img purposes (e.g. OG meta tag URLs) — never for `src` on an image element
+
 ## No Workarounds (Non-Negotiable)
 
 Never skip, bypass, or work around tests, linting, type-checking, or git hooks. Every problem must be fixed at its root cause:
