@@ -387,5 +387,17 @@
     "savesPerMonth": "Oszczędzasz ${amount}/mies.",
     "overBudget": "${amount} ponad budżet",
     "clearBudget": "Wyczyść budżet"
+  },
+  "bestCities": {
+    "title": "Najlepsze Miasta dla Cyfrowych Nomadów {year}",
+    "description": "Top 50 miast ocenianych co miesiąc według Nomad Score — koszt życia, internet, bezpieczeństwo i klimat.",
+    "monthTitle": "Najlepsze Miasta dla Nomadów w {month} {year}",
+    "monthDescription": "Top 50 miast dla cyfrowych nomadów w {month} {year}, ranking według Nomad Score.",
+    "browseByMonth": "Przeglądaj według miesiąca",
+    "rank": "Miejsce",
+    "nomadScore": "Nomad Score",
+    "cost": "Koszt/mies.",
+    "internet": "Internet",
+    "topCity": "Najlepsze miasto"
   }
 }

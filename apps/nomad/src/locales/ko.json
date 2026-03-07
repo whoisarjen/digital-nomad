@@ -376,5 +376,17 @@
     "savesPerMonth": "${amount}/월 절약",
     "overBudget": "${amount} 예산 초과",
     "clearBudget": "예산 지우기"
+  },
+  "bestCities": {
+    "title": "Best Cities for Digital Nomads {year}",
+    "description": "Top 50 cities ranked by Nomad Score each month — covering cost, internet, safety, and climate.",
+    "monthTitle": "Best Digital Nomad Cities in {month} {year}",
+    "monthDescription": "Top 50 cities for digital nomads in {month} {year}, ranked by composite Nomad Score.",
+    "browseByMonth": "Browse by Month",
+    "rank": "Rank",
+    "nomadScore": "Nomad Score",
+    "cost": "Cost/mo",
+    "internet": "Internet",
+    "topCity": "Top City"
   }
 }
