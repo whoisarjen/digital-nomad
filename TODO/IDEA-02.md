@@ -1,1 +1,0 @@
-make all possible impovment from SEO perspective

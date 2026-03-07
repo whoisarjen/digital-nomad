@@ -25,7 +25,7 @@ describe('GET /api/__sitemap__/cities', () => {
   })
 
   it('returns entries for cities in the chunk', async () => {
-    getQueryMock.mockReturnValue({ chunk: '0', total: '1' })
+    getQueryMock.mockReturnValue({ chunk: '0' })
     prismaMock.city.findMany.mockResolvedValue([
       { slug: 'bangkok', updatedAt: new Date('2024-01-01') },
       { slug: 'lisbon', updatedAt: new Date('2024-03-15') },
@@ -39,7 +39,7 @@ describe('GET /api/__sitemap__/cities', () => {
   })
 
   it('entries do not include _sitemap field', async () => {
-    getQueryMock.mockReturnValue({ chunk: '0', total: '1' })
+    getQueryMock.mockReturnValue({ chunk: '0' })
     prismaMock.city.findMany.mockResolvedValue([
       { slug: 'barcelona', updatedAt: new Date('2024-06-01') },
     ])
@@ -51,22 +51,14 @@ describe('GET /api/__sitemap__/cities', () => {
     }
   })
 
-  it('only processes cities in the given chunk', async () => {
-    prismaMock.city.findMany.mockResolvedValue([
-      { slug: 'a', updatedAt: new Date() },
-      { slug: 'b', updatedAt: new Date() },
-      { slug: 'c', updatedAt: new Date() },
-      { slug: 'd', updatedAt: new Date() },
-    ])
+  it('passes correct skip/take to prisma for each chunk', async () => {
+    getQueryMock.mockReturnValue({ chunk: '2' })
+    prismaMock.city.findMany.mockResolvedValue([])
 
-    getQueryMock.mockReturnValue({ chunk: '0', total: '2' })
-    const chunk0 = await handler.default(createMockH3Event())
+    await handler.default(createMockH3Event())
 
-    getQueryMock.mockReturnValue({ chunk: '1', total: '2' })
-    const chunk1 = await handler.default(createMockH3Event())
-
-    expect(chunk0).toHaveLength(2)
-    expect(chunk1).toHaveLength(2)
-    expect(chunk0[0].loc).not.toBe(chunk1[0].loc)
+    expect(prismaMock.city.findMany).toHaveBeenCalledWith(
+      expect.objectContaining({ skip: 200, take: 100 }),
+    )
   })
 })

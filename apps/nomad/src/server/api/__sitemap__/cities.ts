@@ -1,16 +1,15 @@
+const CHUNK_SIZE = 100;
+
 export default defineSitemapEventHandler(async (event) => {
     const query = getQuery(event);
     const chunk = Number(query.chunk ?? 0);
-    const total = Number(query.total ?? 1);
 
-    const allCities = await prisma.city.findMany({
+    const cities = await prisma.city.findMany({
         select: { slug: true, updatedAt: true },
         orderBy: { name: 'asc' },
+        skip: chunk * CHUNK_SIZE,
+        take: CHUNK_SIZE,
     });
-
-    const citiesPerChunk = Math.ceil(allCities.length / total);
-    const start = chunk * citiesPerChunk;
-    const cities = allCities.slice(start, Math.min(start + citiesPerChunk, allCities.length));
 
     return cities.flatMap((city) =>
         buildLocalizedEntries(
