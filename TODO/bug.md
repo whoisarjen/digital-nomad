@@ -1,1 +1,0 @@
-filter when selected and diselected even to url is empty, showing 1 selected

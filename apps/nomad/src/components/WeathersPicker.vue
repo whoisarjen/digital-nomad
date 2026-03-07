@@ -50,7 +50,7 @@ function selectWeather(value: string) {
     query: {
       ...route.query,
       page: undefined,
-      weathers: newSelections,
+      weathers: newSelections.length ? newSelections : undefined,
     },
   });
 }

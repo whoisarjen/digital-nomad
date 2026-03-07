@@ -40,7 +40,7 @@ function selectRegion(value: string) {
     query: {
       ...route.query,
       page: undefined,
-      regions: newSelections,
+      regions: newSelections.length ? newSelections : undefined,
     },
   });
 }

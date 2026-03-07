@@ -125,7 +125,11 @@
       "Bash(npm install @nuxtjs/seo --ignore-scripts)",
       "Bash(/Users/kamilowczarek/Documents/GitHub/digital-nomad/todo:*)",
       "Bash(/Users/kamilowczarek/Documents/GitHub/digital-nomad/todo/todo_compare_seo.md:*)",
-      "Bash(git reset HEAD -- apps/collector/nuxt.config.ts apps/collector/vercel.json)"
+      "Bash(git reset HEAD -- apps/collector/nuxt.config.ts apps/collector/vercel.json)",
+      "Bash(node -e \"const v = require\\(''/Users/kamilowczarek/Documents/GitHub/digital-nomad/node_modules/vitest/dist/config.js''\\); console.log\\(Object.keys\\(v\\).slice\\(0,20\\)\\)\")",
+      "Bash(node -e \"import\\(''/Users/kamilowczarek/Documents/GitHub/digital-nomad/node_modules/vitest/dist/config.js''\\).then\\(v=>console.log\\(Object.keys\\(v\\)\\)\\)\")",
+      "Bash(/Users/kamilowczarek/Documents/GitHub/digital-nomad/apps/nomad/src/components/__tests__/WeathersPicker.test.ts:*)",
+      "Bash(/Users/kamilowczarek/Documents/GitHub/digital-nomad/apps/nomad/src/components/__tests__/RegionsPicker.test.ts:*)"
     ],
     "additionalDirectories": [
       "/tmp",
