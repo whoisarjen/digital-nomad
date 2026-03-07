@@ -12,6 +12,8 @@ useHead({
     lang: () => i18nHead.value.htmlAttrs?.lang,
     dir: () => getHtmlDir(i18nHead.value.htmlAttrs?.lang ?? 'en'),
   },
+  link: () => i18nHead.value.link ?? [],
+  meta: () => i18nHead.value.meta ?? [],
 })
 
 useSchemaOrg([
