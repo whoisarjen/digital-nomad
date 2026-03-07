@@ -120,7 +120,11 @@
       "Bash(npx vitest run src/components/__tests__/)",
       "Read(//Users/kamilowczarek/**)",
       "Bash(npx which turbo)",
-      "Bash(chmod -R u+rwx /Users/kamilowczarek/Documents/GitHub/digital-nomad/apps/nomad/.nuxt)"
+      "Bash(chmod -R u+rwx /Users/kamilowczarek/Documents/GitHub/digital-nomad/apps/nomad/.nuxt)",
+      "Bash(npm install @nuxtjs/seo)",
+      "Bash(npm install @nuxtjs/seo --ignore-scripts)",
+      "Bash(/Users/kamilowczarek/Documents/GitHub/digital-nomad/todo:*)",
+      "Bash(/Users/kamilowczarek/Documents/GitHub/digital-nomad/todo/todo_compare_seo.md:*)"
     ],
     "additionalDirectories": [
       "/tmp",

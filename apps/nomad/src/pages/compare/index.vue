@@ -190,7 +190,6 @@
 </template>
 
 <script lang="ts" setup>
-import { LOCALES } from '~/constants/global.constant'
 import { buildCompareSlug } from '~/shared/global.utils'
 
 defineI18nRoute({
@@ -203,8 +202,6 @@ defineI18nRoute({
 const { t } = useCustomI18n()
 const localePath = useLocalePath()
 const router = useRouter()
-
-const BASE_URL = 'https://nomad.whoisarjen.com'
 
 const { data, status } = await useComparePairs({ lazy: true })
 
@@ -266,38 +263,19 @@ function goCompare() {
   router.push(localePath({ name: 'compare-slugs', params: { slugs } }))
 }
 
-// SEO
-const canonicalPath = '/compare'
-useHead({
-  title: t('compare.hubTitle'),
-  meta: [
-    { name: 'description', content: t('compare.hubSubtitle') },
-    { property: 'og:title', content: t('compare.hubTitle') },
-    { property: 'og:description', content: t('compare.hubSubtitle') },
-    { property: 'og:type', content: 'website' },
-    { property: 'og:url', content: `${BASE_URL}${canonicalPath}` },
-  ],
-  link: [
-    { rel: 'canonical', href: `${BASE_URL}${canonicalPath}` },
-    ...LOCALES.map(l => ({
-      rel: 'alternate',
-      hreflang: l.code,
-      href: l.code === 'en' ? `${BASE_URL}/compare` : `${BASE_URL}/${l.code}/porownaj`,
-    })),
-    { rel: 'alternate', hreflang: 'x-default', href: `${BASE_URL}/compare` },
-  ],
-  script: [
-    {
-      type: 'application/ld+json',
-      innerHTML: JSON.stringify({
-        '@context': 'https://schema.org',
-        '@type': 'BreadcrumbList',
-        itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Home', item: BASE_URL },
-          { '@type': 'ListItem', position: 2, name: t('compare.hubTitle'), item: `${BASE_URL}${canonicalPath}` },
-        ],
-      }),
-    },
-  ],
+useSeoMeta({
+  title: () => t('compare.hubTitle'),
+  description: () => t('compare.hubSubtitle'),
+  ogType: 'website',
+  twitterCard: 'summary_large_image',
 })
+
+useSchemaOrg([
+  defineBreadcrumb({
+    itemListElement: [
+      { name: 'Home', item: '/' },
+      { name: () => t('compare.hubTitle') },
+    ],
+  }),
+])
 </script>

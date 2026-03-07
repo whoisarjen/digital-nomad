@@ -442,9 +442,24 @@ const unsplashUrl = (raw: string, w: number, h: number) => {
 
 const hasFilters = computed(() => Object.keys(route.query).length > 0)
 
+useSeoMeta({
+  title: 'Find Your Next Nomad City',
+  description: 'Compare 500+ cities by cost, weather, internet, safety & more. Find the perfect city for your digital nomad lifestyle.',
+  ogType: 'website',
+  twitterCard: 'summary_large_image',
+})
+
 useHead({
   meta: computed(() => hasFilters.value ? [{ name: 'robots', content: 'noindex, nofollow' }] : []),
 })
+
+useSchemaOrg([
+  defineBreadcrumb({
+    itemListElement: [
+      { name: 'Home' },
+    ],
+  }),
+])
 
 const translatedOrderByOptions = computed(() =>
   OPTIONS_ORDER_BY.map(opt => ({ ...opt, label: t(`orderBy.${opt.value}`) }))

@@ -267,7 +267,6 @@
 <script setup lang="ts">
 import type { Level } from '@prisma/client'
 import type { GetCitiesSchema } from '~/shared/global.schema'
-import { LOCALES } from '~/constants/global.constant'
 import { DEFAULT_CITIES_LIMIT } from '~/shared/global.schema'
 import { getUserCurrentMonthString, OPTIONS_ORDER_BY, REGION_SLUG_MAP } from '~/shared/global.utils'
 
@@ -405,87 +404,58 @@ const formatSafetyLabel = (level: Level | undefined | null) => {
   return labels[level] ?? level.toLowerCase()
 }
 
-// SEO
-const BASE_URL = 'https://nomad.whoisarjen.com'
+useHead({
+  meta: computed(() => hasFilters.value ? [{ name: 'robots', content: 'noindex, nofollow' }] : []),
+})
 
-const REGION_SEGMENT: Partial<Record<string, string>> = {
-  pl: 'regiony', es: 'regiones', de: 'regionen', pt: 'regioes', tr: 'bolgeler', it: 'regioni',
-}
-
-const regionHref = (code: string) => {
-  const prefix = code === 'en' ? '' : `/${code}`
-  const segment = REGION_SEGMENT[code] ?? 'regions'
-  return `${BASE_URL}${prefix}/${segment}/${regionSlug.value}`
-}
-
-useHead(computed(() => {
+useHead(() => {
   if (!regionData.value) return {}
 
   const title = t('regionPage.metaTitle', { region: regionLabel.value, year: currentYear })
   const description = t('regionPage.metaDesc', { region: regionLabel.value, count: regionData.value.stats.cityCount })
 
-  const metaTags = [
-    { name: 'description', content: description },
-    { property: 'og:title', content: title },
-    { property: 'og:description', content: description },
-    { property: 'og:type', content: 'website' },
-  ]
-
-  metaTags.push({ property: 'og:url', content: regionHref(locale.value) })
-
   const firstCityImageUrl = regionData.value.cities[0]?.image?.url
-  if (firstCityImageUrl) {
-    metaTags.push({ property: 'og:image', content: unsplashUrl(firstCityImageUrl, 1200, 630) })
-  }
-
-  if (hasFilters.value) {
-    metaTags.push({ name: 'robots', content: 'noindex, nofollow' })
-  }
-
-  const itemListElements = (regionData.value.cities ?? []).slice(0, 10).map((city, i) => ({
-    '@type': 'ListItem',
-    'position': i + 1,
-    'name': city.name,
-    'url': `https://nomad.whoisarjen.com/cities/${city.slug}`,
-  }))
+  const ogImage = firstCityImageUrl ? unsplashUrl(firstCityImageUrl, 1200, 630) : undefined
 
   return {
     title,
-    meta: metaTags,
-    link: [
-      { rel: 'canonical', href: regionHref(locale.value) },
-      ...LOCALES.map(l => ({
-        rel: 'alternate',
-        hreflang: l.code as string,
-        href: regionHref(l.code),
-      })),
-      { rel: 'alternate', hreflang: 'x-default', href: regionHref('en') },
-    ],
-    script: [
-      {
-        type: 'application/ld+json',
-        innerHTML: JSON.stringify({
-          '@context': 'https://schema.org',
-          '@type': 'ItemList',
-          'name': title,
-          'description': description,
-          'numberOfItems': regionData.value.stats.cityCount,
-          'itemListElement': itemListElements,
-        }),
-      },
-      {
-        type: 'application/ld+json',
-        innerHTML: JSON.stringify({
-          '@context': 'https://schema.org',
-          '@type': 'BreadcrumbList',
-          'itemListElement': [
-            { '@type': 'ListItem', 'position': 1, 'name': 'Home', 'item': 'https://nomad.whoisarjen.com' },
-            { '@type': 'ListItem', 'position': 2, 'name': t('regionPage.breadcrumb'), 'item': 'https://nomad.whoisarjen.com/regions' },
-            { '@type': 'ListItem', 'position': 3, 'name': regionLabel.value },
-          ],
-        }),
-      },
+    meta: [
+      { name: 'description', content: description },
+      { property: 'og:title', content: title },
+      { property: 'og:description', content: description },
+      { property: 'og:type', content: 'website' },
+      ...(ogImage ? [{ property: 'og:image', content: ogImage }] : []),
+      { name: 'twitter:card', content: 'summary_large_image' },
     ],
   }
-}))
+})
+
+useSchemaOrg(() => {
+  if (!regionData.value) return []
+
+  const title = t('regionPage.metaTitle', { region: regionLabel.value, year: currentYear })
+  const description = t('regionPage.metaDesc', { region: regionLabel.value, count: regionData.value.stats.cityCount })
+
+  return [
+    {
+      '@type': 'ItemList',
+      'name': title,
+      'description': description,
+      'numberOfItems': regionData.value.stats.cityCount,
+      'itemListElement': (regionData.value.cities ?? []).slice(0, 10).map((city, i) => ({
+        '@type': 'ListItem',
+        'position': i + 1,
+        'name': city.name,
+        'url': `https://nomad.whoisarjen.com/cities/${city.slug}`,
+      })),
+    },
+    defineBreadcrumb({
+      itemListElement: [
+        { name: 'Home', item: '/' },
+        { name: t('regionPage.breadcrumb'), item: '/regions' },
+        { name: regionLabel.value },
+      ],
+    }),
+  ]
+})
 </script>

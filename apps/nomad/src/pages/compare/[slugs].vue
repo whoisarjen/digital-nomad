@@ -604,7 +604,6 @@
 <script lang="ts" setup>
 import type { Level } from '@prisma/client'
 import { formatNumber, buildCompareSlug } from '~/shared/global.utils'
-import { LOCALES } from '~/constants/global.constant'
 
 defineI18nRoute({
   paths: {
@@ -799,142 +798,17 @@ const getMonthShort = (month: string) => {
   return new Date(2023, Number(month) - 1).toLocaleString(getLocaleBcp47(locale.value), { month: 'short' })
 }
 
-// ─── SEO ───
-const BASE_URL = 'https://nomad.whoisarjen.com'
-
 useHead(() => {
   if (!data.value) return {}
-
   const cityAName = data.value.cityA.name
   const cityBName = data.value.cityB.name
-  const slugs = rawSlugs.value
-  const title = t('compare.metaTitle', { cityA: cityAName, cityB: cityBName })
-  const description = t('compare.metaDesc', { cityA: cityAName, cityB: cityBName })
-  const enUrl = `${BASE_URL}/compare/${slugs}`
-  const currentUrl = locale.value === 'en' ? enUrl : `${BASE_URL}/${locale.value}/porownaj/${slugs}`
-
-  const hreflangLinks: { rel: string; hreflang: string; href: string }[] = LOCALES.map(l => ({
-    rel: 'alternate',
-    hreflang: l.code as string,
-    href: l.code === 'en' ? `${BASE_URL}/compare/${slugs}` : `${BASE_URL}/${l.code}/porownaj/${slugs}`,
-  }))
-  hreflangLinks.push({ rel: 'alternate', hreflang: 'x-default', href: enUrl })
-
-  // noindex if missing key data
-  const missingData = !data.value.cityA.costForNomadInUsd || !data.value.cityB.costForNomadInUsd ||
-    !data.value.cityA.internetSpeedCity || !data.value.cityB.internetSpeedCity
-
-  const jsonLd: Record<string, unknown>[] = [
-    {
-      '@context': 'https://schema.org',
-      '@type': 'Article',
-      'headline': `${cityAName} vs ${cityBName} for Digital Nomads`,
-      'description': description,
-      'url': currentUrl,
-      'inLanguage': locale.value,
-      'publisher': {
-        '@type': 'Organization',
-        'name': 'Digital Nomad',
-        'url': BASE_URL,
-      },
-    },
-    {
-      '@context': 'https://schema.org',
-      '@type': 'BreadcrumbList',
-      'itemListElement': [
-        { '@type': 'ListItem', 'position': 1, 'name': 'Home', 'item': BASE_URL },
-        { '@type': 'ListItem', 'position': 2, 'name': t('compare.hubTitle'), 'item': `${BASE_URL}${locale.value === 'en' ? '' : `/${locale.value}`}/compare` },
-        { '@type': 'ListItem', 'position': 3, 'name': `${cityAName} vs ${cityBName}`, 'item': currentUrl },
-      ],
-    },
-  ]
-
-  // ── FAQPage JSON-LD ──
-  const faqItems: Record<string, unknown>[] = []
-
-  const faqCostA = Number(data.value.cityA.costForNomadInUsd ?? 0)
-  const faqCostB = Number(data.value.cityB.costForNomadInUsd ?? 0)
-  if (faqCostA && faqCostB) {
-    const cheaper = faqCostA < faqCostB ? cityAName : cityBName
-    const faqPct = Math.round(Math.abs(faqCostA - faqCostB) / Math.max(faqCostA, faqCostB) * 100)
-    faqItems.push({
-      '@type': 'Question',
-      'name': `Is ${cityAName} cheaper than ${cityBName} for digital nomads?`,
-      'acceptedAnswer': {
-        '@type': 'Answer',
-        'text': `${cheaper} is cheaper for digital nomads. ${cityAName} costs $${faqCostA}/month and ${cityBName} costs $${faqCostB}/month — a ${faqPct}% difference.`,
-      },
-    })
-  }
-
-  const faqSpeedA = data.value.cityA.internetSpeedCity
-  const faqSpeedB = data.value.cityB.internetSpeedCity
-  if (faqSpeedA && faqSpeedB) {
-    const faster = faqSpeedA > faqSpeedB ? cityAName : cityBName
-    faqItems.push({
-      '@type': 'Question',
-      'name': `Which city has better internet for remote work, ${cityAName} or ${cityBName}?`,
-      'acceptedAnswer': {
-        '@type': 'Answer',
-        'text': `${faster} has faster internet. ${cityAName} averages ${faqSpeedA} Mbps and ${cityBName} averages ${faqSpeedB} Mbps in city-level speed rankings.`,
-      },
-    })
-  }
-
-  if (data.value.cityA.safety && data.value.cityB.safety) {
-    faqItems.push({
-      '@type': 'Question',
-      'name': `Is ${cityAName} safer than ${cityBName}?`,
-      'acceptedAnswer': {
-        '@type': 'Answer',
-        'text': `${cityAName} has a ${data.value.cityA.safety.toLowerCase()} safety rating and ${cityBName} has a ${data.value.cityB.safety.toLowerCase()} safety rating based on Numbeo data.`,
-      },
-    })
-  }
-
-  const summaryA = data.value.cityA.monthSummary
-  const summaryB = data.value.cityB.monthSummary
-  if (summaryA.length && summaryB.length) {
-    const bestA = summaryA.reduce((acc, m) => m.totalScore > acc.totalScore ? m : acc, summaryA[0]!)
-    const bestB = summaryB.reduce((acc, m) => m.totalScore > acc.totalScore ? m : acc, summaryB[0]!)
-    const mA = new Date(2023, Number(bestA.month) - 1).toLocaleString('en-US', { month: 'long' })
-    const mB = new Date(2023, Number(bestB.month) - 1).toLocaleString('en-US', { month: 'long' })
-    faqItems.push({
-      '@type': 'Question',
-      'name': `When is the best time to visit ${cityAName} compared to ${cityBName}?`,
-      'acceptedAnswer': {
-        '@type': 'Answer',
-        'text': `The best month to visit ${cityAName} is ${mA} (weather score: ${bestA.totalScore}). For ${cityBName}, the best month is ${mB} (score: ${bestB.totalScore}).`,
-      },
-    })
-  }
-
-  if (faqItems.length > 0) {
-    jsonLd.push({
-      '@context': 'https://schema.org',
-      '@type': 'FAQPage',
-      'mainEntity': faqItems,
-    })
-  }
 
   return {
-    title,
+    title: t('compare.metaTitle', { cityA: cityAName, cityB: cityBName }),
     meta: [
-      { name: 'description', content: description },
-      { property: 'og:title', content: title },
-      { property: 'og:description', content: description },
-      { property: 'og:url', content: currentUrl },
-      { property: 'og:type', content: 'article' },
-      ...(missingData ? [{ name: 'robots', content: 'noindex, nofollow' }] : []),
+      { name: 'description', content: t('compare.metaDesc', { cityA: cityAName, cityB: cityBName }) },
+      { name: 'robots', content: 'noindex, nofollow' },
     ],
-    link: [
-      { rel: 'canonical', href: currentUrl },
-      ...hreflangLinks,
-    ],
-    script: jsonLd.map(ld => ({
-      type: 'application/ld+json',
-      innerHTML: JSON.stringify(ld),
-    })),
   }
 })
 </script>

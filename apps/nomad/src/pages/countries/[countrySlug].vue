@@ -211,18 +211,11 @@ const formatSafetyLabel = (level: Level | undefined | null) => {
   return labels[level] ?? level.toLowerCase()
 }
 
-useHead(computed(() => {
+useHead(() => {
   if (!countryData.value) return {}
 
   const title = t('countryPage.title', { country: countryData.value.country, year: currentYear })
   const description = t('countryPage.description', { count: countryData.value.stats.cityCount, country: countryData.value.country })
-
-  const itemListElements = countryData.value.cities.slice(0, 10).map((city, i) => ({
-    '@type': 'ListItem',
-    'position': i + 1,
-    'name': city.name,
-    'url': `https://nomad.whoisarjen.com/cities/${city.slug}`,
-  }))
 
   return {
     title,
@@ -231,32 +224,37 @@ useHead(computed(() => {
       { property: 'og:title', content: title },
       { property: 'og:description', content: description },
       { property: 'og:type', content: 'website' },
-    ],
-    script: [
-      {
-        type: 'application/ld+json',
-        innerHTML: JSON.stringify({
-          '@context': 'https://schema.org',
-          '@type': 'ItemList',
-          'name': title,
-          'description': description,
-          'numberOfItems': countryData.value.stats.cityCount,
-          'itemListElement': itemListElements,
-        }),
-      },
-      {
-        type: 'application/ld+json',
-        innerHTML: JSON.stringify({
-          '@context': 'https://schema.org',
-          '@type': 'BreadcrumbList',
-          'itemListElement': [
-            { '@type': 'ListItem', 'position': 1, 'name': 'Home', 'item': 'https://nomad.whoisarjen.com' },
-            { '@type': 'ListItem', 'position': 2, 'name': t('countryPage.allCountries'), 'item': 'https://nomad.whoisarjen.com/countries' },
-            { '@type': 'ListItem', 'position': 3, 'name': countryData.value.country },
-          ],
-        }),
-      },
+      { name: 'twitter:card', content: 'summary_large_image' },
     ],
   }
-}))
+})
+
+useSchemaOrg(() => {
+  if (!countryData.value) return []
+
+  const title = t('countryPage.title', { country: countryData.value.country, year: currentYear })
+  const description = t('countryPage.description', { count: countryData.value.stats.cityCount, country: countryData.value.country })
+
+  return [
+    {
+      '@type': 'ItemList',
+      'name': title,
+      'description': description,
+      'numberOfItems': countryData.value.stats.cityCount,
+      'itemListElement': countryData.value.cities.slice(0, 10).map((city, i) => ({
+        '@type': 'ListItem',
+        'position': i + 1,
+        'name': city.name,
+        'url': `https://nomad.whoisarjen.com/cities/${city.slug}`,
+      })),
+    },
+    defineBreadcrumb({
+      itemListElement: [
+        { name: 'Home', item: '/' },
+        { name: t('countryPage.allCountries'), item: '/countries' },
+        { name: countryData.value.country },
+      ],
+    }),
+  ]
+})
 </script>

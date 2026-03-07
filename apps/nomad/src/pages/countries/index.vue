@@ -177,10 +177,19 @@ const filtered = computed(() => {
   })
 })
 
-useHead({
-  title: t('countryPage.allCountriesTitle') + ' | Digital Nomad',
-  meta: [
-    { name: 'description', content: t('countryPage.allCountriesDesc', { count: '' }) },
-  ],
+useSeoMeta({
+  title: () => t('countryPage.allCountriesTitle'),
+  description: () => t('countryPage.allCountriesDesc', { count: '' }),
+  ogType: 'website',
+  twitterCard: 'summary_large_image',
 })
+
+useSchemaOrg([
+  defineBreadcrumb({
+    itemListElement: [
+      { name: 'Home', item: '/' },
+      { name: () => t('countryPage.allCountries') },
+    ],
+  }),
+])
 </script>

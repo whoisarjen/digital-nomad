@@ -13,15 +13,17 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-03-11',
   devtools: { enabled: process.env.NODE_ENV === 'development' },
   devServer: { port: 3000 },
+  site: {
+    url: 'https://nomad.whoisarjen.com',
+    name: 'Digital Nomad',
+    description: 'Compare 500+ cities by cost, weather, internet, safety & more. Find the perfect city for your digital nomad lifestyle.',
+    defaultLocale: 'en',
+  },
   runtimeConfig: {
     NUXT_AUTH_SECRET: process.env.NUXT_AUTH_SECRET,
   },
   app: {
     head: {
-      title: 'Digital Nomad - Find Your Next Nomad City',
-      meta: [
-        { name: 'description', content: 'Compare 500+ cities by cost, weather, internet, safety & more. Find the perfect city for your digital nomad lifestyle.' },
-      ],
       link: [
         { rel: 'icon', type: 'image/svg+xml', href: '/logo.svg' },
         { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
@@ -36,7 +38,7 @@ export default defineNuxtConfig({
     'nuxt-lucide-icons',
     '@nuxt/image',
     '@nuxtjs/i18n',
-    '@nuxtjs/sitemap',
+    '@nuxtjs/seo',
     '@sidebase/nuxt-auth',
   ],
   auth: {
@@ -110,6 +112,22 @@ export default defineNuxtConfig({
         includeAppSources: false,
       },
     },
+  },
+  robots: {
+    allow: ['/'],
+    disallow: ['/api/'],
+    sitemap: 'https://nomad.whoisarjen.com/sitemap_index.xml',
+  },
+  schemaOrg: {
+    identity: {
+      type: 'Organization',
+      name: 'Digital Nomad',
+      url: 'https://nomad.whoisarjen.com',
+      logo: 'https://nomad.whoisarjen.com/logo.svg',
+    },
+  },
+  ogImage: {
+    enabled: false,
   },
   nitro: {
     vercel: {

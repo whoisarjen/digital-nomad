@@ -113,8 +113,6 @@
 </template>
 
 <script setup lang="ts">
-import { LOCALES } from '~/constants/global.constant'
-
 defineI18nRoute({
   paths: {
     en: '/blog/[slug]',
@@ -122,7 +120,7 @@ defineI18nRoute({
   },
 })
 
-const { locale } = useCustomI18n()
+const { locale, t } = useCustomI18n()
 const localePath = useLocalePath()
 
 const route = useRoute()
@@ -138,66 +136,10 @@ watch(
 
 const { data, status } = await useArticleBySlug(queryParams, { lazy: true })
 
-const BASE_URL = 'https://nomad.whoisarjen.com'
-
 useHead(() => {
   if (!data.value) return {}
-
   const title = data.value.metaTitle || data.value.title
   const description = data.value.metaDesc || data.value.excerpt
-  const slug = data.value.slug
-  const enUrl = `${BASE_URL}/blog/${slug}`
-  const currentUrl = locale.value === 'en' ? enUrl : `${BASE_URL}/${locale.value}/blog/${slug}`
-
-  const hreflangLinks: { rel: string; hreflang: string; href: string }[] = LOCALES.map(l => ({
-    rel: 'alternate',
-    hreflang: l.code as string,
-    href: l.code === 'en' ? `${BASE_URL}/blog/${slug}` : `${BASE_URL}/${l.code}/blog/${slug}`,
-  }))
-  hreflangLinks.push({ rel: 'alternate', hreflang: 'x-default', href: enUrl })
-
-  const jsonLd: any[] = [
-    {
-      '@context': 'https://schema.org',
-      '@type': 'Article',
-      'headline': data.value.title,
-      'description': description,
-      'image': data.value.featuredImageUrl || undefined,
-      'datePublished': data.value.publishedAt,
-      'dateModified': data.value.updatedAt,
-      'url': currentUrl,
-      'inLanguage': locale.value,
-      'publisher': {
-        '@type': 'Organization',
-        'name': 'Digital Nomad',
-        'url': BASE_URL,
-      },
-    },
-    {
-      '@context': 'https://schema.org',
-      '@type': 'BreadcrumbList',
-      'itemListElement': [
-        { '@type': 'ListItem', 'position': 1, 'name': 'Home', 'item': BASE_URL },
-        { '@type': 'ListItem', 'position': 2, 'name': 'Blog', 'item': `${BASE_URL}${locale.value === 'en' ? '' : `/${locale.value}`}/blog` },
-        { '@type': 'ListItem', 'position': 3, 'name': data.value.title, 'item': currentUrl },
-      ],
-    },
-  ]
-
-  if (data.value.faqs?.length) {
-    jsonLd.push({
-      '@context': 'https://schema.org',
-      '@type': 'FAQPage',
-      'mainEntity': (data.value.faqs as any[]).map((faq: any) => ({
-        '@type': 'Question',
-        'name': faq.question,
-        'acceptedAnswer': {
-          '@type': 'Answer',
-          'text': faq.answer,
-        },
-      })),
-    })
-  }
 
   return {
     title,
@@ -205,19 +147,52 @@ useHead(() => {
       { name: 'description', content: description },
       { property: 'og:title', content: title },
       { property: 'og:description', content: description },
-      { property: 'og:url', content: currentUrl },
       { property: 'og:type', content: 'article' },
       ...(data.value.featuredImageUrl ? [{ property: 'og:image', content: data.value.featuredImageUrl }] : []),
+      { name: 'twitter:card', content: 'summary_large_image' },
+      ...(data.value.publishedAt ? [{ property: 'article:published_time', content: data.value.publishedAt }] : []),
+      ...(data.value.updatedAt ? [{ property: 'article:modified_time', content: data.value.updatedAt }] : []),
     ],
-    link: [
-      { rel: 'canonical', href: currentUrl },
-      ...hreflangLinks,
-    ],
-    script: jsonLd.map(ld => ({
-      type: 'application/ld+json',
-      innerHTML: JSON.stringify(ld),
-    })),
   }
+})
+
+useSchemaOrg(() => {
+  if (!data.value) return []
+
+  const schemas: any[] = [
+    defineArticle({
+      headline: data.value.title,
+      description: data.value.metaDesc || data.value.excerpt,
+      image: data.value.featuredImageUrl || undefined,
+      datePublished: data.value.publishedAt || undefined,
+      dateModified: data.value.updatedAt || undefined,
+    }),
+    defineBreadcrumb({
+      itemListElement: [
+        { name: 'Home', item: '/' },
+        { name: t('blog.title'), item: '/blog' },
+        { name: data.value.title },
+      ],
+    }),
+  ]
+
+  if (data.value.faqs?.length) {
+    schemas.push(
+      {
+        '@type': 'FAQPage',
+        'mainEntity': (data.value.faqs as { question: string; answer: string }[]).map(faq => ({
+          '@type': 'Question',
+          'name': faq.question,
+          'acceptedAnswer': {
+            '@type': 'Answer',
+            'text': faq.answer,
+          },
+        })),
+      },
+    )
+  }
+
+  return schemas
 })
 
 const formatDate = (date: string) => {

@@ -387,7 +387,6 @@
 <script lang="ts" setup>
 import type { Level } from '@prisma/client';
 import { formatNumber } from '~/shared/global.utils';
-import { LOCALES } from '~/constants/global.constant';
 
 defineI18nRoute({
   paths: {
@@ -503,51 +502,12 @@ const getAirQualityClass = (score: number) => {
   return 'text-red-600'
 }
 
-const BASE_URL = 'https://nomad.whoisarjen.com'
-
 useHead(() => {
   if (!data.value) return {}
 
   const { name, country, costForNomadInUsd, internetSpeedCity, safety } = data.value
-  const slug = citySlug.value
   const title = `${name}, ${country} — Digital Nomad Guide`
   const description = `Live and work in ${name}. Nomad cost $${costForNomadInUsd}/mo, ${internetSpeedCity} Mbps internet, ${formatLevel(safety)} safety rating.`
-
-  const getCityUrl = (code: string) => {
-    if (code === 'en') return `${BASE_URL}/cities/${slug}`
-    if (code === 'pl') return `${BASE_URL}/pl/miasta/${slug}`
-    return `${BASE_URL}/${code}/cities/${slug}`
-  }
-
-  const currentUrl = getCityUrl(locale.value)
-
-  const hreflangLinks = [
-    ...LOCALES.map(l => ({ rel: 'alternate', hreflang: l.code as string, href: getCityUrl(l.code) })),
-    { rel: 'alternate', hreflang: 'x-default', href: getCityUrl('en') },
-  ]
-
-  const jsonLd = [
-    {
-      '@context': 'https://schema.org',
-      '@type': 'BreadcrumbList',
-      'itemListElement': [
-        { '@type': 'ListItem', 'position': 1, 'name': 'Home', 'item': BASE_URL },
-        { '@type': 'ListItem', 'position': 2, 'name': 'Cities', 'item': `${BASE_URL}/cities` },
-        { '@type': 'ListItem', 'position': 3, 'name': name, 'item': currentUrl },
-      ],
-    },
-    {
-      '@context': 'https://schema.org',
-      '@type': 'Place',
-      'name': name,
-      'url': currentUrl,
-      'address': {
-        '@type': 'PostalAddress',
-        'addressLocality': name,
-        'addressCountry': country,
-      },
-    },
-  ]
 
   const imageUrl = data.value.image?.url
   const ogImage = imageUrl?.startsWith('https://')
@@ -560,7 +520,6 @@ useHead(() => {
       { name: 'description', content: description },
       { property: 'og:title', content: title },
       { property: 'og:description', content: description },
-      { property: 'og:url', content: currentUrl },
       { property: 'og:type', content: 'website' },
       ...(ogImage ? [
         { property: 'og:image', content: ogImage },
@@ -569,14 +528,29 @@ useHead(() => {
       ] : []),
       { name: 'twitter:card', content: 'summary_large_image' },
     ],
-    link: [
-      { rel: 'canonical', href: currentUrl },
-      ...hreflangLinks,
-    ],
-    script: jsonLd.map(ld => ({
-      type: 'application/ld+json',
-      innerHTML: JSON.stringify(ld),
-    })),
   }
+})
+
+useSchemaOrg(() => {
+  if (!data.value) return []
+
+  return [
+    defineBreadcrumb({
+      itemListElement: [
+        { name: 'Home', item: '/' },
+        { name: 'Cities', item: '/cities' },
+        { name: data.value.name },
+      ],
+    }),
+    {
+      '@type': 'Place',
+      'name': data.value.name,
+      'address': {
+        '@type': 'PostalAddress',
+        'addressLocality': data.value.name,
+        'addressCountry': data.value.country,
+      },
+    },
+  ]
 })
 </script>

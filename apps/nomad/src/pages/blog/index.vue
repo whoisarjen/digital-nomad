@@ -158,8 +158,6 @@
 
 <script setup lang="ts">
 import type { GetArticlesSchema } from '~/shared/global.schema';
-import { LOCALES } from '~/constants/global.constant'
-
 defineI18nRoute({
   paths: {
     en: '/blog',
@@ -169,33 +167,22 @@ defineI18nRoute({
 
 const { locale, t } = useCustomI18n()
 const localePath = useLocalePath()
-const BASE_URL = 'https://nomad.whoisarjen.com'
 
-useHead(() => {
-  const enUrl = `${BASE_URL}/blog`
-  const currentUrl = locale.value === 'en' ? enUrl : `${BASE_URL}/${locale.value}/blog`
-
-  const hreflangLinks: { rel: string; hreflang: string; href: string }[] = LOCALES.map(l => ({
-    rel: 'alternate',
-    hreflang: l.code as string,
-    href: l.code === 'en' ? `${BASE_URL}/blog` : `${BASE_URL}/${l.code}/blog`,
-  }))
-  hreflangLinks.push({ rel: 'alternate', hreflang: 'x-default', href: enUrl })
-
-  return {
-    title: `${t('blog.title')} - Digital Nomad`,
-    meta: [
-      { name: 'description', content: t('blog.subtitle') },
-      { property: 'og:title', content: `${t('blog.title')} - Digital Nomad` },
-      { property: 'og:description', content: t('blog.subtitle') },
-      { property: 'og:url', content: currentUrl },
-    ],
-    link: [
-      { rel: 'canonical', href: currentUrl },
-      ...hreflangLinks,
-    ],
-  }
+useSeoMeta({
+  title: () => t('blog.title'),
+  description: () => t('blog.subtitle'),
+  ogType: 'website',
+  twitterCard: 'summary_large_image',
 })
+
+useSchemaOrg([
+  defineBreadcrumb({
+    itemListElement: [
+      { name: 'Home', item: '/' },
+      { name: () => t('blog.title') },
+    ],
+  }),
+])
 
 const route = useRoute()
 
