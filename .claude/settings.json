@@ -124,7 +124,8 @@
       "Bash(npm install @nuxtjs/seo)",
       "Bash(npm install @nuxtjs/seo --ignore-scripts)",
       "Bash(/Users/kamilowczarek/Documents/GitHub/digital-nomad/todo:*)",
-      "Bash(/Users/kamilowczarek/Documents/GitHub/digital-nomad/todo/todo_compare_seo.md:*)"
+      "Bash(/Users/kamilowczarek/Documents/GitHub/digital-nomad/todo/todo_compare_seo.md:*)",
+      "Bash(git reset HEAD -- apps/collector/nuxt.config.ts apps/collector/vercel.json)"
     ],
     "additionalDirectories": [
       "/tmp",
