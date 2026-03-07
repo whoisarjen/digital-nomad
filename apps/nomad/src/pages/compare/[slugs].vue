@@ -577,6 +577,36 @@
             {{ $t('compare.dataAttribution') }}
           </p>
 
+          <!-- ─── Related Comparisons ─── -->
+          <section v-if="relatedData && relatedData.length" class="mb-10">
+            <div class="flex items-center justify-between mb-4">
+              <h2 class="text-base font-bold text-gray-900">
+                {{ $t('compare.relatedComparisons') }}
+              </h2>
+              <NuxtLink
+                :to="localePath('compare')"
+                class="text-sm font-medium text-primary-600 hover:text-primary-700 transition-colors"
+              >
+                {{ $t('compare.relatedComparisonsCta') }}
+              </NuxtLink>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              <NuxtLink
+                v-for="pair in relatedData"
+                :key="pair.slugs"
+                :to="localePath({ name: 'compare-slugs', params: { slugs: pair.slugs } })"
+                class="bg-white rounded-2xl border border-gray-100 px-5 py-4 flex items-center justify-between gap-3 hover:border-primary-200 hover:shadow-sm transition-all group"
+              >
+                <div class="flex items-center gap-2 min-w-0">
+                  <span class="text-sm font-semibold text-gray-900 truncate">{{ pair.cityAName }}</span>
+                  <span class="text-xs text-gray-300 shrink-0">vs</span>
+                  <span class="text-sm font-semibold text-gray-900 truncate">{{ pair.cityBName }}</span>
+                </div>
+                <LucideArrowRight :size="14" class="text-gray-300 group-hover:text-primary-500 transition-colors shrink-0" />
+              </NuxtLink>
+            </div>
+          </section>
+
           <!-- ─── Navigation Links ─── -->
           <div class="flex flex-wrap items-center justify-between gap-4 pb-4">
             <NuxtLink
@@ -645,6 +675,10 @@ watch(rawSlugs, (val) => {
 })
 
 const { data, status } = await useCompare(slugsRef, { lazy: true })
+
+// ─── Related comparisons ───
+const relatedSlug = ref(parts[0] ?? '')
+const { data: relatedData } = await useCompareRelated(relatedSlug, { lazy: true })
 
 // ─── Content engine ───
 const content = computed(() => {
@@ -804,13 +838,47 @@ useHead(() => {
   if (!data.value) return {}
   const cityAName = data.value.cityA.name
   const cityBName = data.value.cityB.name
+  const title = t('compare.metaTitle', { cityA: cityAName, cityB: cityBName })
+  const description = t('compare.metaDesc', { cityA: cityAName, cityB: cityBName })
+
+  const rawImageUrl = imageA.value.url
+  const ogImage = rawImageUrl?.startsWith('https://')
+    ? `${rawImageUrl}${rawImageUrl.includes('?') ? '&' : '?'}w=1200&h=630&fit=crop&auto=format&q=80`
+    : undefined
 
   return {
-    title: t('compare.metaTitle', { cityA: cityAName, cityB: cityBName }),
+    title,
     meta: [
-      { name: 'description', content: t('compare.metaDesc', { cityA: cityAName, cityB: cityBName }) },
-      { name: 'robots', content: 'noindex, nofollow' },
+      { name: 'description', content: description },
+      { property: 'og:title', content: title },
+      { property: 'og:description', content: description },
+      { property: 'og:type', content: 'article' },
+      ...(ogImage ? [
+        { property: 'og:image', content: ogImage },
+        { property: 'og:image:width', content: '1200' },
+        { property: 'og:image:height', content: '630' },
+      ] : []),
+      { name: 'twitter:card', content: 'summary_large_image' },
     ],
   }
+})
+
+useSchemaOrg(() => {
+  if (!data.value) return []
+
+  return [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'Place',
+      'name': data.value.cityA.name,
+      'url': `https://digitalnomad.guide/cities/${data.value.cityA.slug}`,
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'Place',
+      'name': data.value.cityB.name,
+      'url': `https://digitalnomad.guide/cities/${data.value.cityB.slug}`,
+    },
+  ]
 })
 </script>

@@ -318,7 +318,9 @@
       "tied_v1": "Bu gerçekten yakın bir karşılaştırma. Hem {cityA} hem de {cityB} dijital göçebeler için güçlü bir değer sunuyor — doğru seçim kişisel önceliklerinize bağlı.",
       "tied_v2": "Burada net bir kazanan yok — {cityA} ve {cityB} farklı alanlarda öne çıkıyor. İdeal seçiminiz sizin için en önemli olan şeye bağlı.",
       "tied_v3": "{cityA} ve {cityB} genel olarak iyi dengelenmiş. Bütçe, hava durumu tercihleri ve yaşam tarzı öncelikleri belirleyici olacak."
-    }
+    },
+    "relatedComparisons": "İlgili karşılaştırmalar",
+    "relatedComparisonsCta": "Tüm karşılaştırmaları gör"
   },
   "regionPage": {
     "indexSubtitle": "Dijital göçebe şehirlerini bölgeye göre keşfedin — maliyet, internet, güvenlik ve hava durumuna göre sıralanmış.",
@@ -353,5 +355,26 @@
   },
   "explore": {
     "showingForMonth": "{month} için sonuçlar"
+  },
+  "affordability": {
+    "widgetTitle": "Bunu karşılayabilir miyim?",
+    "monthlyIncome": "Aylık gelir",
+    "surplus": "Fazla",
+    "deficit": "Açık",
+    "runwayMonths": "{months} aylık yedek",
+    "lifestyle": "Yaşam tarzı",
+    "affordable": "Rahat",
+    "tight": "Kısıtlı",
+    "overBudget": "Bütçe aşıldı",
+    "totalSavings": "Toplam tasarruf",
+    "calculate": "Hesapla",
+    "budgetVsCost": "${budget}/ay bütçe vs ${cost}/ay şehir maliyeti",
+    "forLifestyle": "{tier} yaşam tarzı için"
+  },
+  "budget": {
+    "filterLabel": "Aylık bütçem",
+    "savesPerMonth": "${amount}/ay tasarruf",
+    "overBudget": "Bütçeyi ${amount} aştı",
+    "clearBudget": "Bütçeyi temizle"
   }
 }

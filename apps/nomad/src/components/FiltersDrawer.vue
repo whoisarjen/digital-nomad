@@ -94,6 +94,11 @@
               <TemperaturesPicker />
             </div>
 
+            <!-- Budget (personal overlay, not a server filter) -->
+            <div class="bg-white rounded-xl border border-gray-100 p-4 flex flex-col">
+              <BudgetFilter />
+            </div>
+
             <!-- Price -->
             <div class="bg-white rounded-xl border border-gray-100 p-4 flex flex-col">
               <PricesPicker :min="costMin" :max="costMax" />

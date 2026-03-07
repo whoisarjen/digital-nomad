@@ -1,159 +1,36 @@
 <template>
   <div class="min-h-screen bg-[#060E1B]">
-    <Transition name="city-fade" mode="out-in">
-    <div v-if="!data || status !== 'success'" key="skeleton">
-      <!-- Dark Header Zone -->
-      <section class="pt-24 pb-20 px-6">
-        <div class="max-w-screen-xl mx-auto flex flex-col gap-4">
-          <div class="h-3 w-40 bg-white/10 animate-pulse rounded" />
-          <div class="h-14 w-2/3 bg-white/10 animate-pulse rounded-lg" />
-          <div class="flex items-center gap-3">
-            <div class="h-5 w-32 bg-white/10 animate-pulse rounded" />
-            <div class="h-6 w-28 bg-white/10 animate-pulse rounded-full" />
-          </div>
-          <div class="flex flex-wrap gap-2.5 mt-2">
-            <div v-for="i in 5" :key="i" class="h-9 w-28 bg-white/10 animate-pulse rounded-full" />
-          </div>
-        </div>
-      </section>
+    <!-- ─── Dark Header Zone ─── -->
+    <section class="relative pt-24 pb-20 px-6 overflow-hidden">
+      <div
+        class="absolute inset-0 opacity-40"
+        style="background-image: url(&quot;data:image/svg+xml,%3Csvg width='24' height='24' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='12' cy='12' r='1' fill='rgba(255,255,255,0.025)'/%3E%3C/svg%3E&quot;);"
+      />
+      <div class="absolute -top-[20%] -right-[10%] w-[40%] h-[40%] rounded-full bg-primary-500/[0.06] blur-[100px]" />
+      <div class="absolute -bottom-[10%] -left-[15%] w-[30%] h-[30%] rounded-full bg-accent-500/[0.04] blur-[80px]" />
 
-      <!-- Light Content Zone -->
-      <div class="bg-gray-50 rounded-t-[2rem] -mt-2 relative z-10">
-        <div class="max-w-screen-xl mx-auto px-6 py-12">
-
-          <!-- Hero image -->
-          <div class="relative -mt-24 mb-10 rounded-2xl overflow-hidden aspect-[21/9] skeleton" />
-
-          <!-- Key Metrics Strip: 6 cards -->
-          <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 mb-10">
-            <div v-for="i in 6" :key="i" class="bg-white rounded-2xl border border-gray-100 p-4">
-              <div class="flex items-center gap-2 mb-2">
-                <div class="size-7 skeleton rounded-lg" />
-                <div class="h-2.5 w-14 skeleton rounded" />
-              </div>
-              <div class="h-8 w-16 skeleton rounded" />
-            </div>
-          </div>
-
-          <!-- Detail Sections: 4 cards -->
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-10">
-            <!-- Cost of Living: 4 rows -->
-            <div class="bg-white rounded-2xl border border-gray-100 p-6">
-              <div class="flex items-center gap-2.5 mb-5">
-                <div class="size-8 skeleton rounded-xl" />
-                <div class="h-4 w-32 skeleton rounded" />
-              </div>
-              <div v-for="i in 4" :key="i" class="flex justify-between items-center py-3" :class="{ 'border-b border-gray-50': i < 4 }">
-                <div class="h-3.5 w-20 skeleton rounded" />
-                <div class="h-3.5 w-16 skeleton rounded" />
-              </div>
-            </div>
-
-            <!-- Internet & Infrastructure: 2 rows -->
-            <div class="bg-white rounded-2xl border border-gray-100 p-6">
-              <div class="flex items-center gap-2.5 mb-5">
-                <div class="size-8 skeleton rounded-xl" />
-                <div class="h-4 w-44 skeleton rounded" />
-              </div>
-              <div v-for="i in 2" :key="i" class="flex justify-between items-center py-3" :class="{ 'border-b border-gray-50': i < 2 }">
-                <div class="h-3.5 w-24 skeleton rounded" />
-                <div class="h-3.5 w-24 skeleton rounded" />
-              </div>
-            </div>
-
-            <!-- Environment & Health: 5 rows -->
-            <div class="bg-white rounded-2xl border border-gray-100 p-6">
-              <div class="flex items-center gap-2.5 mb-5">
-                <div class="size-8 skeleton rounded-xl" />
-                <div class="h-4 w-40 skeleton rounded" />
-              </div>
-              <div v-for="i in 5" :key="i" class="flex justify-between items-center py-3" :class="{ 'border-b border-gray-50': i < 5 }">
-                <div class="h-3.5 w-28 skeleton rounded" />
-                <div class="h-3.5 w-16 skeleton rounded" />
-              </div>
-            </div>
-
-            <!-- Quality of Life: 2 rows -->
-            <div class="bg-white rounded-2xl border border-gray-100 p-6">
-              <div class="flex items-center gap-2.5 mb-5">
-                <div class="size-8 skeleton rounded-xl" />
-                <div class="h-4 w-28 skeleton rounded" />
-              </div>
-              <div v-for="i in 2" :key="i" class="flex justify-between items-center py-3" :class="{ 'border-b border-gray-50': i < 2 }">
-                <div class="h-3.5 w-16 skeleton rounded" />
-                <div class="h-3.5 w-16 skeleton rounded" />
-              </div>
-            </div>
-          </div>
-
-          <!-- Monthly Weather: header + 12 month cards -->
-          <div class="bg-white rounded-2xl border border-gray-100 p-6 mb-10">
-            <div class="flex items-center gap-2.5 mb-5">
-              <div class="size-8 skeleton rounded-xl" />
-              <div class="h-4 w-36 skeleton rounded" />
-            </div>
-            <div class="h-3.5 w-64 skeleton rounded mb-4" />
-            <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-12 gap-2">
-              <div v-for="i in 12" :key="i" class="h-[110px] skeleton rounded-xl" />
-            </div>
-          </div>
-
-          <!-- Articles: magazine layout skeleton -->
-          <div class="grid grid-cols-1 lg:grid-cols-5 gap-4 mb-10">
-            <div class="lg:col-span-3 bg-white rounded-2xl overflow-hidden border border-gray-100">
-              <div class="aspect-[16/10] skeleton" />
-              <div class="p-5 flex flex-col gap-2">
-                <div class="h-5 w-4/5 skeleton rounded" />
-                <div class="h-4 w-full skeleton rounded" />
-                <div class="h-3 w-24 skeleton rounded mt-2" />
-              </div>
-            </div>
-            <div class="lg:col-span-2 flex flex-col gap-4">
-              <div v-for="i in 2" :key="i" class="flex gap-4 bg-white rounded-2xl border border-gray-100 p-3 flex-1">
-                <div class="w-28 sm:w-32 flex-shrink-0 skeleton rounded-xl min-h-[100px]" />
-                <div class="flex flex-col gap-1.5 py-1 flex-1">
-                  <div class="h-4 w-full skeleton rounded" />
-                  <div class="h-3 w-4/5 skeleton rounded" />
-                  <div class="h-3 w-20 skeleton rounded mt-auto" />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Bottom links -->
-          <div class="h-4 w-32 skeleton rounded mt-2" />
-          <div class="h-4 w-28 skeleton rounded mt-4 mb-4" />
-        </div>
-      </div>
-    </div>
-    <!-- Loaded state -->
-    <div v-else key="loaded">
-      <!-- ─── Dark Header Zone ─── -->
-      <section class="relative pt-24 pb-20 px-6 overflow-hidden">
-        <div
-          class="absolute inset-0 opacity-40"
-          style="background-image: url(&quot;data:image/svg+xml,%3Csvg width='24' height='24' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='12' cy='12' r='1' fill='rgba(255,255,255,0.025)'/%3E%3C/svg%3E&quot;);"
-        />
-        <div class="absolute -top-[20%] -right-[10%] w-[40%] h-[40%] rounded-full bg-primary-500/[0.06] blur-[100px]" />
-        <div class="absolute -bottom-[10%] -left-[15%] w-[30%] h-[30%] rounded-full bg-accent-500/[0.04] blur-[80px]" />
-
-        <div class="relative max-w-screen-xl mx-auto">
-          <!-- Breadcrumb -->
-          <div class="flex items-center gap-3 mb-6">
+      <div class="relative max-w-screen-xl mx-auto">
+        <!-- Breadcrumb -->
+        <div class="flex items-center gap-3 mb-6">
+          <template v-if="data">
             <NuxtLink :to="localePath('index')" class="text-sm text-white/40 hover:text-white/70 transition-colors">
               {{ $t('nav.exploreCities') }}
             </NuxtLink>
             <span class="text-white/20">/</span>
             <span class="text-sm text-primary-400 truncate max-w-[240px]">{{ data.name }}</span>
-          </div>
+          </template>
+          <div v-else class="h-4 w-40 bg-white/10 animate-pulse rounded" />
+        </div>
 
-          <!-- City Name -->
-          <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold text-white leading-[1.08] tracking-tight">
-            {{ data.name }}
-          </h1>
+        <!-- City Name -->
+        <h1 v-if="data" class="text-4xl sm:text-5xl md:text-6xl font-bold text-white leading-[1.08] tracking-tight">
+          {{ data.name }}
+        </h1>
+        <div v-else class="h-10 sm:h-12 md:h-16 w-2/3 bg-white/10 animate-pulse rounded-lg" />
 
-          <!-- Country & Region -->
-          <div class="flex flex-wrap items-center gap-3 mt-3">
+        <!-- Country & Region -->
+        <div class="flex flex-wrap items-center gap-3 mt-3">
+          <template v-if="data">
             <NuxtLink
               v-if="data.countrySlug"
               :to="localePath({ name: 'countries-countrySlug', params: { countrySlug: data.countrySlug } })"
@@ -167,10 +44,16 @@
               <LucideGlobe :size="12" class="text-primary-400" />
               {{ data.region.replace(/([A-Z])/g, ' $1').trim() }}
             </span>
-          </div>
+          </template>
+          <template v-else>
+            <div class="h-5 w-32 bg-white/10 animate-pulse rounded" />
+            <div class="h-6 w-28 bg-white/10 animate-pulse rounded-full" />
+          </template>
+        </div>
 
-          <!-- Quick Stats Badges -->
-          <div class="flex flex-wrap gap-2.5 mt-6">
+        <!-- Quick Stats Badges -->
+        <div class="flex flex-wrap gap-2.5 mt-6">
+          <template v-if="data">
             <span class="flex items-center gap-2 bg-white/[0.06] border border-white/[0.08] rounded-full px-4 py-2 text-sm text-white/70">
               <LucideWallet :size="14" class="text-emerald-400" />
               ${{ data.costForNomadInUsd }}/mo
@@ -196,16 +79,21 @@
                 </div>
               </template>
             </AuthContainer>
-          </div>
+          </template>
+          <template v-else>
+            <div v-for="i in 5" :key="i" class="h-9 w-28 bg-white/[0.06] border border-white/[0.08] animate-pulse rounded-full" />
+          </template>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <!-- ─── Light Content Zone ─── -->
-      <div class="bg-gray-50 rounded-t-[2rem] -mt-2 relative z-10">
-        <div class="max-w-screen-xl mx-auto px-6 py-12">
+    <!-- ─── Light Content Zone ─── -->
+    <div class="bg-gray-50 rounded-t-[2rem] -mt-2 relative z-10">
+      <div class="max-w-screen-xl mx-auto px-6 py-12">
 
-          <!-- Hero Image (floating over boundary) -->
-          <div class="relative -mt-24 mb-10 rounded-2xl overflow-hidden shadow-2xl aspect-[21/9] group/img">
+        <!-- Hero Image (floating over boundary) -->
+        <div class="relative -mt-24 mb-10 rounded-2xl overflow-hidden shadow-2xl aspect-[21/9] group/img">
+          <template v-if="data">
             <CustomNuxtImg
               v-if="heroImage.url"
               :src="heroImage.url"
@@ -218,11 +106,14 @@
             />
             <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
             <UnsplashCredit :owner-name="heroImage.ownerName" :owner-username="heroImage.ownerUsername" />
-          </div>
+          </template>
+          <div v-else class="absolute inset-0 skeleton" />
+        </div>
 
-          <!-- ─── Key Metrics Strip ─── -->
-          <section class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 mb-10">
-            <div class="bg-white rounded-2xl p-4 border border-gray-100">
+        <!-- ─── Key Metrics Strip ─── -->
+        <section class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 mb-10">
+          <div class="bg-white rounded-2xl p-4 border border-gray-100">
+            <template v-if="data">
               <div class="flex items-center gap-2 mb-2">
                 <div class="size-7 rounded-lg bg-emerald-50 flex items-center justify-center">
                   <LucideWallet :size="14" class="text-emerald-600" />
@@ -230,9 +121,18 @@
                 <span class="text-[11px] font-medium text-gray-400 uppercase tracking-wide">{{ $t('city.nomadCost') }}</span>
               </div>
               <p class="text-2xl font-bold text-gray-900 tabular-nums">${{ data.costForNomadInUsd }}<span class="text-sm font-normal text-gray-400">/mo</span></p>
-            </div>
+            </template>
+            <template v-else>
+              <div class="flex items-center gap-2 mb-2">
+                <div class="size-7 skeleton rounded-lg" />
+                <div class="h-2.5 w-14 skeleton rounded" />
+              </div>
+              <div class="h-8 w-20 skeleton rounded" />
+            </template>
+          </div>
 
-            <div class="bg-white rounded-2xl p-4 border border-gray-100">
+          <div class="bg-white rounded-2xl p-4 border border-gray-100">
+            <template v-if="data">
               <div class="flex items-center gap-2 mb-2">
                 <div class="size-7 rounded-lg bg-cyan-50 flex items-center justify-center">
                   <LucideWifi :size="14" class="text-cyan-600" />
@@ -240,9 +140,18 @@
                 <span class="text-[11px] font-medium text-gray-400 uppercase tracking-wide">{{ $t('city.internet') }}</span>
               </div>
               <p class="text-2xl font-bold text-gray-900 tabular-nums">{{ data.internetSpeedCity }}<span class="text-sm font-normal text-gray-400"> Mbps</span></p>
-            </div>
+            </template>
+            <template v-else>
+              <div class="flex items-center gap-2 mb-2">
+                <div class="size-7 skeleton rounded-lg" />
+                <div class="h-2.5 w-14 skeleton rounded" />
+              </div>
+              <div class="h-8 w-20 skeleton rounded" />
+            </template>
+          </div>
 
-            <div class="bg-white rounded-2xl p-4 border border-gray-100">
+          <div class="bg-white rounded-2xl p-4 border border-gray-100">
+            <template v-if="data">
               <div class="flex items-center gap-2 mb-2">
                 <div class="size-7 rounded-lg bg-blue-50 flex items-center justify-center">
                   <LucideShieldCheck :size="14" class="text-blue-600" />
@@ -253,9 +162,18 @@
                 <span class="size-2.5 rounded-full" :class="getLevelDotClass(data.safety)" />
                 <p class="text-lg font-bold capitalize" :class="getLevelTextClass(data.safety)">{{ formatLevel(data.safety) }}</p>
               </div>
-            </div>
+            </template>
+            <template v-else>
+              <div class="flex items-center gap-2 mb-2">
+                <div class="size-7 skeleton rounded-lg" />
+                <div class="h-2.5 w-14 skeleton rounded" />
+              </div>
+              <div class="h-8 w-16 skeleton rounded" />
+            </template>
+          </div>
 
-            <div class="bg-white rounded-2xl p-4 border border-gray-100">
+          <div class="bg-white rounded-2xl p-4 border border-gray-100">
+            <template v-if="data">
               <div class="flex items-center gap-2 mb-2">
                 <div class="size-7 rounded-lg bg-green-50 flex items-center justify-center">
                   <LucideLeaf :size="14" class="text-green-600" />
@@ -263,9 +181,18 @@
                 <span class="text-[11px] font-medium text-gray-400 uppercase tracking-wide">{{ $t('city.airQuality') }}</span>
               </div>
               <p class="text-2xl font-bold tabular-nums" :class="getAirQualityClass(data.airQualityScore)">{{ data.airQualityScore }}<span class="text-sm font-normal text-gray-400">/5</span></p>
-            </div>
+            </template>
+            <template v-else>
+              <div class="flex items-center gap-2 mb-2">
+                <div class="size-7 skeleton rounded-lg" />
+                <div class="h-2.5 w-14 skeleton rounded" />
+              </div>
+              <div class="h-8 w-16 skeleton rounded" />
+            </template>
+          </div>
 
-            <div class="bg-white rounded-2xl p-4 border border-gray-100">
+          <div class="bg-white rounded-2xl p-4 border border-gray-100">
+            <template v-if="data">
               <div class="flex items-center gap-2 mb-2">
                 <div class="size-7 rounded-lg bg-rose-50 flex items-center justify-center">
                   <LucideHeart :size="14" class="text-rose-500" />
@@ -276,9 +203,18 @@
                 <span class="size-2.5 rounded-full" :class="getLevelDotClass(data.healthCare)" />
                 <p class="text-lg font-bold capitalize" :class="getLevelTextClass(data.healthCare)">{{ formatLevel(data.healthCare) }}</p>
               </div>
-            </div>
+            </template>
+            <template v-else>
+              <div class="flex items-center gap-2 mb-2">
+                <div class="size-7 skeleton rounded-lg" />
+                <div class="h-2.5 w-14 skeleton rounded" />
+              </div>
+              <div class="h-8 w-16 skeleton rounded" />
+            </template>
+          </div>
 
-            <div class="bg-white rounded-2xl p-4 border border-gray-100">
+          <div class="bg-white rounded-2xl p-4 border border-gray-100">
+            <template v-if="data">
               <div class="flex items-center gap-2 mb-2">
                 <div class="size-7 rounded-lg bg-gray-50 flex items-center justify-center">
                   <LucideUsers :size="14" class="text-gray-500" />
@@ -286,20 +222,35 @@
                 <span class="text-[11px] font-medium text-gray-400 uppercase tracking-wide">{{ $t('city.population') }}</span>
               </div>
               <p class="text-2xl font-bold text-gray-900 tabular-nums">{{ formatNumber(data.population) }}</p>
-            </div>
-          </section>
+            </template>
+            <template v-else>
+              <div class="flex items-center gap-2 mb-2">
+                <div class="size-7 skeleton rounded-lg" />
+                <div class="h-2.5 w-14 skeleton rounded" />
+              </div>
+              <div class="h-8 w-20 skeleton rounded" />
+            </template>
+          </div>
+        </section>
 
-          <!-- ─── Detail Sections ─── -->
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-10">
-            <!-- Cost of Living -->
-            <section class="bg-white rounded-2xl border border-gray-100 p-6">
-              <h2 class="text-base font-bold text-gray-900 mb-5 flex items-center gap-2.5">
+        <!-- ─── Detail Sections ─── -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-10">
+          <!-- Cost of Living -->
+          <section class="bg-white rounded-2xl border border-gray-100 p-6">
+            <h2 class="text-base font-bold text-gray-900 mb-5 flex items-center gap-2.5">
+              <template v-if="data">
                 <div class="size-8 rounded-xl bg-emerald-50 flex items-center justify-center">
                   <LucideWallet :size="16" class="text-emerald-600" />
                 </div>
                 {{ $t('city.costOfLiving') }}
-              </h2>
-              <div class="flex flex-col">
+              </template>
+              <template v-else>
+                <div class="size-8 skeleton rounded-xl" />
+                <div class="h-4 w-32 skeleton rounded" />
+              </template>
+            </h2>
+            <div class="flex flex-col">
+              <template v-if="data">
                 <div class="flex justify-between items-center py-3 border-b border-gray-50">
                   <span class="text-sm text-gray-500">{{ $t('city.nomad') }}</span>
                   <span class="text-sm font-semibold text-emerald-600 tabular-nums">${{ data.costForNomadInUsd }}/mo</span>
@@ -316,18 +267,32 @@
                   <span class="text-sm text-gray-500">{{ $t('city.family') }}</span>
                   <span class="text-sm font-semibold text-gray-700 tabular-nums">${{ data.costForFamilyInUsd }}/mo</span>
                 </div>
-              </div>
-            </section>
+              </template>
+              <template v-else>
+                <div v-for="i in 4" :key="i" class="flex justify-between items-center py-3" :class="{ 'border-b border-gray-50': i < 4 }">
+                  <div class="h-3.5 w-20 skeleton rounded" />
+                  <div class="h-3.5 w-16 skeleton rounded" />
+                </div>
+              </template>
+            </div>
+          </section>
 
-            <!-- Internet & Infrastructure -->
-            <section class="bg-white rounded-2xl border border-gray-100 p-6">
-              <h2 class="text-base font-bold text-gray-900 mb-5 flex items-center gap-2.5">
+          <!-- Internet & Infrastructure -->
+          <section class="bg-white rounded-2xl border border-gray-100 p-6">
+            <h2 class="text-base font-bold text-gray-900 mb-5 flex items-center gap-2.5">
+              <template v-if="data">
                 <div class="size-8 rounded-xl bg-cyan-50 flex items-center justify-center">
                   <LucideWifi :size="16" class="text-cyan-600" />
                 </div>
                 {{ $t('city.internetInfrastructure') }}
-              </h2>
-              <div class="flex flex-col">
+              </template>
+              <template v-else>
+                <div class="size-8 skeleton rounded-xl" />
+                <div class="h-4 w-44 skeleton rounded" />
+              </template>
+            </h2>
+            <div class="flex flex-col">
+              <template v-if="data">
                 <div class="flex justify-between items-center py-3 border-b border-gray-50">
                   <span class="text-sm text-gray-500">{{ $t('city.citySpeed') }}</span>
                   <div class="flex items-center gap-2">
@@ -342,18 +307,32 @@
                     <span v-if="data.internetSpeedCountryRanking" class="text-[10px] font-medium text-gray-400 bg-gray-50 rounded-full px-2 py-0.5 tabular-nums">#{{ data.internetSpeedCountryRanking }}</span>
                   </div>
                 </div>
-              </div>
-            </section>
+              </template>
+              <template v-else>
+                <div v-for="i in 2" :key="i" class="flex justify-between items-center py-3" :class="{ 'border-b border-gray-50': i < 2 }">
+                  <div class="h-3.5 w-24 skeleton rounded" />
+                  <div class="h-3.5 w-24 skeleton rounded" />
+                </div>
+              </template>
+            </div>
+          </section>
 
-            <!-- Environment & Health -->
-            <section class="bg-white rounded-2xl border border-gray-100 p-6">
-              <h2 class="text-base font-bold text-gray-900 mb-5 flex items-center gap-2.5">
+          <!-- Environment & Health -->
+          <section class="bg-white rounded-2xl border border-gray-100 p-6">
+            <h2 class="text-base font-bold text-gray-900 mb-5 flex items-center gap-2.5">
+              <template v-if="data">
                 <div class="size-8 rounded-xl bg-green-50 flex items-center justify-center">
                   <LucideLeaf :size="16" class="text-green-600" />
                 </div>
                 {{ $t('city.environmentHealth') }}
-              </h2>
-              <div class="flex flex-col">
+              </template>
+              <template v-else>
+                <div class="size-8 skeleton rounded-xl" />
+                <div class="h-4 w-40 skeleton rounded" />
+              </template>
+            </h2>
+            <div class="flex flex-col">
+              <template v-if="data">
                 <div class="flex justify-between items-center py-3 border-b border-gray-50">
                   <span class="text-sm text-gray-500">{{ $t('city.airQualityNow') }}</span>
                   <span class="text-sm font-semibold text-gray-700 tabular-nums">{{ data.airQualityNow }} AQI</span>
@@ -374,18 +353,32 @@
                   <span class="text-sm text-gray-500">{{ $t('city.climate') }}</span>
                   <span class="text-sm font-semibold capitalize" :class="getLevelTextClass(data.climate)">{{ formatLevel(data.climate) }}</span>
                 </div>
-              </div>
-            </section>
+              </template>
+              <template v-else>
+                <div v-for="i in 5" :key="i" class="flex justify-between items-center py-3" :class="{ 'border-b border-gray-50': i < 5 }">
+                  <div class="h-3.5 w-28 skeleton rounded" />
+                  <div class="h-3.5 w-16 skeleton rounded" />
+                </div>
+              </template>
+            </div>
+          </section>
 
-            <!-- Quality of Life -->
-            <section class="bg-white rounded-2xl border border-gray-100 p-6">
-              <h2 class="text-base font-bold text-gray-900 mb-5 flex items-center gap-2.5">
+          <!-- Quality of Life -->
+          <section class="bg-white rounded-2xl border border-gray-100 p-6">
+            <h2 class="text-base font-bold text-gray-900 mb-5 flex items-center gap-2.5">
+              <template v-if="data">
                 <div class="size-8 rounded-xl bg-rose-50 flex items-center justify-center">
                   <LucideHeart :size="16" class="text-rose-500" />
                 </div>
                 {{ $t('city.qualityOfLife') }}
-              </h2>
-              <div class="flex flex-col">
+              </template>
+              <template v-else>
+                <div class="size-8 skeleton rounded-xl" />
+                <div class="h-4 w-28 skeleton rounded" />
+              </template>
+            </h2>
+            <div class="flex flex-col">
+              <template v-if="data">
                 <div class="flex justify-between items-center py-3 border-b border-gray-50">
                   <span class="text-sm text-gray-500">{{ $t('city.safety') }}</span>
                   <span class="text-sm font-semibold capitalize" :class="getLevelTextClass(data.safety)">{{ formatLevel(data.safety) }}</span>
@@ -394,24 +387,51 @@
                   <span class="text-sm text-gray-500">{{ $t('city.healthcare') }}</span>
                   <span class="text-sm font-semibold capitalize" :class="getLevelTextClass(data.healthCare)">{{ formatLevel(data.healthCare) }}</span>
                 </div>
-              </div>
-            </section>
-          </div>
+              </template>
+              <template v-else>
+                <div v-for="i in 2" :key="i" class="flex justify-between items-center py-3" :class="{ 'border-b border-gray-50': i < 2 }">
+                  <div class="h-3.5 w-16 skeleton rounded" />
+                  <div class="h-3.5 w-16 skeleton rounded" />
+                </div>
+              </template>
+            </div>
+          </section>
+        </div>
 
-          <!-- ─── Monthly Weather ─── -->
-          <section class="bg-white rounded-2xl border border-gray-100 p-6 mb-10">
-            <h2 class="text-base font-bold text-gray-900 mb-5 flex items-center gap-2.5">
+        <!-- ─── Affordability Calculator ─── -->
+        <AffordabilityWidget
+          v-if="data"
+          :cost-nomad="Number(data.costForNomadInUsd)"
+          :cost-expat="Number(data.costForExpatInUsd)"
+          :cost-local="Number(data.costForLocalInUsd)"
+          :cost-family="Number(data.costForFamilyInUsd)"
+          class="mb-10"
+        />
+
+        <!-- ─── Monthly Weather ─── -->
+        <section class="bg-white rounded-2xl border border-gray-100 p-6 mb-10">
+          <h2 class="text-base font-bold text-gray-900 mb-5 flex items-center gap-2.5">
+            <template v-if="data">
               <div class="size-8 rounded-xl bg-primary-50 flex items-center justify-center">
                 <LucideCalendar :size="16" class="text-primary-600" />
               </div>
               {{ $t('city.monthlyWeather') }}
-            </h2>
+            </template>
+            <template v-else>
+              <div class="size-8 skeleton rounded-xl" />
+              <div class="h-4 w-36 skeleton rounded" />
+            </template>
+          </h2>
+          <template v-if="data">
             <p v-if="bestMonthLabels" class="text-sm text-gray-500 mb-4">
               <span class="font-medium text-emerald-600">{{ $t('city.bestMonths', { months: bestMonthLabels }) }}</span>
-              <span class="mx-2 text-gray-300">·</span>
+              <span class="mx-2 text-gray-300">&middot;</span>
               <span class="font-medium text-red-500">{{ $t('city.avoidMonths', { months: avoidMonthLabels }) }}</span>
             </p>
-            <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-12 gap-2">
+          </template>
+          <div v-else class="h-4 w-64 skeleton rounded mb-4" />
+          <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-12 gap-2">
+            <template v-if="months">
               <div
                 v-for="(monthData, index) in months"
                 :key="index"
@@ -433,7 +453,7 @@
                 <div class="my-2">
                   <WeatherIcon :weather-icon="monthData.weatherIcon" />
                 </div>
-                <span class="text-lg font-bold text-gray-900 tabular-nums">{{ Number(monthData.apparentTemperatureMax).toFixed(0) }}°</span>
+                <span class="text-lg font-bold text-gray-900 tabular-nums">{{ Number(monthData.apparentTemperatureMax).toFixed(0) }}&deg;</span>
                 <div class="flex flex-col items-center mt-1.5 gap-0.5">
                   <span class="text-[10px] text-gray-400 tabular-nums">{{ Number(monthData.rainSum).toFixed(0) }}mm</span>
                   <span class="text-[10px] text-gray-400 tabular-nums">{{ Number(monthData.sunshineDuration).toFixed(0) }}h</span>
@@ -455,25 +475,63 @@
                   class="mt-1 text-[9px] font-bold uppercase tracking-wide text-red-500 bg-red-50 rounded px-1.5 py-0.5"
                 >{{ $t('city.avoidLabel') }}</span>
               </div>
+            </template>
+            <template v-else>
+              <div v-for="i in 12" :key="i" class="flex flex-col items-center rounded-xl p-3 border border-gray-100 bg-gray-50">
+                <div class="h-3 w-6 skeleton rounded mb-2" />
+                <div class="size-6 skeleton rounded-full my-2" />
+                <div class="h-5 w-8 skeleton rounded" />
+                <div class="flex flex-col items-center mt-1.5 gap-0.5">
+                  <div class="h-2.5 w-8 skeleton rounded" />
+                  <div class="h-2.5 w-6 skeleton rounded" />
+                </div>
+                <div class="h-3 w-6 skeleton rounded mt-1.5" />
+              </div>
+            </template>
+          </div>
+        </section>
+
+        <!-- ─── Related Articles ─── -->
+        <CityArticlesWidget :city-slug="citySlug" />
+
+        <!-- ─── Compare CTA ─── -->
+        <div class="mt-10">
+          <template v-if="data">
+            <p class="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
+              <LucideSparkles :size="14" class="text-primary-500" />
+              {{ $t('compare.compareWith') }}
+            </p>
+            <div v-if="relatedComparisons && relatedComparisons.length" class="flex flex-wrap gap-2">
+              <NuxtLink
+                v-for="pair in relatedComparisons.slice(0, 3)"
+                :key="pair.slugs"
+                :to="localePath({ name: 'compare-slugs', params: { slugs: pair.slugs } })"
+                class="inline-flex items-center gap-1.5 bg-white border border-gray-200 rounded-full px-4 py-1.5 text-sm font-medium text-gray-700 hover:border-primary-300 hover:text-primary-600 transition-all"
+              >
+                {{ pair.cityAName }} vs {{ pair.cityBName }}
+              </NuxtLink>
+              <NuxtLink
+                :to="localePath('compare')"
+                class="inline-flex items-center gap-1.5 text-sm font-medium text-gray-400 hover:text-primary-600 transition-colors px-2"
+              >
+                {{ $t('compare.relatedComparisonsCta') }}
+                <LucideArrowRight :size="12" />
+              </NuxtLink>
             </div>
-          </section>
-
-          <!-- ─── Related Articles ─── -->
-          <CityArticlesWidget :city-slug="citySlug" />
-
-          <!-- ─── Compare CTA ─── -->
-          <div class="mt-10">
             <NuxtLink
+              v-else
               :to="localePath('compare')"
               class="inline-flex items-center gap-2 text-sm font-medium text-primary-600 hover:text-primary-700 transition-colors"
             >
-              <LucideSparkles :size="14" />
-              {{ $t('compare.compareWith') }}
+              {{ $t('compare.relatedComparisonsCta') }}
             </NuxtLink>
-          </div>
+          </template>
+          <div v-else class="h-4 w-32 skeleton rounded" />
+        </div>
 
-          <!-- ─── Back to Explore ─── -->
-          <div class="mt-4 pb-4">
+        <!-- ─── Back to Explore ─── -->
+        <div class="mt-4 pb-4">
+          <template v-if="data">
             <NuxtLink
               :to="localePath('index')"
               class="inline-flex items-center gap-2 text-sm font-medium text-gray-400 hover:text-primary-600 transition-colors"
@@ -481,11 +539,11 @@
               <LucideArrowLeft :size="14" />
               {{ $t('nav.exploreCities') }}
             </NuxtLink>
-          </div>
+          </template>
+          <div v-else class="h-4 w-28 skeleton rounded" />
         </div>
       </div>
     </div>
-    </Transition>
   </div>
 </template>
 
@@ -522,9 +580,11 @@ watch(
   { immediate: true }
 )
 
-const { data, status } = await useCitiesBySlug(queryParams, {
+const { data } = await useCitiesBySlug(queryParams, {
   lazy: true,
 })
+
+const { data: relatedComparisons } = await useCompareRelated(citySlug, { lazy: true })
 
 const heroImage = computed(() => data.value?.image ?? {
   ownerName: 'Tan Kaninthanond',

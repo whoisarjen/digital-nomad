@@ -345,10 +345,29 @@
                     </div>
                   </NuxtLink>
                   <!-- Price + Favorite (top right, above link) -->
-                  <div class="absolute top-3 right-3 z-20 flex items-center gap-2">
-                    <div class="bg-black/50 rounded-full px-2.5 py-1 text-sm font-semibold text-emerald-400 tabular-nums pointer-events-none">
-                      ${{ city.costForNomadInUsd }}<span class="text-[11px] font-normal text-white/60">/mo</span>
+                  <div class="absolute top-3 right-3 z-20 flex flex-col items-end gap-1.5">
+                    <div class="flex items-center gap-2">
+                      <div class="bg-black/50 rounded-full px-2.5 py-1 text-sm font-semibold text-emerald-400 tabular-nums pointer-events-none">
+                        ${{ city.costForNomadInUsd }}<span class="text-[11px] font-normal text-white/60">/mo</span>
+                      </div>
                     </div>
+                    <!-- Budget delta badge -->
+                    <div
+                      v-if="budget !== null"
+                      class="rounded-full px-2.5 py-1 text-[11px] font-bold tabular-nums pointer-events-none"
+                      :class="budget - Number(city.costForNomadInUsd) >= 0
+                        ? 'bg-emerald-500/80 text-white'
+                        : 'bg-red-500/80 text-white'"
+                    >
+                      <template v-if="budget - Number(city.costForNomadInUsd) >= 0">
+                        +${{ budget - Number(city.costForNomadInUsd) }}
+                      </template>
+                      <template v-else>
+                        -${{ Math.abs(budget - Number(city.costForNomadInUsd)) }}
+                      </template>
+                    </div>
+                  </div>
+                  <div class="absolute top-3 right-3 z-20 flex items-center gap-2 pointer-events-none" style="display:none">
                     <AuthContainer>
                       <FavoriteButton :city-slug="city.slug" />
                       <template #fallback>

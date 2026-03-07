@@ -135,7 +135,15 @@
       "Bash(npm run test:run -- src/components/__tests__/CustomNuxtImg.test.ts)",
       "Bash(npm run test:run -- src/utils/__tests__/cityFaq.test.ts)",
       "Bash(npm run test:run -- src/__tests__/app.test.ts)",
-      "Bash(npm run test:run -- --reporter=verbose src/server/api/countries)"
+      "Bash(npm run test:run -- --reporter=verbose src/server/api/countries)",
+      "Bash(git -C /Users/kamilowczarek/Documents/GitHub/digital-nomad push origin main)",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\(json.dumps\\(d.get\\(''compare'', {}\\), indent=2\\)\\)\")",
+      "Bash(npm run test:run -- src/composables/__tests__/useBudget.test.ts)",
+      "Bash(npm run test:run -- src/server/api/compare/related/__tests__/\\\\[slug\\\\].get.test.ts)",
+      "Bash(npm run test:run -- \"compare/related\")",
+      "Bash(npm run test:run -- src/components/__tests__/AffordabilityWidget.test.ts)",
+      "Bash(npm run test:run -- src/components/__tests__/BudgetFilter.test.ts)",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\(json.dumps\\(list\\(d.keys\\(\\)\\), indent=2\\)\\)\")"
     ],
     "additionalDirectories": [
       "/tmp",
@@ -144,7 +152,8 @@
       "/Users/kamilowczarek/Documents/GitHub/digital-nomad",
       "/Users/kamilowczarek/Documents/GitHub/digital-nomad/.claude/marketing/content",
       "/Users/kamilowczarek/Documents/GitHub/digital-nomad/.claude/marketing",
-      "/Users/kamilowczarek/Documents/GitHub/digital-nomad/.claude"
+      "/Users/kamilowczarek/Documents/GitHub/digital-nomad/.claude",
+      "/Users/kamilowczarek/Documents/GitHub/digital-nomad/docs"
     ]
   }
 }

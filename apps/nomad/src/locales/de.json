@@ -318,7 +318,9 @@
       "tied_v1": "Das ist wirklich knapp. Sowohl {cityA} als auch {cityB} bieten einen hohen Wert für digitale Nomaden — die richtige Wahl hängt von deinen persönlichen Prioritäten ab.",
       "tied_v2": "Es gibt hier keinen klaren Gewinner — {cityA} und {cityB} glänzen jeweils in unterschiedlichen Bereichen. Deine ideale Wahl hängt davon ab, was dir am wichtigsten ist.",
       "tied_v3": "{cityA} und {cityB} sind insgesamt gut aufgestellt. Budget, Wetterpräferenzen und Lebensstilprioritäten werden den Ausschlag geben."
-    }
+    },
+    "relatedComparisons": "Ähnliche Vergleiche",
+    "relatedComparisonsCta": "Alle Vergleiche anzeigen"
   },
   "regionPage": {
     "indexSubtitle": "Entdecke Städte für digitale Nomaden nach Region — gerankt nach Kosten, Internet, Sicherheit und Wetter.",
@@ -353,5 +355,26 @@
   },
   "explore": {
     "showingForMonth": "Ergebnisse für {month}"
+  },
+  "affordability": {
+    "widgetTitle": "Kann ich mir das leisten?",
+    "monthlyIncome": "Monatliches Einkommen",
+    "surplus": "Überschuss",
+    "deficit": "Defizit",
+    "runwayMonths": "{months} Monate Rücklage",
+    "lifestyle": "Lebensstil",
+    "affordable": "Bequem",
+    "tight": "Eng",
+    "overBudget": "Budget überschritten",
+    "totalSavings": "Gesamtersparnisse",
+    "calculate": "Berechnen",
+    "budgetVsCost": "${budget}/Mo. Budget vs. ${cost}/Mo. Stadtkosten",
+    "forLifestyle": "für {tier} Lebensstil"
+  },
+  "budget": {
+    "filterLabel": "Mein monatliches Budget",
+    "savesPerMonth": "${amount}/Mo. sparen",
+    "overBudget": "${amount} über Budget",
+    "clearBudget": "Budget löschen"
   }
 }

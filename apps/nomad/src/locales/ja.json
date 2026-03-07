@@ -318,7 +318,9 @@
       "tied_v1": "これは本当に僅差です。{cityA}と{cityB}はどちらもデジタルノマドにとって優れた価値を提供しており — 正しい選択は個人の優先事項次第です。",
       "tied_v2": "明確な勝者はいません — {cityA}と{cityB}はそれぞれ異なる分野で優れています。理想的な選択はあなたにとって最も重要なことに依存します。",
       "tied_v3": "{cityA}と{cityB}は全体的によく均衡しています。予算、天気の好み、ライフスタイルの優先事項が決め手になるでしょう。"
-    }
+    },
+    "relatedComparisons": "関連する比較",
+    "relatedComparisonsCta": "すべての比較を見る"
   },
   "regionPage": {
     "indexSubtitle": "地域別にデジタルノマドの都市を探す — 費用、インターネット、安全性、天気でランキング。",
@@ -353,5 +355,26 @@
   },
   "explore": {
     "showingForMonth": "{month}の結果"
+  },
+  "affordability": {
+    "widgetTitle": "余裕はある？",
+    "monthlyIncome": "月収",
+    "surplus": "余剰",
+    "deficit": "赤字",
+    "runwayMonths": "{months}ヶ月分の余裕",
+    "lifestyle": "ライフスタイル",
+    "affordable": "余裕あり",
+    "tight": "ギリギリ",
+    "overBudget": "予算オーバー",
+    "totalSavings": "総貯蓄",
+    "calculate": "計算",
+    "budgetVsCost": "${budget}/月の予算 vs ${cost}/月の都市コスト",
+    "forLifestyle": "{tier}ライフスタイル向け"
+  },
+  "budget": {
+    "filterLabel": "月間予算",
+    "savesPerMonth": "${amount}/月節約",
+    "overBudget": "予算を${amount}オーバー",
+    "clearBudget": "予算をクリア"
   }
 }

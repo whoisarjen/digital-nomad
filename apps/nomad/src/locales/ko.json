@@ -318,7 +318,9 @@
       "tied_v1": "정말 근소한 차이입니다. {cityA}와(과) {cityB} 모두 디지털 노마드에게 훌륭한 가치를 제공합니다 — 올바른 선택은 개인의 우선순위에 달려 있습니다.",
       "tied_v2": "확실한 승자가 없습니다 — {cityA}와(과) {cityB}는 각각 다른 영역에서 뛰어납니다. 이상적인 선택은 무엇이 가장 중요한지에 달려 있습니다.",
       "tied_v3": "{cityA}와(과) {cityB}는 전반적으로 잘 맞서고 있습니다. 예산, 날씨 선호도, 라이프스타일 우선순위가 결정적 요인이 될 것입니다."
-    }
+    },
+    "relatedComparisons": "관련 비교",
+    "relatedComparisonsCta": "모든 비교 보기"
   },
   "regionPage": {
     "indexSubtitle": "지역별 디지털 노마드 도시 탐색 — 비용, 인터넷, 안전, 날씨로 순위 매김.",
@@ -353,5 +355,26 @@
   },
   "explore": {
     "showingForMonth": "{month} 결과"
+  },
+  "affordability": {
+    "widgetTitle": "감당할 수 있을까?",
+    "monthlyIncome": "월 수입",
+    "surplus": "잉여",
+    "deficit": "적자",
+    "runwayMonths": "{months}개월 여유",
+    "lifestyle": "생활 방식",
+    "affordable": "여유 있음",
+    "tight": "빠듯함",
+    "overBudget": "예산 초과",
+    "totalSavings": "총 저축",
+    "calculate": "계산",
+    "budgetVsCost": "${budget}/월 예산 vs ${cost}/월 도시 비용",
+    "forLifestyle": "{tier} 생활 방식"
+  },
+  "budget": {
+    "filterLabel": "월 예산",
+    "savesPerMonth": "${amount}/월 절약",
+    "overBudget": "${amount} 예산 초과",
+    "clearBudget": "예산 지우기"
   }
 }

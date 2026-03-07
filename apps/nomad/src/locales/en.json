@@ -319,7 +319,9 @@
       "tied_v1": "This one is genuinely close. Both {cityA} (${costA}/mo) and {cityB} (${costB}/mo) offer strong value for digital nomads — the right choice depends on your personal priorities.",
       "tied_v2": "There is no clear overall winner — {cityA} at ${costA}/mo and {cityB} at ${costB}/mo are in the same price bracket. Your lifestyle priorities will be the tiebreaker.",
       "tied_v3": "{cityA} (${costA}/mo) and {cityB} (${costB}/mo) are well-matched overall. Budget, weather preferences, and lifestyle priorities will determine the better fit."
-    }
+    },
+    "relatedComparisons": "Related Comparisons",
+    "relatedComparisonsCta": "See all comparisons"
   },
   "regionPage": {
     "indexSubtitle": "Explore digital nomad cities by region — ranked by cost, internet, safety, and weather.",
@@ -366,5 +368,26 @@
     "allCountriesDesc": "Browse {count} countries with digital nomad city data.",
     "cityCount": "{count} cities",
     "moreIn": "More cities in {country}"
+  },
+  "affordability": {
+    "widgetTitle": "Can I afford this?",
+    "monthlyIncome": "Monthly income",
+    "surplus": "Surplus",
+    "deficit": "Deficit",
+    "runwayMonths": "{months} months of runway",
+    "lifestyle": "Lifestyle",
+    "affordable": "Comfortable",
+    "tight": "Tight",
+    "overBudget": "Over budget",
+    "totalSavings": "Total savings",
+    "calculate": "Calculate",
+    "budgetVsCost": "${budget}/mo budget vs ${cost}/mo city cost",
+    "forLifestyle": "for {tier} lifestyle"
+  },
+  "budget": {
+    "filterLabel": "My monthly budget",
+    "savesPerMonth": "Save ${amount}/mo",
+    "overBudget": "${amount} over budget",
+    "clearBudget": "Clear budget"
   }
 }

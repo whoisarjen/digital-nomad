@@ -318,7 +318,9 @@
       "tied_v1": "هذه مقارنة متقاربة حقاً. كل من {cityA} و{cityB} تقدمان قيمة عالية للرحّالة الرقميين — الخيار الصحيح يعتمد على أولوياتك الشخصية.",
       "tied_v2": "لا يوجد فائز واضح هنا — {cityA} و{cityB} تتفوق كل منهما في مجالات مختلفة. اختيارك المثالي يعتمد على ما يهمك أكثر.",
       "tied_v3": "{cityA} و{cityB} متقاربتان بشكل عام. الميزانية وتفضيلات الطقس وأولويات نمط الحياة ستكون عوامل الحسم."
-    }
+    },
+    "relatedComparisons": "مقارنات ذات صلة",
+    "relatedComparisonsCta": "عرض جميع المقارنات"
   },
   "regionPage": {
     "indexSubtitle": "استكشف مدن الرحّالة الرقميين حسب المنطقة — مصنّفة حسب التكلفة، الإنترنت، الأمان، والطقس.",
@@ -353,5 +355,26 @@
   },
   "explore": {
     "showingForMonth": "نتائج لشهر {month}"
+  },
+  "affordability": {
+    "widgetTitle": "هل أستطيع تحمل التكلفة؟",
+    "monthlyIncome": "الدخل الشهري",
+    "surplus": "فائض",
+    "deficit": "عجز",
+    "runwayMonths": "{months} أشهر من الاحتياطي",
+    "lifestyle": "نمط الحياة",
+    "affordable": "مريح",
+    "tight": "ضيق",
+    "overBudget": "تجاوز الميزانية",
+    "totalSavings": "إجمالي المدخرات",
+    "calculate": "احسب",
+    "budgetVsCost": "ميزانية ${budget}/شهر مقابل ${cost}/شهر تكلفة المدينة",
+    "forLifestyle": "لنمط حياة {tier}"
+  },
+  "budget": {
+    "filterLabel": "ميزانيتي الشهرية",
+    "savesPerMonth": "وفر ${amount}/شهر",
+    "overBudget": "${amount} فوق الميزانية",
+    "clearBudget": "مسح الميزانية"
   }
 }
