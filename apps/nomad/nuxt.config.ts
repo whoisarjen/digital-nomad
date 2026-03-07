@@ -1,8 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import { LOCALES } from './src/constants/global.constant'
 
-const CITY_CHUNKS = 20
-
 const fullSitePath = process.env.NUXT_PUBLIC_VERCEL_URL
   ? `https://${process.env.NUXT_PUBLIC_VERCEL_URL}`
   : 'http://localhost:3000'
@@ -90,15 +88,10 @@ export default defineNuxtConfig({
       pages: {
         includeAppSources: true,
       },
-      ...Object.fromEntries(
-        Array.from({ length: CITY_CHUNKS }, (_, i) => [
-          `cities-${i}`,
-          {
-            sources: [`/api/__sitemap__/cities?chunk=${i}&total=${CITY_CHUNKS}`],
-            includeAppSources: false,
-          },
-        ]),
-      ),
+      cities: {
+        sources: ['/api/__sitemap__/cities'],
+        includeAppSources: false,
+      },
       articles: {
         sources: ['/api/__sitemap__/articles'],
         includeAppSources: false,
