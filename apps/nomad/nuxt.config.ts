@@ -135,6 +135,13 @@ export default defineNuxtConfig({
   ogImage: {
     enabled: false,
   },
+  experimental: {
+    defaults: {
+      nuxtLink: {
+        prefetch: false,
+      },
+    },
+  },
   nitro: {
     vercel: {
       regions: ['fra1'],

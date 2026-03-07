@@ -129,7 +129,10 @@
       "Bash(node -e \"const v = require\\(''/Users/kamilowczarek/Documents/GitHub/digital-nomad/node_modules/vitest/dist/config.js''\\); console.log\\(Object.keys\\(v\\).slice\\(0,20\\)\\)\")",
       "Bash(node -e \"import\\(''/Users/kamilowczarek/Documents/GitHub/digital-nomad/node_modules/vitest/dist/config.js''\\).then\\(v=>console.log\\(Object.keys\\(v\\)\\)\\)\")",
       "Bash(/Users/kamilowczarek/Documents/GitHub/digital-nomad/apps/nomad/src/components/__tests__/WeathersPicker.test.ts:*)",
-      "Bash(/Users/kamilowczarek/Documents/GitHub/digital-nomad/apps/nomad/src/components/__tests__/RegionsPicker.test.ts:*)"
+      "Bash(/Users/kamilowczarek/Documents/GitHub/digital-nomad/apps/nomad/src/components/__tests__/RegionsPicker.test.ts:*)",
+      "Bash(npm run test:run -- --reporter=verbose src/components/__tests__/CustomNuxtImg.test.ts)",
+      "Bash(npm run test:run -- src/utils/__tests__/i18n-content.test.ts)",
+      "Bash(npm run test:run -- src/components/__tests__/CustomNuxtImg.test.ts)"
     ],
     "additionalDirectories": [
       "/tmp",
