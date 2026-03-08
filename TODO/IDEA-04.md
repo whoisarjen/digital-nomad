@@ -1,114 +1,84 @@
-# IDEA-04: Weekly Email Newsletter
+# IDEA-04: Data Freshness Transparency
 **Status:** NOT_STARTED
-**Priority:** 4/23
-**Complexity:** M
+**Priority:** 04/23
+**Complexity:** S
 
 ## What's Already Implemented
-Nothing. No `NewsletterSubscriber` model, no email library, no newsletter endpoints. Cron infrastructure exists in `apps/collector/` — but newsletter cron belongs in `apps/nomad/` (user data + content are there).
+- `City.updatedAt` exists (Prisma `@updatedAt`)
+- Cron jobs in `apps/collector/` update city data periodically
+- No data source labels or freshness indicators on city pages
 
 ## Revised Analysis
-**Schema IS required** — the original idea undersells this. A `NewsletterSubscriber` model with status enum is needed.
+Simple, high E-E-A-T impact feature. The `City.updatedAt` timestamp already serves as the freshness signal — no new DB fields needed.
 
-**Double opt-in is legally required** for EU users (the site has PL locale, so EU audience is certain). This adds a `confirmationToken` field and a `/api/newsletter/confirm.get.ts` endpoint.
+**Per-metric timestamps are overkill for V1.** Use `City.updatedAt` as a single freshness signal for the whole city record. Different data sources (Open-Meteo, Numbeo, Speedtest) update at different times, but the city `updatedAt` reflects the most recent update of any field.
 
-**Resend SDK** is the right choice — clean TypeScript SDK, generous free tier (3K/month), standard in Nuxt/Vercel ecosystem. Not yet installed.
+**Methodology page** is the highest-value SEO component of this idea — "how are digital nomad cities ranked" is a genuine search query. It establishes E-E-A-T authority and differentiates from competitors with opaque data.
 
-**Cron location:** Add to `apps/nomad/` — create/extend `vercel.json` with cron config. The newsletter is user-facing, not a data pipeline task.
+**Freshness indicator logic:**
+- Green: updated within 30 days
+- Yellow: 31–90 days
+- Red: 91+ days (data may be stale)
 
-**Weekly content queries** are trivial with existing Prisma patterns:
-- Top 3 cities: `prisma.monthSummary.findMany({ orderBy: { totalScore: 'desc' }, take: 3, ... })`
-- Cheapest with fast internet: `prisma.city.findFirst({ where: { internetSpeedCity: { gte: 20 } }, orderBy: { costForNomadInUsd: 'asc' } })`
-- New blog posts: `prisma.article.findMany({ where: { publishedAt: { gte: sevenDaysAgo } }, take: 3 })`
-
-**Unsubscribe token:** Separate stable `unsubscribeToken` field (different from `confirmationToken` which expires) — avoids token expiry issues for unsubscribes.
+**Data source attribution per section** (not per field) is the right granularity for V1:
+- Weather section: "Open-Meteo"
+- Cost section: "Numbeo"
+- Internet section: "Speedtest Global Index"
+- Air quality section: "IQAir"
+- Last updated: `city.updatedAt` formatted as "3 days ago" or "March 2026"
 
 ## Implementation Plan
 
 ### Database Changes
-```prisma
-enum SubscriberStatus {
-  PENDING
-  ACTIVE
-  UNSUBSCRIBED
-}
-
-model NewsletterSubscriber {
-  id                String           @id @default(cuid())
-  email             String           @unique
-  status            SubscriberStatus @default(PENDING)
-  confirmationToken String?          @unique
-  unsubscribeToken  String           @unique @default(cuid())
-  createdAt         DateTime         @default(now())
-  updatedAt         DateTime         @default(now()) @updatedAt
-
-  @@index([status])
-}
-```
+None. Use existing `City.updatedAt`.
 
 ### API Endpoints
-**`apps/nomad/src/server/api/newsletter/subscribe.post.ts`**
-- Accepts `{ email: string }` body, Zod validated
-- Creates subscriber with `status: PENDING`, sends confirmation email via Resend
-- Returns `{ success: true }` always (no email enumeration)
-
-**`apps/nomad/src/server/api/newsletter/confirm.get.ts`**
-- Reads `?token=` from query
-- Sets `status: ACTIVE`, clears `confirmationToken`
-- Redirects to `/?subscribed=1`
-
-**`apps/nomad/src/server/api/newsletter/unsubscribe.get.ts`**
-- Reads `?token=` from query
-- Sets `status: UNSUBSCRIBED`
-- Redirects to `/?unsubscribed=1`
-
-**`apps/nomad/src/server/api/cron/newsletter.post.ts`**
-- Secured via `CRON_SECRET` header check
-- Queries active subscribers (`select { email, unsubscribeToken }` only — never log emails)
-- Builds content: top 3 cities, cheapest fast-internet city, new blog posts
-- Sends batch via `resend.batch.send()`
-- Returns `{ sent: N, errors: M }`
+**Modify** `apps/nomad/src/server/api/cities/[slug].get.ts`
+- Add `updatedAt: true` to the city select
 
 ### Frontend Components/Pages
-**New file**: `apps/nomad/src/components/NewsletterSignup.vue`
-- Single email input + submit button
-- Calls `/api/newsletter/subscribe` via `$fetch`
-- Success state: "Check your email to confirm"
-- Inline error for invalid email
+**New file**: `apps/nomad/src/components/DataFreshnessBadge.vue`
+- Props: `updatedAt: string`
+- Computes days since update
+- Renders colored dot (green/yellow/red) + "Updated X days ago" or "Updated March 2026"
 
-**Integrate into:**
-- `apps/nomad/src/pages/index.vue` — section between features grid and explore
-- `apps/nomad/src/pages/cities/[slug].vue` — bottom of city detail pages
+**New file**: `apps/nomad/src/components/DataSourceLabel.vue`
+- Props: `source: string` (e.g., "Open-Meteo")
+- Small "Source: Open-Meteo" label rendered under each data section
 
-### Infrastructure
-Add to `apps/nomad/vercel.json` (create if missing):
-```json
-{
-  "crons": [{ "path": "/api/cron/newsletter", "schedule": "0 9 * * 1" }]
-}
-```
-Add env vars to Vercel: `RESEND_API_KEY`, `CRON_SECRET`
+**Modify** `apps/nomad/src/pages/cities/[slug].vue`
+- Add `<DataFreshnessBadge :updated-at="data.updatedAt" />` to city page header
+- Add `<DataSourceLabel source="..." />` under each major data section (Weather, Cost, Internet, Air Quality)
 
-Install: `npm install resend` in `apps/nomad/`
+**New file**: `apps/nomad/src/pages/methodology.vue`
+- `defineI18nRoute({ paths: { en: '/methodology', pl: '/metodologia' } })`
+- Full SEO: `useHead` targeting "how are digital nomad cities ranked", "nomad city data sources"
+- Explains: all data sources, update frequency, scoring formula for `totalScore`, how MonthSummary is built
+- Static content (no API call needed)
+- BreadcrumbList JSON-LD
+
+**Add link** to `/methodology` in site footer
 
 ### i18n Changes
 Add to all locale files:
 ```json
-"newsletter": {
-  "title": "Stay in the loop",
-  "subtitle": "Weekly picks: best cities, cheapest gems, and new guides.",
-  "placeholder": "your@email.com",
-  "subscribe": "Subscribe",
-  "successTitle": "Check your inbox",
-  "successSubtitle": "Confirmation link sent to {email}",
-  "gdprNote": "No spam. Unsubscribe anytime."
+"freshness": {
+  "updatedDaysAgo": "Updated {days} days ago",
+  "updatedToday": "Updated today",
+  "updatedThisMonth": "Updated this month",
+  "fresh": "Fresh data",
+  "aging": "Data may be aging",
+  "stale": "Data may be outdated",
+  "source": "Source: {name}",
+  "methodology": "Data Methodology"
 }
 ```
 
 ## Dependencies
-None blocking. Benefits from IDEA-06 (referral) for cross-promotion.
+None.
 
 ## Notes
-- Resend free tier: 3K/month. Plan for paid at ~600 active subscribers.
-- `confirmationToken` should expire after 24h — enforce in application logic, not DB schema.
-- Never log subscriber email addresses in cron output.
-- Unsubscribe link is legally required in every email (CAN-SPAM + GDPR). Include in HTML footer.
+- `City.updatedAt` is a single timestamp for the whole row. Multiple data sources update at different times — this is a V1 simplification. Document in the methodology page.
+- The methodology page is static content — consider writing it as a proper editorial piece, not just a technical spec page. It should read naturally for both users and Google.
+- Add "Data sources" link in the city page footer area (near copyright/attribution for images).
+- This feature directly addresses the trust gap vs NomadList (whose data is famously inaccurate).

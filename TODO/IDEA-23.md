@@ -1,115 +1,81 @@
-# IDEA-23: Neighborhood Guides
-**Status:** NOT_STARTED
+# IDEA-23: City Forum / Q&A
+**Status:** NOT_STARTED — BLOCKED (traffic gate)
 **Priority:** 23/23
 **Complexity:** XL
 
 ## What's Already Implemented
-Nothing. No `Neighborhood` model, no neighborhood endpoints, no neighborhood pages.
+Nothing. No `Thread` or `Reply` models, no forum endpoints, no forum UI.
 
 ## Revised Analysis
-**Lowest priority for a reason.** Neighborhood data is:
-- Entirely editorial (no automated data source)
-- Rapidly stale (rents change, vibes shift)
-- Requires local knowledge per city
-- Needs manual maintenance indefinitely
+**Explicitly gated: only build at 500+ active users.** An empty forum is actively harmful — it signals a ghost town and hurts credibility. This idea should not be picked up until:
+1. The site has 500+ active registered users
+2. IDEA-16 (City Tips) has been live for at least 3 months to establish UGC culture
+3. IDEA-14 (Check-ins) is live to provide a community signal
 
-**Minimal viable approach:** Do NOT attempt all 20 cities × 5 neighborhoods = 100 entries from the start. Instead:
-- Start with **3 cities** (Lisbon, Chiang Mai, Medellin — the most-searched nomad cities)
-- **3 neighborhoods each = 9 entries** as a pilot
-- Validate traffic/engagement before expanding
+**High maintenance overhead:** Forums require moderation, spam prevention, email notifications, and ongoing community management. These are real ongoing costs beyond the initial implementation.
 
-**URL structure:** After [removed] restructures city pages to `[slug]/index.vue`, neighborhoods naturally fit at `[slug]/neighborhoods/[neighborhoodSlug].vue`. The index at `[slug]/neighborhoods/` lists all neighborhoods for that city.
+**Consider IDEA-16 as the substitute:** City Tips (short, categorized, upvoteable) covers 80% of the Q&A use case with significantly lower moderation burden. Build IDEA-16 first and assess whether a full forum is still needed.
 
-**Data format:** Neighborhood descriptions should be written like blog posts, not just structured data. A 200-word editorial description with a clear "nomad recommendation" makes these pages more valuable than a data table.
+**If building:**
+- The 6-month auto-expire on threads is a good design — prevents stale questions from cluttering the page
+- Email notifications on replies are table stakes — requires IDEA-09 (Newsletter/Resend) infrastructure first
+- Spam prevention: rate limiting (1 thread per user per city per 24 hours), email verification requirement before posting
 
-**Vibe tags as enum vs free-text:** Use a fixed enum of vibe tags (QUIET, SOCIAL, ARTSY, AFFORDABLE, CENTRAL, EXPAT_FRIENDLY, LOCAL) rather than `String[]` — easier to filter and display consistently.
-
-**User submissions for scaling:** Once the editorial approach is validated, open submissions similar to IDEA-19 (Coworking). Submissions need admin approval for quality control.
-
-## Implementation Plan
+## Implementation Plan (when unblocked)
 
 ### Database Changes
 ```prisma
-enum NeighborhoodVibe {
-  QUIET
-  SOCIAL
-  ARTSY
-  AFFORDABLE
-  CENTRAL
-  EXPAT_FRIENDLY
-  LOCAL
+model Thread {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  citySlug  String
+  city      City     @relation(fields: [citySlug], references: [slug])
+  title     String   @db.VarChar(200)
+  content   String   @db.VarChar(1000)
+  isActive  Boolean  @default(true)
+  expiresAt DateTime // createdAt + 6 months
+
+  replies   Reply[]
+
+  @@index([citySlug, isActive, createdAt])
 }
 
-model Neighborhood {
-  id           String              @id @default(cuid())
-  citySlug     String
-  city         City                @relation(fields: [citySlug], references: [slug])
-  slug         String
-  nameEn       String
-  namePl       String?
-  descriptionEn String?            @db.VarChar(1000)
-  descriptionPl String?            @db.VarChar(1000)
-  avgRentUsd   Decimal?            @db.Decimal(10, 2)
-  vibes        NeighborhoodVibe[]
-  walkability  Int?                // 1-10
-
-  @@unique([citySlug, slug])
-  @@index([citySlug])
+model Reply {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  threadId  String
+  thread    Thread   @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  content   String   @db.VarChar(1000)
+  upvotes   Int      @default(0)
 }
 ```
 
 ### API Endpoints
-**`apps/nomad/src/server/api/cities/[slug]/neighborhoods.get.ts`** — GET, public
-- Returns all neighborhoods for a city
-- Uses `getLocale()` + `getLocalizedSelect()` for bilingual description
-- `select: { slug, nameEn/namePl as name, descriptionEn/namePl as description, avgRentUsd, vibes, walkability }`
-
-**`apps/nomad/src/server/api/cities/[slug]/neighborhoods/[neighborhoodSlug].get.ts`** — GET, public
-- Returns single neighborhood detail
+- `GET /api/forum/city/[slug]` — paginated thread list
+- `POST /api/forum/threads` — create thread (protected, rate-limited)
+- `GET /api/forum/threads/[id]` — thread with replies
+- `POST /api/forum/threads/[id]/replies` — add reply (protected)
+- `POST /api/forum/replies/[id]/vote` — upvote reply (protected)
+- `POST /api/forum/threads/[id]/report` — report thread (protected)
+- Cron: expire threads older than 6 months (set `isActive: false`)
 
 ### Frontend Components/Pages
-**New file**: `apps/nomad/src/pages/cities/[slug]/neighborhoods/index.vue`
-- List of neighborhoods with vibe tags, avg rent, walkability score
-- `useHead` with SEO targeting "[city] neighborhoods for digital nomads"
-
-**New file**: `apps/nomad/src/pages/cities/[slug]/neighborhoods/[neighborhoodSlug].vue`
-- Full neighborhood guide: description, avg rent, walkability, vibe tags
-- Full SEO with JSON-LD
-
-**Modify** `apps/nomad/src/pages/cities/[slug]/index.vue`
-- Add "Neighborhoods" section with 2-3 featured neighborhoods and link to full list
-
-**New file**: `packages/db/prisma/seeds/neighborhoods.ts`
-- Seed data for 3 pilot cities (Lisbon, Chiang Mai, Medellin)
-- 3 neighborhoods each
-
-### i18n Changes
-Add to all locale files:
-```json
-"neighborhoods": {
-  "title": "Neighborhoods in {city}",
-  "heading": "Where to Stay in {city}",
-  "avgRent": "Avg rent: ${price}/mo",
-  "walkability": "Walkability: {score}/10",
-  "vibes": {
-    "QUIET": "Quiet",
-    "SOCIAL": "Social",
-    "ARTSY": "Artsy",
-    "AFFORDABLE": "Affordable",
-    "CENTRAL": "Central",
-    "EXPAT_FRIENDLY": "Expat-friendly",
-    "LOCAL": "Local vibe"
-  },
-  "seeAll": "All neighborhoods in {city}"
-}
-```
+- `apps/nomad/src/components/CityForum.vue` — thread list + new thread form on city page
+- `apps/nomad/src/pages/forum/[citySlug]/[threadId].vue` — thread detail page
+- Email notification on reply (via Resend, requires IDEA-09)
 
 ## Dependencies
-- [removed]: City page restructure to `[slug]/index.vue` is a prerequisite for the nested URL structure.
+- **BLOCKED until 500+ active users**
+- IDEA-16 (City Tips) — build and validate first; may obviate forum need
+- IDEA-09 (Newsletter/Resend) — required for email notifications
+- IDEA-14 (Check-ins) — provides community signal prerequisite
 
 ## Notes
-- Start with 3 cities, 3 neighborhoods each — validate before scaling.
-- Neighborhood descriptions need to be editorial quality, not just structured data. Consider writing them as mini blog posts.
-- `avgRentUsd` is highly volatile — label it "approximate" and show last-updated date.
-- NomadList's neighborhood feature is "broken" (per the spec) — this is a real competitive opportunity if done well for top cities.
-- Do NOT attempt to build this at scale before validating the editorial pilot. 9 well-written neighborhoods beat 100 skeletal entries.
+- Do not start implementation until the traffic/user gate is met.
+- Consider IDEA-16 as a permanent substitute rather than a stepping stone.
+- If building: implement strict rate limiting and spam prevention before launch. Empty posts, spam, and low-quality questions are worse than no forum.
+- The 6-month auto-expire is a strong design decision — keep it. Stale questions are confusing and reduce trust.

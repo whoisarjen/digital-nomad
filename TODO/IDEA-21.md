@@ -1,76 +1,120 @@
-# IDEA-21: Historical Cost Trends
+# IDEA-21: Public Data API
+
 **Status:** NOT_STARTED
 **Priority:** 21/23
-**Complexity:** S (start now) → L (payoff later)
+**Complexity:** L
 
 ## What's Already Implemented
-Nothing. No `CostSnapshot` model, no snapshot cron.
+
+Nothing. There is no API key model, no rate limiting middleware, no public-facing `/api/public/` route directory, and no developer documentation page. The existing server endpoints all serve the internal Nuxt frontend or protected user-session flows. The auth system is session-cookie-based (`next-auth`), not token-based, which means API key authentication would require a net-new auth layer built alongside the session system.
+
+Existing public endpoints that the Data API would expose are already structurally present:
+- `GET /api/cities/index.get.ts` — city list with filters
+- `GET /api/cities/[slug].get.ts` — city detail
+- `GET /api/compare/[slugs].get.ts` — city comparison
+- `GET /api/regions/[region].get.ts` — region rankings
+
+These can be adapted (not duplicated) as public API endpoints, but they currently return internal-format responses and have no rate limiting.
 
 ## Revised Analysis
-**START THIS IMMEDIATELY.** The schema + cron take one day to implement. The value compounds over 6–12 months as snapshots accumulate. Every month you delay is a month of data permanently lost.
 
-**The UI can wait** — ship the model and cron now. Add the trend visualization to city pages once 6+ months of data exists.
+The original plan is directionally correct but underestimates complexity. Several concerns:
 
-**Snapshot frequency:** Monthly is correct. Weekly would be overkill and expensive to store. Monthly snapshots × 500 cities = 500 rows/month = 6,000 rows/year — tiny.
+**Prerequisites are not met.** This is designated Phase 2, but the concrete prerequisite is traffic and user trust — not just code. Shipping an API before achieving meaningful organic traffic means building infrastructure for zero consumers. The recommendation is to not start this until the site has established SEO traction (blog content, 10k+ monthly visits).
 
-**Cron placement:** `apps/collector/server/api/cron/cost-snapshot.get.ts` — collector handles all data collection. Run on the 1st of each month.
+**Rate limiting on Vercel serverless is non-trivial.** The standard approach is a Redis-backed counter (Upstash is the Vercel-native choice). There is no Redis/KV store in this stack today. Adding Upstash means a new dependency, new environment variable, and a new edge middleware pattern. The collector app's `vercel.json` has no cron entries yet, so there is no existing rate-limit infrastructure at all.
 
-**Which cost fields to snapshot:**
-- `costForNomadInUsd` — primary
-- `costForExpatInUsd` — secondary
-- `costForLocalInUsd` — secondary
-- Skip `costForFamilyInUsd` for V1 to keep snapshots lean
+**API key model placement.** The `ApiKey` model belongs in `packages/db/prisma/schema.prisma` alongside User. The key needs to be hashed at rest (store a `keyHash`, return the raw key once at creation). The model as sketched in the idea stores the raw key — that is a security issue that needs addressing in the design.
 
-**Idempotency:** The cron should skip if a snapshot for the current month already exists (`@@unique([citySlug, snapshotMonth])`).
+**The free/paid tier pricing is a product decision, not a technical one.** $19/month is a reasonable starting point, but payment processing (Stripe) is not in the stack. That is another new dependency. The free tier (100 req/day) alone can be shipped without Stripe by using a hard limit enforced in middleware.
+
+**A simpler first step:** Ship a free-only tier with an API key that is just a read-only credential (no payment). This generates developer interest, backlinks, and lets you validate demand before adding Stripe. Paid tier can be bolted on later once the free tier has users.
+
+**Recommendation:** Do not start this until at least IDEA-01 and a few content/SEO ideas are shipped. When you do start, the correct order is: (1) schema + key management UI, (2) rate limit middleware using Upstash, (3) public endpoint wrappers, (4) docs page, (5) payment/paid tier.
 
 ## Implementation Plan
 
 ### Database Changes
-```prisma
-model CostSnapshot {
-  id            String   @id @default(cuid())
-  citySlug      String
-  city          City     @relation(fields: [citySlug], references: [slug])
-  costNomad     Decimal  @db.Decimal(10, 2)
-  costExpat     Decimal  @db.Decimal(10, 2)
-  costLocal     Decimal  @db.Decimal(10, 2)
-  snapshotMonth DateTime // store as first day of month: new Date(year, month-1, 1)
 
-  @@unique([citySlug, snapshotMonth])
-  @@index([citySlug])
+Add to `packages/db/prisma/schema.prisma`:
+
+```prisma
+model ApiKey {
+  id           String   @id @default(cuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  keyHash      String   @unique  // bcrypt or SHA-256 hash — never store raw key
+  name         String            // user-assigned label e.g. "My App"
+  isActive     Boolean  @default(true)
+  tier         String   @default("free")  // "free" | "paid"
+  requestCount Int      @default(0)       // lifetime counter (coarse; real rate limit in Redis)
+  lastUsedAt   DateTime?
+  createdAt    DateTime @default(now())
+
+  @@index([userId])
 }
 ```
 
+Also add the inverse relation to `User`:
+```prisma
+apiKeys ApiKey[]
+```
+
 ### API Endpoints
-**Future (add after 6+ months of data)**: `apps/nomad/src/server/api/cities/[slug]/cost-history.get.ts`
-- Returns all snapshots for a city ordered by `snapshotMonth asc`
-- Client computes % change between periods
 
-### Cron
-**New file**: `apps/collector/server/api/cron/cost-snapshot.get.ts`
-- Runs monthly (first day of month)
-- Queries all cities: `prisma.city.findMany({ select: { slug, costForNomadInUsd, costForExpatInUsd, costForLocalInUsd } })`
-- Upserts snapshots: `prisma.costSnapshot.createMany({ data: [...], skipDuplicates: true })`
-- Returns `{ snapshotted: N }`
+All public endpoints live under `apps/nomad/src/server/api/v1/` to namespace them away from internal endpoints.
 
-**Modify** `apps/collector/vercel.json`
-- Add cron entry: `{ "path": "/api/cron/cost-snapshot", "schedule": "0 0 1 * *" }` (midnight on 1st of month)
+New rate-limit middleware:
+- `apps/nomad/src/server/middleware/api-key-auth.ts` — validates `Authorization: Bearer <key>` header, enforces daily request quota via Upstash Redis, attaches tier to event context
 
-### Frontend Components/Pages (Future — after 6+ months of data)
-**New file**: `apps/nomad/src/components/CostTrendChart.vue`
-- Simple line chart (use `chart.js` or a lightweight alternative already in the project)
-- Shows `costForNomadInUsd` over time
-- "Cost has [increased/decreased] X% in the past 12 months"
+Public endpoint wrappers (adapt internal endpoints, do not duplicate):
+- `apps/nomad/src/server/api/v1/cities/index.get.ts` — city list (limited fields, no session-specific data)
+- `apps/nomad/src/server/api/v1/cities/[slug].get.ts` — city detail
+- `apps/nomad/src/server/api/v1/compare/[slugs].get.ts` — city comparison
+- `apps/nomad/src/server/api/v1/rankings.get.ts` — top cities by total score for current month
 
-**Modify** `apps/nomad/src/pages/cities/[slug].vue`
-- Add `<CostTrendChart :city-slug="slug" />` after the cost section — only render if ≥ 3 data points exist
+Key management (dashboard-protected):
+- `apps/nomad/src/server/api/dashboard/api-keys/index.get.ts` — list user's keys
+- `apps/nomad/src/server/api/dashboard/api-keys/create.post.ts` — generate new key (returns raw key once)
+- `apps/nomad/src/server/api/dashboard/api-keys/[id].delete.ts` — revoke key
+
+### Frontend Components/Pages
+
+- `apps/nomad/src/pages/developers.vue` — documentation page (static, no i18n needed for v1, EN only)
+- `apps/nomad/src/components/dashboard/ApiKeyManager.vue` — list/create/revoke keys in dashboard
+- Extend `apps/nomad/src/pages/dashboard.vue` to include the ApiKeyManager section
+
+### i18n Changes
+
+Minimal for v1 — the developer docs page can be EN-only. Dashboard additions:
+
+`apps/nomad/src/locales/en.json` additions:
+```json
+"apiKeys": {
+  "title": "API Keys",
+  "create": "Generate Key",
+  "revoke": "Revoke",
+  "name": "Key name",
+  "created": "Created",
+  "lastUsed": "Last used",
+  "never": "Never",
+  "copyWarning": "Copy this key — it will not be shown again.",
+  "freeLimit": "100 requests/day on free tier"
+}
+```
 
 ## Dependencies
-None. This is infrastructure — build it before everything else that depends on data.
+
+- No IDEA dependencies (standalone)
+- New infrastructure dependency: Upstash Redis for rate limiting (or alternative KV store)
+- Future dependency: Stripe for paid tier billing
+- Should be built only after the site has meaningful traffic — this is Phase 2
 
 ## Notes
-- **Ship the cron and schema NOW** — every delayed month is permanently lost data.
-- The `snapshotMonth` field should always be stored as the first day of the month in UTC (e.g., `new Date(Date.UTC(2026, 2, 1))` for March 2026) for consistent grouping.
-- The `skipDuplicates: true` option in `createMany` makes the cron idempotent — safe to run multiple times per month.
-- The UI (trend chart) is NOT the priority here. The data collection cron is. Add the chart UI once you have enough data to make it meaningful.
-- Add a manual backfill endpoint or script to create initial snapshots from current city costs as a "T=0" baseline.
+
+- **Do not start this before the site has traffic.** Building API infrastructure for zero consumers is wasted effort at this stage (priority 18/23 is appropriate).
+- The `keyHash` approach is critical — store `SHA-256(rawKey)`, return `rawKey` exactly once on creation. If a user loses it, they generate a new one.
+- The rate limit window should be a rolling 24-hour window, not a calendar day, to be fair to users in all timezones.
+- Upstash free tier covers ~10k requests/day which is sufficient to bootstrap this.
+- The `/api/v1/` namespace keeps public API responses fully independent from internal endpoint response shape, so both can evolve without breaking each other.
+- Do not expose favorites, user data, or any session-scoped endpoints through the public API.

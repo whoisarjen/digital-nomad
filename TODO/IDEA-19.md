@@ -1,154 +1,91 @@
-# IDEA-19: Coworking Space Directory
-
+# IDEA-19: Public Nomad Profiles
 **Status:** NOT_STARTED
 **Priority:** 19/23
-**Complexity:** L
+**Complexity:** M
 
 ## What's Already Implemented
-
-Nothing. The Prisma schema has no `CoworkingSpace` model. There are no coworking-related pages, API endpoints, or components anywhere in the codebase.
+- `User.number` field exists — already used for user identity in the system
+- `Favorite` model exists ([removed] adds status)
+- Dashboard exists at `/pages/dashboard.vue`
+- No public profile pages exist
 
 ## Revised Analysis
+**Depends heavily on other IDEAs.** A profile page is only interesting if there's content to show. Priority order of content:
+1. Favorite cities (already exists — VISITED/PLANNING from [removed]) — minimum viable content
+2. Tips submitted (IDEA-16)
+3. Reviews submitted (IDEA-18)
+4. Check-in history (IDEA-14)
 
-The original idea is directionally correct — coworking data is high-value for digital nomads — but the **admin approval workflow is the critical risk**. There is currently no admin panel, no admin role on the `User` model, no admin middleware, and no admin routes anywhere in the app. Building a submission-to-approval pipeline from scratch is a significant hidden dependency.
+V1 should ship with just favorite cities (VISITED) and member since date — enough to be useful. Other content adds incrementally as those IDEAs land.
 
-**Admin workflow reality check.** The current auth system (`@sidebase/nuxt-auth` + `next-auth`) stores a simple `User` with no `role` or `isAdmin` field. To do even minimal manual approval you need: (1) an `isAdmin` flag on `User`, (2) a protected admin API endpoint to list unapproved spaces and flip `isApproved`, and (3) some admin UI or at minimum a direct DB workflow via Prisma Studio. Given the project is solo-operated, the lightest viable path is: skip the admin UI entirely and approve directly in the DB (Prisma Studio or a one-off SQL UPDATE). The API only ever exposes `isApproved: true` records to the frontend, so bad submissions are invisible without approval.
+**`User.number` for URLs** (`/nomads/1234`) is clean and doesn't expose email or internal ID. This field already exists.
 
-**Schema simplification.** The proposed schema stores `submittedBy` as a plain string. This is fine for a first version, but linking to `userId` (String, FK to User) is strictly better — it enables rate-limiting submissions per user and eventually showing users their pending submissions. The tradeoff is requiring auth to submit, which is acceptable given the existing auth system.
+**Privacy controls are essential.** Users must control what's public:
+- Cities visited: show/hide
+- Cities planning: always hidden from public view
+- Tips: show/hide
+- Member since: always public
 
-**WiFi speed** is notoriously self-reported and unreliable. Drop the `wifiSpeed` field from the initial schema; it adds noise without a verification mechanism. Bring it back if you add a Speedtest.net-style check-in flow later.
-
-**Vibe tags** from the proposal are a `String[]` in Postgres (array column). This is supported by Prisma. Keep it — it's the main differentiator from existing coworking databases.
-
-**Rating/votes.** The proposal says "sort by rating/votes" but the schema has no rating or vote fields — these would be a second-phase addition. For V1, sort by `createdAt desc` among approved spaces.
-
-**i18n scope.** The `name`, `address`, and potentially any `notes` field are inherently user-generated English-only content. No bilingual field pattern needed here — it would be meaningless. Section headings and UI labels need i18n across the 11 locales.
-
-**SEO note.** Individual coworking space pages are not worth building initially. The section on the city page is sufficient. If the dataset grows to 50+ spaces per city, a standalone `/cities/[slug]/coworking` page would make sense.
-
-**Effort realism.** Despite "Medium" effort in the brief, this is a genuine L due to the form, submission flow, moderation-by-DB, approval-aware queries, and new city page section — all with zero existing scaffolding.
+**Minimal schema change:** Add a `publicProfile` boolean flag to `User` (default: false for existing users, true for new). Plus `showVisited` boolean. No `profileVisible` toggle per-content-type for V1 — just a single "make profile public" toggle.
 
 ## Implementation Plan
 
 ### Database Changes
-
-Add to `packages/db/prisma/schema.prisma`:
-
 ```prisma
-model CoworkingSpace {
-  id          String   @id @default(cuid())
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @default(now()) @updatedAt
-
-  citySlug    String
-  city        City     @relation(fields: [citySlug], references: [slug], onDelete: Cascade)
-
-  name        String
-  address     String?
-  dailyPrice  Decimal? @db.Decimal(8, 2)
-  monthlyPrice Decimal? @db.Decimal(8, 2)
-  vibeTags    String[]
-  isApproved  Boolean  @default(false)
-
-  submittedById String?
-  submittedBy   User?   @relation(fields: [submittedById], references: [id], onDelete: SetNull)
-
-  @@index([citySlug, isApproved])
-}
+// Add to User model:
+publicProfile Boolean @default(false)
+showVisited   Boolean @default(true)
 ```
-
-Also add the reverse relation to `City`:
-```prisma
-coworkingSpaces CoworkingSpace[]
-```
-
-And to `User`:
-```prisma
-coworkingSpaces CoworkingSpace[]
-```
-
-User runs `prisma db push` as usual.
 
 ### API Endpoints
-
-**List approved coworking spaces for a city:**
-- `apps/nomad/src/server/api/coworking/[citySlug].get.ts`
-- Public, no auth required
-- Returns only `isApproved: true` records, ordered by `createdAt desc`
-- `select`: `id`, `name`, `address`, `dailyPrice`, `monthlyPrice`, `vibeTags`, `createdAt`
-
-**Submit a new coworking space:**
-- `apps/nomad/src/server/api/coworking/submit.post.ts`
-- Protected via `defineProtectedEventHandler` (requires auth — same pattern as `favorites/toggle.post.ts` and `features/vote.post.ts`)
-- Validates body with zod schema
-- Creates record with `isApproved: false`; submittedById from session
-
-**Zod schema additions** in `apps/nomad/src/shared/global.schema.ts`:
-```ts
-export const getCoworkingByCitySchema = z.object({
-  citySlug: z.string().min(1),
-})
-
-export const submitCoworkingSchema = z.object({
-  citySlug: z.string().min(1),
-  name: z.string().min(2).max(120),
-  address: z.string().max(200).optional(),
-  dailyPrice: z.number().positive().max(9999).optional(),
-  monthlyPrice: z.number().positive().max(9999).optional(),
-  vibeTags: z.array(z.string().max(30)).max(5).default([]),
-})
-```
+**`apps/nomad/src/server/api/users/[number].get.ts`** — GET, public
+- Finds user by `number` field
+- Returns 404 if not found OR `publicProfile = false`
+- If `showVisited = true`: returns VISITED favorites with city data (`select` only)
+- Returns: `{ number, memberSince: createdAt, visitedCities: [...], tipCount: 0, reviewCount: 0 }` (tip/review counts added as those IDEAs land)
 
 ### Frontend Components/Pages
+**New file**: `apps/nomad/src/pages/nomads/[number].vue`
+- `defineI18nRoute({ paths: { en: '/nomads/[number]', pl: '/nomadzi/[number]' } })`
+- Fetches user profile from new endpoint
+- Shows: "Nomad #[number]", member since date, visited cities grid (if public)
+- 404-style page if profile not found or not public
+- Minimal SEO: `useHead` with title "Nomad #[number] Profile" — `noindex` for private profiles, light `index` for public ones
 
-**New composable:**
-- `apps/nomad/src/composables/useCoworking.ts`
-- Wraps `useCustomQuery` for `/api/coworking/[citySlug]`
+**New file**: `apps/nomad/src/components/dashboard/ProfileSettings.vue`
+- Toggle: "Make my profile public"
+- Toggle: "Show cities I've visited"
+- Link to own public profile when enabled
 
-**New component — coworking section:**
-- `apps/nomad/src/components/CityCoworkingSection.vue`
-- Shows list of approved spaces as cards: name, address, daily/monthly price badges, vibe tags
-- Includes a "Submit a Space" button that opens a modal/drawer form
-- The form is auth-gated (uses `AuthGate` component — already exists)
-- Shows empty state if no approved spaces yet
+**Modify** `apps/nomad/src/pages/dashboard.vue`
+- Add `<DashboardProfileSettings />` section
 
-**Modify city page:**
-- `apps/nomad/src/pages/cities/[slug].vue`
-- Add `<CityCoworkingSection :city-slug="citySlug" />` after the Related Articles widget
+**New file**: `apps/nomad/src/server/api/users/profile.patch.ts`
+- Protected endpoint: updates `publicProfile` and `showVisited` for current user
 
 ### i18n Changes
-
-Add to all 11 locale files under `apps/nomad/src/locales/`:
+Add to all locale files:
 ```json
-"coworking": {
-  "title": "Coworking Spaces",
-  "noSpaces": "No coworking spaces listed yet.",
-  "submitSpace": "Submit a Space",
-  "daily": "Daily",
-  "monthly": "Monthly",
-  "submitTitle": "Submit a Coworking Space",
-  "nameLabel": "Space name",
-  "addressLabel": "Address (optional)",
-  "dailyPriceLabel": "Daily price (USD, optional)",
-  "monthlyPriceLabel": "Monthly price (USD, optional)",
-  "vibeTagsLabel": "Vibe tags (e.g. quiet, fast wifi, cafes)",
-  "submitButton": "Submit for Review",
-  "submitSuccess": "Thanks! Your submission is under review.",
-  "pendingNote": "Listings are reviewed before appearing."
+"profile": {
+  "title": "Nomad #{number}",
+  "memberSince": "Member since {date}",
+  "visitedCities": "Cities visited",
+  "noVisited": "No visited cities shared",
+  "makePublic": "Make my profile public",
+  "showVisited": "Show cities I've visited",
+  "profilePrivate": "This profile is private",
+  "yourProfile": "Your profile",
+  "viewProfile": "View public profile"
 }
 ```
 
 ## Dependencies
-
-No hard code dependencies on other IDEAs, but the admin approval mechanism is a soft dependency on building any admin tooling (which does not exist yet). Until an admin UI exists, approvals must be done manually via Prisma Studio or direct SQL:
-```sql
-UPDATE "CoworkingSpace" SET "isApproved" = true WHERE id = '...';
-```
+- [removed] (Favorites Split): VISITED cities are the primary public content. Required.
+- IDEA-16 (Tips): tip count/list on profile — optional, add later.
+- IDEA-18 (Reviews): review count on profile — optional, add later.
 
 ## Notes
-
-- There is no email library in the project (`package.json` has no nodemailer, Resend, SendGrid, etc.). Email notifications for submission status are therefore impossible without adding an email dependency — skip for V1.
-- The `isAdmin` check for an admin UI would require adding a `role` field to `User` or a simple `isAdmin Boolean @default(false)` field. Not worth doing just for this feature.
-- Empty-state handling is critical: show "No spaces listed yet. Be the first to submit one." — an empty section with no CTA is worse than no section at all.
-- Consider rate-limiting submissions per user (e.g. max 5 submissions across all cities) to prevent spam. Enforce this in the submit endpoint using `prisma.coworkingSpace.count({ where: { submittedById: userId } })` before creating.
-- Do not build this until there is a clear plan for how approvals get processed. If no one is checking the queue, user submissions accumulate invisibly and the feature is dead on arrival.
+- Default `publicProfile: false` for all existing users — opt-in, not opt-out.
+- The `User.number` field is already a clean integer — confirm it auto-increments or is set correctly for all users.
+- "Cities planning" should NEVER be public — it reveals future plans which is private information.
+- Link to profile from tip and review author bylines once IDEA-16 and IDEA-18 are built.

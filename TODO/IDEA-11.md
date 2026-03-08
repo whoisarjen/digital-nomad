@@ -1,84 +1,106 @@
-# IDEA-11: Data Freshness Transparency
+# IDEA-11: Granular Cost Breakdown
 **Status:** NOT_STARTED
 **Priority:** 11/23
-**Complexity:** S
+**Complexity:** XL
 
 ## What's Already Implemented
-- `City.updatedAt` exists (Prisma `@updatedAt`)
-- Cron jobs in `apps/collector/` update city data periodically
-- No data source labels or freshness indicators on city pages
+- Aggregate cost fields exist (`costForNomadInUsd`, `costForExpatInUsd`, `costForLocalInUsd`, `costForFamilyInUsd`) but no line-item breakdown
+- Nothing else. No `CityPrice` model, no price endpoints, no cost breakdown UI.
 
 ## Revised Analysis
-Simple, high E-E-A-T impact feature. The `City.updatedAt` timestamp already serves as the freshness signal — no new DB fields needed.
+**The model and UI are easy. Data collection is the hard problem.** Building the schema and UI takes ~1 day. Collecting 30-50 accurate price items for 50 cities takes weeks.
 
-**Per-metric timestamps are overkill for V1.** Use `City.updatedAt` as a single freshness signal for the whole city record. Different data sources (Open-Meteo, Numbeo, Speedtest) update at different times, but the city `updatedAt` reflects the most recent update of any field.
+**Data source options (in order of preference):**
+1. **Numbeo API** — structured, reliable, ~$50–200/month for commercial access. Best quality.
+2. **Numbeo web scraping** — fragile, ToS issue, not recommended.
+3. **User submissions** — free but slow to populate, needs moderation.
+4. **Manual research** — accurate but not scalable.
 
-**Methodology page** is the highest-value SEO component of this idea — "how are digital nomad cities ranked" is a genuine search query. It establishes E-E-A-T authority and differentiates from competitors with opaque data.
+**Recommendation:** Start with user submissions (IDEA-16 style) to seed the data, and explore Numbeo API access for automation once there's a budget.
 
-**Freshness indicator logic:**
-- Green: updated within 30 days
-- Yellow: 31–90 days
-- Red: 91+ days (data may be stale)
+**Coverage:** Start with top 20 nomad cities, 15-20 items each (not 50 items). Ship something useful before trying to be comprehensive.
 
-**Data source attribution per section** (not per field) is the right granularity for V1:
-- Weather section: "Open-Meteo"
-- Cost section: "Numbeo"
-- Internet section: "Speedtest Global Index"
-- Air quality section: "IQAir"
-- Last updated: `city.updatedAt` formatted as "3 days ago" or "March 2026"
+**Categories vs items:** 30-50 individual items is overwhelming UI. Group into expandable categories. Show 5 top items by default, "Show more" for full list.
 
 ## Implementation Plan
 
 ### Database Changes
-None. Use existing `City.updatedAt`.
+```prisma
+enum PriceCategory {
+  FOOD
+  HOUSING
+  TRANSPORT
+  UTILITIES
+  ENTERTAINMENT
+  PERSONAL_CARE
+}
+
+model CityPrice {
+  id         String        @id @default(cuid())
+  citySlug   String
+  city       City          @relation(fields: [citySlug], references: [slug])
+  category   PriceCategory
+  item       String        // "Meal at inexpensive restaurant"
+  itemPl     String?       // PL translation of item name
+  priceUsd   Decimal       @db.Decimal(10, 2)
+  updatedAt  DateTime      @updatedAt
+
+  @@unique([citySlug, item])
+  @@index([citySlug, category])
+}
+```
 
 ### API Endpoints
-**Modify** `apps/nomad/src/server/api/cities/[slug].get.ts`
-- Add `updatedAt: true` to the city select
+**`apps/nomad/src/server/api/cities/[slug]/prices.get.ts`** — GET, public
+- Returns all price items for a city grouped by category
+- `select` only: category, item, itemPl (if PL locale), priceUsd, updatedAt
+- Respects locale for item name (use `getLocale` + return appropriate item field)
 
 ### Frontend Components/Pages
-**New file**: `apps/nomad/src/components/DataFreshnessBadge.vue`
-- Props: `updatedAt: string`
-- Computes days since update
-- Renders colored dot (green/yellow/red) + "Updated X days ago" or "Updated March 2026"
+**New file**: `apps/nomad/src/components/CostBreakdown.vue`
+- Props: `prices: PriceByCategoryGroup[]`, `locale: string`
+- Expandable category sections (accordion style)
+- Show 5 items per category by default, "Show all X items" toggle
+- Each item: name, price in USD, optional local currency conversion
+- "Data source" attribution per item or per section
 
-**New file**: `apps/nomad/src/components/DataSourceLabel.vue`
-- Props: `source: string` (e.g., "Open-Meteo")
-- Small "Source: Open-Meteo" label rendered under each data section
+**Modify** `apps/nomad/src/pages/cities/[slug].vue` (or `[slug]/index.vue` after [removed] restructure)
+- Add `<CostBreakdown />` below the existing aggregate cost section
+- Lazy-load with `useCustomQuery` (don't block city page render)
 
-**Modify** `apps/nomad/src/pages/cities/[slug].vue`
-- Add `<DataFreshnessBadge :updated-at="data.updatedAt" />` to city page header
-- Add `<DataSourceLabel source="..." />` under each major data section (Weather, Cost, Internet, Air Quality)
+**New file**: `apps/nomad/src/composables/useCityPrices.ts`
+- Wraps `useCustomQuery` for prices endpoint
+- `lazy: true` to avoid blocking city page initial load
 
-**New file**: `apps/nomad/src/pages/methodology.vue`
-- `defineI18nRoute({ paths: { en: '/methodology', pl: '/metodologia' } })`
-- Full SEO: `useHead` targeting "how are digital nomad cities ranked", "nomad city data sources"
-- Explains: all data sources, update frequency, scoring formula for `totalScore`, how MonthSummary is built
-- Static content (no API call needed)
-- BreadcrumbList JSON-LD
-
-**Add link** to `/methodology` in site footer
+**New file**: `packages/db/prisma/seeds/city-prices.ts`
+- Initial seed data for top 20 cities
+- JSON file of `{ citySlug, category, item, priceUsd }` records
 
 ### i18n Changes
 Add to all locale files:
 ```json
-"freshness": {
-  "updatedDaysAgo": "Updated {days} days ago",
-  "updatedToday": "Updated today",
-  "updatedThisMonth": "Updated this month",
-  "fresh": "Fresh data",
-  "aging": "Data may be aging",
-  "stale": "Data may be outdated",
-  "source": "Source: {name}",
-  "methodology": "Data Methodology"
+"costBreakdown": {
+  "title": "Cost Breakdown",
+  "showAll": "Show all {count} items",
+  "showLess": "Show less",
+  "categories": {
+    "FOOD": "Food & Restaurants",
+    "HOUSING": "Housing",
+    "TRANSPORT": "Transport",
+    "UTILITIES": "Utilities",
+    "ENTERTAINMENT": "Entertainment",
+    "PERSONAL_CARE": "Personal Care"
+  },
+  "perMonth": "/month",
+  "dataSource": "Source: Numbeo"
 }
 ```
 
 ## Dependencies
-None.
+- [removed]: If city page is restructured to `[slug]/index.vue`, this component goes in that file.
 
 ## Notes
-- `City.updatedAt` is a single timestamp for the whole row. Multiple data sources update at different times — this is a V1 simplification. Document in the methodology page.
-- The methodology page is static content — consider writing it as a proper editorial piece, not just a technical spec page. It should read naturally for both users and Google.
-- Add "Data sources" link in the city page footer area (near copyright/attribution for images).
-- This feature directly addresses the trust gap vs NomadList (whose data is famously inaccurate).
+- **Data collection is 90% of the effort.** Do not start building the UI until data exists for at least 10 cities.
+- Consider Numbeo API commercial license ($50-200/month) once site traffic justifies it — automating 50+ price items for 500 cities is only feasible with their API.
+- The `@@unique([citySlug, item])` constraint uses the English item name as the unique key — this means `itemPl` is optional and the English name is canonical.
+- Price comparison ("A restaurant meal in Bangkok costs 70% less than in Lisbon") is a compelling feature that requires computing diffs client-side or via the compare endpoint ([removed]).

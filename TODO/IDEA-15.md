@@ -1,106 +1,102 @@
-# IDEA-15: Granular Cost Breakdown
+# IDEA-15: Trip Planner (Extend Favorites)
 **Status:** NOT_STARTED
 **Priority:** 15/23
 **Complexity:** XL
 
 ## What's Already Implemented
-- Aggregate cost fields exist (`costForNomadInUsd`, `costForExpatInUsd`, `costForLocalInUsd`, `costForFamilyInUsd`) but no line-item breakdown
-- Nothing else. No `CityPrice` model, no price endpoints, no cost breakdown UI.
+Nothing. No trip planner UI, no reorder API, no plan month API, no public trip view.
 
 ## Revised Analysis
-**The model and UI are easy. Data collection is the hard problem.** Building the schema and UI takes ~1 day. Collecting 30-50 accurate price items for 50 cities takes weeks.
+**Requires [removed] first.** The `status` field from [removed] changes the Favorite model shape that this extends.
 
-**Data source options (in order of preference):**
-1. **Numbeo API** — structured, reliable, ~$50–200/month for commercial access. Best quality.
-2. **Numbeo web scraping** — fragile, ToS issue, not recommended.
-3. **User submissions** — free but slow to populate, needs moderation.
-4. **Manual research** — accurate but not scalable.
+**Drag-to-reorder NOT recommended.** No drag library is installed (`@vueuse/core` doesn't ship a sortable list). Adding `vue-draggable-next` or similar adds dependency weight and accessibility complexity. **Use up/down arrow buttons for reordering** — same UX outcome, significantly simpler implementation, keyboard accessible with `aria-label`.
 
-**Recommendation:** Start with user submissions (IDEA-05 style) to seed the data, and explore Numbeo API access for automation once there's a budget.
+**Shareable trip link privacy:** The spec proposes `/trips/[userId]` which exposes internal user IDs. Instead, add a `tripShareToken` field to `User` (a `cuid()` default), route as `/trips/[tripShareToken]`. Avoids leaking user IDs.
 
-**Coverage:** Start with top 20 nomad cities, 15-20 items each (not 50 items). Ship something useful before trying to be comprehensive.
+**Month-specific weather** is already in `MonthSummary` — join on `plannedMonth` in the trip endpoint. No new data collection needed.
 
-**Categories vs items:** 30-50 individual items is overwhelming UI. Group into expandable categories. Show 5 top items by default, "Show more" for full list.
+**Running total cost** is computed client-side — sum `costForNomadInUsd` for all planning favorites with `plannedMonth` set.
 
 ## Implementation Plan
 
 ### Database Changes
 ```prisma
-enum PriceCategory {
-  FOOD
-  HOUSING
-  TRANSPORT
-  UTILITIES
-  ENTERTAINMENT
-  PERSONAL_CARE
-}
+// Add to existing Favorite model (after [removed]'s status field):
+order        Int?
+plannedMonth Int?  // 1-12
 
-model CityPrice {
-  id         String        @id @default(cuid())
-  citySlug   String
-  city       City          @relation(fields: [citySlug], references: [slug])
-  category   PriceCategory
-  item       String        // "Meal at inexpensive restaurant"
-  itemPl     String?       // PL translation of item name
-  priceUsd   Decimal       @db.Decimal(10, 2)
-  updatedAt  DateTime      @updatedAt
-
-  @@unique([citySlug, item])
-  @@index([citySlug, category])
-}
+// Add to User model:
+tripShareToken String @unique @default(cuid())
 ```
 
 ### API Endpoints
-**`apps/nomad/src/server/api/cities/[slug]/prices.get.ts`** — GET, public
-- Returns all price items for a city grouped by category
-- `select` only: category, item, itemPl (if PL locale), priceUsd, updatedAt
-- Respects locale for item name (use `getLocale` + return appropriate item field)
+**`apps/nomad/src/server/api/favorites/reorder.patch.ts`** — PATCH, protected
+- Body: `{ items: Array<{ citySlug: string, order: number }> }`
+- Upserts `order` for each favorite
+- Returns `{ updated: number }`
+
+**`apps/nomad/src/server/api/favorites/plan.patch.ts`** — PATCH, protected
+- Body: `{ citySlug: string, plannedMonth: number | null }`
+- Updates `plannedMonth` on the favorite record
+- Returns `{ plannedMonth: number | null }`
+
+**`apps/nomad/src/server/api/trips/[token].get.ts`** — GET, public
+- Finds `User` by `tripShareToken`
+- Returns PLANNING favorites with `order`, `plannedMonth`, city data (name, country, image, `costForNomadInUsd`), and `monthSummary` for the planned month (weatherIcon, temperature)
+- No auth required
+
+**Modify** `apps/nomad/src/server/api/favorites/index.get.ts`
+- Include `order`, `plannedMonth` in response
+- Default sort: `order asc nulls last, createdAt desc` when `status = PLANNING`
 
 ### Frontend Components/Pages
-**New file**: `apps/nomad/src/components/CostBreakdown.vue`
-- Props: `prices: PriceByCategoryGroup[]`, `locale: string`
-- Expandable category sections (accordion style)
-- Show 5 items per category by default, "Show all X items" toggle
-- Each item: name, price in USD, optional local currency conversion
-- "Data source" attribution per item or per section
+**New file**: `apps/nomad/src/composables/useTripPlanner.ts`
+- `reorderFavorites()` mutation wrapping PATCH endpoint
+- `setPlanMonth(citySlug, month)` mutation
 
-**Modify** `apps/nomad/src/pages/cities/[slug].vue` (or `[slug]/index.vue` after [removed] restructure)
-- Add `<CostBreakdown />` below the existing aggregate cost section
-- Lazy-load with `useCustomQuery` (don't block city page render)
+**New file**: `apps/nomad/src/components/dashboard/TripPlanner.vue`
+- Ordered list of PLANNING favorites
+- Up/down arrow buttons per row for reordering (with `aria-label`)
+- Dropdown month selector (Jan–Dec + "Not set") per city
+- Running total cost at bottom (sum of cities with `plannedMonth` set)
+- Share button: copies `/trips/[tripShareToken]` to clipboard
+- Month-specific weather preview icon per city when `plannedMonth` is set
 
-**New file**: `apps/nomad/src/composables/useCityPrices.ts`
-- Wraps `useCustomQuery` for prices endpoint
-- `lazy: true` to avoid blocking city page initial load
+**Modify** `apps/nomad/src/components/dashboard/SavedCities.vue`
+- Planning tab renders `<TripPlanner>` instead of (or alongside) the grid view
 
-**New file**: `packages/db/prisma/seeds/city-prices.ts`
-- Initial seed data for top 20 cities
-- JSON file of `{ citySlug, category, item, priceUsd }` records
+**New file**: `apps/nomad/src/pages/trips/[token].vue`
+- Public read-only trip view
+- Fetches `GET /api/trips/[token]`
+- Shows ordered cities with planned months and weather previews
+- `noindex` meta (private user content)
+- `defineI18nRoute({ paths: { en: '/trips/[token]', pl: '/trasy/[token]' } })`
 
 ### i18n Changes
 Add to all locale files:
 ```json
-"costBreakdown": {
-  "title": "Cost Breakdown",
-  "showAll": "Show all {count} items",
-  "showLess": "Show less",
-  "categories": {
-    "FOOD": "Food & Restaurants",
-    "HOUSING": "Housing",
-    "TRANSPORT": "Transport",
-    "UTILITIES": "Utilities",
-    "ENTERTAINMENT": "Entertainment",
-    "PERSONAL_CARE": "Personal Care"
-  },
-  "perMonth": "/month",
-  "dataSource": "Source: Numbeo"
+"trip": {
+  "planner": "Trip Planner",
+  "planMonth": "Planned month",
+  "notPlanned": "Month not set",
+  "shareTrip": "Share trip",
+  "linkCopied": "Link copied!",
+  "totalCost": "Est. monthly total",
+  "monthlyBudget": "~${cost}/mo",
+  "publicView": "{name}'s Trip",
+  "noPlanning": "No cities in Planning list yet",
+  "moveUp": "Move up",
+  "moveDown": "Move down"
 }
 ```
 
 ## Dependencies
-- [removed]: If city page is restructured to `[slug]/index.vue`, this component goes in that file.
+- **[removed] is a hard prerequisite** — the planner operates on PLANNING favorites.
+- IDEA-14 / [removed]: month-specific weather data comes from `MonthSummary` already in DB.
 
 ## Notes
-- **Data collection is 90% of the effort.** Do not start building the UI until data exists for at least 10 cities.
-- Consider Numbeo API commercial license ($50-200/month) once site traffic justifies it — automating 50+ price items for 500 cities is only feasible with their API.
-- The `@@unique([citySlug, item])` constraint uses the English item name as the unique key — this means `itemPl` is optional and the English name is canonical.
-- Price comparison ("A restaurant meal in Bangkok costs 70% less than in Lisbon") is a compelling feature that requires computing diffs client-side or via the compare endpoint ([removed]).
+- `tripShareToken` addition to `User` is a simple `prisma db push` — one field.
+- Public trip page must set `noindex` in head meta — it's private user content.
+- Running total only sums cities where `plannedMonth IS NOT NULL`.
+- Up/down arrow reordering must be keyboard navigable: `<button aria-label="Move up">` / `<button aria-label="Move down">`.
+- The public trip view at `/trips/[token]` should gracefully handle tokens that don't exist (404 page, not server error).

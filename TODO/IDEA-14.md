@@ -1,64 +1,94 @@
-# IDEA-14: Affiliate Integration
+# IDEA-14: City Check-Ins ("I'm Here Now")
 **Status:** NOT_STARTED
 **Priority:** 14/23
-**Complexity:** S
+**Complexity:** L
 
 ## What's Already Implemented
-Nothing. No affiliate links anywhere in the codebase.
+Nothing. No check-in model, no check-in endpoints, no check-in UI anywhere in the codebase.
+
+Auth system exists (`defineProtectedEventHandler` pattern established). Favorites system shows the correct server endpoint pattern to follow.
 
 ## Revised Analysis
-**Do not build until traffic milestone: 1,000+ daily visitors.** Building affiliate infrastructure before that is premature — the programs won't accept you, and it clutters the codebase for no revenue. This is a gate-on-traffic feature.
+**Broken unique constraint in spec:** The proposed `@@unique([userId, isActive])` is logically wrong — PostgreSQL would collide on `(userId, false)` for the second inactive record. Prisma has no partial unique index support. Enforce single-active-check-in in application logic inside the toggle handler (deactivate existing before creating new).
 
-**Revenue potential once at traffic milestone:**
-- SafetyWing: ~$50/referral. At 10 signups/month = $500/month
-- Booking.com: 4–8% commission on bookings
-- Wise: per-card referral commission
+**Cron placement:** The auto-expire cron belongs in `apps/collector/server/api/cron/checkins-expire.get.ts` — not in the nomad app. Collector already has Vercel cron infrastructure and DB access. Pattern follows existing `weather-daily.get.ts`.
 
-**Implementation is deliberately simple:** No affiliate tracking infrastructure needed in the app. Affiliate programs provide UTM links or redirect links — just place them statically in a component. No DB changes, no analytics hooks in the app.
-
-**City-specific Booking.com links:** Booking.com's affiliate URL accepts destination as a query param: `https://www.booking.com/searchresults.html?aid=[YOUR_AID]&ss=[city name]`. Generate dynamically from `city.name`.
-
-**Non-intrusive placement:** Small section at the bottom of city pages, clearly labeled. No popups, no banners, no interstitials. Trust is more valuable than aggressive monetization.
+**Toggle semantics:** Toggling the same city again = check out. Toggling a different city = move to new city (deactivate old, activate new).
 
 ## Implementation Plan
 
 ### Database Changes
-None.
+```prisma
+model CheckIn {
+  id         String    @id @default(cuid())
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @default(now()) @updatedAt
+  userId     String
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  citySlug   String
+  city       City      @relation(fields: [citySlug], references: [slug], onDelete: Cascade)
+  arrivingAt DateTime?
+  leavingAt  DateTime?
+  isActive   Boolean   @default(true)
+
+  @@index([userId, isActive])
+  @@index([citySlug, isActive])
+}
+```
+Add `checkIns CheckIn[]` back-relations to `User` and `City`.
 
 ### API Endpoints
-None. Affiliate links are static or dynamically constructed client-side from city name.
+**`apps/nomad/src/server/api/checkins/toggle.post.ts`** — POST, protected
+- Body: `{ citySlug: string, arrivingAt?: string }`
+- Deactivates existing active check-in for user (if any); creates new active check-in for target city (or just deactivates if same city = toggle off)
+- Returns `{ checkedIn: boolean, citySlug: string | null }`
+
+**`apps/nomad/src/server/api/checkins/city/[slug].get.ts`** — GET, public
+- Returns `{ count: number }` of active check-ins for that city
+
+**`apps/nomad/src/server/api/checkins/me.get.ts`** — GET, protected
+- Returns `{ citySlug: string | null, arrivingAt: string | null }`
+
+**Modify** `apps/nomad/src/server/api/cities/[slug].get.ts`
+- Add parallel `prisma.checkIn.count({ where: { citySlug: slug, isActive: true } })` to return `activeCheckInCount`
+
+**`apps/collector/server/api/cron/checkins-expire.get.ts`** — cron
+- Sets `isActive = false` on records where `createdAt < 90 days ago AND isActive = true`
 
 ### Frontend Components/Pages
-**New file**: `apps/nomad/src/components/AffiliateLinks.vue`
-- Props: `cityName: string`, `citySlug: string`
-- Renders 2-3 contextual affiliate links:
-  - "Book accommodation in {city}" → Booking.com (city-specific URL)
-  - "Get travel insurance" → SafetyWing (static link)
-  - "Open a travel bank account" → Wise (static link)
-- Clearly labeled: "Our partners" or "Affiliate links — we earn a small commission at no cost to you"
-- Minimal styling: small card at bottom of city page, not a banner
+**New file**: `apps/nomad/src/composables/useCheckIn.ts`
+- Wraps me endpoint + toggle mutation with optimistic update
+
+**New file**: `apps/nomad/src/components/CheckInButton.vue`
+- Auth-gated (shows sign-in prompt if not authenticated)
+- Shows "Check in" / "I'm here" state based on current check-in status
 
 **Modify** `apps/nomad/src/pages/cities/[slug].vue`
-- Add `<AffiliateLinks :city-name="data.name" :city-slug="slug" />` at the very bottom of city content, before footer
+- Add `<CheckInButton>` to city hero area
+- Show "X nomads here this month" count badge
+
+**New file**: `apps/nomad/src/components/dashboard/CheckInStatus.vue`
+- Current active check-in card on dashboard
 
 ### i18n Changes
 Add to all locale files:
 ```json
-"affiliate": {
-  "title": "Useful Links",
-  "disclaimer": "We may earn a commission from these links at no cost to you.",
-  "bookAccommodation": "Book accommodation in {city}",
-  "travelInsurance": "Get travel insurance (SafetyWing)",
-  "bankAccount": "Open a travel bank account (Wise)"
+"checkIn": {
+  "button": "Check in",
+  "checkedIn": "I'm here",
+  "checkOut": "Check out",
+  "signInToCheckIn": "Sign in to check in",
+  "nomadsHere": "{count} nomad here | {count} nomads here this month",
+  "currentlyIn": "Currently in {city}",
+  "noActiveCheckIn": "Not checked in anywhere"
 }
 ```
 
 ## Dependencies
-None technical. Gate on traffic milestone (1,000+ daily visitors).
+- IDEA-17 (Season Ratings) wants to gate ratings on check-in history — soft dependency.
+- [removed] (Trending) benefits from check-in velocity data.
 
 ## Notes
-- Apply for Booking.com affiliate program at affiliates.booking.com (requires existing traffic)
-- Apply for SafetyWing affiliate at safetywing.com/nomad-health (lower traffic bar)
-- Apply for Wise affiliate at wise.com/partners
-- Keep it subtle — the trust built by ad-free UX is worth more than aggressive affiliate placement at this stage.
-- Add a `/affiliate-disclosure` page for legal compliance (one-time, static content).
+- Single-active constraint must be enforced in application logic, not DB constraint.
+- Cron in collector, not nomad — follow the `weather-daily.get.ts` pattern exactly.
+- 90-day auto-expiry keeps the "nomads here this month" count fresh and meaningful.

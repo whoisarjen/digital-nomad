@@ -1,35 +1,24 @@
-# IDEA-08: Schengen 90/180 Day Calculator
+# IDEA-08: Affiliate Integration
 **Status:** NOT_STARTED
-**Priority:** 8/23
-**Complexity:** M
+**Priority:** 08/23
+**Complexity:** S
 
 ## What's Already Implemented
-Nothing. No `/tools/` pages directory exists. No Schengen-related logic anywhere in the codebase. `City.region` (Region enum) is available for non-Schengen recommendations.
+Nothing. No affiliate links anywhere in the codebase.
 
 ## Revised Analysis
-Core feature is pure date arithmetic — entirely client-side. The complexity is in:
-1. Setting up `/tools/` page structure and i18n routing
-2. The rolling 180-day window algorithm (common mistake: treating it as a fixed calendar period)
-3. Non-Schengen city recommendations — filter by region/country
+**Do not build until traffic milestone: 1,000+ daily visitors.** Building affiliate infrastructure before that is premature — the programs won't accept you, and it clutters the codebase for no revenue. This is a gate-on-traffic feature.
 
-**Rolling window algorithm:**
-For any check date D: look back 180 days. Sum overlapping days from each entry/exit pair within `[D - 180, D]`. Must not exceed 90.
+**Revenue potential once at traffic milestone:**
+- SafetyWing: ~$50/referral. At 10 signups/month = $500/month
+- Booking.com: 4–8% commission on bookings
+- Wise: per-card referral commission
 
-```ts
-for each date D:
-  windowStart = D - 180 days
-  daysUsed = sum of overlap between each [entry, exit] pair and [windowStart, D]
-  if daysUsed >= 90: you're at limit
-nextSafeEntry = date when oldest days fall off the 180-day window
-```
+**Implementation is deliberately simple:** No affiliate tracking infrastructure needed in the app. Affiliate programs provide UTM links or redirect links — just place them statically in a component. No DB changes, no analytics hooks in the app.
 
-**Non-Schengen recommendations:** Use a hardcoded list of Schengen member countries (26) to filter `City.country`. Any `region !== 'Europe'` is automatically non-Schengen. Among European cities, filter out the 26 Schengen members. No API change strictly needed — a simple static `SCHENGEN_COUNTRIES` set in a constant.
+**City-specific Booking.com links:** Booking.com's affiliate URL accepts destination as a query param: `https://www.booking.com/searchresults.html?aid=[YOUR_AID]&ss=[city name]`. Generate dynamically from `city.name`.
 
-**i18n routing:** Start with English-only path `/tools/schengen-calculator`. Add `/narzedzia/kalkulator-schengen` for PL in a follow-up pass. The `defineI18nRoute` pattern is established.
-
-**SSR:** Page has no server-side data dependency. Use `definePageMeta({ ssr: false })` or leave SSR on with empty initial state — both work.
-
-**Shareable state:** Store entry/exit pairs in URL query params as `?e=2025-01-10:2025-02-15,2025-03-01:2025-04-20` — nice-to-have V2.
+**Non-intrusive placement:** Small section at the bottom of city pages, clearly labeled. No popups, no banners, no interstitials. Trust is more valuable than aggressive monetization.
 
 ## Implementation Plan
 
@@ -37,54 +26,39 @@ nextSafeEntry = date when oldest days fall off the 180-day window
 None.
 
 ### API Endpoints
-None for the calculator itself. Optionally extend `GET /api/cities` with `nonSchengen=true` param for recommendations — a 5-line addition to `getCitiesSchema` and `index.get.ts`.
+None. Affiliate links are static or dynamically constructed client-side from city name.
 
 ### Frontend Components/Pages
-**New file**: `apps/nomad/src/pages/tools/schengen-calculator.vue`
-- `defineI18nRoute({ paths: { en: '/tools/schengen-calculator' } })`
-- Full SEO `useHead`: title "Schengen Calculator for Digital Nomads | 90/180 Day Tracker"
-- Entry/exit date pair inputs with add/remove rows
-- Computed: `daysUsed`, `daysRemaining`, `nextSafeEntry`, `isOverLimit`
-- Visual progress bar (0–90, color-coded: green < 60, yellow 60–80, red 80+)
-- Warning + non-Schengen city recommendations when < 20 days remain
+**New file**: `apps/nomad/src/components/AffiliateLinks.vue`
+- Props: `cityName: string`, `citySlug: string`
+- Renders 2-3 contextual affiliate links:
+  - "Book accommodation in {city}" → Booking.com (city-specific URL)
+  - "Get travel insurance" → SafetyWing (static link)
+  - "Open a travel bank account" → Wise (static link)
+- Clearly labeled: "Our partners" or "Affiliate links — we earn a small commission at no cost to you"
+- Minimal styling: small card at bottom of city page, not a banner
 
-**New file**: `apps/nomad/src/composables/useSchengenCalculator.ts`
-- Input: `entries: Ref<Array<{ from: string; to: string }>>`
-- Pure date arithmetic, no API calls
-- Exports: `daysUsed`, `daysRemaining`, `nextSafeEntry`, `isOverLimit`
-
-**New file**: `apps/nomad/src/components/SchengenEntryRow.vue`
-- Two date inputs (entry date, exit date), remove button
-
-**New constant**: Add `SCHENGEN_COUNTRY_CODES` set to `apps/nomad/src/shared/global.utils.ts`
-- 26 Schengen member country codes for filtering recommendations
-
-**Add link** in footer or nav to `/tools/schengen-calculator`
-
-**Sitemap:** Add static entry via `nuxt.config.ts` `sitemap.urls` — simpler than a `__sitemap__` API for fixed URLs.
+**Modify** `apps/nomad/src/pages/cities/[slug].vue`
+- Add `<AffiliateLinks :city-name="data.name" :city-slug="slug" />` at the very bottom of city content, before footer
 
 ### i18n Changes
 Add to all locale files:
 ```json
-"schengen": {
-  "title": "Schengen 90/180 Day Calculator",
-  "subtitle": "Track your Schengen zone days remaining",
-  "addEntry": "Add entry",
-  "entryDate": "Entry date",
-  "exitDate": "Exit date",
-  "daysUsed": "{days} days used",
-  "daysRemaining": "{days} days remaining",
-  "nextSafeEntry": "Next safe entry: {date}",
-  "overLimit": "You are over the 90-day limit",
-  "lowDays": "Running low — consider these non-Schengen cities:",
-  "noEntries": "Add your first Schengen entry above"
+"affiliate": {
+  "title": "Useful Links",
+  "disclaimer": "We may earn a commission from these links at no cost to you.",
+  "bookAccommodation": "Book accommodation in {city}",
+  "travelInsurance": "Get travel insurance (SafetyWing)",
+  "bankAccount": "Open a travel bank account (Wise)"
 }
 ```
 
 ## Dependencies
-None. Fully self-contained. Shares `/tools/` directory with IDEA-09.
+None technical. Gate on traffic milestone (1,000+ daily visitors).
 
 ## Notes
-- Non-Schengen European countries to include in recommendations: UK, Ireland, Albania, Bosnia, Kosovo, North Macedonia, Moldova, Montenegro, Serbia, Ukraine, Georgia, Armenia, Azerbaijan.
-- The rolling 180-day window is commonly misunderstood — implement carefully and add a clear tooltip/explanation on the page.
-- Add the tools pages to the sitemap statically.
+- Apply for Booking.com affiliate program at affiliates.booking.com (requires existing traffic)
+- Apply for SafetyWing affiliate at safetywing.com/nomad-health (lower traffic bar)
+- Apply for Wise affiliate at wise.com/partners
+- Keep it subtle — the trust built by ad-free UX is worth more than aggressive affiliate placement at this stage.
+- Add a `/affiliate-disclosure` page for legal compliance (one-time, static content).

@@ -1,166 +1,146 @@
-# IDEA-10: City Alerts / Watchlist
-
+# IDEA-10: Digital Nomad Visa Directory
 **Status:** NOT_STARTED
 **Priority:** 10/23
 **Complexity:** XL
 
 ## What's Already Implemented
-
-The landing page (`apps/nomad/src/pages/index.vue`) already has a "soon" teaser card labeled "Monthly cost alerts" with the text "Get notified when cost of living changes in your saved cities". The teaser uses `LucideBell` and the `landing.soon` badge. No backend, no schema, no UI beyond this placeholder.
-
-The `Favorite` model and full favorites flow (toggle, list, slugs composable, dashboard SavedCities widget) is fully implemented. This is the natural foundation — alerts extend favorites, they don't replace them.
-
-Auth is implemented via `@sidebase/nuxt-auth` with session management. `defineProtectedEventHandler` is available in server utils for user-gated endpoints.
+Nothing. No `CountryVisa` model, no `/pages/visas/` directory, no visa-related fields on `City` or any other model. Confirmed by grepping the entire schema and source tree.
 
 ## Revised Analysis
 
-This is the most complex idea in the batch. Several concerns based on the real codebase:
+### The original plan is right but the scope is too ambitious for a first pass
 
-**Email library: not installed.** `apps/nomad/package.json` has zero email dependencies — no Resend, Nodemailer, SendGrid, Postmark. This is a hard blocker for the weekly digest. You need to pick and install an email provider before this feature can be completed. Given the existing Vercel deployment, **Resend** is the obvious choice (good Vercel integration, generous free tier, modern API).
+The proposed `CountryVisa` model is country-level data, but the existing data model is entirely city-level. This creates a structural mismatch that needs to be resolved upfront. The `City` model has `countryCode` and `countrySlug` fields, which provides the join key, but there is no `Country` model — countries are just denormalized strings on `City`. Before building visa pages, you need to decide whether to create a proper `Country` model or attach `CountryVisa` as a standalone model keyed by `countryCode`.
 
-**Threshold model for alerts.** The proposed schema tracks `threshold` + `direction` (ABOVE/BELOW) per metric. This is flexible but creates complexity: when the cron runs, it must query every active alert, fetch the current metric value for each city, and compare. With potentially many users and many alerts, this becomes O(alerts) queries. Better approach: cron fetches all cities' current values once, then loads all active alerts and evaluates in memory. This is feasible at current scale.
+**Recommendation: standalone `CountryVisa` keyed by `countryCode`** — simpler, no migration of existing city data, and countryCode (ISO-2) is already on every `City` row. This avoids creating a `Country` model just for visas.
 
-**"Cost change" vs. absolute threshold.** The original schema checks if a metric crosses a fixed threshold (e.g., "notify me when cost drops below $2000"). An alternative is "notify me when cost changes by X%". The Decimal threshold approach in the proposal is fine — keep it.
+### Data is the real blocker, not the schema
 
-**`lastTriggered` prevents spam.** The schema's `lastTriggered DateTime?` field is critical. The cron should only re-trigger an alert if `lastTriggered` is null or older than the check interval (e.g., 7 days). This must be enforced in the cron logic.
+The schema is the easy part (one afternoon). The hard part is sourcing accurate, legally defensible visa data for even 30 countries across three passport types (US/EU/UK). Visa-free day counts change with bilateral treaties. A stale "90 days visa-free" entry for a country that just changed its policy is actively harmful. Every row needs a source URL and an `updatedAt` to surface staleness. The original plan mentions "legal accuracy matters — add disclaimers" but does not solve the freshness problem.
 
-**Max 10 alerts per user.** Enforce this at the POST endpoint level — `prisma.cityAlert.count({ where: { userId, isActive: true } })` and reject if >= 10.
+**Recommendation: add a `sourceUrl` and `verifiedAt` field to each row, and show a visible "Last verified: [date]" on every entry in the UI.** This is table stakes for legal defensibility.
 
-**AlertMetric values.** The proposed enum values (COST_NOMAD, COST_EXPAT, INTERNET_SPEED, SAFETY) map to `City.costForNomadInUsd`, `City.costForExpatInUsd`, `City.internetSpeedCity`, and `City.safety`. Note that `safety` is a `Level` enum (LOW/MIDDLE/HIGH), not a Decimal, so comparing it with a Decimal threshold is awkward. Options: (a) exclude SAFETY from AlertMetric for now and only support numeric fields, or (b) map Level to a numeric value (LOW=1, MIDDLE=2, HIGH=3) for comparison. Recommendation: start with COST_NOMAD and INTERNET_SPEED only — these are the most valuable to nomads and are pure numeric fields.
+### The `/visas` index with passport selector is high-effort UI for low immediate SEO return
 
-**Cron placement.** The `apps/collector` app hosts all cron jobs (weather-daily, legacy cron). The alert digest cron belongs there too, not in `apps/nomad`.
+The higher-value SEO play is adding a compact "Visa Info" card directly on existing city pages (which already rank). This surfaces visa data on pages that already have traffic without needing to build and index an entirely new section. Build the city-page card first, defer the full `/visas` directory index until you have data for 30+ countries.
 
-**Dashboard section.** The dashboard page (`apps/nomad/src/pages/dashboard.vue`) currently has: NomadIdentity, RoadmapBoard, SavedCities, AccountDangerZone. The alert management UI fits as a new section between SavedCities and AccountDangerZone.
+### Schengen vs nomad visa are two different user intents
 
-**Relationship to Favorites.** The schema uses `citySlug` (not a FK to Favorite). This is correct — you may want to alert on a city you haven't favorited. But the UX should nudge users to add alerts from the city page or from SavedCities.
+`isSchengen` is a binary flag that answers "can I stay 90 days in Schengen with US/EU/UK passport?" — this is mostly static and easy. The nomad visa fields (`hasNomadVisa`, `nomadVisaCost`, etc.) answer a completely different question and the data is much harder to source and keep current. Split these into separate display sections in the UI with separate "last verified" timestamps.
+
+### The passport selector (US/EU/UK) is important but requires careful i18n handling
+
+The selector label and visa-free day copy must be translated in all 11 locales. The data itself (day counts, links) is not localized — it is factual. Only UI labels need locale keys.
 
 ## Implementation Plan
 
 ### Database Changes
 
 Add to `packages/db/prisma/schema.prisma`:
+
 ```prisma
-enum AlertMetric {
-  COST_NOMAD
-  COST_EXPAT
-  INTERNET_SPEED
-  SAFETY
-}
+model CountryVisa {
+  countryCode String @id  // ISO 3166-1 alpha-2, matches City.countryCode
 
-enum AlertDirection {
-  BELOW
-  ABOVE
-}
+  // Visa-free days (-1 = visa required, 0 = e-visa, positive = visa-free days)
+  visaFreeUsaDays Int?
+  visaFreeEuDays  Int?
+  visaFreeUkDays  Int?
 
-model CityAlert {
-  id          String         @id @default(cuid())
-  userId      String
-  user        User           @relation(fields: [userId], references: [id], onDelete: Cascade)
-  citySlug    String
-  city        City           @relation(fields: [citySlug], references: [slug], onDelete: Cascade)
-  metric      AlertMetric
-  threshold   Decimal        @db.Decimal(10, 2)
-  direction   AlertDirection
-  isActive    Boolean        @default(true)
-  lastTriggered DateTime?
-  createdAt   DateTime       @default(now())
+  // Schengen Area membership
+  isSchengen Boolean @default(false)
 
-  @@index([userId, isActive])
-  @@index([isActive])
+  // Tax residency threshold
+  taxThresholdDays Int?  // days before potential tax residency triggered
+
+  // Digital nomad visa
+  hasNomadVisa       Boolean  @default(false)
+  nomadVisaCostUsd   Int?     // approximate annual cost in USD
+  nomadVisaDurationMonths Int? // visa validity in months
+  nomadVisaIncomeUsd Int?     // minimum monthly income requirement in USD
+  nomadVisaLink      String?  // official government URL
+
+  // Data provenance
+  sourceUrl   String?
+  verifiedAt  DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 }
 ```
 
-Also add relations to `User` and `City` models:
-```prisma
-// In User model:
-alerts CityAlert[]
-
-// In City model:
-alerts CityAlert[]
-```
-
-User runs `prisma db push`.
+No relation from `City` to `CountryVisa` is needed — join happens at the API layer via `countryCode`.
 
 ### API Endpoints
 
-All endpoints in `apps/nomad/src/server/api/alerts/`:
+- `apps/nomad/src/server/api/visa/[countryCode].get.ts`
+  - Returns full `CountryVisa` row for a given ISO country code
+  - Used by the city detail page to show the visa card
+  - Returns `null` if no record exists (not all countries will have data initially)
 
-**`index.post.ts`** — Create alert
-- `defineProtectedEventHandler`
-- Validate body: `citySlug`, `metric` (AlertMetric enum), `threshold` (number), `direction` (AlertDirection enum)
-- Check count: reject if user has >= 10 active alerts
-- `prisma.cityAlert.create({ select: { id, metric, threshold, direction, citySlug, isActive, createdAt } })`
-
-**`index.get.ts`** — List alerts for current user
-- `defineProtectedEventHandler`
-- `prisma.cityAlert.findMany({ where: { userId, isActive: true }, select: { id, metric, threshold, direction, citySlug, lastTriggered, createdAt, city: { select: { name, country } } }, orderBy: { createdAt: 'desc' } })`
-
-**`[id].delete.ts`** — Delete / deactivate alert
-- `defineProtectedEventHandler`
-- Validate the alert belongs to the current user before deleting
-- `prisma.cityAlert.delete({ where: { id, userId } })`
-
-**Cron: `apps/collector/server/api/cron/alert-digest.get.ts`**
-- Fetch all active alerts: `prisma.cityAlert.findMany({ where: { isActive: true }, select: { id, userId, citySlug, metric, threshold, direction, lastTriggered, user: { select: { email } } } })`
-- For each unique citySlug, fetch current values once (group by city to avoid N+1)
-- Evaluate each alert against current value
-- Skip alerts where `lastTriggered` is within last 6 days (rate-limit to roughly weekly)
-- For triggered alerts: send email via Resend, update `lastTriggered`
-- Group triggered alerts by user to send one digest email per user, not one per alert
+- `apps/nomad/src/server/api/visa/index.get.ts`
+  - Returns all `CountryVisa` rows ordered by `countryCode`
+  - Used by the `/visas` directory index page
+  - Query params: `passport` (us | eu | uk), `hasNomadVisa` (boolean), optional region filter
 
 ### Frontend Components/Pages
 
-**`apps/nomad/src/components/dashboard/CityAlerts.vue`** (new)
-- List current alerts with city name, metric, threshold, direction
-- Delete button per alert
-- "Add alert" form (city search, metric picker, threshold input, direction toggle)
-- Show remaining alert slots (max 10)
+**Phase 1 — city page integration (build this first):**
+- `apps/nomad/src/components/CityVisaCard.vue`
+  - New section card on `/cities/[slug]` page, placed after "Quality of Life" card
+  - Shows visa-free days for all three passports in a three-column layout
+  - Shows nomad visa summary block (cost, duration, income, link) if `hasNomadVisa`
+  - Shows Schengen badge and tax threshold note
+  - Shows "Last verified: [date]" and source link
+  - Shows disclaimer: "This is informational only. Always verify with official sources."
+  - Renders nothing (hidden) if no `CountryVisa` record exists for that country
 
-**`apps/nomad/src/pages/dashboard.vue`** (modify)
-- Import and add `<CityAlerts />` component below SavedCities section
-
-**`apps/nomad/src/pages/cities/[slug].vue`** (modify)
-- Add "Set Alert" button in the header badges area (next to FavoriteButton)
-- Auth-gated via `<AuthGate>`
-
-**`apps/nomad/src/composables/useCityAlerts.ts`** (new)
-- Wraps GET `/api/alerts` via `useCustomQuery`
+**Phase 2 — visa directory (build after 30+ countries are seeded):**
+- `apps/nomad/src/pages/visas/index.vue`
+  - Full directory with passport selector tabs (US / EU / UK)
+  - Filterable table: visa-free days, has nomad visa, region
+  - Link to country's city pages
 
 ### i18n Changes
 
-Add to `apps/nomad/src/locales/en.json`:
+Add to all 11 locale files (`en.json`, `pl.json`, etc.):
+
 ```json
-"alerts": {
-  "title": "City Alerts",
-  "add": "Add Alert",
-  "delete": "Remove",
-  "metric": {
-    "COST_NOMAD": "Nomad Cost",
-    "COST_EXPAT": "Expat Cost",
-    "INTERNET_SPEED": "Internet Speed",
-    "SAFETY": "Safety"
-  },
-  "direction": {
-    "BELOW": "drops below",
-    "ABOVE": "rises above"
-  },
-  "maxReached": "Maximum 10 alerts reached",
-  "noAlerts": "No alerts set. Add one from any city page.",
-  "slotsRemaining": "{count} slots remaining",
-  "notifyWhen": "Notify me when {city} {metric} {direction} {threshold}"
+"visa": {
+  "title": "Visa Information",
+  "passportUs": "US Passport",
+  "passportEu": "EU Passport",
+  "passportUk": "UK Passport",
+  "visaFreeDays": "{days} days visa-free",
+  "visaRequired": "Visa required",
+  "eVisaAvailable": "e-Visa available",
+  "isSchengen": "Schengen Area",
+  "taxThreshold": "Tax residency after {days} days",
+  "nomadVisa": "Nomad Visa Available",
+  "nomadVisaCost": "~${cost}/year",
+  "nomadVisaDuration": "{months} months",
+  "nomadVisaIncome": "Min. income: ${income}/mo",
+  "nomadVisaApply": "Apply / Official Info",
+  "verifiedAt": "Last verified: {date}",
+  "disclaimer": "Visa rules change. Always verify with official government sources before travel.",
+  "noData": "Visa data not yet available for this country."
 }
 ```
 
-## Dependencies
+### Sitemap Changes
 
-- Requires an email provider to be installed (Resend recommended). This is a hard dependency before the cron can be useful.
-- The landing page teaser (in `index.vue`) references "Monthly cost alerts" — once this ships, that card should either link to the dashboard or be removed.
+- `apps/nomad/src/server/api/__sitemap__/visas.ts` — enumerate all visa directory pages once Phase 2 is built
+- Add `/api/__sitemap__/visas` to the `sources` array in `nuxt.config.ts`
+
+## Dependencies
+- No hard dependencies on other IDEAs
+- Soft dependency: having `/cities/[slug]` pages already ranking well makes Phase 1 (city card) immediately valuable
 
 ## Notes
 
-- **Install Resend first.** Without email, you can build the full CRUD for alerts (schema, API, UI) but the cron is inert. Consider doing the CRUD work first in one PR and wiring up email in a follow-up.
-- The `SAFETY` metric is a `Level` enum, not a number. If you include it in `AlertMetric`, the cron needs to map Level → integer for threshold comparison. This is a source of bugs. Strong recommendation: omit SAFETY from the initial implementation and add it later.
-- The alert digest email UX matters a lot. A single batched email per user ("3 of your city alerts triggered this week") is far better than 3 separate emails. Build the batching logic from the start.
-- Consider adding a `Vercel Cron` entry in `vercel.json` for the collector app to run `alert-digest` weekly (e.g., every Monday at 08:00 UTC). Check whether the collector app has a `vercel.json` already.
-- The existing `processInBatches` utility in the collector app can be used in the cron to avoid overwhelming the DB.
-- The max-10-alerts rule must be enforced server-side, not just in the UI.
+- **Start with Phase 1 only.** Seed data for 10-15 countries where the nomad visa program is well-known (Portugal, Thailand, Indonesia/Bali, Georgia, Croatia, Costa Rica, UAE, Estonia, Czech Republic, Hungary, Mexico) and ship the city-page card. This gives real SEO value on day one with minimal surface area.
+- **Do not build `/visas/index.vue` until you have 30+ country rows.** A directory with 10 rows looks thin and does not rank.
+- **Encoding convention for visa-free days:** use `-1` for "visa required, no e-visa", `0` for "e-visa available", and a positive integer for visa-free days. This keeps the column a single `Int?` instead of a string enum.
+- **EU passport complexity:** "EU passport" is not a single thing — a French passport and a Romanian passport have different visa-free access in some countries. For simplicity, use the Schengen passport baseline (worst-case EU access). Note this limitation in the UI.
+- **The `nomadVisaLink` must point to the official government URL**, not a third-party blog post, to maintain credibility.
+- This feature is high-effort primarily due to data collection, not engineering. Budget 3-4 hours for the schema + API + city card, and much more time for ongoing data maintenance.
