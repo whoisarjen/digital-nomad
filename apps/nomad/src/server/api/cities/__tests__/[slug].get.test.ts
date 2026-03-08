@@ -23,6 +23,9 @@ const mockCity = (overrides: Record<string, unknown> = {}) => ({
     internetSpeed: 100,
     internetSpeedRanking: 50,
     englishProficiency: 416,
+    plugTypes: 'A,B,C,I',
+    voltage: 220,
+    frequency: 50,
   },
   costForNomadInUsd: 1500,
   costForExpatInUsd: 2000,
@@ -91,5 +94,40 @@ describe('GET /api/cities/[slug]', () => {
     const result = await handler.default(createMockH3Event({ params: { slug: 'nowhere' } }))
 
     expect(result.englishProficiency).toBeNull()
+  })
+
+  it('returns plugTypes, voltage, frequency from country', async () => {
+    getValidatedRouterParamsMock.mockResolvedValue({ slug: 'bangkok' })
+    prismaMock.city.findFirstOrThrow.mockResolvedValue(mockCity())
+
+    const result = await handler.default(createMockH3Event({ params: { slug: 'bangkok' } }))
+
+    expect(result.plugTypes).toBe('A,B,C,I')
+    expect(result.voltage).toBe(220)
+    expect(result.frequency).toBe(50)
+  })
+
+  it('returns null plugTypes/voltage/frequency when country has no electricity data', async () => {
+    getValidatedRouterParamsMock.mockResolvedValue({ slug: 'nowhere' })
+    prismaMock.city.findFirstOrThrow.mockResolvedValue(
+      mockCity({
+        country: {
+          name: 'Unknown',
+          region: 'Africa',
+          internetSpeed: 10,
+          internetSpeedRanking: 100,
+          englishProficiency: 0,
+          plugTypes: null,
+          voltage: null,
+          frequency: null,
+        },
+      }),
+    )
+
+    const result = await handler.default(createMockH3Event({ params: { slug: 'nowhere' } }))
+
+    expect(result.plugTypes).toBeNull()
+    expect(result.voltage).toBeNull()
+    expect(result.frequency).toBeNull()
   })
 })

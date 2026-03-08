@@ -15,6 +15,9 @@ export default defineEventHandler(async (event) => {
           internetSpeed: true,
           internetSpeedRanking: true,
           englishProficiency: true,
+          plugTypes: true,
+          voltage: true,
+          frequency: true,
         },
       },
       costForNomadInUsd: true,
@@ -67,5 +70,8 @@ export default defineEventHandler(async (event) => {
     internetSpeedCountry: countryData.internetSpeed,
     internetSpeedCountryRanking: countryData.internetSpeedRanking,
     englishProficiency,
+    plugTypes: countryData.plugTypes ?? null,
+    voltage: countryData.voltage ?? null,
+    frequency: countryData.frequency ?? null,
   }
 })
