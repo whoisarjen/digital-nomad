@@ -30,10 +30,10 @@
               {{ $t('filters.title') }}
             </h3>
             <span
-              v-if="activeFilterCount"
+              v-if="draftFilterCount"
               class="min-w-5 h-5 rounded-full bg-accent-500 text-white text-[11px] font-bold flex items-center justify-center px-1.5 tabular-nums"
             >
-              {{ activeFilterCount }}
+              {{ draftFilterCount }}
             </span>
           </div>
           <button
@@ -81,27 +81,27 @@
 
             <!-- Weather -->
             <div class="bg-white rounded-xl border border-gray-100 p-4 flex flex-col">
-              <WeathersPicker />
+              <WeathersPicker v-model="draftWeathers" />
             </div>
 
             <!-- Months (full width on desktop) -->
             <div class="md:col-span-2 bg-white rounded-xl border border-gray-100 p-4">
-              <MonthsPicker />
+              <MonthsPicker v-model="draftMonths" />
             </div>
 
             <!-- Temperature -->
             <div class="bg-white rounded-xl border border-gray-100 p-4 flex flex-col">
-              <TemperaturesPicker />
+              <TemperaturesPicker v-model="draftTemperatures" />
             </div>
 
             <!-- Budget -->
             <div class="bg-white rounded-xl border border-gray-100 p-4 flex flex-col">
-              <BudgetFilter />
+              <BudgetFilter v-model="draftCosts" />
             </div>
 
             <!-- Regions (full width on desktop) -->
             <div v-if="!hideRegions" class="md:col-span-2 bg-white rounded-xl border border-gray-100 p-4">
-              <RegionsPicker />
+              <RegionsPicker v-model="draftRegions" />
             </div>
 
             <!-- Dynamic pickers from API -->
@@ -112,6 +112,8 @@
                   :operation="(pickers as any)[key].operation"
                   :options="(pickers as any)[key].options"
                   isLabel
+                  :modelValue="(draftQuery[key] as string) ?? '-1'"
+                  @update:modelValue="setDraftSingleValue(key, $event)"
                 />
               </div>
             </template>
@@ -123,16 +125,16 @@
           <div class="px-5 py-3 flex items-center gap-3">
             <button
               @click="clearAndClose"
-              :disabled="!activeFilterCount"
+              :disabled="!draftFilterCount"
               class="px-5 py-2.5 rounded-xl border text-sm font-medium transition-colors"
-              :class="activeFilterCount
+              :class="draftFilterCount
                 ? 'border-gray-300 text-gray-700 hover:bg-gray-100 cursor-pointer'
                 : 'border-gray-200 text-gray-300 cursor-not-allowed'"
             >
               {{ $t('filters.clear') }}
             </button>
             <button
-              @click="close"
+              @click="applyAndClose"
               class="flex-1 py-2.5 rounded-xl bg-primary-600 hover:bg-primary-700 text-white text-sm font-semibold transition-colors"
             >
               Show results
@@ -145,6 +147,11 @@
 </template>
 
 <script setup lang="ts">
+import type { LocationQueryValue } from 'vue-router'
+import { getUserCurrentMonthString } from '~/shared/global.utils'
+
+type DraftQuery = Record<string, LocationQueryValue | LocationQueryValue[]>
+
 const props = defineProps<{
   modelValue: boolean
   pickers: any
@@ -159,21 +166,112 @@ const emit = defineEmits<{
   'clearFilters': []
 }>()
 
-function close() {
-  emit('update:modelValue', false)
-}
+const route = useRoute()
+const router = useRouter()
 
-function clearAndClose() {
-  emit('clearFilters')
-  close()
-}
+// --- Draft state ---
+const DRAFT_EXCLUDE_PARAMS = ['page', 'q', 'orderBy', 'sort']
 
-// Lock body scroll when drawer is open
+const draftQuery = ref<DraftQuery>({ ...route.query })
+
+// Sync draft from route when drawer is closed and route changes
+watch(() => route.query, (newQuery) => {
+  if (!props.modelValue) {
+    draftQuery.value = { ...newQuery }
+  }
+})
+
+// On open: refresh draft from route
 watch(() => props.modelValue, (open) => {
+  if (open) {
+    draftQuery.value = { ...route.query }
+  }
   if (import.meta.client) {
     document.body.style.overflow = open ? 'hidden' : ''
   }
 })
+
+// --- Draft computed getters/setters for pickers ---
+
+const draftWeathers = computed<string[]>({
+  get: () => toStringArray(draftQuery.value.weathers),
+  set: (val) => {
+    const next = { ...draftQuery.value }
+    if (val.length) { next.weathers = val } else { delete next.weathers }
+    draftQuery.value = next
+  },
+})
+
+const draftRegions = computed<string[]>({
+  get: () => toStringArray(draftQuery.value.regions),
+  set: (val) => {
+    const next = { ...draftQuery.value }
+    if (val.length) { next.regions = val } else { delete next.regions }
+    draftQuery.value = next
+  },
+})
+
+const draftMonths = computed<string>({
+  get: () => (draftQuery.value.months as string) ?? getUserCurrentMonthString(),
+  set: (val) => {
+    draftQuery.value = { ...draftQuery.value, months: val }
+  },
+})
+
+const draftTemperatures = computed<string[] | undefined>({
+  get: () => {
+    const val = draftQuery.value.temperatures
+    if (!val) return undefined
+    return toStringArray(val)
+  },
+  set: (val) => {
+    const next = { ...draftQuery.value }
+    if (val?.length) { next.temperatures = val } else { delete next.temperatures }
+    draftQuery.value = next
+  },
+})
+
+const draftCosts = computed<string | undefined>({
+  get: () => (draftQuery.value.costs as string) ?? undefined,
+  set: (val) => {
+    const next = { ...draftQuery.value }
+    if (val !== undefined) { next.costs = val } else { delete next.costs }
+    draftQuery.value = next
+  },
+})
+
+function setDraftSingleValue(key: string, value: string) {
+  const next = { ...draftQuery.value }
+  if (value === '-1') { delete next[key] } else { next[key] = value }
+  draftQuery.value = next
+}
+
+// --- Draft filter count ---
+const draftFilterCount = computed(() =>
+  Object.keys(draftQuery.value).filter(k => !DRAFT_EXCLUDE_PARAMS.includes(k) && draftQuery.value[k] !== undefined).length,
+)
+
+// --- Helpers ---
+function toStringArray(val: DraftQuery[string] | undefined): string[] {
+  if (Array.isArray(val)) return val.filter((v): v is string => v !== null)
+  return val ? [val] : []
+}
+
+// --- Actions ---
+function close() {
+  emit('update:modelValue', false)
+}
+
+function applyAndClose() {
+  router.push({ query: { ...draftQuery.value, page: undefined } })
+  close()
+}
+
+function clearAndClose() {
+  emit('clearFilters')
+  draftQuery.value = {}
+  close()
+}
 
 // Close on Escape key + cleanup
 function handleKeydown(e: KeyboardEvent) {
