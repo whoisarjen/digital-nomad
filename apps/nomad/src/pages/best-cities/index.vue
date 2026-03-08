@@ -27,47 +27,66 @@
       </div>
     </section>
 
-    <!-- Month grid -->
+    <!-- Month list -->
     <section class="px-6 pb-16">
       <div class="max-w-screen-xl mx-auto">
+        <!-- Skeleton -->
         <template v-if="status === 'pending' || !data">
-          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-            <div v-for="i in 12" :key="i" class="h-56 skeleton rounded-2xl" />
+          <div class="space-y-2">
+            <div v-for="i in 12" :key="i" class="h-20 skeleton rounded-2xl" />
           </div>
         </template>
 
         <template v-else>
-          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+          <!-- Column headers -->
+          <div class="hidden sm:grid grid-cols-[8rem_1fr_auto_auto] gap-4 px-5 pb-2 text-xs font-medium text-white/25 uppercase tracking-wider border-b border-white/[0.06] mb-1">
+            <span>Month</span>
+            <span>#1 City</span>
+            <span>Score</span>
+            <span />
+          </div>
+
+          <div class="space-y-1">
             <NuxtLink
-              v-for="entry in data"
+              v-for="(entry, i) in data"
               :key="entry.month"
               :to="localePath({ name: 'best-cities-month', params: { month: monthValueToSlug(entry.month) } })"
-              class="group relative flex flex-col overflow-hidden rounded-2xl bg-white/[0.04] hover:bg-white/[0.07] border border-white/[0.06] hover:border-primary-400/30 transition-all duration-200"
+              class="group grid grid-cols-[8rem_1fr_auto_auto] gap-4 items-center px-5 py-4 rounded-2xl bg-white/[0.03] hover:bg-white/[0.07] border border-white/[0.05] hover:border-primary-400/30 transition-all duration-200"
             >
-              <div class="relative h-36 overflow-hidden">
-                <CustomNuxtImg
-                  v-if="entry.topCity.image"
-                  :src="entry.topCity.image.url"
-                  :alt="entry.topCity.name"
-                  :width="entry.topCity.image.width"
-                  :height="entry.topCity.image.height"
-                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-                <div v-else class="w-full h-full bg-white/[0.04]" />
-                <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                <span class="absolute top-2 left-3 text-xs font-semibold text-white/80 uppercase tracking-wider">
+              <!-- Month -->
+              <div>
+                <span class="text-lg font-bold text-white group-hover:text-primary-300 transition-colors">
                   {{ monthValueToDisplayName(entry.month) }}
                 </span>
+                <span class="block text-xs text-white/25 tabular-nums">{{ currentYear }}</span>
               </div>
 
-              <div class="p-3 flex flex-col gap-1">
-                <p class="text-white font-semibold text-sm leading-tight group-hover:text-primary-300 transition-colors">
-                  {{ entry.topCity.name }}
-                </p>
-                <p class="text-white/40 text-xs">{{ entry.topCity.country }}</p>
-                <div class="mt-1">
-                  <NomadScoreBadge :score="entry.topCity.totalScore" />
+              <!-- Top city -->
+              <div class="flex items-center gap-3 min-w-0">
+                <div class="relative shrink-0 w-10 h-10 rounded-lg overflow-hidden bg-white/[0.06]">
+                  <CustomNuxtImg
+                    v-if="entry.topCity.image"
+                    :src="entry.topCity.image.url"
+                    :alt="entry.topCity.name"
+                    :width="entry.topCity.image.width"
+                    :height="entry.topCity.image.height"
+                    class="w-full h-full object-cover"
+                  />
                 </div>
+                <div class="min-w-0">
+                  <p class="text-white/40 text-[10px] uppercase tracking-wider mb-0.5">#1 city</p>
+                  <p class="text-white text-sm font-medium truncate">{{ entry.topCity.name }}</p>
+                  <p class="text-white/40 text-xs truncate">{{ entry.topCity.country }}</p>
+                </div>
+              </div>
+
+              <!-- Score -->
+              <NomadScoreBadge :score="entry.topCity.totalScore" />
+
+              <!-- Arrow -->
+              <div class="flex items-center gap-1 text-white/30 group-hover:text-primary-400 transition-colors text-sm font-medium">
+                <span class="hidden sm:inline text-xs">View rankings</span>
+                <LucideChevronRight :size="16" />
               </div>
             </NuxtLink>
           </div>
