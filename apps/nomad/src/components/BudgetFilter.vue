@@ -33,28 +33,51 @@
 </template>
 
 <script lang="ts" setup>
+const props = defineProps<{
+  modelValue?: string
+}>()
+
+const emit = defineEmits<{
+  'update:modelValue': [value: string | undefined]
+}>()
+
 const { budget, setBudget } = useBudget()
 const route = useRoute()
 const router = useRouter()
 
-const isFilterActive = computed(() => !!route.query.costs)
+const instance = getCurrentInstance()
+const isControlled = computed(
+  () => instance?.vnode.props != null && 'modelValue' in instance.vnode.props,
+)
+
+const isFilterActive = computed(() =>
+  isControlled.value ? !!props.modelValue : !!route.query.costs,
+)
 
 function onSliderInput(e: Event) {
   const val = Number((e.target as HTMLInputElement).value)
   setBudget(val)
-  if (isFilterActive.value) {
+  if (isControlled.value) {
+    if (isFilterActive.value) {
+      emit('update:modelValue', String(val))
+    }
+  } else if (isFilterActive.value) {
     router.push({ query: { ...route.query, costs: String(val) } })
   }
 }
 
 function onToggleFilter(e: Event) {
   const checked = (e.target as HTMLInputElement).checked
-  const query = { ...route.query }
-  if (checked) {
-    query.costs = String(budget.value)
+  if (isControlled.value) {
+    emit('update:modelValue', checked ? String(budget.value) : undefined)
   } else {
-    delete query.costs
+    const query = { ...route.query }
+    if (checked) {
+      query.costs = String(budget.value)
+    } else {
+      delete query.costs
+    }
+    router.push({ query })
   }
-  router.push({ query })
 }
 </script>

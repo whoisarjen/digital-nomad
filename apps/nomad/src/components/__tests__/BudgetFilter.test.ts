@@ -1,10 +1,11 @@
 // @vitest-environment happy-dom
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { ref, computed, reactive } from 'vue'
+import { ref, computed, reactive, getCurrentInstance } from 'vue'
 import { mount } from '@vue/test-utils'
 
 vi.stubGlobal('ref', ref)
 vi.stubGlobal('computed', computed)
+vi.stubGlobal('getCurrentInstance', getCurrentInstance)
 
 const mockBudget = ref<number>(2000)
 const mockSetBudget = vi.fn((v: number | null) => { mockBudget.value = v ?? 2000 })
@@ -107,5 +108,75 @@ describe('BudgetFilter', () => {
     await wrapper.find('input[type="checkbox"]').setValue(false)
     await wrapper.find('input[type="checkbox"]').trigger('change')
     expect(mockPush).toHaveBeenCalledWith({ query: {} })
+  })
+
+  describe('controlled mode (with modelValue)', () => {
+    it('checkbox reflects modelValue instead of route.query', () => {
+      mockRoute.query = {}
+      const wrapper = mount(BudgetFilter, {
+        props: { modelValue: '1500' },
+        global: { mocks: { $t: (k: string) => k } },
+      })
+      const checkbox = wrapper.find('input[type="checkbox"]').element as HTMLInputElement
+      expect(checkbox.checked).toBe(true)
+    })
+
+    it('checkbox is unchecked when modelValue is undefined', () => {
+      mockRoute.query = { costs: '2000' }
+      const wrapper = mount(BudgetFilter, {
+        props: { modelValue: undefined },
+        global: { mocks: { $t: (k: string) => k } },
+      })
+      const checkbox = wrapper.find('input[type="checkbox"]').element as HTMLInputElement
+      expect(checkbox.checked).toBe(false)
+    })
+
+    it('checking toggle emits update:modelValue with costs string', async () => {
+      const wrapper = mount(BudgetFilter, {
+        props: { modelValue: undefined },
+        global: { mocks: { $t: (k: string) => k } },
+      })
+      await wrapper.find('input[type="checkbox"]').setValue(true)
+      await wrapper.find('input[type="checkbox"]').trigger('change')
+      expect(wrapper.emitted('update:modelValue')).toBeTruthy()
+      expect(wrapper.emitted('update:modelValue')![0]).toEqual(['2000'])
+      expect(mockPush).not.toHaveBeenCalled()
+    })
+
+    it('unchecking toggle emits update:modelValue with undefined', async () => {
+      const wrapper = mount(BudgetFilter, {
+        props: { modelValue: '2000' },
+        global: { mocks: { $t: (k: string) => k } },
+      })
+      await wrapper.find('input[type="checkbox"]').setValue(false)
+      await wrapper.find('input[type="checkbox"]').trigger('change')
+      expect(wrapper.emitted('update:modelValue')).toBeTruthy()
+      expect(wrapper.emitted('update:modelValue')![0]).toEqual([undefined])
+      expect(mockPush).not.toHaveBeenCalled()
+    })
+
+    it('slider input emits update:modelValue when filter is active', async () => {
+      const wrapper = mount(BudgetFilter, {
+        props: { modelValue: '2000' },
+        global: { mocks: { $t: (k: string) => k } },
+      })
+      const slider = wrapper.find('input[type="range"]')
+      await slider.setValue('3000')
+      await slider.trigger('input')
+      expect(wrapper.emitted('update:modelValue')).toBeTruthy()
+      expect(wrapper.emitted('update:modelValue')![0]).toEqual(['3000'])
+      expect(mockPush).not.toHaveBeenCalled()
+    })
+
+    it('slider input does not emit when filter is not active in controlled mode', async () => {
+      const wrapper = mount(BudgetFilter, {
+        props: { modelValue: undefined },
+        global: { mocks: { $t: (k: string) => k } },
+      })
+      const slider = wrapper.find('input[type="range"]')
+      await slider.setValue('3000')
+      await slider.trigger('input')
+      expect(wrapper.emitted('update:modelValue')).toBeFalsy()
+    })
   })
 })
