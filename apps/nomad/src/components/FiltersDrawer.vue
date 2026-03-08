@@ -181,11 +181,8 @@ watch(() => route.query, (newQuery) => {
   }
 })
 
-// On open: refresh draft from route
+// Lock body scroll when drawer is open
 watch(() => props.modelValue, (open) => {
-  if (open) {
-    draftQuery.value = { ...route.query }
-  }
   if (import.meta.client) {
     document.body.style.overflow = open ? 'hidden' : ''
   }
