@@ -151,7 +151,7 @@ export default defineNuxtConfig({
       regions: ['fra1'],
     },
     routeRules: {
-      '/__sitemap__/**': { isr: true },
+      '/__sitemap__/**': { isr: 604800 },
     },
   },
   image: {
