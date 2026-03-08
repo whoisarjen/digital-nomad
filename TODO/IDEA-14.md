@@ -1,114 +1,64 @@
-# IDEA-14: Weekly Email Newsletter
+# IDEA-14: Affiliate Integration
 **Status:** NOT_STARTED
-**Priority:** 14/39
-**Complexity:** M
+**Priority:** 14/23
+**Complexity:** S
 
 ## What's Already Implemented
-Nothing. No `NewsletterSubscriber` model, no email library, no newsletter endpoints. Cron infrastructure exists in `apps/collector/` — but newsletter cron belongs in `apps/nomad/` (user data + content are there).
+Nothing. No affiliate links anywhere in the codebase.
 
 ## Revised Analysis
-**Schema IS required** — the original idea undersells this. A `NewsletterSubscriber` model with status enum is needed.
+**Do not build until traffic milestone: 1,000+ daily visitors.** Building affiliate infrastructure before that is premature — the programs won't accept you, and it clutters the codebase for no revenue. This is a gate-on-traffic feature.
 
-**Double opt-in is legally required** for EU users (the site has PL locale, so EU audience is certain). This adds a `confirmationToken` field and a `/api/newsletter/confirm.get.ts` endpoint.
+**Revenue potential once at traffic milestone:**
+- SafetyWing: ~$50/referral. At 10 signups/month = $500/month
+- Booking.com: 4–8% commission on bookings
+- Wise: per-card referral commission
 
-**Resend SDK** is the right choice — clean TypeScript SDK, generous free tier (3K/month), standard in Nuxt/Vercel ecosystem. Not yet installed.
+**Implementation is deliberately simple:** No affiliate tracking infrastructure needed in the app. Affiliate programs provide UTM links or redirect links — just place them statically in a component. No DB changes, no analytics hooks in the app.
 
-**Cron location:** Add to `apps/nomad/` — create/extend `vercel.json` with cron config. The newsletter is user-facing, not a data pipeline task.
+**City-specific Booking.com links:** Booking.com's affiliate URL accepts destination as a query param: `https://www.booking.com/searchresults.html?aid=[YOUR_AID]&ss=[city name]`. Generate dynamically from `city.name`.
 
-**Weekly content queries** are trivial with existing Prisma patterns:
-- Top 3 cities: `prisma.monthSummary.findMany({ orderBy: { totalScore: 'desc' }, take: 3, ... })`
-- Cheapest with fast internet: `prisma.city.findFirst({ where: { internetSpeedCity: { gte: 20 } }, orderBy: { costForNomadInUsd: 'asc' } })`
-- New blog posts: `prisma.article.findMany({ where: { publishedAt: { gte: sevenDaysAgo } }, take: 3 })`
-
-**Unsubscribe token:** Separate stable `unsubscribeToken` field (different from `confirmationToken` which expires) — avoids token expiry issues for unsubscribes.
+**Non-intrusive placement:** Small section at the bottom of city pages, clearly labeled. No popups, no banners, no interstitials. Trust is more valuable than aggressive monetization.
 
 ## Implementation Plan
 
 ### Database Changes
-```prisma
-enum SubscriberStatus {
-  PENDING
-  ACTIVE
-  UNSUBSCRIBED
-}
-
-model NewsletterSubscriber {
-  id                String           @id @default(cuid())
-  email             String           @unique
-  status            SubscriberStatus @default(PENDING)
-  confirmationToken String?          @unique
-  unsubscribeToken  String           @unique @default(cuid())
-  createdAt         DateTime         @default(now())
-  updatedAt         DateTime         @default(now()) @updatedAt
-
-  @@index([status])
-}
-```
+None.
 
 ### API Endpoints
-**`apps/nomad/src/server/api/newsletter/subscribe.post.ts`**
-- Accepts `{ email: string }` body, Zod validated
-- Creates subscriber with `status: PENDING`, sends confirmation email via Resend
-- Returns `{ success: true }` always (no email enumeration)
-
-**`apps/nomad/src/server/api/newsletter/confirm.get.ts`**
-- Reads `?token=` from query
-- Sets `status: ACTIVE`, clears `confirmationToken`
-- Redirects to `/?subscribed=1`
-
-**`apps/nomad/src/server/api/newsletter/unsubscribe.get.ts`**
-- Reads `?token=` from query
-- Sets `status: UNSUBSCRIBED`
-- Redirects to `/?unsubscribed=1`
-
-**`apps/nomad/src/server/api/cron/newsletter.post.ts`**
-- Secured via `CRON_SECRET` header check
-- Queries active subscribers (`select { email, unsubscribeToken }` only — never log emails)
-- Builds content: top 3 cities, cheapest fast-internet city, new blog posts
-- Sends batch via `resend.batch.send()`
-- Returns `{ sent: N, errors: M }`
+None. Affiliate links are static or dynamically constructed client-side from city name.
 
 ### Frontend Components/Pages
-**New file**: `apps/nomad/src/components/NewsletterSignup.vue`
-- Single email input + submit button
-- Calls `/api/newsletter/subscribe` via `$fetch`
-- Success state: "Check your email to confirm"
-- Inline error for invalid email
+**New file**: `apps/nomad/src/components/AffiliateLinks.vue`
+- Props: `cityName: string`, `citySlug: string`
+- Renders 2-3 contextual affiliate links:
+  - "Book accommodation in {city}" → Booking.com (city-specific URL)
+  - "Get travel insurance" → SafetyWing (static link)
+  - "Open a travel bank account" → Wise (static link)
+- Clearly labeled: "Our partners" or "Affiliate links — we earn a small commission at no cost to you"
+- Minimal styling: small card at bottom of city page, not a banner
 
-**Integrate into:**
-- `apps/nomad/src/pages/index.vue` — section between features grid and explore
-- `apps/nomad/src/pages/cities/[slug].vue` — bottom of city detail pages
-
-### Infrastructure
-Add to `apps/nomad/vercel.json` (create if missing):
-```json
-{
-  "crons": [{ "path": "/api/cron/newsletter", "schedule": "0 9 * * 1" }]
-}
-```
-Add env vars to Vercel: `RESEND_API_KEY`, `CRON_SECRET`
-
-Install: `npm install resend` in `apps/nomad/`
+**Modify** `apps/nomad/src/pages/cities/[slug].vue`
+- Add `<AffiliateLinks :city-name="data.name" :city-slug="slug" />` at the very bottom of city content, before footer
 
 ### i18n Changes
 Add to all locale files:
 ```json
-"newsletter": {
-  "title": "Stay in the loop",
-  "subtitle": "Weekly picks: best cities, cheapest gems, and new guides.",
-  "placeholder": "your@email.com",
-  "subscribe": "Subscribe",
-  "successTitle": "Check your inbox",
-  "successSubtitle": "Confirmation link sent to {email}",
-  "gdprNote": "No spam. Unsubscribe anytime."
+"affiliate": {
+  "title": "Useful Links",
+  "disclaimer": "We may earn a commission from these links at no cost to you.",
+  "bookAccommodation": "Book accommodation in {city}",
+  "travelInsurance": "Get travel insurance (SafetyWing)",
+  "bankAccount": "Open a travel bank account (Wise)"
 }
 ```
 
 ## Dependencies
-None blocking. Benefits from IDEA-18 (referral) for cross-promotion.
+None technical. Gate on traffic milestone (1,000+ daily visitors).
 
 ## Notes
-- Resend free tier: 3K/month. Plan for paid at ~600 active subscribers.
-- `confirmationToken` should expire after 24h — enforce in application logic, not DB schema.
-- Never log subscriber email addresses in cron output.
-- Unsubscribe link is legally required in every email (CAN-SPAM + GDPR). Include in HTML footer.
+- Apply for Booking.com affiliate program at affiliates.booking.com (requires existing traffic)
+- Apply for SafetyWing affiliate at safetywing.com/nomad-health (lower traffic bar)
+- Apply for Wise affiliate at wise.com/partners
+- Keep it subtle — the trust built by ad-free UX is worth more than aggressive affiliate placement at this stage.
+- Add a `/affiliate-disclosure` page for legal compliance (one-time, static content).

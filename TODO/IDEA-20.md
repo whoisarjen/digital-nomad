@@ -1,105 +1,81 @@
-# IDEA-20: Favorites Split — Visited vs Planning
+# IDEA-20: "Pack for This City" Practical Info
 **Status:** NOT_STARTED
-**Priority:** 20/39
+**Priority:** 20/23
 **Complexity:** S
 
 ## What's Already Implemented
-Current `Favorite` model:
-```prisma
-model Favorite {
-  userId    String
-  citySlug  String
-  createdAt DateTime @default(now())
-  @@id([userId, citySlug])
-  @@index([userId])
-}
-```
-No `status` field. The toggle endpoint does a pure add/remove with no status concept. `FavoriteButton.vue` is a single heart with no status awareness.
+Nothing. No `CountryInfo` model, no practical info endpoints, no practical info UI on city pages.
 
 ## Revised Analysis
-This is a **prerequisite for IDEA-13** (Trip Planner). Build this first.
+**Data is largely static and country-level.** A one-time seed script is more reliable than user submissions for this type of data — plug type, voltage, and best SIM carrier don't change often.
 
-**Toggle endpoint changes:** When city already favorited and user changes status (PLANNING → VISITED), the handler should **update** the existing record (preserve `createdAt`), not delete + recreate.
+**Data sources (all free):**
+- Plug types and voltage: Wikipedia's "Mains electricity by country" (exhaustive, stable)
+- Best SIM carrier: manual research — varies by traveler experience
+- Taxi apps: Grab, Bolt, Uber coverage is publicly documented
+- Tipping culture: widely documented in travel guides
 
-**FavoriteButton UI:** Single heart for initial save (defaults to PLANNING). On re-interaction, show a dropdown/split with "Visited" / "Planning" options. Keep it compact — a dropdown on hover over the already-favorited heart is the cleanest pattern.
+**Coverage:** Data for 50 countries covers ~95% of nomad destinations. This is achievable with a focused manual effort.
 
-**City detail endpoint:** Add `{ visitedCount, planningCount }` via a `groupBy` query on `Favorite` — parallel to the city data query.
+**Display:** Small "Practical Info" card on city pages, not a prominent section. This is utility content, not a destination feature. Collapsed by default on mobile.
 
-**Session:** `auth/[...].ts` currently uses `include` to load favorites (existing rule violation — pre-existing, don't copy). The session `favoriteSlugs` will need to carry status. Consider returning `{ slug, status }[]` in the session instead of just `string[]` — or add a separate `favoriteStatuses` map to the session object.
+**Linking to country pages** (IDEA-04): country pages would show this info prominently. City pages just show it as a utility widget.
 
 ## Implementation Plan
 
 ### Database Changes
 ```prisma
-enum FavoriteStatus {
-  VISITED
-  PLANNING
+model CountryInfo {
+  id          String  @id @default(cuid())
+  countryCode String  @unique
+  plugType    String? // "Type C, Type F"
+  voltage     Int?    // 220
+  frequency   Int?    // 50
+  simCards    String? // "AIS, DTAC, TrueMove H (Thailand)"
+  taxiApp     String? // "Grab"
+  tipping     String? @db.VarChar(300) // "Tipping not expected. Optional 10% in tourist restaurants."
 }
-
-// Add to existing Favorite model:
-status FavoriteStatus @default(PLANNING)
 ```
 
-No additional index needed — queries always filter by `userId` first (already indexed).
-
 ### API Endpoints
-**Modify** `apps/nomad/src/server/api/favorites/toggle.post.ts`
-- Accept optional `status: 'VISITED' | 'PLANNING'` in body (default `PLANNING`)
-- Logic:
-  - Record exists + same status → delete (unfavorite)
-  - Record exists + different status → update status only (preserve createdAt)
-  - Record does not exist → create with given status
-
-**Modify** `apps/nomad/src/server/api/favorites/index.get.ts`
-- Include `status` in response select
-
-**Modify** `apps/nomad/src/server/api/favorites/slugs.get.ts`
-- Include `status` per slug so `FavoriteButton` knows current status without extra fetch
-
-**Modify** `apps/nomad/src/server/api/cities/[slug].get.ts`
-- Add parallel `prisma.favorite.groupBy({ by: ['status'], where: { citySlug: slug }, _count: { _all: true } })` to return `{ visitedCount, planningCount }`
-
-**Modify** `apps/nomad/src/server/api/auth/[...].ts`
-- In session callback: load `{ slug, status }[]` instead of just `favoriteSlugs: string[]`
+**`apps/nomad/src/server/api/cities/[slug]/practical.get.ts`** — GET, public
+- Joins `City.countryCode` to `CountryInfo`
+- Returns practical info for the city's country
+- Returns 404 gracefully (not all countries will have data)
 
 ### Frontend Components/Pages
-**Modify** `apps/nomad/src/shared/global.schema.ts`
-- Add `status` field to `favoriteToggleSchema`
-
-**Modify** `apps/nomad/src/components/FavoriteButton.vue`
-- Add status-aware dropdown: two options "Visited" / "Planning" shown when city is already favorited
-- Keep single heart for initial unfavorited state (tapping = PLANNING by default)
-
-**Modify** `apps/nomad/src/composables/useFavoriteSlugs.ts`
-- Track `{ slug, status }[]` instead of `string[]`
-- Add `getFavoriteStatus(slug): FavoriteStatus | false` helper
-- Update `isFavorited()` to also return status info
-
-**Modify** `apps/nomad/src/components/dashboard/SavedCities.vue`
-- Add two tabs: "Visited" / "Planning"
-- Filter `favorites` computed by active tab
+**New file**: `apps/nomad/src/components/CityPracticalInfo.vue`
+- Props: `countryCode: string`
+- Small card showing: plug types (with icon), voltage, best SIM carriers, taxi apps, tipping note
+- Collapsed by default on mobile
+- Show only fields that have data (some countries won't have complete data)
 
 **Modify** `apps/nomad/src/pages/cities/[slug].vue`
-- Add aggregate count badges: "82 been here · 34 planning to visit"
+- Add `<CityPracticalInfo :country-code="data.countryCode" />` near the bottom
+
+**New file**: `packages/db/prisma/seeds/country-info.ts`
+- Seed script for 50 countries
+- Data from a maintained JSON file: `packages/db/prisma/seeds/data/country-info.json`
 
 ### i18n Changes
 Add to all locale files:
 ```json
-"favorites": {
-  "statusVisited": "Visited",
-  "statusPlanning": "Planning",
-  "tabVisited": "Visited",
-  "tabPlanning": "Planning to visit",
-  "changeStatus": "Change status",
-  "beenHere": "{count} been here",
-  "planning": "{count} planning to visit"
+"practical": {
+  "title": "Practical Info",
+  "plugType": "Plug type",
+  "voltage": "Voltage",
+  "simCards": "Best SIM cards",
+  "taxiApp": "Taxi/ride app",
+  "tipping": "Tipping culture",
+  "noData": "Practical info not yet available for this country"
 }
 ```
 
 ## Dependencies
-- Prerequisite for IDEA-13 (Trip Planner) — build this first.
+- IDEA-04 (Country Pages): practical info displays prominently on country detail pages once those exist.
 
 ## Notes
-- Existing favorites in DB will default to `PLANNING` (the enum default) — no backfill needed.
-- Do NOT use `include` in any new Prisma queries — the auth handler's existing `include` usage is a pre-existing violation, do not replicate.
-- The `groupBy` for visitedCount/planningCount on the city detail endpoint runs in parallel with the main city query for no latency penalty.
+- Plug type icons (A, B, C, D, E, F, G, H, I, J, K, L, M) — use simple letter badges or unicode symbols, not images.
+- The seed JSON file should be the source of truth, checked into the repo. Manual updates to JSON → re-run seed script.
+- `simCards` field is a free-text string ("AIS, DTAC, TrueMove H") — not normalized. Normalization is over-engineering for this use case.
+- Tipping culture is highly subjective. Keep the `tipping` note factual and brief. Cite a source if possible.

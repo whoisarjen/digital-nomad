@@ -1,94 +1,84 @@
-# IDEA-11: City Check-Ins ("I'm Here Now")
+# IDEA-11: Data Freshness Transparency
 **Status:** NOT_STARTED
-**Priority:** 11/39
-**Complexity:** L
+**Priority:** 11/23
+**Complexity:** S
 
 ## What's Already Implemented
-Nothing. No check-in model, no check-in endpoints, no check-in UI anywhere in the codebase.
-
-Auth system exists (`defineProtectedEventHandler` pattern established). Favorites system shows the correct server endpoint pattern to follow.
+- `City.updatedAt` exists (Prisma `@updatedAt`)
+- Cron jobs in `apps/collector/` update city data periodically
+- No data source labels or freshness indicators on city pages
 
 ## Revised Analysis
-**Broken unique constraint in spec:** The proposed `@@unique([userId, isActive])` is logically wrong — PostgreSQL would collide on `(userId, false)` for the second inactive record. Prisma has no partial unique index support. Enforce single-active-check-in in application logic inside the toggle handler (deactivate existing before creating new).
+Simple, high E-E-A-T impact feature. The `City.updatedAt` timestamp already serves as the freshness signal — no new DB fields needed.
 
-**Cron placement:** The auto-expire cron belongs in `apps/collector/server/api/cron/checkins-expire.get.ts` — not in the nomad app. Collector already has Vercel cron infrastructure and DB access. Pattern follows existing `weather-daily.get.ts`.
+**Per-metric timestamps are overkill for V1.** Use `City.updatedAt` as a single freshness signal for the whole city record. Different data sources (Open-Meteo, Numbeo, Speedtest) update at different times, but the city `updatedAt` reflects the most recent update of any field.
 
-**Toggle semantics:** Toggling the same city again = check out. Toggling a different city = move to new city (deactivate old, activate new).
+**Methodology page** is the highest-value SEO component of this idea — "how are digital nomad cities ranked" is a genuine search query. It establishes E-E-A-T authority and differentiates from competitors with opaque data.
+
+**Freshness indicator logic:**
+- Green: updated within 30 days
+- Yellow: 31–90 days
+- Red: 91+ days (data may be stale)
+
+**Data source attribution per section** (not per field) is the right granularity for V1:
+- Weather section: "Open-Meteo"
+- Cost section: "Numbeo"
+- Internet section: "Speedtest Global Index"
+- Air quality section: "IQAir"
+- Last updated: `city.updatedAt` formatted as "3 days ago" or "March 2026"
 
 ## Implementation Plan
 
 ### Database Changes
-```prisma
-model CheckIn {
-  id         String    @id @default(cuid())
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @default(now()) @updatedAt
-  userId     String
-  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  citySlug   String
-  city       City      @relation(fields: [citySlug], references: [slug], onDelete: Cascade)
-  arrivingAt DateTime?
-  leavingAt  DateTime?
-  isActive   Boolean   @default(true)
-
-  @@index([userId, isActive])
-  @@index([citySlug, isActive])
-}
-```
-Add `checkIns CheckIn[]` back-relations to `User` and `City`.
+None. Use existing `City.updatedAt`.
 
 ### API Endpoints
-**`apps/nomad/src/server/api/checkins/toggle.post.ts`** — POST, protected
-- Body: `{ citySlug: string, arrivingAt?: string }`
-- Deactivates existing active check-in for user (if any); creates new active check-in for target city (or just deactivates if same city = toggle off)
-- Returns `{ checkedIn: boolean, citySlug: string | null }`
-
-**`apps/nomad/src/server/api/checkins/city/[slug].get.ts`** — GET, public
-- Returns `{ count: number }` of active check-ins for that city
-
-**`apps/nomad/src/server/api/checkins/me.get.ts`** — GET, protected
-- Returns `{ citySlug: string | null, arrivingAt: string | null }`
-
 **Modify** `apps/nomad/src/server/api/cities/[slug].get.ts`
-- Add parallel `prisma.checkIn.count({ where: { citySlug: slug, isActive: true } })` to return `activeCheckInCount`
-
-**`apps/collector/server/api/cron/checkins-expire.get.ts`** — cron
-- Sets `isActive = false` on records where `createdAt < 90 days ago AND isActive = true`
+- Add `updatedAt: true` to the city select
 
 ### Frontend Components/Pages
-**New file**: `apps/nomad/src/composables/useCheckIn.ts`
-- Wraps me endpoint + toggle mutation with optimistic update
+**New file**: `apps/nomad/src/components/DataFreshnessBadge.vue`
+- Props: `updatedAt: string`
+- Computes days since update
+- Renders colored dot (green/yellow/red) + "Updated X days ago" or "Updated March 2026"
 
-**New file**: `apps/nomad/src/components/CheckInButton.vue`
-- Auth-gated (shows sign-in prompt if not authenticated)
-- Shows "Check in" / "I'm here" state based on current check-in status
+**New file**: `apps/nomad/src/components/DataSourceLabel.vue`
+- Props: `source: string` (e.g., "Open-Meteo")
+- Small "Source: Open-Meteo" label rendered under each data section
 
 **Modify** `apps/nomad/src/pages/cities/[slug].vue`
-- Add `<CheckInButton>` to city hero area
-- Show "X nomads here this month" count badge
+- Add `<DataFreshnessBadge :updated-at="data.updatedAt" />` to city page header
+- Add `<DataSourceLabel source="..." />` under each major data section (Weather, Cost, Internet, Air Quality)
 
-**New file**: `apps/nomad/src/components/dashboard/CheckInStatus.vue`
-- Current active check-in card on dashboard
+**New file**: `apps/nomad/src/pages/methodology.vue`
+- `defineI18nRoute({ paths: { en: '/methodology', pl: '/metodologia' } })`
+- Full SEO: `useHead` targeting "how are digital nomad cities ranked", "nomad city data sources"
+- Explains: all data sources, update frequency, scoring formula for `totalScore`, how MonthSummary is built
+- Static content (no API call needed)
+- BreadcrumbList JSON-LD
+
+**Add link** to `/methodology` in site footer
 
 ### i18n Changes
 Add to all locale files:
 ```json
-"checkIn": {
-  "button": "Check in",
-  "checkedIn": "I'm here",
-  "checkOut": "Check out",
-  "signInToCheckIn": "Sign in to check in",
-  "nomadsHere": "{count} nomad here | {count} nomads here this month",
-  "currentlyIn": "Currently in {city}",
-  "noActiveCheckIn": "Not checked in anywhere"
+"freshness": {
+  "updatedDaysAgo": "Updated {days} days ago",
+  "updatedToday": "Updated today",
+  "updatedThisMonth": "Updated this month",
+  "fresh": "Fresh data",
+  "aging": "Data may be aging",
+  "stale": "Data may be outdated",
+  "source": "Source: {name}",
+  "methodology": "Data Methodology"
 }
 ```
 
 ## Dependencies
-- IDEA-26 (Season Ratings) wants to gate ratings on check-in history — soft dependency.
-- IDEA-37 (Trending) benefits from check-in velocity data.
+None.
 
 ## Notes
-- Single-active constraint must be enforced in application logic, not DB constraint.
-- Cron in collector, not nomad — follow the `weather-daily.get.ts` pattern exactly.
-- 90-day auto-expiry keeps the "nomads here this month" count fresh and meaningful.
+- `City.updatedAt` is a single timestamp for the whole row. Multiple data sources update at different times — this is a V1 simplification. Document in the methodology page.
+- The methodology page is static content — consider writing it as a proper editorial piece, not just a technical spec page. It should read naturally for both users and Google.
+- Add "Data sources" link in the city page footer area (near copyright/attribution for images).
+- This feature directly addresses the trust gap vs NomadList (whose data is famously inaccurate).

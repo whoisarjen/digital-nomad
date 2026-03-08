@@ -1,84 +1,81 @@
-# IDEA-22: Cost / Runway Calculator
-**Status:** NOT_STARTED
-**Priority:** 22/39
-**Complexity:** M
+# IDEA-22: City Forum / Q&A
+**Status:** NOT_STARTED — BLOCKED (traffic gate)
+**Priority:** 22/23
+**Complexity:** XL
 
 ## What's Already Implemented
-- All four cost tiers exist on `City` model and are fetched by the city slug API
-- `costForNomadInUsd` is returned by the cities list endpoint; `costForExpatInUsd` and `costForLocalInUsd` are NOT returned by the list endpoint (only by `/cities/[slug]`)
-- No calculator pages exist
+Nothing. No `Thread` or `Reply` models, no forum endpoints, no forum UI.
 
 ## Revised Analysis
-**City page widget** shares implementation with IDEA-07 Part A — same `AffordabilityWidget.vue` component, two input modes: monthly income (surplus/deficit) and total savings (runway).
+**Explicitly gated: only build at 500+ active users.** An empty forum is actively harmful — it signals a ghost town and hurts credibility. This idea should not be picked up until:
+1. The site has 500+ active registered users
+2. IDEA-05 (City Tips) has been live for at least 3 months to establish UGC culture
+3. IDEA-01 (Check-ins) is live to provide a community signal
 
-**Standalone ranked page** needs all cities with all cost tiers. The existing `/api/cities` list is paginated and caps at 100 items — cannot be reused. A new lean endpoint returning all cities with cost fields only is the right approach, cached aggressively via ISR.
+**High maintenance overhead:** Forums require moderation, spam prevention, email notifications, and ongoing community management. These are real ongoing costs beyond the initial implementation.
 
-**Formula:**
-```
-runway = savings / monthlyCost                              (no income)
-runway = savings / (monthlyCost - monthlyIncome)            (with income)
-if monthlyIncome >= monthlyCost: show "Indefinitely"
-```
+**Consider IDEA-05 as the substitute:** City Tips (short, categorized, upvoteable) covers 80% of the Q&A use case with significantly lower moderation burden. Build IDEA-05 first and assess whether a full forum is still needed.
 
-**Shareable URL:** Store `savings`, `income`, `tier` as query params: `/tools/runway-calculator?savings=50000&income=3000&tier=nomad`. Follows existing route.query pattern.
+**If building:**
+- The 6-month auto-expire on threads is a good design — prevents stale questions from cluttering the page
+- Email notifications on replies are table stakes — requires IDEA-04 (Newsletter/Resend) infrastructure first
+- Spam prevention: rate limiting (1 thread per user per city per 24 hours), email verification requirement before posting
 
-**Display:** Show top 50 by runway, "load more" for the rest. Sorting is client-side since all data is loaded.
-
-## Implementation Plan
+## Implementation Plan (when unblocked)
 
 ### Database Changes
-None.
+```prisma
+model Thread {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  citySlug  String
+  city      City     @relation(fields: [citySlug], references: [slug])
+  title     String   @db.VarChar(200)
+  content   String   @db.VarChar(1000)
+  isActive  Boolean  @default(true)
+  expiresAt DateTime // createdAt + 6 months
 
-### API Endpoints
-**New file**: `apps/nomad/src/server/api/tools/runway.get.ts`
-- No query params, returns all cities with only cost fields
-- `prisma.city.findMany({ select: { slug, name, country, costForNomadInUsd, costForExpatInUsd, costForLocalInUsd, costForFamilyInUsd, image: { select: { url } } } })`
-- No pagination — ~500 cities × 5 fields = small payload (~50KB)
-- Add Nitro ISR rule: `'/api/tools/runway': { isr: 3600 }` in `nuxt.config.ts`
+  replies   Reply[]
 
-### Frontend Components/Pages
-**New file**: `apps/nomad/src/pages/tools/runway-calculator.vue`
-- `defineI18nRoute({ paths: { en: '/tools/runway-calculator' } })`
-- Inputs: `savings` (number input) + `income` (optional), tier toggle (nomad/expat/local/family)
-- Inputs sync to URL query params via `router.push({ query })`
-- Uses `useRunwayData()` composable (wraps new endpoint)
-- Ranked city list: sorted client-side by runway months desc, top 50 shown, "show more" button
-- Dynamic `useHead`: title/description reflects savings amount for shareability
+  @@index([citySlug, isActive, createdAt])
+}
 
-**New file**: `apps/nomad/src/composables/useRunwayData.ts`
-- Wraps `useCustomQuery` for `/api/tools/runway`
-- No reactive deps, cached for session duration
-
-**Modify**: `apps/nomad/src/components/AffordabilityWidget.vue` (shared with IDEA-07)
-- Add "total savings" input mode alongside "monthly income" mode
-- Shows runway months for each tier when savings entered
-
-**Add link** in footer or nav to `/tools/runway-calculator`
-
-### i18n Changes
-Add to all locale files:
-```json
-"runway": {
-  "title": "Cost & Runway Calculator | How Long Can You Live Abroad?",
-  "subtitle": "See how many months your savings will last in 500+ cities",
-  "savings": "Total savings",
-  "monthlyIncome": "Monthly income (optional)",
-  "tierLabel": "Lifestyle",
-  "resultsTitle": "Cities ranked by runway",
-  "months": "{months} months",
-  "indefinite": "Indefinitely",
-  "showMore": "Show more cities",
-  "shareTitle": "${savings} savings — Runway in {count}+ cities"
+model Reply {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  threadId  String
+  thread    Thread   @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  content   String   @db.VarChar(1000)
+  upvotes   Int      @default(0)
 }
 ```
 
+### API Endpoints
+- `GET /api/forum/city/[slug]` — paginated thread list
+- `POST /api/forum/threads` — create thread (protected, rate-limited)
+- `GET /api/forum/threads/[id]` — thread with replies
+- `POST /api/forum/threads/[id]/replies` — add reply (protected)
+- `POST /api/forum/replies/[id]/vote` — upvote reply (protected)
+- `POST /api/forum/threads/[id]/report` — report thread (protected)
+- Cron: expire threads older than 6 months (set `isActive: false`)
+
+### Frontend Components/Pages
+- `apps/nomad/src/components/CityForum.vue` — thread list + new thread form on city page
+- `apps/nomad/src/pages/forum/[citySlug]/[threadId].vue` — thread detail page
+- Email notification on reply (via Resend, requires IDEA-04)
+
 ## Dependencies
-- IDEA-07: Shares `AffordabilityWidget.vue` — build together.
-- IDEA-21: Shares `/tools/` page directory — build together.
+- **BLOCKED until 500+ active users**
+- IDEA-05 (City Tips) — build and validate first; may obviate forum need
+- IDEA-04 (Newsletter/Resend) — required for email notifications
+- IDEA-01 (Check-ins) — provides community signal prerequisite
 
 ## Notes
-- `Decimal` cost fields: use `Number(cost)` before arithmetic.
-- For `monthlyIncome >= monthlyCost`: show "Indefinitely" — never display negative numbers.
-- The standalone page is fully public and indexable (no auth gate).
-- Sitemap: static entry via `nuxt.config.ts` alongside IDEA-21.
-- Round runway months to 1 decimal: `(savings / cost).toFixed(1)`.
+- Do not start implementation until the traffic/user gate is met.
+- Consider IDEA-05 as a permanent substitute rather than a stepping stone.
+- If building: implement strict rate limiting and spam prevention before launch. Empty posts, spam, and low-quality questions are worse than no forum.
+- The 6-month auto-expire is a strong design decision — keep it. Stale questions are confusing and reduce trust.

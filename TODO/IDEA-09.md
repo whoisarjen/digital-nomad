@@ -1,23 +1,28 @@
-# IDEA-09: Prominent Nomad Score
-**Status:** PARTIAL
-**Priority:** 9/39
+# IDEA-09: Cost / Runway Calculator
+**Status:** NOT_STARTED
+**Priority:** 9/23
 **Complexity:** M
 
 ## What's Already Implemented
-- `MonthSummary.totalScore` exists in schema and is returned by city APIs
-- City cards already show `totalScore` inline next to a star icon (small/secondary)
-- No `/best-cities/` index page exists
-- No `NomadScoreBadge` component with circular visual exists
-- No annual composite score is pre-computed — must be derived from 12-month average at query time
+- All four cost tiers exist on `City` model and are fetched by the city slug API
+- `costForNomadInUsd` is returned by the cities list endpoint; `costForExpatInUsd` and `costForLocalInUsd` are NOT returned by the list endpoint (only by `/cities/[slug]`)
+- No calculator pages exist
 
 ## Revised Analysis
-The score field exists but is not prominent. There is no stored "annual average" — it must be computed via Prisma `groupBy` with `_avg: { totalScore: true }` on `MonthSummary` at query time. No schema changes needed.
+**City page widget** shares implementation with [removed] Part A — same `AffordabilityWidget.vue` component, two input modes: monthly income (surplus/deficit) and total savings (runway).
 
-**Route namespace note:** `/best-cities/index.vue` is the IDEA-09 landing page; `/best-cities/[region].vue` (IDEA-03) and `/best-cities/[month].vue` (IDEA-10) share this directory. Build `best-cities/` as a directory from the start.
+**Standalone ranked page** needs all cities with all cost tiers. The existing `/api/cities` list is paginated and caps at 100 items — cannot be reused. A new lean endpoint returning all cities with cost fields only is the right approach, cached aggressively via ISR.
 
-**Score scale:** Confirm the actual `totalScore` range before labeling "0–100". `OPTIONS_RANKS` uses values 2–4 (stars) — the scale may differ. Label accurately.
+**Formula:**
+```
+runway = savings / monthlyCost                              (no income)
+runway = savings / (monthlyCost - monthlyIncome)            (with income)
+if monthlyIncome >= monthlyCost: show "Indefinitely"
+```
 
-**Circular SVG badge:** Start with a styled pill badge with color coding; add the ring as a polish pass. Keep the component simple initially.
+**Shareable URL:** Store `savings`, `income`, `tier` as query params: `/tools/runway-calculator?savings=50000&income=3000&tier=nomad`. Follows existing route.query pattern.
+
+**Display:** Show top 50 by runway, "load more" for the rest. Sorting is client-side since all data is loaded.
 
 ## Implementation Plan
 
@@ -25,48 +30,55 @@ The score field exists but is not prominent. There is no stored "annual average"
 None.
 
 ### API Endpoints
-**New file**: `apps/nomad/src/server/api/rankings/best-cities.get.ts`
-- `prisma.monthSummary.groupBy({ by: ['citySlug'], _avg: { totalScore: true }, orderBy: { _avg: { totalScore: 'desc' } }, take: 50 })`
-- Then hydrate city fields in a second `prisma.city.findMany({ where: { slug: { in: slugs } }, select: { slug, name, country, costForNomadInUsd, internetSpeedCity, safety, image: { select: { url } } } })`
-- Merge and return ranked list with `nomadScore` field
+**New file**: `apps/nomad/src/server/api/tools/runway.get.ts`
+- No query params, returns all cities with only cost fields
+- `prisma.city.findMany({ select: { slug, name, country, costForNomadInUsd, costForExpatInUsd, costForLocalInUsd, costForFamilyInUsd, image: { select: { url } } } })`
+- No pagination — ~500 cities × 5 fields = small payload (~50KB)
+- Add Nitro ISR rule: `'/api/tools/runway': { isr: 3600 }` in `nuxt.config.ts`
 
 ### Frontend Components/Pages
-**New file**: `apps/nomad/src/components/NomadScoreBadge.vue`
-- Props: `score: number`, `size: 'sm' | 'md' | 'lg'`
-- Color: green (≥70), yellow (40–69), red (<40)
-- V1: pill badge; V2: circular SVG ring
+**New file**: `apps/nomad/src/pages/tools/runway-calculator.vue`
+- `defineI18nRoute({ paths: { en: '/tools/runway-calculator' } })`
+- Inputs: `savings` (number input) + `income` (optional), tier toggle (nomad/expat/local/family)
+- Inputs sync to URL query params via `router.push({ query })`
+- Uses `useRunwayData()` composable (wraps new endpoint)
+- Ranked city list: sorted client-side by runway months desc, top 50 shown, "show more" button
+- Dynamic `useHead`: title/description reflects savings amount for shareability
 
-**New file**: `apps/nomad/src/pages/best-cities/index.vue`
-- Ranked table: rank number, city name, country, `NomadScoreBadge`, cost, internet speed
-- Full SEO: `useHead` with title targeting "best cities for digital nomads 2026"
-- ItemList + BreadcrumbList JSON-LD
-- `defineI18nRoute({ paths: { en: '/best-cities', pl: '/najlepsze-miasta' } })`
+**New file**: `apps/nomad/src/composables/useRunwayData.ts`
+- Wraps `useCustomQuery` for `/api/tools/runway`
+- No reactive deps, cached for session duration
 
-**New file**: `apps/nomad/src/composables/useBestCities.ts`
-- Wraps `useCustomQuery` for the new rankings endpoint
+**Modify**: `apps/nomad/src/components/AffordabilityWidget.vue` (shared with [removed])
+- Add "total savings" input mode alongside "monthly income" mode
+- Shows runway months for each tier when savings entered
 
-**New file**: `apps/nomad/src/server/api/__sitemap__/best-cities.ts`
-- Single static entry (index page only)
-
-**Modify**: `apps/nomad/src/components/CityCard.vue` and `apps/nomad/src/pages/cities/[slug].vue`
-- Replace inline score display with `<NomadScoreBadge>`
+**Add link** in footer or nav to `/tools/runway-calculator`
 
 ### i18n Changes
 Add to all locale files:
 ```json
-"bestCities": {
-  "title": "Best Digital Nomad Cities {year} | Ranked by Nomad Score",
-  "description": "Top 50 cities ranked by composite nomad score covering cost, internet, safety, and climate.",
-  "heading": "Best Digital Nomad Cities",
-  "rank": "Rank",
-  "nomadScore": "Nomad Score"
+"runway": {
+  "title": "Cost & Runway Calculator | How Long Can You Live Abroad?",
+  "subtitle": "See how many months your savings will last in 500+ cities",
+  "savings": "Total savings",
+  "monthlyIncome": "Monthly income (optional)",
+  "tierLabel": "Lifestyle",
+  "resultsTitle": "Cities ranked by runway",
+  "months": "{months} months",
+  "indefinite": "Indefinitely",
+  "showMore": "Show more cities",
+  "shareTitle": "${savings} savings — Runway in {count}+ cities"
 }
 ```
 
 ## Dependencies
-- IDEA-03 and IDEA-10 share the `/best-cities/` directory — build directory structure first.
+- [removed]: Shares `AffordabilityWidget.vue` — build together.
+- IDEA-08: Shares `/tools/` page directory — build together.
 
 ## Notes
-- Rankings page fresh content signal: update monthly when `MonthSummary` data refreshes.
-- Score tooltips (sub-score breakdown) are a V2 polish — skip for initial launch.
-- Verify actual score range from the DB before coding color thresholds.
+- `Decimal` cost fields: use `Number(cost)` before arithmetic.
+- For `monthlyIncome >= monthlyCost`: show "Indefinitely" — never display negative numbers.
+- The standalone page is fully public and indexable (no auth gate).
+- Sitemap: static entry via `nuxt.config.ts` alongside IDEA-08.
+- Round runway months to 1 decimal: `(savings / cost).toFixed(1)`.

@@ -1,94 +1,136 @@
-# IDEA-12: "Which City Matches Me" Quiz
+# IDEA-12: Nomad Season Community Ratings
 **Status:** NOT_STARTED
-**Priority:** 12/39
+**Priority:** 12/23
 **Complexity:** M
 
 ## What's Already Implemented
-Nothing. No `/pages/quiz/` directory exists. All required city fields are in the schema (`costForNomadInUsd`, `temperatureC`, `internetSpeedCity`, `safety`, `region`). Region constants and Level enum values are already shared.
+Nothing. No `SeasonRating` model exists. The auth infrastructure, the `Favorite` model (which provides the gating mechanic), and the monthly weather display on the city page are all in place.
 
 ## Revised Analysis
-Pure client-side scoring — one new slim API endpoint returning all cities with scoring fields, then weighted scoring in a computed().
 
-**Field mapping correction from original spec:**
-- Climate → use `City.temperatureC` (annual average °C), NOT `City.climate` (which is a Numbeo composite quality index, not a temperature signal)
-- All other fields match the spec directly
+**Dependency on IDEA-01 (Check-ins):** IDEA-01 is not implemented and is not in scope here. The original plan says "only users who have checked in or favorited the city can rate." Gating on check-ins is blocked. Gating on Favorites (`Favorite` model already exists) is achievable today and is simpler. Revised gate: **only users who have favorited the city can rate its months.** This is a meaningful signal — if you've favorited a city you have at least a declared interest in it, and people who actually visited it tend to favorite it.
 
-**Scoring algorithm (client-side, weighted points per city):**
-- Budget: exact bracket match = 3pts, adjacent bracket = 1pt
-- Climate: temp within ±5°C of preferred midpoint = 3pts, ±12°C = 1pt, "doesn't matter" = 3pts all
-- Internet: meets threshold = 3pts, within 20% below = 1pt, "doesn't matter" = 3pts all
-- Safety: exact match = 3pts, one level below preference = 1pt, "adventurous" = 3pts all
-- Region: selected region(s) match = 3pts, "anywhere" = 3pts all
+This means the eligibility check in the POST endpoint is a single `prisma.favorite.findUnique({ where: { userId_citySlug: { userId, citySlug } } })` call — cheap and already battle-tested from the favorites system.
 
-**Results page:** `noindex` (personalized/dynamic). Quiz index page: full SEO.
+**Thumbs up/down vs. numeric rating:** Thumbs up/down (boolean `isPositive`) is clean and easy to aggregate. The aggregated display ("Best months are Nov–Feb") computes as: for each month, calculate `positiveCount / totalVotes * 100`. Months above a threshold (e.g., 60%) are "best"; below another (e.g., 40%) are "avoid." This is straightforward and works well even with small sample sizes, unlike a 5-star system.
 
-**URL params:** Use numeric indices for brevity: `?budget=2&climate=1&internet=1&safety=2&regions=0,2`
+**Display text generation:** The aggregation happens on the server — the GET endpoint returns per-month `{ positiveCount, totalCount, positiveRate }` for all 12 months, plus a pre-computed `bestMonths` and `avoidMonths` array of month numbers. The frontend renders the text from these arrays.
+
+**Interplay with existing MonthSummary data:** The city page already shows the algorithmic month score strip (IDEA-01 is implemented). The community season ratings should be displayed as a distinct "Community View" subsection below or alongside it — not replacing the data-driven strip. Two different signals: one objective (climate data), one subjective (community sentiment). Keep them visually separate.
+
+**Schema note — `@@index([citySlug, month])`:** Correct and important. The primary read pattern is "all votes for citySlug X grouped by month", so this index covers it well.
+
+**Changing a vote:** The `@@unique([userId, citySlug, month])` means a user can only have one vote per month per city. The POST endpoint should be an upsert — if a vote already exists for that `[userId, citySlug, month]`, update `isPositive`; otherwise create. This is more UX-friendly than a separate "delete and re-vote" flow.
 
 ## Implementation Plan
 
 ### Database Changes
-None.
+Add to `/Users/kamilowczarek/Documents/GitHub/digital-nomad/packages/db/prisma/schema.prisma`:
 
-### API Endpoints
-**New file**: `apps/nomad/src/server/api/quiz/cities.get.ts`
-- No query params, no auth required
-- Returns all cities with scoring fields only:
-  ```ts
-  select: {
-    slug: true, name: true, country: true, region: true,
-    costForNomadInUsd: true, temperatureC: true,
-    internetSpeedCity: true, safety: true,
-    image: { select: { url: true, ownerName: true, ownerUsername: true } },
-  }
-  ```
-- No pagination — ~500 records × 6 fields ≈ 50KB payload
-- Add ISR cache rule in `nuxt.config.ts`: `'/api/quiz/cities': { isr: 3600 }`
+```prisma
+model SeasonRating {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 
-### Frontend Components/Pages
-**New file**: `apps/nomad/src/pages/quiz/index.vue`
-- `defineI18nRoute({ paths: { en: '/quiz', pl: '/quiz' } })`
-- Local `ref<number>` for `currentStep` (1–5)
-- Refs for each answer, synced to URL query params on completion
-- Progress bar UI
-- On final step: `router.push` to quiz results with answers as query params
-- Full SEO: `useHead` targeting "digital nomad quiz", "best city for me digital nomad"
+  userId    String
+  user      User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  citySlug  String
+  city      City   @relation(fields: [citySlug], references: [slug], onDelete: Cascade)
+  month     Int    // 1-12
+  isPositive Boolean
 
-**New file**: `apps/nomad/src/pages/quiz/results.vue`
-- Reads answers from `route.query`
-- Calls `useQuizCities()` composable
-- Weighted scoring in `computed()` → top 5 cities
-- Shows city cards with score breakdown reasoning
-- Share button: `navigator.clipboard.writeText(window.location.href)`
-- `noindex` meta
-
-**New file**: `apps/nomad/src/composables/useQuizCities.ts`
-- Wraps `useCustomQuery` for `/api/quiz/cities`
-- No query ref needed — static endpoint, cached for session
-
-### i18n Changes
-Add to all locale files (abbreviated — see full list in impl):
-```json
-"quiz": {
-  "title": "Which City Is Right for Me?",
-  "subtitle": "Answer 5 quick questions to find your ideal digital nomad base",
-  "step": "Step {current} of {total}",
-  "next": "Next", "back": "Back", "seeResults": "See My Results",
-  "retake": "Retake Quiz", "shareResults": "Share Results",
-  "resultsTitle": "Your Top Cities",
-  "matchScore": "{score}% match",
-  "stepBudget": { "question": "What's your monthly budget?", ... },
-  "stepClimate": { "question": "What climate do you prefer?", ... },
-  "stepInternet": { "question": "How important is internet speed?", ... },
-  "stepSafety": { "question": "What's your safety preference?", ... },
-  "stepRegions": { "question": "Any region preference?", "anywhere": "Anywhere" }
+  @@unique([userId, citySlug, month])
+  @@index([citySlug, month])
+  @@index([userId])
 }
 ```
 
+Add relations to existing models:
+- `User`: add `seasonRatings SeasonRating[]`
+- `City`: add `seasonRatings SeasonRating[]`
+
+### API Endpoints
+
+| File | Method | Auth | Description |
+|------|--------|------|-------------|
+| `apps/nomad/src/server/api/season-ratings/city/[slug].get.ts` | GET | Public | Aggregated ratings for all 12 months of a city |
+| `apps/nomad/src/server/api/season-ratings/index.post.ts` | POST | Required | Upsert a month rating (must have favorited city) |
+
+**GET `/api/season-ratings/city/[slug]`** — public. Groups votes by month and returns an array of 12 items:
+```ts
+{
+  month: number,       // 1-12
+  positiveCount: number,
+  totalCount: number,
+  userVote: boolean | null  // null if not authenticated or no vote
+}
+```
+The `userVote` field requires an optional auth check via `getServerSession(event)` — no error thrown if unauthenticated, just `null`. The frontend derives `bestMonths` and `avoidMonths` client-side from `positiveCount / totalCount`.
+
+Use `groupBy` is not available in Prisma on Neon driver adapter easily. Use raw `findMany` with `where: { citySlug, isActive: true }` and aggregate in JS. Given the 12-month ceiling and realistic vote counts, this is fine.
+
+**POST `/api/season-ratings`** — protected via `defineProtectedEventHandler`. Validate body:
+```ts
+{ citySlug, month (1-12), isPositive }
+```
+1. Check `Favorite` exists for `userId + citySlug`. If not, throw `403` with message "You must save this city before rating its seasons."
+2. `upsert` `SeasonRating` on the unique key `[userId, citySlug, month]`.
+3. Return `{ month, isPositive }`.
+
+### Zod Schemas
+Add to `apps/nomad/src/shared/global.schema.ts`:
+
+```ts
+export const createSeasonRatingSchema = z.object({
+  citySlug: z.string().min(1),
+  month: z.number().int().min(1).max(12),
+  isPositive: z.boolean(),
+})
+```
+
+Note: `month` comes from a POST body, so it arrives as a number (not a string), unlike query params that need `.transform(Number)`.
+
+### Composables
+- `apps/nomad/src/composables/useSeasonRatings.ts` — wraps GET `/api/season-ratings/city/[slug]` via `useCustomQuery`
+- `apps/nomad/src/composables/useSubmitSeasonRating.ts` — wraps POST via mutation (follow `vote.post.ts` pattern)
+
+### Frontend Components/Pages
+
+New components:
+- `apps/nomad/src/components/CitySeasonRatings.vue` — full section component. Renders a row of 12 month tiles (reuse or mirror the existing monthly weather strip styling for visual consistency). Each tile shows: month abbreviation, thumbs-up/down buttons (auth-gated), and a percentage bar if there are votes. Shows a summary text line at the top: "Community says: Best months are Nov–Feb. Avoid July–Aug."
+- No separate sub-components needed for v1 — keep it in one file.
+
+Modify:
+- `apps/nomad/src/pages/cities/[slug].vue` — add `<CitySeasonRatings :city-slug="citySlug" />` below the Monthly Weather section (`<!-- ─── Monthly Weather ─── -->`), giving it its own card/section within the light content zone.
+
+### i18n Changes
+Add to `apps/nomad/src/locales/en.json`:
+
+```json
+"seasonRatings": {
+  "title": "Community Season Ratings",
+  "subtitle": "Would you go back in this month?",
+  "positiveBtn": "Yes",
+  "negativeBtn": "No",
+  "noVotes": "No votes yet",
+  "bestMonths": "Community says: Best months are {months}.",
+  "avoidMonths": "Avoid: {months}.",
+  "noData": "Not enough votes yet to show a trend.",
+  "mustFavorite": "Save this city to rate its seasons",
+  "loginToRate": "Sign in to rate"
+}
+```
+
+Mirror keys to `apps/nomad/src/locales/pl.json`.
+
 ## Dependencies
-None. Fully independent.
+- **Favorite model** (already implemented, [removed] equivalent is already done as `Favorite` exists in schema).
+- IDEA-01 (Check-ins) is explicitly NOT a dependency in this revised plan — gating is done on Favorites only.
 
 ## Notes
-- Use `City.temperatureC` for climate scoring — NOT `City.climate` (Numbeo composite).
-- Region enum has 7 values (Antarctica removed). Quiz shows all 7 with existing `regions` i18n keys.
-- Add quiz CTA to homepage features grid and footer once built.
-- No auth required for the quiz endpoint.
+- **Gating rationale change:** Gating on Favorites rather than check-ins is a deliberate simplification. It avoids blocking on IDEA-01 and is still a meaningful quality signal. Can be relaxed later to "favorited OR checked in" once IDEA-01 ships.
+- **Minimum votes threshold:** Consider not displaying `bestMonths`/`avoidMonths` summary text until a city has at least 3 total votes. Otherwise a single user's opinion would appear as "Community says."
+- **No delete endpoint in v1:** Users can flip their vote by submitting again (upsert). There is no need for an explicit delete. If a user wants to undo entirely, that can come in v2.
+- **Spam resilience:** Each user can cast at most 12 votes per city (one per month). The Favorite gate prevents drive-by voting.
+- **Display alongside algorithmic score:** Make the community section visually distinct from the existing `MonthSummary` strip. Use a different color scheme or a clear label ("Community" vs. "Weather Data") to avoid confusion.

@@ -1,74 +1,91 @@
-# IDEA-17: Internet Speed Rankings Page
+# IDEA-17: Public Nomad Profiles
 **Status:** NOT_STARTED
-**Priority:** 17/39
-**Complexity:** S
+**Priority:** 17/23
+**Complexity:** M
 
 ## What's Already Implemented
-- `City.internetSpeedCity` (Int, Mbps) and `City.internetSpeedCityRanking` (Int) both exist in schema
-- Both are returned by `GET /api/cities/[slug]` but NOT by the list endpoint
-- No `/fastest-internet/` pages exist
+- `User.number` field exists — already used for user identity in the system
+- `Favorite` model exists ([removed] adds status)
+- Dashboard exists at `/pages/dashboard.vue`
+- No public profile pages exist
 
 ## Revised Analysis
-This is among the lowest-effort ideas in the backlog — pure read from existing data, no computation needed, simple table UI.
+**Depends heavily on other IDEAs.** A profile page is only interesting if there's content to show. Priority order of content:
+1. Favorite cities (already exists — VISITED/PLANNING from [removed]) — minimum viable content
+2. Tips submitted (IDEA-05)
+3. Reviews submitted (IDEA-16)
+4. Check-in history (IDEA-01)
 
-**Pagination concern:** 500+ cities in a table needs pagination or virtual scrolling for performance. Show top 100 with "load more" or `?page=` pagination — do not return all 500 in one response.
+V1 should ship with just favorite cities (VISITED) and member since date — enough to be useful. Other content adds incrementally as those IDEAs land.
 
-**Ranking display:** `internetSpeedCityRanking` is a pre-computed global rank (lower number = faster). On per-region pages, still show the global rank column — useful context ("this city ranks #12 globally, #3 in Europe").
+**`User.number` for URLs** (`/nomads/1234`) is clean and doesn't expose email or internal ID. This field already exists.
 
-**Region filter tabs:** Implement as `<NuxtLink>` to sub-pages, not client-side filter state, so each region variant is a crawlable URL.
+**Privacy controls are essential.** Users must control what's public:
+- Cities visited: show/hide
+- Cities planning: always hidden from public view
+- Tips: show/hide
+- Member since: always public
 
-**Ordering:** `orderBy: { internetSpeedCityRanking: 'asc' }` (lower rank = faster). Same result as `internetSpeedCity desc` if data is consistent.
+**Minimal schema change:** Add a `publicProfile` boolean flag to `User` (default: false for existing users, true for new). Plus `showVisited` boolean. No `profileVisible` toggle per-content-type for V1 — just a single "make profile public" toggle.
 
 ## Implementation Plan
 
 ### Database Changes
-None.
+```prisma
+// Add to User model:
+publicProfile Boolean @default(false)
+showVisited   Boolean @default(true)
+```
 
 ### API Endpoints
-**New file**: `apps/nomad/src/server/api/rankings/fastest-internet/index.get.ts`
-- `prisma.city.findMany({ orderBy: { internetSpeedCityRanking: 'asc' }, take: 100, select: { slug, name, country, region, internetSpeedCity, internetSpeedCityRanking, image: { select: { url } } } })`
-- Support optional `?page=` for pagination
-
-**New file**: `apps/nomad/src/server/api/rankings/fastest-internet/[region].get.ts`
-- Validates `region` param against `REGION_SLUG_MAP`
-- Filters `where: { region: regionEnum }`, same select/order
+**`apps/nomad/src/server/api/users/[number].get.ts`** — GET, public
+- Finds user by `number` field
+- Returns 404 if not found OR `publicProfile = false`
+- If `showVisited = true`: returns VISITED favorites with city data (`select` only)
+- Returns: `{ number, memberSince: createdAt, visitedCities: [...], tipCount: 0, reviewCount: 0 }` (tip/review counts added as those IDEAs land)
 
 ### Frontend Components/Pages
-**New file**: `apps/nomad/src/pages/fastest-internet/index.vue`
-- Ranked table: global rank, city + country flag, region, speed (Mbps), speed visualization (progress bar)
-- Region tabs at top linking to `/fastest-internet/[region]`
-- Full SEO: title "Cities with Fastest Internet for Remote Work | 2026 Rankings"
-- `useHead` with FAQ JSON-LD: "Which city has the fastest internet for digital nomads?"
+**New file**: `apps/nomad/src/pages/nomads/[number].vue`
+- `defineI18nRoute({ paths: { en: '/nomads/[number]', pl: '/nomadzi/[number]' } })`
+- Fetches user profile from new endpoint
+- Shows: "Nomad #[number]", member since date, visited cities grid (if public)
+- 404-style page if profile not found or not public
+- Minimal SEO: `useHead` with title "Nomad #[number] Profile" — `noindex` for private profiles, light `index` for public ones
 
-**New file**: `apps/nomad/src/pages/fastest-internet/[region].vue`
-- Same structure, region-filtered
-- `defineI18nRoute` with EN/PL paths
+**New file**: `apps/nomad/src/components/dashboard/ProfileSettings.vue`
+- Toggle: "Make my profile public"
+- Toggle: "Show cities I've visited"
+- Link to own public profile when enabled
 
-**New file**: `apps/nomad/src/composables/useFastestInternet.ts`
+**Modify** `apps/nomad/src/pages/dashboard.vue`
+- Add `<DashboardProfileSettings />` section
 
-**New file**: `apps/nomad/src/server/api/__sitemap__/fastest-internet.ts`
-- 7 region pages + 1 global = 8 paths per locale
+**New file**: `apps/nomad/src/server/api/users/profile.patch.ts`
+- Protected endpoint: updates `publicProfile` and `showVisited` for current user
 
 ### i18n Changes
 Add to all locale files:
 ```json
-"fastestInternet": {
-  "title": "Cities with Fastest Internet for Remote Work | {year} Rankings",
-  "description": "Internet speed rankings for 500+ cities. Find the best city for remote work by connection speed.",
-  "heading": "Fastest Internet for Remote Workers",
-  "rank": "Rank",
-  "speed": "Speed",
-  "globalRank": "Global Rank",
-  "mbps": "{speed} Mbps",
-  "faqQuestion": "Which city has the fastest internet for digital nomads?",
-  "faqAnswer": "{city} has the fastest average internet speed at {speed} Mbps, ranking #1 globally for remote workers."
+"profile": {
+  "title": "Nomad #{number}",
+  "memberSince": "Member since {date}",
+  "visitedCities": "Cities visited",
+  "noVisited": "No visited cities shared",
+  "makePublic": "Make my profile public",
+  "showVisited": "Show cities I've visited",
+  "profilePrivate": "This profile is private",
+  "yourProfile": "Your profile",
+  "viewProfile": "View public profile"
 }
 ```
 
 ## Dependencies
-None. Fully standalone.
+- [removed] (Favorites Split): VISITED cities are the primary public content. Required.
+- IDEA-05 (Tips): tip count/list on profile — optional, add later.
+- IDEA-16 (Reviews): review count on profile — optional, add later.
 
 ## Notes
-- Add `internetSpeedCity` and `internetSpeedCityRanking` to the cities list endpoint select if they're not already included — city cards may want to show speed.
-- Speed visualization: normalize against the maximum speed in the dataset (not a fixed 1000 Mbps scale) so bars are meaningful.
-- Consider adding a "Copy shareable link" for each city's row.
+- Default `publicProfile: false` for all existing users — opt-in, not opt-out.
+- The `User.number` field is already a clean integer — confirm it auto-increments or is set correctly for all users.
+- "Cities planning" should NEVER be public — it reveals future plans which is private information.
+- Link to profile from tip and review author bylines once IDEA-05 and IDEA-16 are built.

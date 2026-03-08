@@ -1,99 +1,120 @@
-# IDEA-18: Activate Referral System
-**Status:** PARTIAL (schema only)
-**Priority:** 18/39
-**Complexity:** S
+# IDEA-18: Public Data API
+
+**Status:** NOT_STARTED
+**Priority:** 18/23
+**Complexity:** L
 
 ## What's Already Implemented
-- `User.referralCode String @unique @default(cuid())` — exists, auto-populates ✅
-- `User.referredBy String?` — exists ✅
-- `registerSchema.referralCode` field in `global.schema.ts` — dead code from a never-built email/password flow
 
-Everything else — sign-up capture, dashboard section, API endpoints — is **not built at all**. The "80% built" claim from the original spec is overstated.
+Nothing. There is no API key model, no rate limiting middleware, no public-facing `/api/public/` route directory, and no developer documentation page. The existing server endpoints all serve the internal Nuxt frontend or protected user-session flows. The auth system is session-cookie-based (`next-auth`), not token-based, which means API key authentication would require a net-new auth layer built alongside the session system.
+
+Existing public endpoints that the Data API would expose are already structurally present:
+- `GET /api/cities/index.get.ts` — city list with filters
+- `GET /api/cities/[slug].get.ts` — city detail
+- `GET /api/compare/[slugs].get.ts` — city comparison
+- `GET /api/regions/[region].get.ts` — region rankings
+
+These can be adapted (not duplicated) as public API endpoints, but they currently return internal-format responses and have no rate limiting.
 
 ## Revised Analysis
-**Core challenge: auth flow.** The app uses Google OAuth only via `next-auth` + `PrismaAdapter`. When a user signs in via Google for the first time, `PrismaAdapter` auto-creates the `User` record with no hook to inject arbitrary data (like a referral code from a URL param).
 
-**Solution: cookie-based referral capture.**
-1. User visits `/join?ref=SOMECODE`
-2. A Nuxt server middleware sets a short-lived cookie: `nomad_ref=CODE; Max-Age=600; SameSite=Lax`
-3. Cookie survives the OAuth redirect round-trip
-4. In the `jwt` callback (fires on first sign-in when `user` object is present), read the cookie and update `User.referredBy` if still null
+The original plan is directionally correct but underestimates complexity. Several concerns:
 
-**Referral counting:** `prisma.user.count({ where: { referredBy: session.user.referralCode } })` — no extra schema needed.
+**Prerequisites are not met.** This is designated Phase 2, but the concrete prerequisite is traffic and user trust — not just code. Shipping an API before achieving meaningful organic traffic means building infrastructure for zero consumers. The recommendation is to not start this until the site has established SEO traction (blog content, 10k+ monthly visits).
 
-**Skip "gate feature behind 3 invites" for V1** — adds friction to an untested feature. Ship display + tracking first.
+**Rate limiting on Vercel serverless is non-trivial.** The standard approach is a Redis-backed counter (Upstash is the Vercel-native choice). There is no Redis/KV store in this stack today. Adding Upstash means a new dependency, new environment variable, and a new edge middleware pattern. The collector app's `vercel.json` has no cron entries yet, so there is no existing rate-limit infrastructure at all.
 
-**`registerSchema.referralCode`** is dead code — do not build email/password auth just for referrals. Leave the schema field as-is.
+**API key model placement.** The `ApiKey` model belongs in `packages/db/prisma/schema.prisma` alongside User. The key needs to be hashed at rest (store a `keyHash`, return the raw key once at creation). The model as sketched in the idea stores the raw key — that is a security issue that needs addressing in the design.
+
+**The free/paid tier pricing is a product decision, not a technical one.** $19/month is a reasonable starting point, but payment processing (Stripe) is not in the stack. That is another new dependency. The free tier (100 req/day) alone can be shipped without Stripe by using a hard limit enforced in middleware.
+
+**A simpler first step:** Ship a free-only tier with an API key that is just a read-only credential (no payment). This generates developer interest, backlinks, and lets you validate demand before adding Stripe. Paid tier can be bolted on later once the free tier has users.
+
+**Recommendation:** Do not start this until at least IDEA-21 and a few content/SEO ideas are shipped. When you do start, the correct order is: (1) schema + key management UI, (2) rate limit middleware using Upstash, (3) public endpoint wrappers, (4) docs page, (5) payment/paid tier.
 
 ## Implementation Plan
 
 ### Database Changes
-None. Fields already exist.
+
+Add to `packages/db/prisma/schema.prisma`:
+
+```prisma
+model ApiKey {
+  id           String   @id @default(cuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  keyHash      String   @unique  // bcrypt or SHA-256 hash — never store raw key
+  name         String            // user-assigned label e.g. "My App"
+  isActive     Boolean  @default(true)
+  tier         String   @default("free")  // "free" | "paid"
+  requestCount Int      @default(0)       // lifetime counter (coarse; real rate limit in Redis)
+  lastUsedAt   DateTime?
+  createdAt    DateTime @default(now())
+
+  @@index([userId])
+}
+```
+
+Also add the inverse relation to `User`:
+```prisma
+apiKeys ApiKey[]
+```
 
 ### API Endpoints
-**New file**: `apps/nomad/src/server/api/referrals/count.get.ts`
-- Protected via `defineProtectedEventHandler`
-- Returns `{ count: number }`:
-  ```ts
-  prisma.user.count({ where: { referredBy: session.user.referralCode } })
-  ```
-- Verify `session.user.referralCode` is in the session object (the session callback returns full user from DB — should include it)
 
-**New file**: `apps/nomad/src/server/middleware/referral.ts`
-- On any request to `/join` with `?ref=` query param
-- Sets cookie: `nomad_ref=REFCODE; Path=/; Max-Age=600; SameSite=Lax; HttpOnly`
+All public endpoints live under `apps/nomad/src/server/api/v1/` to namespace them away from internal endpoints.
 
-**Modify** `apps/nomad/src/server/api/auth/[...].ts`
-- In the `jwt` callback, when `user` object is present (= first sign-in):
-  ```ts
-  const refCode = getCookie(event, 'nomad_ref')
-  if (refCode && !existingUser.referredBy) {
-    await prisma.user.update({
-      where: { id: user.id },
-      data: { referredBy: refCode },
-      select: { id: true }, // select rule
-    })
-    deleteCookie(event, 'nomad_ref')
-  }
-  ```
-- **Do NOT touch the existing `include` in the session callback** — pre-existing violation, don't fix it here (risks breaking session shape)
+New rate-limit middleware:
+- `apps/nomad/src/server/middleware/api-key-auth.ts` — validates `Authorization: Bearer <key>` header, enforces daily request quota via Upstash Redis, attaches tier to event context
+
+Public endpoint wrappers (adapt internal endpoints, do not duplicate):
+- `apps/nomad/src/server/api/v1/cities/index.get.ts` — city list (limited fields, no session-specific data)
+- `apps/nomad/src/server/api/v1/cities/[slug].get.ts` — city detail
+- `apps/nomad/src/server/api/v1/compare/[slugs].get.ts` — city comparison
+- `apps/nomad/src/server/api/v1/rankings.get.ts` — top cities by total score for current month
+
+Key management (dashboard-protected):
+- `apps/nomad/src/server/api/dashboard/api-keys/index.get.ts` — list user's keys
+- `apps/nomad/src/server/api/dashboard/api-keys/create.post.ts` — generate new key (returns raw key once)
+- `apps/nomad/src/server/api/dashboard/api-keys/[id].delete.ts` — revoke key
 
 ### Frontend Components/Pages
-**New file**: `apps/nomad/src/components/dashboard/Referral.vue`
-- Follow exact visual pattern of `NomadIdentity.vue` (white card, border, consistent typography)
-- Shows: "Invite friends" heading, copyable referral link `https://nomad.whoisarjen.com/join?ref={referralCode}`, referral count from `useReferralCount()`
-- Copy-to-clipboard button with "Copied!" feedback
 
-**Modify** `apps/nomad/src/pages/dashboard.vue`
-- Add `<DashboardReferral />` after `NomadIdentity` section
-
-**Modify** `apps/nomad/src/pages/join.vue`
-- Read `route.query.ref` on mount
-- The server middleware handles the cookie — the join page just needs to ensure it doesn't strip the `?ref=` param before the OAuth redirect
-
-**New file**: `apps/nomad/src/composables/useReferralCount.ts`
-- Wraps `useCustomQuery` for `/api/referrals/count`
-- `lazy: true` so it doesn't block dashboard render
+- `apps/nomad/src/pages/developers.vue` — documentation page (static, no i18n needed for v1, EN only)
+- `apps/nomad/src/components/dashboard/ApiKeyManager.vue` — list/create/revoke keys in dashboard
+- Extend `apps/nomad/src/pages/dashboard.vue` to include the ApiKeyManager section
 
 ### i18n Changes
-Add to all locale files:
+
+Minimal for v1 — the developer docs page can be EN-only. Dashboard additions:
+
+`apps/nomad/src/locales/en.json` additions:
 ```json
-"referral": {
-  "title": "Invite Friends",
-  "subtitle": "Share your link and grow the community",
-  "yourLink": "Your referral link",
-  "copy": "Copy",
-  "copied": "Copied!",
-  "referredCount": "{count} friends joined",
-  "noReferrals": "No referrals yet — share your link!"
+"apiKeys": {
+  "title": "API Keys",
+  "create": "Generate Key",
+  "revoke": "Revoke",
+  "name": "Key name",
+  "created": "Created",
+  "lastUsed": "Last used",
+  "never": "Never",
+  "copyWarning": "Copy this key — it will not be shown again.",
+  "freeLimit": "100 requests/day on free tier"
 }
 ```
 
 ## Dependencies
-None.
+
+- No IDEA dependencies (standalone)
+- New infrastructure dependency: Upstash Redis for rate limiting (or alternative KV store)
+- Future dependency: Stripe for paid tier billing
+- Should be built only after the site has meaningful traffic — this is Phase 2
 
 ## Notes
-- `referralCode` is already `cuid()` generated for every existing user — no backfill needed.
-- Cookie max-age of 600s (10 minutes) prevents stale referral attribution.
-- The `registerSchema.referralCode` field in `global.schema.ts` is dead code — consider removing in a separate cleanup PR.
-- Verify `session.user.referralCode` is exposed before wiring the count endpoint.
+
+- **Do not start this before the site has traffic.** Building API infrastructure for zero consumers is wasted effort at this stage (priority 18/23 is appropriate).
+- The `keyHash` approach is critical — store `SHA-256(rawKey)`, return `rawKey` exactly once on creation. If a user loses it, they generate a new one.
+- The rate limit window should be a rolling 24-hour window, not a calendar day, to be fair to users in all timezones.
+- Upstash free tier covers ~10k requests/day which is sufficient to bootstrap this.
+- The `/api/v1/` namespace keeps public API responses fully independent from internal endpoint response shape, so both can evolve without breaking each other.
+- Do not expose favorites, user data, or any session-scoped endpoints through the public API.

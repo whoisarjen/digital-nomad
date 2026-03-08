@@ -1,70 +1,101 @@
-# IDEA-16: Cheapest Cities by Region Pages
+# IDEA-16: User City Reviews
 **Status:** NOT_STARTED
-**Priority:** 16/39
-**Complexity:** S
+**Priority:** 16/23
+**Complexity:** M
 
 ## What's Already Implemented
-Nothing. The existing cities index endpoint supports cost-ascending ordering but is paginated and filtered through MonthSummary — not suitable for SEO pages (paginated/filtered URLs get `noindex`). Dedicated pages needed.
+Nothing. No `CityReview` model, no review endpoints, no review UI.
 
 ## Revised Analysis
-Dedicated pages are required for SEO — cannot reuse the main index with preset params (those get `noindex` when params present, per existing pattern).
+Clean idea with clear schema. Start with 3 dimensions instead of 5 to reduce form friction — users who see a 5-dimension form are more likely to skip. Add dimensions in V2 once the feature is established.
 
-**Relative cost indicator** ("43% cheaper than European average") is the key differentiator. Requires computing region average cost at query time — the existing region endpoint already computes `costMin`/`costMax`; add `avgCost` is one line.
+**Recommended V1 dimensions (3):**
+- Overall experience (1-5) — replaces the composite
+- Value for money (1-5)
+- Internet reliability (1-5)
 
-**Global `/cheapest-cities` page** (worldwide) + 7 regional pages. Use the same endpoint with/without region filter.
+**Text review:** Keep at 500 chars. Optional, not required — rated-only reviews are valid.
 
-**Route:** `/cheapest-cities` and `/cheapest-cities/[region]` — clean, intent-matching URLs.
+**Aggregate display:** Show average across each dimension + total review count. Only show averages when ≥ 3 reviews (to avoid misleading 5.0/5 from one review).
 
-**Cost data source:** `City.costForNomadInUsd` directly — not `MonthSummary`. Cost doesn't vary by month in the current data model. Avoids month-dependency for a cost ranking page.
+**Moderation:** `isActive: false` flag + report mechanism (simple: increment a `reportCount` field, auto-hide at threshold = 5). No manual review queue for V1 — rely on the 500-char limit and community reporting.
 
-**Null values:** `costForNomadInUsd` is non-nullable on `City` model — no null sorting issue.
+**Schema compatibility with IDEA-05:** Both `CityTip` and `CityReview` go on the city page. Keep them as separate sections — tips are practical advice, reviews are subjective opinions.
 
 ## Implementation Plan
 
 ### Database Changes
-None.
+```prisma
+model CityReview {
+  id              String   @id @default(cuid())
+  createdAt       DateTime @default(now())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  citySlug        String
+  city            City     @relation(fields: [citySlug], references: [slug])
+  overallRating   Int      // 1-5
+  valueRating     Int      // 1-5
+  internetRating  Int      // 1-5
+  content         String?  @db.VarChar(500)
+  isActive        Boolean  @default(true)
+  reportCount     Int      @default(0)
+
+  @@unique([userId, citySlug])
+  @@index([citySlug, isActive])
+}
+```
 
 ### API Endpoints
-**New file**: `apps/nomad/src/server/api/rankings/cheapest-cities/index.get.ts`
-- Returns top 50 cheapest cities globally, `orderBy: { costForNomadInUsd: 'asc' }`
-- Includes `globalAvgCost` in response for relative indicator
-- `select` only: slug, name, country, region, costForNomadInUsd, internetSpeedCity, safety, image
+**`apps/nomad/src/server/api/reviews/city/[slug].get.ts`** — GET, public
+- Returns reviews + aggregate averages for a city
+- Aggregate: `prisma.cityReview.aggregate({ where: { citySlug, isActive: true }, _avg: { overallRating, valueRating, internetRating }, _count: { _all: true } })`
+- Returns recent 10 reviews with (anonymized) user info — `select { overallRating, valueRating, internetRating, content, createdAt, userId }` — no username for privacy
+- Does not return content if `reportCount >= 5`
 
-**New file**: `apps/nomad/src/server/api/rankings/cheapest-cities/[region].get.ts`
-- Validates `region` param against `REGION_SLUG_MAP`
-- Returns cities for that region sorted by `costForNomadInUsd asc`
-- Includes `regionAvgCost` for relative indicator calculation
+**`apps/nomad/src/server/api/reviews/index.post.ts`** — POST, protected
+- Body: `{ citySlug, overallRating, valueRating, internetRating, content? }`
+- Validates ratings are 1–5 integers
+- Upsert (user can update their own review)
+
+**`apps/nomad/src/server/api/reviews/[id]/report.post.ts`** — POST, protected
+- Increments `reportCount`; sets `isActive: false` if count ≥ 5
 
 ### Frontend Components/Pages
-**New file**: `apps/nomad/src/pages/cheapest-cities/index.vue`
-- Global cheapest page, full SEO
+**New file**: `apps/nomad/src/components/CityReviews.vue`
+- Aggregate ratings display (stars + average per dimension)
+- Review list (most recent first, hidden if reportCount ≥ 5)
+- Review submission form (auth-gated)
+- Report button per review
 
-**New file**: `apps/nomad/src/pages/cheapest-cities/[region].vue`
-- Per-region cheapest page
-- Relative indicator computed client-side: `((cityCost - regionAvgCost) / regionAvgCost * 100).toFixed(0)` → "X% cheaper than regional average"
-- `defineI18nRoute` with EN/PL paths
+**Modify** `apps/nomad/src/pages/cities/[slug].vue` (or `[slug]/index.vue`)
+- Add `<CityReviews :city-slug="slug" />` section
 
-**New file**: `apps/nomad/src/composables/useCheapestCities.ts`
-
-**New file**: `apps/nomad/src/server/api/__sitemap__/cheapest-cities.ts`
-- 7 region slugs + 1 global = 8 paths per locale
+**New file**: `apps/nomad/src/composables/useCityReviews.ts`
+- Wraps aggregate query + mutation
 
 ### i18n Changes
 Add to all locale files:
 ```json
-"cheapestCities": {
-  "title": "Cheapest Digital Nomad Cities in {region} | 2026 Cost Rankings",
-  "globalTitle": "Cheapest Digital Nomad Cities Worldwide | 2026 Rankings",
-  "description": "Cities sorted by monthly cost for digital nomads. Live data.",
-  "cheaperThanAverage": "{pct}% cheaper than {region} average",
-  "moreExpensiveThanAverage": "{pct}% more expensive than {region} average"
+"reviews": {
+  "title": "Community Reviews",
+  "addReview": "Write a review",
+  "overallRating": "Overall",
+  "valueRating": "Value for money",
+  "internetRating": "Internet reliability",
+  "optional": "Optional comment",
+  "signInToReview": "Sign in to write a review",
+  "noReviews": "Be the first to review {city}",
+  "totalReviews": "{count} review | {count} reviews",
+  "report": "Report",
+  "minRatings": "Shown after {min}+ reviews"
 }
 ```
 
 ## Dependencies
-- IDEA-03: Region pages already exist under `/regions/`. Cheapest cities is a separate SEO intent at `/cheapest-cities/`. No conflict.
+- IDEA-17 (Public Profiles): reviews authored by a user appear on their profile.
 
 ## Notes
-- English URL slugs universally (no `/najtansze-miasta/` in PL) — simpler and defensible.
-- Region names for display come from existing `regions` i18n keys.
-- Add Nitro ISR route rule for these endpoints — cost data is updated infrequently.
+- Show aggregate ratings only when ≥ 3 reviews exist — prevents misleading 5.0 from one vote.
+- Anonymize reviews — show "Nomad #1234" not usernames, for privacy.
+- One review per user per city — enforced by `@@unique([userId, citySlug])`.
+- V2: Add remaining dimensions (safety felt, vibe, ease of arrival) once review volume is established.

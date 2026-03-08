@@ -1,97 +1,154 @@
-# IDEA-19: English Proficiency Score
+# IDEA-19: Coworking Space Directory
 
 **Status:** NOT_STARTED
-**Priority:** 19/39
-**Complexity:** S
+**Priority:** 19/23
+**Complexity:** L
 
 ## What's Already Implemented
 
-Nothing. The `City` model has no `englishProficiency` field. No filter, no badge, no seed data.
+Nothing. The Prisma schema has no `CoworkingSpace` model. There are no coworking-related pages, API endpoints, or components anywhere in the codebase.
 
 ## Revised Analysis
 
-The original plan is sound and genuinely low-effort. A few refinements based on the real codebase:
+The original idea is directionally correct — coworking data is high-value for digital nomads — but the **admin approval workflow is the critical risk**. There is currently no admin panel, no admin role on the `User` model, no admin middleware, and no admin routes anywhere in the app. Building a submission-to-approval pipeline from scratch is a significant hidden dependency.
 
-**Data granularity.** EF EPI is country-level data, not city-level. This matches the pattern already used for `internetSpeedCountry` (scraped once, applied to all cities in a country). The `countryCode` field on `City` is the right join key.
+**Admin workflow reality check.** The current auth system (`@sidebase/nuxt-auth` + `next-auth`) stores a simple `User` with no `role` or `isAdmin` field. To do even minimal manual approval you need: (1) an `isAdmin` flag on `User`, (2) a protected admin API endpoint to list unapproved spaces and flip `isApproved`, and (3) some admin UI or at minimum a direct DB workflow via Prisma Studio. Given the project is solo-operated, the lightest viable path is: skip the admin UI entirely and approve directly in the DB (Prisma Studio or a one-off SQL UPDATE). The API only ever exposes `isApproved: true` records to the frontend, so bad submissions are invisible without approval.
 
-**Score vs. Level.** The original plan proposes storing a `Decimal` (0-100 EF score) and displaying it as a High/Medium/Low badge. The existing schema already uses the `Level` enum (`LOW | MIDDLE | HIGH`) for all qualitative dimensions (safety, pollution, healthCare, etc.). Storing a raw Decimal and then deriving the Level at display time adds complexity for no benefit — unless you plan to expose the raw numeric score. Recommendation: store both, or store just a `Level` field named `englishLevel` that fits the existing enum pattern. However, keeping the raw Decimal also enables future range filtering, so `Decimal?` is the better call.
+**Schema simplification.** The proposed schema stores `submittedBy` as a plain string. This is fine for a first version, but linking to `userId` (String, FK to User) is strictly better — it enables rate-limiting submissions per user and eventually showing users their pending submissions. The tradeoff is requiring auth to submit, which is acceptable given the existing auth system.
 
-**Filter pattern.** The existing `filters.get.ts` endpoint returns a `pickers` object consumed by `FiltersDrawer` via `SinglePicker`. The safety and pollution pickers already use `OPTIONS_LEVEL_GTE` / `OPTIONS_LEVEL_LTE`. Adding `englishProficiency` follows the exact same pattern — add it to the `pickers` response, add a zod field to `getCitiesSchema`, add a `where` clause in `index.get.ts`. The `SinglePicker` component renders it automatically.
+**WiFi speed** is notoriously self-reported and unreliable. Drop the `wifiSpeed` field from the initial schema; it adds noise without a verification mechanism. Bring it back if you add a Speedtest.net-style check-in flow later.
 
-**Seed approach.** EF EPI data is published annually as a PDF/webpage. The simplest approach is a one-time collector script at `apps/collector/server/api/_legacy_cron/english-proficiency.get.ts` that maps EF country scores to the `englishProficiency` field via `countryCode`. This mirrors the `internets.get.ts` pattern (scrape → `city.updateMany` by country).
+**Vibe tags** from the proposal are a `String[]` in Postgres (array column). This is supported by Prisma. Keep it — it's the main differentiator from existing coworking databases.
 
-**Score-to-Level mapping.** EF EPI bands: Very High 600+, High 550-599, Moderate 500-549, Low <500. Map to `LOW | MIDDLE | HIGH` for the filter, store raw Decimal for display.
+**Rating/votes.** The proposal says "sort by rating/votes" but the schema has no rating or vote fields — these would be a second-phase addition. For V1, sort by `createdAt desc` among approved spaces.
 
-**City page display.** The city detail page (`/cities/[slug].vue`) has a Quality of Life section currently showing only safety and healthcare. English proficiency fits naturally here. The API endpoint `cities/[slug].get.ts` needs `englishProficiency: true` added to its `select`.
+**i18n scope.** The `name`, `address`, and potentially any `notes` field are inherently user-generated English-only content. No bilingual field pattern needed here — it would be meaningless. Section headings and UI labels need i18n across the 11 locales.
 
-**i18n.** The current filter label system in `SinglePicker` auto-capitalizes the `name` prop (e.g. `englishProficiency` → "English Proficiency"). The existing `filters.pickers` object key becomes the URL query param name, so `englishProficiency` works cleanly.
+**SEO note.** Individual coworking space pages are not worth building initially. The section on the city page is sufficient. If the dataset grows to 50+ spaces per city, a standalone `/cities/[slug]/coworking` page would make sense.
+
+**Effort realism.** Despite "Medium" effort in the brief, this is a genuine L due to the form, submission flow, moderation-by-DB, approval-aware queries, and new city page section — all with zero existing scaffolding.
 
 ## Implementation Plan
 
 ### Database Changes
 
-Add to `City` model in `packages/db/prisma/schema.prisma`:
+Add to `packages/db/prisma/schema.prisma`:
+
 ```prisma
-englishProficiency Decimal? @db.Decimal(5, 2)
+model CoworkingSpace {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now()) @updatedAt
+
+  citySlug    String
+  city        City     @relation(fields: [citySlug], references: [slug], onDelete: Cascade)
+
+  name        String
+  address     String?
+  dailyPrice  Decimal? @db.Decimal(8, 2)
+  monthlyPrice Decimal? @db.Decimal(8, 2)
+  vibeTags    String[]
+  isApproved  Boolean  @default(false)
+
+  submittedById String?
+  submittedBy   User?   @relation(fields: [submittedById], references: [id], onDelete: SetNull)
+
+  @@index([citySlug, isApproved])
+}
+```
+
+Also add the reverse relation to `City`:
+```prisma
+coworkingSpaces CoworkingSpace[]
+```
+
+And to `User`:
+```prisma
+coworkingSpaces CoworkingSpace[]
 ```
 
 User runs `prisma db push` as usual.
 
 ### API Endpoints
 
-**Seed script (collector):**
-- Create `apps/collector/server/api/_legacy_cron/english-proficiency.get.ts`
-- Fetches EF EPI data (manual JSON embed or scrape), maps country scores to cities via `countryCode`
-- Uses `prisma.city.updateMany({ where: { countryCode: ... }, data: { englishProficiency: ... } })`
+**List approved coworking spaces for a city:**
+- `apps/nomad/src/server/api/coworking/[citySlug].get.ts`
+- Public, no auth required
+- Returns only `isApproved: true` records, ordered by `createdAt desc`
+- `select`: `id`, `name`, `address`, `dailyPrice`, `monthlyPrice`, `vibeTags`, `createdAt`
 
-**City list filter (`apps/nomad/src/server/api/cities/filters.get.ts`):**
-- Add `englishProficiency: true` to the `select` in `city.findMany`
-- Add an `englishProficiency` entry to the returned `pickers` object using `OPTIONS_LEVEL_GTE` pattern (gte operation, LOW/MIDDLE/HIGH thresholds mapped from the Decimal)
+**Submit a new coworking space:**
+- `apps/nomad/src/server/api/coworking/submit.post.ts`
+- Protected via `defineProtectedEventHandler` (requires auth — same pattern as `favorites/toggle.post.ts` and `features/vote.post.ts`)
+- Validates body with zod schema
+- Creates record with `isApproved: false`; submittedById from session
 
-Alternatively, expose raw numeric options derived from the actual data distribution using `getSingleOptions` — this lets users filter by score directly.
+**Zod schema additions** in `apps/nomad/src/shared/global.schema.ts`:
+```ts
+export const getCoworkingByCitySchema = z.object({
+  citySlug: z.string().min(1),
+})
 
-**City list query (`apps/nomad/src/server/api/cities/index.get.ts`):**
-- Add `englishProficiency: true` to the city `select` inside `monthSummary.findMany`
-- Add a `where` clause block: `if (query.englishProficiency) { AND.push({ englishProficiency: { gte: query.englishProficiency } }) }`
-
-**City detail (`apps/nomad/src/server/api/cities/[slug].get.ts`):**
-- Add `englishProficiency: true` to the `select`
+export const submitCoworkingSchema = z.object({
+  citySlug: z.string().min(1),
+  name: z.string().min(2).max(120),
+  address: z.string().max(200).optional(),
+  dailyPrice: z.number().positive().max(9999).optional(),
+  monthlyPrice: z.number().positive().max(9999).optional(),
+  vibeTags: z.array(z.string().max(30)).max(5).default([]),
+})
+```
 
 ### Frontend Components/Pages
 
-**`apps/nomad/src/shared/global.schema.ts`:**
-- Add `englishProficiency` field to `getCitiesSchema` (optional string → number pipe, same as `internets`)
+**New composable:**
+- `apps/nomad/src/composables/useCoworking.ts`
+- Wraps `useCustomQuery` for `/api/coworking/[citySlug]`
 
-**`apps/nomad/src/pages/cities/[slug].vue`:**
-- Add English proficiency row to the Quality of Life section card
-- Display as numeric score + derived badge (High/Medium/Low) using a helper function matching `formatLevel`
+**New component — coworking section:**
+- `apps/nomad/src/components/CityCoworkingSection.vue`
+- Shows list of approved spaces as cards: name, address, daily/monthly price badges, vibe tags
+- Includes a "Submit a Space" button that opens a modal/drawer form
+- The form is auth-gated (uses `AuthGate` component — already exists)
+- Shows empty state if no approved spaces yet
 
-**`apps/nomad/src/pages/index.vue`:**
-- No change needed — filter is handled via `FiltersDrawer` + `pickers` from the API
+**Modify city page:**
+- `apps/nomad/src/pages/cities/[slug].vue`
+- Add `<CityCoworkingSection :city-slug="citySlug" />` after the Related Articles widget
 
 ### i18n Changes
 
-Add to all locale files under `apps/nomad/src/locales/`:
+Add to all 11 locale files under `apps/nomad/src/locales/`:
 ```json
-"city": {
-  "englishProficiency": "English Proficiency"
-}
-```
-
-For the filter, `SinglePicker` auto-labels from the key, so no extra key needed unless you want a translated label. Add to `filters` section if desired:
-```json
-"filters": {
-  "englishProficiency": "English"
+"coworking": {
+  "title": "Coworking Spaces",
+  "noSpaces": "No coworking spaces listed yet.",
+  "submitSpace": "Submit a Space",
+  "daily": "Daily",
+  "monthly": "Monthly",
+  "submitTitle": "Submit a Coworking Space",
+  "nameLabel": "Space name",
+  "addressLabel": "Address (optional)",
+  "dailyPriceLabel": "Daily price (USD, optional)",
+  "monthlyPriceLabel": "Monthly price (USD, optional)",
+  "vibeTagsLabel": "Vibe tags (e.g. quiet, fast wifi, cafes)",
+  "submitButton": "Submit for Review",
+  "submitSuccess": "Thanks! Your submission is under review.",
+  "pendingNote": "Listings are reviewed before appearing."
 }
 ```
 
 ## Dependencies
 
-None. Standalone feature.
+No hard code dependencies on other IDEAs, but the admin approval mechanism is a soft dependency on building any admin tooling (which does not exist yet). Until an admin UI exists, approvals must be done manually via Prisma Studio or direct SQL:
+```sql
+UPDATE "CoworkingSpace" SET "isApproved" = true WHERE id = '...';
+```
 
 ## Notes
 
-- EF EPI data is country-level. Cities in the same country will share the same score. This is acceptable and consistent with how `internetSpeedCountry` works.
-- The `MonthSummary` model also has fields mirrored from `City` (safety, pollution, etc.) for query performance. If `englishProficiency` needs to be sortable in the main city list (which queries `monthSummary`), you would need to add it to `MonthSummary` as well and sync it via the total-score cron. Given it changes at most once per year, this is low priority — skip it initially and filter/sort directly on `City` if needed.
-- The `SinglePicker` label for filter pickers is auto-derived from the `name` prop by splitting on `_` and uppercasing. The key `englishProficiency` becomes "English Proficiency" automatically — no i18n required for the filter label, only for the city detail page row.
-- The `OPTIONS_LEVEL_GTE` approach (Low+, Middle+) matches the safety/pollution filter UX. For a Decimal field, you can also just define 3-4 numeric cutpoints from the EF score distribution instead of mapping to the Level enum.
+- There is no email library in the project (`package.json` has no nodemailer, Resend, SendGrid, etc.). Email notifications for submission status are therefore impossible without adding an email dependency — skip for V1.
+- The `isAdmin` check for an admin UI would require adding a `role` field to `User` or a simple `isAdmin Boolean @default(false)` field. Not worth doing just for this feature.
+- Empty-state handling is critical: show "No spaces listed yet. Be the first to submit one." — an empty section with no CTA is worse than no section at all.
+- Consider rate-limiting submissions per user (e.g. max 5 submissions across all cities) to prevent spam. Enforce this in the submit endpoint using `prisma.coworkingSpace.count({ where: { submittedById: userId } })` before creating.
+- Do not build this until there is a clear plan for how approvals get processed. If no one is checking the queue, user submissions accumulate invisibly and the feature is dead on arrival.

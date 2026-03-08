@@ -1,102 +1,146 @@
-# IDEA-13: Trip Planner (Extend Favorites)
+# IDEA-13: Digital Nomad Visa Directory
 **Status:** NOT_STARTED
-**Priority:** 13/39
+**Priority:** 13/23
 **Complexity:** XL
 
 ## What's Already Implemented
-Nothing. No trip planner UI, no reorder API, no plan month API, no public trip view.
+Nothing. No `CountryVisa` model, no `/pages/visas/` directory, no visa-related fields on `City` or any other model. Confirmed by grepping the entire schema and source tree.
 
 ## Revised Analysis
-**Requires IDEA-20 first.** The `status` field from IDEA-20 changes the Favorite model shape that this extends.
 
-**Drag-to-reorder NOT recommended.** No drag library is installed (`@vueuse/core` doesn't ship a sortable list). Adding `vue-draggable-next` or similar adds dependency weight and accessibility complexity. **Use up/down arrow buttons for reordering** — same UX outcome, significantly simpler implementation, keyboard accessible with `aria-label`.
+### The original plan is right but the scope is too ambitious for a first pass
 
-**Shareable trip link privacy:** The spec proposes `/trips/[userId]` which exposes internal user IDs. Instead, add a `tripShareToken` field to `User` (a `cuid()` default), route as `/trips/[tripShareToken]`. Avoids leaking user IDs.
+The proposed `CountryVisa` model is country-level data, but the existing data model is entirely city-level. This creates a structural mismatch that needs to be resolved upfront. The `City` model has `countryCode` and `countrySlug` fields, which provides the join key, but there is no `Country` model — countries are just denormalized strings on `City`. Before building visa pages, you need to decide whether to create a proper `Country` model or attach `CountryVisa` as a standalone model keyed by `countryCode`.
 
-**Month-specific weather** is already in `MonthSummary` — join on `plannedMonth` in the trip endpoint. No new data collection needed.
+**Recommendation: standalone `CountryVisa` keyed by `countryCode`** — simpler, no migration of existing city data, and countryCode (ISO-2) is already on every `City` row. This avoids creating a `Country` model just for visas.
 
-**Running total cost** is computed client-side — sum `costForNomadInUsd` for all planning favorites with `plannedMonth` set.
+### Data is the real blocker, not the schema
+
+The schema is the easy part (one afternoon). The hard part is sourcing accurate, legally defensible visa data for even 30 countries across three passport types (US/EU/UK). Visa-free day counts change with bilateral treaties. A stale "90 days visa-free" entry for a country that just changed its policy is actively harmful. Every row needs a source URL and an `updatedAt` to surface staleness. The original plan mentions "legal accuracy matters — add disclaimers" but does not solve the freshness problem.
+
+**Recommendation: add a `sourceUrl` and `verifiedAt` field to each row, and show a visible "Last verified: [date]" on every entry in the UI.** This is table stakes for legal defensibility.
+
+### The `/visas` index with passport selector is high-effort UI for low immediate SEO return
+
+The higher-value SEO play is adding a compact "Visa Info" card directly on existing city pages (which already rank). This surfaces visa data on pages that already have traffic without needing to build and index an entirely new section. Build the city-page card first, defer the full `/visas` directory index until you have data for 30+ countries.
+
+### Schengen vs nomad visa are two different user intents
+
+`isSchengen` is a binary flag that answers "can I stay 90 days in Schengen with US/EU/UK passport?" — this is mostly static and easy. The nomad visa fields (`hasNomadVisa`, `nomadVisaCost`, etc.) answer a completely different question and the data is much harder to source and keep current. Split these into separate display sections in the UI with separate "last verified" timestamps.
+
+### The passport selector (US/EU/UK) is important but requires careful i18n handling
+
+The selector label and visa-free day copy must be translated in all 11 locales. The data itself (day counts, links) is not localized — it is factual. Only UI labels need locale keys.
 
 ## Implementation Plan
 
 ### Database Changes
+
+Add to `packages/db/prisma/schema.prisma`:
+
 ```prisma
-// Add to existing Favorite model (after IDEA-20's status field):
-order        Int?
-plannedMonth Int?  // 1-12
+model CountryVisa {
+  countryCode String @id  // ISO 3166-1 alpha-2, matches City.countryCode
 
-// Add to User model:
-tripShareToken String @unique @default(cuid())
-```
+  // Visa-free days (-1 = visa required, 0 = e-visa, positive = visa-free days)
+  visaFreeUsaDays Int?
+  visaFreeEuDays  Int?
+  visaFreeUkDays  Int?
 
-### API Endpoints
-**`apps/nomad/src/server/api/favorites/reorder.patch.ts`** — PATCH, protected
-- Body: `{ items: Array<{ citySlug: string, order: number }> }`
-- Upserts `order` for each favorite
-- Returns `{ updated: number }`
+  // Schengen Area membership
+  isSchengen Boolean @default(false)
 
-**`apps/nomad/src/server/api/favorites/plan.patch.ts`** — PATCH, protected
-- Body: `{ citySlug: string, plannedMonth: number | null }`
-- Updates `plannedMonth` on the favorite record
-- Returns `{ plannedMonth: number | null }`
+  // Tax residency threshold
+  taxThresholdDays Int?  // days before potential tax residency triggered
 
-**`apps/nomad/src/server/api/trips/[token].get.ts`** — GET, public
-- Finds `User` by `tripShareToken`
-- Returns PLANNING favorites with `order`, `plannedMonth`, city data (name, country, image, `costForNomadInUsd`), and `monthSummary` for the planned month (weatherIcon, temperature)
-- No auth required
+  // Digital nomad visa
+  hasNomadVisa       Boolean  @default(false)
+  nomadVisaCostUsd   Int?     // approximate annual cost in USD
+  nomadVisaDurationMonths Int? // visa validity in months
+  nomadVisaIncomeUsd Int?     // minimum monthly income requirement in USD
+  nomadVisaLink      String?  // official government URL
 
-**Modify** `apps/nomad/src/server/api/favorites/index.get.ts`
-- Include `order`, `plannedMonth` in response
-- Default sort: `order asc nulls last, createdAt desc` when `status = PLANNING`
+  // Data provenance
+  sourceUrl   String?
+  verifiedAt  DateTime?
 
-### Frontend Components/Pages
-**New file**: `apps/nomad/src/composables/useTripPlanner.ts`
-- `reorderFavorites()` mutation wrapping PATCH endpoint
-- `setPlanMonth(citySlug, month)` mutation
-
-**New file**: `apps/nomad/src/components/dashboard/TripPlanner.vue`
-- Ordered list of PLANNING favorites
-- Up/down arrow buttons per row for reordering (with `aria-label`)
-- Dropdown month selector (Jan–Dec + "Not set") per city
-- Running total cost at bottom (sum of cities with `plannedMonth` set)
-- Share button: copies `/trips/[tripShareToken]` to clipboard
-- Month-specific weather preview icon per city when `plannedMonth` is set
-
-**Modify** `apps/nomad/src/components/dashboard/SavedCities.vue`
-- Planning tab renders `<TripPlanner>` instead of (or alongside) the grid view
-
-**New file**: `apps/nomad/src/pages/trips/[token].vue`
-- Public read-only trip view
-- Fetches `GET /api/trips/[token]`
-- Shows ordered cities with planned months and weather previews
-- `noindex` meta (private user content)
-- `defineI18nRoute({ paths: { en: '/trips/[token]', pl: '/trasy/[token]' } })`
-
-### i18n Changes
-Add to all locale files:
-```json
-"trip": {
-  "planner": "Trip Planner",
-  "planMonth": "Planned month",
-  "notPlanned": "Month not set",
-  "shareTrip": "Share trip",
-  "linkCopied": "Link copied!",
-  "totalCost": "Est. monthly total",
-  "monthlyBudget": "~${cost}/mo",
-  "publicView": "{name}'s Trip",
-  "noPlanning": "No cities in Planning list yet",
-  "moveUp": "Move up",
-  "moveDown": "Move down"
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 }
 ```
 
+No relation from `City` to `CountryVisa` is needed — join happens at the API layer via `countryCode`.
+
+### API Endpoints
+
+- `apps/nomad/src/server/api/visa/[countryCode].get.ts`
+  - Returns full `CountryVisa` row for a given ISO country code
+  - Used by the city detail page to show the visa card
+  - Returns `null` if no record exists (not all countries will have data initially)
+
+- `apps/nomad/src/server/api/visa/index.get.ts`
+  - Returns all `CountryVisa` rows ordered by `countryCode`
+  - Used by the `/visas` directory index page
+  - Query params: `passport` (us | eu | uk), `hasNomadVisa` (boolean), optional region filter
+
+### Frontend Components/Pages
+
+**Phase 1 — city page integration (build this first):**
+- `apps/nomad/src/components/CityVisaCard.vue`
+  - New section card on `/cities/[slug]` page, placed after "Quality of Life" card
+  - Shows visa-free days for all three passports in a three-column layout
+  - Shows nomad visa summary block (cost, duration, income, link) if `hasNomadVisa`
+  - Shows Schengen badge and tax threshold note
+  - Shows "Last verified: [date]" and source link
+  - Shows disclaimer: "This is informational only. Always verify with official sources."
+  - Renders nothing (hidden) if no `CountryVisa` record exists for that country
+
+**Phase 2 — visa directory (build after 30+ countries are seeded):**
+- `apps/nomad/src/pages/visas/index.vue`
+  - Full directory with passport selector tabs (US / EU / UK)
+  - Filterable table: visa-free days, has nomad visa, region
+  - Link to country's city pages
+
+### i18n Changes
+
+Add to all 11 locale files (`en.json`, `pl.json`, etc.):
+
+```json
+"visa": {
+  "title": "Visa Information",
+  "passportUs": "US Passport",
+  "passportEu": "EU Passport",
+  "passportUk": "UK Passport",
+  "visaFreeDays": "{days} days visa-free",
+  "visaRequired": "Visa required",
+  "eVisaAvailable": "e-Visa available",
+  "isSchengen": "Schengen Area",
+  "taxThreshold": "Tax residency after {days} days",
+  "nomadVisa": "Nomad Visa Available",
+  "nomadVisaCost": "~${cost}/year",
+  "nomadVisaDuration": "{months} months",
+  "nomadVisaIncome": "Min. income: ${income}/mo",
+  "nomadVisaApply": "Apply / Official Info",
+  "verifiedAt": "Last verified: {date}",
+  "disclaimer": "Visa rules change. Always verify with official government sources before travel.",
+  "noData": "Visa data not yet available for this country."
+}
+```
+
+### Sitemap Changes
+
+- `apps/nomad/src/server/api/__sitemap__/visas.ts` — enumerate all visa directory pages once Phase 2 is built
+- Add `/api/__sitemap__/visas` to the `sources` array in `nuxt.config.ts`
+
 ## Dependencies
-- **IDEA-20 is a hard prerequisite** — the planner operates on PLANNING favorites.
-- IDEA-01 / IDEA-10: month-specific weather data comes from `MonthSummary` already in DB.
+- No hard dependencies on other IDEAs
+- Soft dependency: having `/cities/[slug]` pages already ranking well makes Phase 1 (city card) immediately valuable
 
 ## Notes
-- `tripShareToken` addition to `User` is a simple `prisma db push` — one field.
-- Public trip page must set `noindex` in head meta — it's private user content.
-- Running total only sums cities where `plannedMonth IS NOT NULL`.
-- Up/down arrow reordering must be keyboard navigable: `<button aria-label="Move up">` / `<button aria-label="Move down">`.
-- The public trip view at `/trips/[token]` should gracefully handle tokens that don't exist (404 page, not server error).
+
+- **Start with Phase 1 only.** Seed data for 10-15 countries where the nomad visa program is well-known (Portugal, Thailand, Indonesia/Bali, Georgia, Croatia, Costa Rica, UAE, Estonia, Czech Republic, Hungary, Mexico) and ship the city-page card. This gives real SEO value on day one with minimal surface area.
+- **Do not build `/visas/index.vue` until you have 30+ country rows.** A directory with 10 rows looks thin and does not rank.
+- **Encoding convention for visa-free days:** use `-1` for "visa required, no e-visa", `0` for "e-visa available", and a positive integer for visa-free days. This keeps the column a single `Int?` instead of a string enum.
+- **EU passport complexity:** "EU passport" is not a single thing — a French passport and a Romanian passport have different visa-free access in some countries. For simplicity, use the Schengen passport baseline (worst-case EU access). Note this limitation in the UI.
+- **The `nomadVisaLink` must point to the official government URL**, not a third-party blog post, to maintain credibility.
+- This feature is high-effort primarily due to data collection, not engineering. Budget 3-4 hours for the schema + API + city card, and much more time for ongoing data maintenance.

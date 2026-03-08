@@ -1,90 +1,76 @@
-# IDEA-21: Schengen 90/180 Day Calculator
+# IDEA-21: Historical Cost Trends
 **Status:** NOT_STARTED
-**Priority:** 21/39
-**Complexity:** M
+**Priority:** 21/23
+**Complexity:** S (start now) → L (payoff later)
 
 ## What's Already Implemented
-Nothing. No `/tools/` pages directory exists. No Schengen-related logic anywhere in the codebase. `City.region` (Region enum) is available for non-Schengen recommendations.
+Nothing. No `CostSnapshot` model, no snapshot cron.
 
 ## Revised Analysis
-Core feature is pure date arithmetic — entirely client-side. The complexity is in:
-1. Setting up `/tools/` page structure and i18n routing
-2. The rolling 180-day window algorithm (common mistake: treating it as a fixed calendar period)
-3. Non-Schengen city recommendations — filter by region/country
+**START THIS IMMEDIATELY.** The schema + cron take one day to implement. The value compounds over 6–12 months as snapshots accumulate. Every month you delay is a month of data permanently lost.
 
-**Rolling window algorithm:**
-For any check date D: look back 180 days. Sum overlapping days from each entry/exit pair within `[D - 180, D]`. Must not exceed 90.
+**The UI can wait** — ship the model and cron now. Add the trend visualization to city pages once 6+ months of data exists.
 
-```ts
-for each date D:
-  windowStart = D - 180 days
-  daysUsed = sum of overlap between each [entry, exit] pair and [windowStart, D]
-  if daysUsed >= 90: you're at limit
-nextSafeEntry = date when oldest days fall off the 180-day window
-```
+**Snapshot frequency:** Monthly is correct. Weekly would be overkill and expensive to store. Monthly snapshots × 500 cities = 500 rows/month = 6,000 rows/year — tiny.
 
-**Non-Schengen recommendations:** Use a hardcoded list of Schengen member countries (26) to filter `City.country`. Any `region !== 'Europe'` is automatically non-Schengen. Among European cities, filter out the 26 Schengen members. No API change strictly needed — a simple static `SCHENGEN_COUNTRIES` set in a constant.
+**Cron placement:** `apps/collector/server/api/cron/cost-snapshot.get.ts` — collector handles all data collection. Run on the 1st of each month.
 
-**i18n routing:** Start with English-only path `/tools/schengen-calculator`. Add `/narzedzia/kalkulator-schengen` for PL in a follow-up pass. The `defineI18nRoute` pattern is established.
+**Which cost fields to snapshot:**
+- `costForNomadInUsd` — primary
+- `costForExpatInUsd` — secondary
+- `costForLocalInUsd` — secondary
+- Skip `costForFamilyInUsd` for V1 to keep snapshots lean
 
-**SSR:** Page has no server-side data dependency. Use `definePageMeta({ ssr: false })` or leave SSR on with empty initial state — both work.
-
-**Shareable state:** Store entry/exit pairs in URL query params as `?e=2025-01-10:2025-02-15,2025-03-01:2025-04-20` — nice-to-have V2.
+**Idempotency:** The cron should skip if a snapshot for the current month already exists (`@@unique([citySlug, snapshotMonth])`).
 
 ## Implementation Plan
 
 ### Database Changes
-None.
+```prisma
+model CostSnapshot {
+  id            String   @id @default(cuid())
+  citySlug      String
+  city          City     @relation(fields: [citySlug], references: [slug])
+  costNomad     Decimal  @db.Decimal(10, 2)
+  costExpat     Decimal  @db.Decimal(10, 2)
+  costLocal     Decimal  @db.Decimal(10, 2)
+  snapshotMonth DateTime // store as first day of month: new Date(year, month-1, 1)
 
-### API Endpoints
-None for the calculator itself. Optionally extend `GET /api/cities` with `nonSchengen=true` param for recommendations — a 5-line addition to `getCitiesSchema` and `index.get.ts`.
-
-### Frontend Components/Pages
-**New file**: `apps/nomad/src/pages/tools/schengen-calculator.vue`
-- `defineI18nRoute({ paths: { en: '/tools/schengen-calculator' } })`
-- Full SEO `useHead`: title "Schengen Calculator for Digital Nomads | 90/180 Day Tracker"
-- Entry/exit date pair inputs with add/remove rows
-- Computed: `daysUsed`, `daysRemaining`, `nextSafeEntry`, `isOverLimit`
-- Visual progress bar (0–90, color-coded: green < 60, yellow 60–80, red 80+)
-- Warning + non-Schengen city recommendations when < 20 days remain
-
-**New file**: `apps/nomad/src/composables/useSchengenCalculator.ts`
-- Input: `entries: Ref<Array<{ from: string; to: string }>>`
-- Pure date arithmetic, no API calls
-- Exports: `daysUsed`, `daysRemaining`, `nextSafeEntry`, `isOverLimit`
-
-**New file**: `apps/nomad/src/components/SchengenEntryRow.vue`
-- Two date inputs (entry date, exit date), remove button
-
-**New constant**: Add `SCHENGEN_COUNTRY_CODES` set to `apps/nomad/src/shared/global.utils.ts`
-- 26 Schengen member country codes for filtering recommendations
-
-**Add link** in footer or nav to `/tools/schengen-calculator`
-
-**Sitemap:** Add static entry via `nuxt.config.ts` `sitemap.urls` — simpler than a `__sitemap__` API for fixed URLs.
-
-### i18n Changes
-Add to all locale files:
-```json
-"schengen": {
-  "title": "Schengen 90/180 Day Calculator",
-  "subtitle": "Track your Schengen zone days remaining",
-  "addEntry": "Add entry",
-  "entryDate": "Entry date",
-  "exitDate": "Exit date",
-  "daysUsed": "{days} days used",
-  "daysRemaining": "{days} days remaining",
-  "nextSafeEntry": "Next safe entry: {date}",
-  "overLimit": "You are over the 90-day limit",
-  "lowDays": "Running low — consider these non-Schengen cities:",
-  "noEntries": "Add your first Schengen entry above"
+  @@unique([citySlug, snapshotMonth])
+  @@index([citySlug])
 }
 ```
 
+### API Endpoints
+**Future (add after 6+ months of data)**: `apps/nomad/src/server/api/cities/[slug]/cost-history.get.ts`
+- Returns all snapshots for a city ordered by `snapshotMonth asc`
+- Client computes % change between periods
+
+### Cron
+**New file**: `apps/collector/server/api/cron/cost-snapshot.get.ts`
+- Runs monthly (first day of month)
+- Queries all cities: `prisma.city.findMany({ select: { slug, costForNomadInUsd, costForExpatInUsd, costForLocalInUsd } })`
+- Upserts snapshots: `prisma.costSnapshot.createMany({ data: [...], skipDuplicates: true })`
+- Returns `{ snapshotted: N }`
+
+**Modify** `apps/collector/vercel.json`
+- Add cron entry: `{ "path": "/api/cron/cost-snapshot", "schedule": "0 0 1 * *" }` (midnight on 1st of month)
+
+### Frontend Components/Pages (Future — after 6+ months of data)
+**New file**: `apps/nomad/src/components/CostTrendChart.vue`
+- Simple line chart (use `chart.js` or a lightweight alternative already in the project)
+- Shows `costForNomadInUsd` over time
+- "Cost has [increased/decreased] X% in the past 12 months"
+
+**Modify** `apps/nomad/src/pages/cities/[slug].vue`
+- Add `<CostTrendChart :city-slug="slug" />` after the cost section — only render if ≥ 3 data points exist
+
 ## Dependencies
-None. Fully self-contained. Shares `/tools/` directory with IDEA-22.
+None. This is infrastructure — build it before everything else that depends on data.
 
 ## Notes
-- Non-Schengen European countries to include in recommendations: UK, Ireland, Albania, Bosnia, Kosovo, North Macedonia, Moldova, Montenegro, Serbia, Ukraine, Georgia, Armenia, Azerbaijan.
-- The rolling 180-day window is commonly misunderstood — implement carefully and add a clear tooltip/explanation on the page.
-- Add the tools pages to the sitemap statically.
+- **Ship the cron and schema NOW** — every delayed month is permanently lost data.
+- The `snapshotMonth` field should always be stored as the first day of the month in UTC (e.g., `new Date(Date.UTC(2026, 2, 1))` for March 2026) for consistent grouping.
+- The `skipDuplicates: true` option in `createMany` makes the cron idempotent — safe to run multiple times per month.
+- The UI (trend chart) is NOT the priority here. The data collection cron is. Add the chart UI once you have enough data to make it meaningful.
+- Add a manual backfill endpoint or script to create initial snapshots from current city costs as a "T=0" baseline.
