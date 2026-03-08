@@ -4,8 +4,14 @@ import { buildCompareSlug } from '~/shared/global.utils'
 const CITY_SELECT = {
   slug: true,
   name: true,
-  country: true,
-  region: true,
+  country: {
+    select: {
+      name: true,
+      region: true,
+      internetSpeed: true,
+      internetSpeedRanking: true,
+    },
+  },
   costForNomadInUsd: true,
   costForExpatInUsd: true,
   costForLocalInUsd: true,
@@ -17,8 +23,6 @@ const CITY_SELECT = {
   population: true,
   internetSpeedCity: true,
   internetSpeedCityRanking: true,
-  internetSpeedCountry: true,
-  internetSpeedCountryRanking: true,
   airQualityNow: true,
   airQualityScore: true,
   airQualityNowScore: true,
@@ -53,7 +57,7 @@ export default defineEventHandler(async (event) => {
     return
   }
 
-  const [cityA, cityB] = await Promise.all([
+  const [rawA, rawB] = await Promise.all([
     prisma.city.findFirstOrThrow({
       where: { slug: slugs.city1 },
       select: CITY_SELECT,
@@ -64,5 +68,23 @@ export default defineEventHandler(async (event) => {
     }),
   ])
 
-  return { cityA, cityB }
+  const { country: countryA, ...fieldsA } = rawA
+  const { country: countryB, ...fieldsB } = rawB
+
+  return {
+    cityA: {
+      ...fieldsA,
+      country: countryA.name,
+      region: countryA.region,
+      internetSpeedCountry: countryA.internetSpeed,
+      internetSpeedCountryRanking: countryA.internetSpeedRanking,
+    },
+    cityB: {
+      ...fieldsB,
+      country: countryB.name,
+      region: countryB.region,
+      internetSpeedCountry: countryB.internetSpeed,
+      internetSpeedCountryRanking: countryB.internetSpeedRanking,
+    },
+  }
 })

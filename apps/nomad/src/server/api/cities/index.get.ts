@@ -24,14 +24,18 @@ const getCityPrismaQuery = (query: z.infer<typeof getCitiesSchema>) => {
                 },
                 {
                     country: {
-                        contains: query.q,
-                        mode: 'insensitive',
+                        name: {
+                            contains: query.q,
+                            mode: 'insensitive',
+                        },
                     },
                 },
                 {
-                    countryChinese: {
-                        contains: query.q,
-                        mode: 'insensitive',
+                    country: {
+                        nameChinese: {
+                            contains: query.q,
+                            mode: 'insensitive',
+                        },
                     },
                 },
             ]
@@ -39,7 +43,7 @@ const getCityPrismaQuery = (query: z.infer<typeof getCitiesSchema>) => {
     }
 
     if (query.regions) {
-        AND.push({ region: { in: (Array.isArray(query.regions) ? query.regions : query.regions ? [query.regions] : []) } })
+        AND.push({ country: { region: { in: (Array.isArray(query.regions) ? query.regions : query.regions ? [query.regions] : []) } } })
     }
 
     if (query.costs) {
@@ -99,7 +103,7 @@ const getCityPrismaQuery = (query: z.infer<typeof getCitiesSchema>) => {
         AND.push({
             monthSummary: {
                 some: {
-                    temperature2mMean: { 
+                    temperature2mMean: {
                         gte: query.temperatures.min,
                         lte: query.temperatures.max,
                     },
@@ -191,7 +195,7 @@ export default defineEventHandler(async (event) => {
                     select: {
                         slug: true,
                         name: true,
-                        country: true,
+                        country: { select: { name: true } },
                         costForNomadInUsd: true,
                         population: true,
                         image: true,
@@ -224,8 +228,9 @@ export default defineEventHandler(async (event) => {
     const cities = monthSummaries.map(option => option.city)
 
     return {
-        data: cities.map(({ monthSummary, ...city }) => ({
+        data: cities.map(({ monthSummary, country: countryData, ...city }) => ({
             ...city,
+            country: countryData.name,
             population: formatNumber(city.population),
             weatherIcon: monthSummary[0]?.weatherIcon,
             temperature: monthSummary[0]?.temperature2mMax,

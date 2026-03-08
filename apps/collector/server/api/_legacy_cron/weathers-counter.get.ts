@@ -38,7 +38,7 @@ export default defineEventHandler(async () => {
     prisma.city.findMany({
       select: {
         slug: true,
-        region: true,
+        country: { select: { region: true } },
         weathers: {
           select: {
             apparentTemperatureMax: true,
@@ -148,7 +148,7 @@ export default defineEventHandler(async () => {
 
     await processInBatches(medianTemperatures, async option => {
       const data = {
-        region: city.region,
+        region: city.country.region,
         totalScore: 0,
         citySlug: city.slug,
         month: option.month,

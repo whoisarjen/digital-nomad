@@ -25,9 +25,10 @@ export default defineEventHandler(async (event) => {
         select: {
           slug: true,
           name: true,
-          country: true,
-          countryCode: true,
           countrySlug: true,
+          country: {
+            select: { name: true, code: true },
+          },
           costForNomadInUsd: true,
           internetSpeedCity: true,
           safety: true,
@@ -43,23 +44,28 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 404, statusMessage: 'Country not found' })
   }
 
-  const cities = monthSummaries.map((ms) => ({
-    ...ms.city,
-    costForNomadInUsd: ms.city.costForNomadInUsd ? Number(ms.city.costForNomadInUsd) : null,
-    weatherIcon: ms.weatherIcon,
-    temperature: ms.temperature2mMax,
-    totalScore: ms.totalScore,
-  }))
+  const cities = monthSummaries.map((ms) => {
+    const { country: countryData, ...cityFields } = ms.city
+    return {
+      ...cityFields,
+      country: countryData.name,
+      countryCode: countryData.code,
+      costForNomadInUsd: ms.city.costForNomadInUsd ? Number(ms.city.costForNomadInUsd) : null,
+      weatherIcon: ms.weatherIcon,
+      temperature: ms.temperature2mMax,
+      totalScore: ms.totalScore,
+    }
+  })
 
   const costs = cities.map((c) => c.costForNomadInUsd ?? 0).filter(Boolean)
   const speeds = cities.map((c) => c.internetSpeedCity ?? 0).filter(Boolean)
 
-  const firstCity = monthSummaries[0]!.city
+  const firstCity = cities[0]!
 
   return {
     country: firstCity.country,
     countryCode: firstCity.countryCode,
-    countrySlug: firstCity.countrySlug,
+    countrySlug,
     cities,
     stats: {
       cityCount: cities.length,

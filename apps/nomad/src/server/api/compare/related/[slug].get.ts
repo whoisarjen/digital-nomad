@@ -9,20 +9,19 @@ export default defineEventHandler(async (event) => {
     select: {
       slug: true,
       name: true,
-      region: true,
+      country: { select: { region: true } },
       costForNomadInUsd: true,
     },
   })
 
   const relatedCities = await prisma.city.findMany({
     where: {
-      region: city.region,
+      country: { region: city.country.region },
       slug: { not: slug },
     },
     select: {
       slug: true,
       name: true,
-      country: true,
       costForNomadInUsd: true,
     },
     orderBy: { costForNomadInUsd: 'asc' },

@@ -29,12 +29,12 @@ describe('GET /api/compare/related/[slug]', () => {
     prismaMock.city.findFirstOrThrow.mockResolvedValue({
       slug: 'bangkok',
       name: 'Bangkok',
-      region: 'Asia',
+      country: { region: 'Asia' },
       costForNomadInUsd: 1500,
     })
     prismaMock.city.findMany.mockResolvedValue([
-      { slug: 'bali', name: 'Bali', country: 'Indonesia', costForNomadInUsd: 1200 },
-      { slug: 'chiang-mai', name: 'Chiang Mai', country: 'Thailand', costForNomadInUsd: 900 },
+      { slug: 'bali', name: 'Bali', costForNomadInUsd: 1200 },
+      { slug: 'chiang-mai', name: 'Chiang Mai', costForNomadInUsd: 900 },
     ])
 
     const result = await handler.default(createMockH3Event({ params: { slug: 'bangkok' } }))
@@ -50,11 +50,11 @@ describe('GET /api/compare/related/[slug]', () => {
     prismaMock.city.findFirstOrThrow.mockResolvedValue({
       slug: 'bangkok',
       name: 'Bangkok',
-      region: 'Asia',
+      country: { region: 'Asia' },
       costForNomadInUsd: 1500,
     })
     prismaMock.city.findMany.mockResolvedValue([
-      { slug: 'bali', name: 'Bali', country: 'Indonesia', costForNomadInUsd: 1200 },
+      { slug: 'bali', name: 'Bali', costForNomadInUsd: 1200 },
     ])
 
     const result = await handler.default(createMockH3Event({ params: { slug: 'bangkok' } }))
@@ -70,7 +70,7 @@ describe('GET /api/compare/related/[slug]', () => {
     prismaMock.city.findFirstOrThrow.mockResolvedValue({
       slug: 'nowhere',
       name: 'Nowhere',
-      region: 'Africa',
+      country: { region: 'Africa' },
       costForNomadInUsd: 1000,
     })
     prismaMock.city.findMany.mockResolvedValue([])

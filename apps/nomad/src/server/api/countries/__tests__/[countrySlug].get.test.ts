@@ -25,8 +25,7 @@ vi.mock('~/shared/global.utils', () => ({
 const mockCity = {
   slug: 'bangkok',
   name: 'Bangkok',
-  country: 'Thailand',
-  countryCode: 'TH',
+  country: { name: 'Thailand', code: 'TH' },
   countrySlug: 'thailand',
   costForNomadInUsd: 1500,
   internetSpeedCity: 80,
@@ -34,7 +33,7 @@ const mockCity = {
   image: { url: 'https://example.com/bangkok.jpg', ownerName: 'John', ownerUsername: 'john' },
 }
 
-const mockSummary = (overrides: Partial<typeof mockCity> = {}) => ({
+const mockSummary = (overrides: Record<string, any> = {}) => ({
   totalScore: 85,
   weatherIcon: 'sunny',
   temperature2mMax: 32,

@@ -19,8 +19,7 @@ export default defineProtectedEventHandler(async (event, session) => {
           select: {
             slug: true,
             name: true,
-            country: true,
-            region: true,
+            country: { select: { name: true, region: true } },
             costForNomadInUsd: true,
             internetSpeedCity: true,
             safety: true,
@@ -47,8 +46,8 @@ export default defineProtectedEventHandler(async (event, session) => {
       return {
         slug: f.city.slug,
         name: f.city.name,
-        country: f.city.country,
-        region: f.city.region,
+        country: f.city.country.name,
+        region: f.city.country.region,
         costForNomadInUsd: f.city.costForNomadInUsd,
         internetSpeedCity: f.city.internetSpeedCity,
         safety: f.city.safety,

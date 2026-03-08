@@ -4,6 +4,7 @@ import { createMockH3Event } from '../../../../../test/mocks/h3-event'
 const { prismaMock } = vi.hoisted(() => ({
   prismaMock: {
     city: { groupBy: vi.fn() },
+    country: { findMany: vi.fn() },
   },
 }))
 
@@ -23,11 +24,12 @@ describe('GET /api/countries', () => {
     prismaMock.city.groupBy.mockResolvedValue([
       {
         countrySlug: 'thailand',
-        country: 'Thailand',
-        countryCode: 'TH',
         _count: 5,
         _avg: { costForNomadInUsd: 1500, internetSpeedCity: 80.7 },
       },
+    ])
+    prismaMock.country.findMany.mockResolvedValue([
+      { slug: 'thailand', name: 'Thailand', code: 'TH' },
     ])
 
     const result = await handler.default(createMockH3Event())
@@ -47,11 +49,12 @@ describe('GET /api/countries', () => {
     prismaMock.city.groupBy.mockResolvedValue([
       {
         countrySlug: 'portugal',
-        country: 'Portugal',
-        countryCode: 'PT',
         _count: 2,
         _avg: { costForNomadInUsd: 2000, internetSpeedCity: 124.4 },
       },
+    ])
+    prismaMock.country.findMany.mockResolvedValue([
+      { slug: 'portugal', name: 'Portugal', code: 'PT' },
     ])
 
     const result = await handler.default(createMockH3Event())
@@ -63,11 +66,12 @@ describe('GET /api/countries', () => {
     prismaMock.city.groupBy.mockResolvedValue([
       {
         countrySlug: 'unknown',
-        country: 'Unknown',
-        countryCode: null,
         _count: 1,
         _avg: { costForNomadInUsd: null, internetSpeedCity: null },
       },
+    ])
+    prismaMock.country.findMany.mockResolvedValue([
+      { slug: 'unknown', name: 'Unknown', code: '' },
     ])
 
     const result = await handler.default(createMockH3Event())
@@ -78,6 +82,7 @@ describe('GET /api/countries', () => {
 
   it('returns empty array when no countries exist', async () => {
     prismaMock.city.groupBy.mockResolvedValue([])
+    prismaMock.country.findMany.mockResolvedValue([])
 
     const result = await handler.default(createMockH3Event())
 

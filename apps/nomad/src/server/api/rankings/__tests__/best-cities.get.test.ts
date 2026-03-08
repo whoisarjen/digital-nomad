@@ -24,12 +24,12 @@ describe('GET /api/rankings/best-cities', () => {
       {
         month: '01',
         totalScore: 4,
-        city: { slug: 'bangkok', name: 'Bangkok', country: 'Thailand', image: null },
+        city: { slug: 'bangkok', name: 'Bangkok', country: { name: 'Thailand' }, image: null },
       },
       {
         month: '02',
         totalScore: 3,
-        city: { slug: 'lisbon', name: 'Lisbon', country: 'Portugal', image: null },
+        city: { slug: 'lisbon', name: 'Lisbon', country: { name: 'Portugal' }, image: null },
       },
     ])
 

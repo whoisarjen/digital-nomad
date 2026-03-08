@@ -8,6 +8,8 @@
     "lint": "turbo run lint",
     "check": "turbo run check",
     "test": "turbo run test:run",
+    "db:push": "npm run db:push --workspace=@nomad/db",
+    "db:generate": "npm run db:generate --workspace=@nomad/db",
     "reinstall": "find . -name 'node_modules' -type d -prune -exec rm -rf '{}' + && rm -rf .turbo && npm i",
     "prepare": "husky"
   },

@@ -11,7 +11,7 @@ export default defineEventHandler(async () => {
         prisma.monthSummary.findFirst({
           where: {
             month: currentMonth,
-            city: { region: regionEnum },
+            city: { country: { region: regionEnum } },
           },
           orderBy: [{ totalScore: 'desc' }, { popularity: 'desc' }],
           select: {
@@ -28,7 +28,7 @@ export default defineEventHandler(async () => {
             },
           },
         }),
-        prisma.city.count({ where: { region: regionEnum } }),
+        prisma.city.count({ where: { country: { region: regionEnum } } }),
       ])
 
       return {

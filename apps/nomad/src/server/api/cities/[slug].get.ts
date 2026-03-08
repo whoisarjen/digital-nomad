@@ -3,13 +3,19 @@ import { getCitiesBySlugSchema } from "~/shared/global.schema"
 export default defineEventHandler(async (event) => {
   const { slug } = await getValidatedRouterParams(event, getCitiesBySlugSchema.parse)
 
-  return await prisma.city.findFirstOrThrow({
+  const city = await prisma.city.findFirstOrThrow({
     where: { slug },
     select: {
       name: true,
-      country: true,
       countrySlug: true,
-      region: true,
+      country: {
+        select: {
+          name: true,
+          region: true,
+          internetSpeed: true,
+          internetSpeedRanking: true,
+        },
+      },
       costForNomadInUsd: true,
       costForExpatInUsd: true,
       costForLocalInUsd: true,
@@ -21,8 +27,6 @@ export default defineEventHandler(async (event) => {
       population: true,
       internetSpeedCity: true,
       internetSpeedCityRanking: true,
-      internetSpeedCountry: true,
-      internetSpeedCountryRanking: true,
       airQualityNow: true,
       airQualityScore: true,
       airQualityNowScore: true,
@@ -49,4 +53,14 @@ export default defineEventHandler(async (event) => {
       }
     }
   })
+
+  const { country: countryData, ...cityFields } = city
+
+  return {
+    ...cityFields,
+    country: countryData.name,
+    region: countryData.region,
+    internetSpeedCountry: countryData.internetSpeed,
+    internetSpeedCountryRanking: countryData.internetSpeedRanking,
+  }
 })

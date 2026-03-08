@@ -1,5 +1,5 @@
 export default defineEventHandler(async () => {
-  const citiesInDb = await prisma.city.findMany({ select: { internetSpeedCity: true, slug: true, region: true } })
+  const citiesInDb = await prisma.city.findMany({ select: { internetSpeedCity: true, slug: true, country: { select: { region: true } } } })
   await processInBatches(citiesInDb, async cityInDb => {
     await prisma.city.update({
       where: {

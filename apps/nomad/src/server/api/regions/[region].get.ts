@@ -14,7 +14,7 @@ export default defineEventHandler(async (event) => {
   const monthSummaries = await prisma.monthSummary.findMany({
     where: {
       month: currentMonth,
-      city: { region: regionEnum },
+      city: { country: { region: regionEnum } },
     },
     orderBy: [
       { totalScore: 'desc' },
@@ -28,7 +28,7 @@ export default defineEventHandler(async (event) => {
         select: {
           slug: true,
           name: true,
-          country: true,
+          country: { select: { name: true } },
           costForNomadInUsd: true,
           internetSpeedCity: true,
           safety: true,
@@ -41,12 +41,16 @@ export default defineEventHandler(async (event) => {
     },
   })
 
-  const cities = monthSummaries.map((ms) => ({
-    ...ms.city,
-    weatherIcon: ms.weatherIcon,
-    temperature: ms.temperature2mMax,
-    totalScore: ms.totalScore,
-  }))
+  const cities = monthSummaries.map((ms) => {
+    const { country: countryData, ...cityFields } = ms.city
+    return {
+      ...cityFields,
+      country: countryData.name,
+      weatherIcon: ms.weatherIcon,
+      temperature: ms.temperature2mMax,
+      totalScore: ms.totalScore,
+    }
+  })
 
   const costs = cities.map((c) => Number(c.costForNomadInUsd ?? 0)).filter(Boolean)
   const speeds = cities.map((c) => c.internetSpeedCity ?? 0).filter(Boolean)

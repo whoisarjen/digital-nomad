@@ -13,9 +13,10 @@ export default defineEventHandler(async () => {
       city: {
         select: {
           name: true,
-          country: true,
           slug: true,
-          region: true,
+          country: {
+            select: { name: true, region: true },
+          },
           internetSpeedCity: true,
           safety: true,
           image: { select: { url: true } },
@@ -26,9 +27,9 @@ export default defineEventHandler(async () => {
 
   const cities = topCities.map((ms) => ({
     name: ms.city.name,
-    country: ms.city.country,
+    country: ms.city.country.name,
     slug: ms.city.slug,
-    region: ms.city.region,
+    region: ms.city.country.region,
     totalScore: ms.totalScore,
     cost: ms.costForNomadInUsd ? Number(ms.costForNomadInUsd) : null,
     internetSpeed: ms.city.internetSpeedCity,

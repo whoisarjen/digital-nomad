@@ -83,4 +83,41 @@ describe('GET /api/blog/[slug]', () => {
 
     expect(result.faqs).toEqual([{ question: 'Is it safe?', answer: 'Yes.' }])
   })
+
+  it('flattens city country data in response', async () => {
+    getValidatedRouterParamsMock.mockResolvedValue({ slug: 'city-article' })
+    prismaMock.article.findFirstOrThrow.mockResolvedValue({
+      slug: 'city-article',
+      titleEn: 'City Guide',
+      excerptEn: 'Guide',
+      contentEn: 'Content',
+      metaTitleEn: null,
+      metaDescEn: null,
+      featuredImageUrl: null,
+      featuredImageAlt: null,
+      featuredImageOwnerName: null,
+      featuredImageOwnerUsername: null,
+      readingTimeMinutes: 3,
+      publishedAt: new Date(),
+      updatedAt: new Date(),
+      faqs: [],
+      cities: [
+        {
+          isPrimary: true,
+          city: {
+            slug: 'bangkok',
+            name: 'Bangkok',
+            country: { name: 'Thailand' },
+            image: null,
+          },
+        },
+      ],
+    })
+
+    const result = await handler.default(
+      createMockH3Event({ params: { slug: 'city-article' } }),
+    )
+
+    expect(result.cities[0].city.country).toBe('Thailand')
+  })
 })

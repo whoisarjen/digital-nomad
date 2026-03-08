@@ -23,22 +23,23 @@ export default defineEventHandler(async () => {
   const medianSpeedCity = data.filter(({ country }) => country.includes(','))
   const medianSpeedCountry = data.filter(({ country }) => !country.includes(','))
 
+  // Update country-level internet speed on the Country table
   await processInBatches(medianSpeedCountry, async country => {
-    await prisma.city.updateMany({
+    await prisma.country.updateMany({
       where: {
-        country: {
+        name: {
           contains: country.country,
           mode: 'insensitive',
         }
       },
       data: {
-        internetSpeedCity: country.speed,
-        internetSpeedCountry: country.speed,
-        internetSpeedCountryRanking: country.ranking,
+        internetSpeed: country.speed,
+        internetSpeedRanking: country.ranking,
       },
     })
   })
 
+  // Update city-level internet speed on the City table
   await processInBatches(medianSpeedCity, async city => {
     await prisma.city.updateMany({
       where: {

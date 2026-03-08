@@ -1,10 +1,12 @@
-import type { City, MonthSummary } from "@prisma/client"
+import type { City, Country, MonthSummary } from "@prisma/client"
+
+type CityWithCountry = City & { country: Country }
 
 class TotalScoreFactory {
-  private city = null as City | null
+  private city = null as CityWithCountry | null
   private monthSummary = null as MonthSummary | null
 
-  constructor(city: City, monthSummary: MonthSummary) {
+  constructor(city: CityWithCountry, monthSummary: MonthSummary) {
     this.city = city
     this.monthSummary = monthSummary
   }
@@ -31,7 +33,7 @@ class TotalScoreFactory {
   }
 
   getRegionScore() {
-    const { region } = this.getCity()
+    const { region } = this.getCity().country
 
     if (region === 'Asia' || region === 'Europe') {
       return 2.5
@@ -206,6 +208,7 @@ export default defineEventHandler(async () => {
         slug,
       },
       include: {
+        country: true,
         monthSummary: true,
       }
     })

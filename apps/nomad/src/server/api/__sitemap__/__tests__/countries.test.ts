@@ -3,7 +3,7 @@ import { createMockH3Event } from '../../../../../test/mocks/h3-event'
 
 const { prismaMock } = vi.hoisted(() => ({
   prismaMock: {
-    city: { findMany: vi.fn() },
+    country: { findMany: vi.fn() },
   },
 }))
 
@@ -23,7 +23,7 @@ describe('GET /api/__sitemap__/countries', () => {
   })
 
   it('entries do not include _sitemap field', async () => {
-    prismaMock.city.findMany.mockResolvedValue([{ countrySlug: 'thailand' }])
+    prismaMock.country.findMany.mockResolvedValue([{ slug: 'thailand' }])
 
     const result = await handler.default(createMockH3Event())
 
@@ -33,7 +33,7 @@ describe('GET /api/__sitemap__/countries', () => {
   })
 
   it('entries include loc and alternatives', async () => {
-    prismaMock.city.findMany.mockResolvedValue([{ countrySlug: 'portugal' }])
+    prismaMock.country.findMany.mockResolvedValue([{ slug: 'portugal' }])
 
     const result = await handler.default(createMockH3Event())
 

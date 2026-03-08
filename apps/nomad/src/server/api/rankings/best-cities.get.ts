@@ -14,7 +14,7 @@ export default defineEventHandler(async () => {
         select: {
           slug: true,
           name: true,
-          country: true,
+          country: { select: { name: true } },
           image: {
             select: {
               url: true,
@@ -35,7 +35,7 @@ export default defineEventHandler(async () => {
     topCity: {
       slug: s.city.slug,
       name: s.city.name,
-      country: s.city.country,
+      country: s.city.country.name,
       totalScore: s.totalScore,
       image: s.city.image,
     },

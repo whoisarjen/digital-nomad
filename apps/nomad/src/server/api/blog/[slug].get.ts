@@ -37,7 +37,7 @@ export default defineEventHandler(async (event) => {
             select: {
               slug: true,
               name: true,
-              country: true,
+              country: { select: { name: true } },
               image: { select: { url: true } },
             },
           },
@@ -66,7 +66,15 @@ export default defineEventHandler(async (event) => {
     readingTimeMinutes: article.readingTimeMinutes,
     publishedAt: article.publishedAt,
     updatedAt: article.updatedAt,
-    cities: article.cities,
+    cities: article.cities.map((c) => ({
+      isPrimary: c.isPrimary,
+      city: {
+        slug: c.city.slug,
+        name: c.city.name,
+        country: c.city.country.name,
+        image: c.city.image,
+      },
+    })),
     faqs,
   };
 });

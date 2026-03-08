@@ -46,33 +46,44 @@ enum Region {
   Antarctica
 }
 
+model Country {
+  slug      String   @id
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  name                 String
+  nameChinese          String
+  code                 String
+  region               Region
+  internetSpeed        Int @default(0)
+  internetSpeedRanking Int @default(0)
+  englishProficiency   Int @default(0)
+
+  cities City[]
+}
+
 model City {
   slug      String   @id
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 
   name         String
-  country      String
+  countrySlug  String
+  country      Country  @relation(fields: [countrySlug], references: [slug])
   population   Int
   temperatureC Decimal @db.Decimal(4, 1)
   latitude     Decimal @db.Decimal(9, 6)
   longitude    Decimal @db.Decimal(9, 6)
-  region       Region
 
   nameChinese    String
-  countryChinese String
   airQualityNow  Int
   airQuality     Float?
-  countryCode    String
-  countrySlug    String
   stateCode      String?
   stateChinese   String?
   state          String?
 
-  internetSpeedCity           Int
-  internetSpeedCityRanking    Int
-  internetSpeedCountry        Int
-  internetSpeedCountryRanking Int
+  internetSpeedCity        Int
+  internetSpeedCityRanking Int
 
   airQualityScore    Int
   airQualityNowScore Decimal @db.Decimal

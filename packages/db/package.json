@@ -9,6 +9,7 @@
     "./types": "./src/types.ts"
   },
   "scripts": {
+    "db:push": "prisma db push",
     "db:generate": "prisma generate"
   },
   "dependencies": {
