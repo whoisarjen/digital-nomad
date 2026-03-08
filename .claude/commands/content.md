@@ -14,6 +14,41 @@ Read these files to understand what exists:
 - `.claude/marketing/published-log.md` — articles already published (avoid duplicates)
 - `.claude/marketing/content/strategy/daily-content-automation-plan.md` — templates and rules
 
+## Step 1b: Check for Short Articles Needing Regeneration
+
+Before picking new keywords, check for existing articles with thin content:
+
+```sql
+SELECT slug, "titleEn", "readingTimeMinutes",
+       LENGTH("contentEn") AS content_length_chars,
+       "publishedAt", "updatedAt"
+FROM "Article"
+WHERE LENGTH("contentEn") < 8000
+ORDER BY LENGTH("contentEn") ASC
+LIMIT 10;
+```
+
+**Threshold:** Any article with `contentEn` under 8000 characters is considered thin and should be regenerated. New articles target 1500-2500 words in HTML (~9000-12000 chars), so 8000 chars catches articles clearly below the quality bar.
+
+**If thin articles found:**
+- Regenerate them first, consuming slots from the N requested (e.g. if 5 requested and 2 thin articles found → regenerate 2, create 3 new)
+- Use the same pipeline agent prompt (Step 3) but with mode: **regenerate** — the agent receives the existing slug and must:
+  1. Query all DB data fresh (City, MonthSummary, QualityIndex)
+  2. Write a full new article (1500-2500 words EN)
+  3. Translate to all 10 languages
+  4. **UPDATE** (not INSERT) the existing row:
+     ```sql
+     UPDATE "Article"
+     SET "titleEn" = '...', "contentEn" = '...', ...,
+         "updatedAt" = NOW(),
+         "publishedAt" = NOW(),
+         "readingTimeMinutes" = [new value]
+     WHERE slug = '[existing-slug]';
+     ```
+  5. Keep the same slug and ArticleCityMap — do NOT insert new rows for those
+- If more thin articles exist than requested slots → pick the shortest ones first
+- If no thin articles → skip this step entirely, proceed normally
+
 ## Step 2: Pick Keywords (Keyword Analyst)
 
 ### Step 2a: Check GSC for Organic Keyword Opportunities
@@ -21,10 +56,11 @@ Read these files to understand what exists:
 Query Google Search Console for keywords Google already associates with the site. Run via bash:
 
 ```bash
+# Uses service account credentials (no browser/OAuth). Timeout 15s to avoid hanging.
 echo '{"jsonrpc":"2.0","method":"tools/call","params":{"name":"search_analytics","arguments":{"siteUrl":"sc-domain:nomad.whoisarjen.com","startDate":"YYYY-MM-DD","endDate":"YYYY-MM-DD","dimensions":"query","rowLimit":100}},"id":1}' | GOOGLE_APPLICATION_CREDENTIALS=/Users/kamilowczarek/.config/gsc-credentials.json npx -y mcp-server-gsc 2>/dev/null
 ```
 
-Use the last 30 days as the date range.
+Run this with Bash tool timeout of 15000ms. Use the last 30 days as the date range. This runs entirely in the background via stdin/stdout — no browser will open.
 
 **If GSC query fails** (timeout, auth error, empty response, or any error): log a warning to the user ("GSC unavailable, proceeding with discovery keywords") and skip directly to Step 2b. Do NOT block the pipeline.
 
@@ -147,6 +183,7 @@ Hard fails (do NOT insert):
 - contentEn must be 500+ words
 - Primary city slug must exist in City table
 - **Featured image must be reachable** — run `curl -sL -o /dev/null -w "%{http_code}" "[featuredImageUrl]"` and verify HTTP 200. If not 200, try a different Unsplash image. If 3 attempts fail → hard fail.
+- **Prefer unique images** — check existing articles for used images: `SELECT "featuredImageUrl" FROM "Article" WHERE "featuredImageUrl" IS NOT NULL`. Try to pick an Unsplash image not already used. If no unique image can be found, a duplicate is acceptable.
 
 Soft warnings (insert anyway, note in report):
 - Any meta title over 60 chars → truncate

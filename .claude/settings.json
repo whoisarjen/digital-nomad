@@ -159,7 +159,31 @@
       "Bash(claude mcp list)",
       "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\(json.dumps\\(d.get\\(''mcpServers'',{}\\), indent=2\\)\\)\")",
       "Bash(GOOGLE_APPLICATION_CREDENTIALS=/Users/kamilowczarek/.config/gsc-credentials.json timeout 5 npx -y mcp-server-gsc)",
-      "Bash(GOOGLE_APPLICATION_CREDENTIALS=/Users/kamilowczarek/.config/gsc-credentials.json npx -y mcp-server-gsc)"
+      "Bash(GOOGLE_APPLICATION_CREDENTIALS=/Users/kamilowczarek/.config/gsc-credentials.json npx -y mcp-server-gsc)",
+      "Bash(psql \"$DATABASE_URL\" -t -A -c 'SELECT DISTINCT country FROM \"\"City\"\" ORDER BY country;')",
+      "Bash(DATABASE_URL=\"postgresql://neondb_owner:npg_n0kXqyEH2Dcs@ep-frosty-boat-alaa0uj5-pooler.c-3.eu-central-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require\" npx tsx -e \":*)",
+      "Bash(node -p \":*)",
+      "Bash(node /tmp/extract-countries.js)",
+      "Bash(node /tmp/build-english-map.js)",
+      "Bash(node /tmp/build-final-json.js)",
+      "Bash(node /tmp/verify-coverage.js)",
+      "Bash(npx -w packages/db prisma generate)",
+      "Bash(chmod -R u+w /Users/kamilowczarek/Documents/GitHub/digital-nomad/node_modules/.prisma/client/)",
+      "Bash(npx --workspace=@nomad/db prisma db push)",
+      "Bash(node -e \"require\\(''dotenv''\\).config\\(\\); console.log\\(''DB:'', process.env.DATABASE_URL?.substring\\(0,30\\)\\)\")",
+      "Bash(npx --workspace=@deante/db prisma db push)",
+      "Bash(npm run db:push)",
+      "Bash(npm run db:generate)",
+      "Bash(chmod -R u+w /Users/kamilowczarek/Documents/GitHub/digital-nomad/node_modules/.prisma/ /Users/kamilowczarek/Documents/GitHub/digital-nomad/node_modules/@prisma/)",
+      "Bash(DATABASE_URL=\"postgresql://neondb_owner:npg_St0wvAqOb2ZD@ep-frosty-boat-alaa0uj5-pooler.c-3.eu-central-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require\" psql \"$DATABASE_URL\" -t -A -F',' -c \"SELECT slug, name, code FROM \"\"Country\"\" ORDER BY name;\")",
+      "Bash(psql --version)",
+      "Bash(psql \"postgresql://neondb_owner:npg_St0wvAqOb2ZD@ep-frosty-boat-alaa0uj5-pooler.c-3.eu-central-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require\" -t -A -F',' -c 'SELECT slug, name, code FROM \"\"Country\"\" ORDER BY name;')",
+      "Bash(while read f)",
+      "Bash(do echo \"=== $f ===\")",
+      "Bash(npx tsx src/seeds/electricity.ts)",
+      "Bash(sudo chmod -R u+w /Users/kamilowczarek/Documents/GitHub/digital-nomad/node_modules/.prisma/)",
+      "Bash(node -e \"import\\(''dotenv''\\).then\\(d => { d.default.config\\({ path: ''.env.local'' }\\); console.log\\(''DATABASE_URL set:'', !!process.env.DATABASE_URL\\); }\\)\")",
+      "Bash(npm run test:run -- \"src/server/api/cities/__tests__/\\\\[slug\\\\].get.test.ts\")"
     ],
     "additionalDirectories": [
       "/tmp",
@@ -169,7 +193,9 @@
       "/Users/kamilowczarek/Documents/GitHub/digital-nomad/.claude/marketing/content",
       "/Users/kamilowczarek/Documents/GitHub/digital-nomad/.claude/marketing",
       "/Users/kamilowczarek/Documents/GitHub/digital-nomad/.claude",
-      "/Users/kamilowczarek/Documents/GitHub/digital-nomad/docs"
+      "/Users/kamilowczarek/Documents/GitHub/digital-nomad/docs",
+      "/Users/kamilowczarek/Documents/GitHub/digital-nomad/TODO",
+      "/Users/kamilowczarek/Documents/GitHub/digital-nomad/packages/db"
     ]
   }
 }
