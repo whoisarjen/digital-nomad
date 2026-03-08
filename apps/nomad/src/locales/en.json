@@ -6,6 +6,7 @@
     "compare": "Compare",
     "blog": "Blog",
     "bestCities": "Rankings",
+    "safeCities": "Safe Cities",
     "openMenu": "Open menu",
     "closeMenu": "Close menu"
   },
@@ -146,7 +147,8 @@
     "noArticles": "No articles found",
     "faqTitle": "Frequently Asked Questions",
     "backToBlog": "Back to Blog",
-    "latestPost": "Latest"
+    "latestPost": "Latest",
+    "exploreCities": "Explore these cities"
   },
   "auth": {
     "signUp": "Sign Up",
@@ -351,6 +353,7 @@
     "exploreCities": "Explore Cities",
     "regions": "Regions",
     "countries": "Countries",
+    "safeCities": "Safe Cities",
     "compare": "Compare Cities",
     "blog": "Blog",
     "joinCommunity": "Join Community",
@@ -412,6 +415,41 @@
     "cost": "Cost/mo",
     "internet": "Internet",
     "topCity": "Top City"
+  },
+  "tools": {
+    "badge": "Tools",
+    "title": "Nomad Tools",
+    "subtitle": "Free calculators and utilities to plan your digital nomad life — no sign-up required.",
+    "metaTitle": "Free Digital Nomad Tools | Calculators & Utilities",
+    "metaDesc": "Free tools for digital nomads: Schengen day tracker, cost & runway calculator, and more.",
+    "open": "Open tool",
+    "badgeFree": "Free",
+    "badgeNew": "New",
+    "schengenName": "Schengen Calculator",
+    "schengenDesc": "Track your 90/180-day Schengen limit, see days remaining, and get your next safe re-entry date.",
+    "runwayName": "Cost & Runway Calculator",
+    "runwayDesc": "Enter your savings and income to see how many months you can live in 500+ cities worldwide."
+  },
+  "runway": {
+    "breadcrumb": "Runway Calculator",
+    "title": "Cost & Runway Calculator",
+    "subtitle": "How long will your savings last? See your runway across 500+ cities — filtered to your lifestyle.",
+    "metaTitle": "Cost & Runway Calculator | How Long Can You Live Abroad?",
+    "metaTitleWithSavings": "${savings} savings — Runway across 500+ cities",
+    "metaDesc": "Enter your savings and monthly income to see how many months you can live in 500+ cities worldwide. Free nomad runway calculator.",
+    "savings": "Total savings",
+    "savingsPlaceholder": "50000",
+    "income": "Monthly income",
+    "incomePlaceholder": "3000",
+    "optional": "optional",
+    "tierLabel": "Lifestyle",
+    "emptyTitle": "Enter your savings to get started",
+    "emptyDesc": "Add your total savings above to instantly see how many months you can live in hundreds of cities worldwide.",
+    "resultsCount": "Showing {count} of {total} cities",
+    "costPerMonth": "Cost/mo",
+    "months": "mo",
+    "showMore": "Show {count} more cities",
+    "lifestyle": "Lifestyle"
   },
   "schengen": {
     "title": "Schengen 90/180 Day Calculator",
@@ -513,5 +551,24 @@
   "currency": {
     "selectCurrency": "Currency",
     "updatedHourly": "Rates updated hourly"
+  },
+  "safeCitiesPage": {
+    "breadcrumb": "Safe Cities",
+    "allH1": "Safest Cities for Digital Nomads",
+    "womenH1": "Safest Cities for Solo Female Travelers",
+    "regionalH1": "Safest Cities in {region} for Digital Nomads",
+    "allSubtitle": "{count} cities rated HIGH safety worldwide, ranked by nomad score",
+    "womenSubtitle": "{count} cities with HIGH safety — curated for solo female travelers",
+    "regionalSubtitle": "{count} cities in {region} rated HIGH safety",
+    "metaTitleAll": "Safest Cities for Digital Nomads {year}",
+    "metaTitleWomen": "Safest Cities for Women Traveling Solo {year}",
+    "metaTitleRegional": "Safest Cities in {region} for Digital Nomads {year}",
+    "metaDescAll": "Explore {count} of the safest cities for digital nomads worldwide. Every city carries a HIGH safety rating, ranked by nomad score.",
+    "metaDescWomen": "Find the safest cities for solo female digital nomads. {count} cities with HIGH safety ratings, ranked by nomad score.",
+    "metaDescRegional": "Discover the safest cities in {region} for digital nomads. {count} cities with HIGH safety ratings, ranked by nomad score.",
+    "statCities": "Safe cities",
+    "statCostRange": "Cost range",
+    "statAvgInternet": "Avg. internet",
+    "noResults": "No safe cities found for this filter."
   }
 }

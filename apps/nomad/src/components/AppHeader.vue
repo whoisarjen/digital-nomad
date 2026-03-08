@@ -15,7 +15,7 @@
       </NuxtLink>
 
       <!-- Desktop nav -->
-      <nav class="hidden lg:flex items-center gap-4">
+      <nav class="hidden xl:flex items-center gap-4">
         <NuxtLink
           v-for="link in navLinks"
           :key="link.to"
@@ -44,7 +44,7 @@
 
       <!-- Mobile menu button -->
       <button
-        class="lg:hidden relative w-10 h-10 flex items-center justify-center rounded-lg hover:bg-white/10 transition-colors"
+        class="xl:hidden relative w-10 h-10 flex items-center justify-center rounded-lg hover:bg-white/10 transition-colors"
         :aria-label="mobileOpen ? $t('nav.closeMenu') : $t('nav.openMenu')"
         :aria-expanded="mobileOpen"
         @click="mobileOpen = !mobileOpen"
@@ -69,7 +69,7 @@
     <Transition name="mobile-menu">
       <nav
         v-if="mobileOpen"
-        class="lg:hidden fixed inset-0 top-14 bg-[#060E1B]/[0.98] backdrop-blur-sm overflow-y-auto"
+        class="xl:hidden fixed inset-0 top-14 bg-[#060E1B]/[0.98] backdrop-blur-sm overflow-y-auto"
       >
         <div class="max-w-screen-sm mx-auto px-6 py-6 flex flex-col gap-1">
           <NuxtLink
@@ -133,9 +133,10 @@ const navLinks = computed(() => [
   { to: localePath('regions'), label: t('nav.regions') },
   { to: localePath('countries'), label: t('nav.countries') },
   { to: localePath('best-cities'), label: t('nav.bestCities') },
+  { to: '/safe-cities', label: t('nav.safeCities') },
   { to: localePath('compare'), label: t('nav.compare') },
   { to: localePath('blog'), label: t('nav.blog') },
-  { to: localePath('tools-schengen-calculator'), label: t('schengen.toolsNav') },
+  { to: localePath('tools'), label: t('schengen.toolsNav') },
 ])
 
 watch(() => route.fullPath, () => {

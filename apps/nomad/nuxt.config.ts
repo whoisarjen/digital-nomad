@@ -121,6 +121,10 @@ export default defineNuxtConfig({
         sources: ['/api/__sitemap__/best-cities'],
         includeAppSources: false,
       },
+      'safe-cities': {
+        sources: ['/api/__sitemap__/safe-cities'],
+        includeAppSources: false,
+      },
     },
   },
   robots: {
@@ -152,6 +156,7 @@ export default defineNuxtConfig({
     },
     routeRules: {
       '/__sitemap__/**': { isr: 604800 },
+      '/api/tools/runway': { isr: 3600 },
     },
   },
   image: {
