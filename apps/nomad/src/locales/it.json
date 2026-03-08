@@ -422,5 +422,9 @@
     "howItWorksDesc": "Lo Spazio Schengen consente soggiorni senza visto fino a 90 giorni in qualsiasi periodo di 180 giorni. Questo calcolatore usa il metodo ufficiale della finestra mobile.",
     "nonSchengenTitle": "Pochi giorni? Prova queste destinazioni fuori Schengen",
     "toolsNav": "Strumenti"
+  },
+  "currency": {
+    "selectCurrency": "Valuta",
+    "updatedHourly": "Tassi aggiornati ogni ora"
   }
 }

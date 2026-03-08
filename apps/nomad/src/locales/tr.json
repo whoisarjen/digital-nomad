@@ -422,5 +422,9 @@
     "howItWorksDesc": "Schengen Alanı, herhangi bir 180 günlük dönem içinde 90 güne kadar vizesiz kalışa izin verir. Bu hesaplayıcı resmi kayan pencere yöntemini kullanır.",
     "nonSchengenTitle": "Günler azalıyor mu? Bu Schengen dışı destinasyonları deneyin",
     "toolsNav": "Araçlar"
+  },
+  "currency": {
+    "selectCurrency": "Para Birimi",
+    "updatedHourly": "Kurlar saatlik güncellenir"
   }
 }

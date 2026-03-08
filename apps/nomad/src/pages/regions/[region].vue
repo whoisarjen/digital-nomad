@@ -56,7 +56,7 @@
                 <span class="text-xs text-white/40 uppercase tracking-wide">{{ $t('regionPage.statCities') }}</span>
               </div>
               <div v-if="regionData.stats.costMin && regionData.stats.costMax" class="flex flex-col gap-1 bg-white/[0.05] border border-white/[0.08] rounded-2xl px-5 py-4 min-w-[140px]">
-                <span class="text-2xl font-bold text-emerald-400 tabular-nums">${{ regionData.stats.costMin }} – ${{ regionData.stats.costMax }}</span>
+                <span class="text-2xl font-bold text-emerald-400 tabular-nums">{{ formatCost(regionData.stats.costMin) }} – {{ formatCost(regionData.stats.costMax) }}</span>
                 <span class="text-xs text-white/40 uppercase tracking-wide">{{ $t('regionPage.statCostRange') }}</span>
               </div>
               <div v-if="regionData.stats.avgSpeed" class="flex flex-col gap-1 bg-white/[0.05] border border-white/[0.08] rounded-2xl px-5 py-4 min-w-[120px]">
@@ -199,7 +199,7 @@
               <!-- Price + Favorite (top right, above link) -->
               <div class="absolute top-3 right-3 z-20 flex items-center gap-2">
                 <div class="bg-black/50 rounded-full px-2.5 py-1 text-sm font-semibold text-emerald-400 tabular-nums pointer-events-none">
-                  ${{ city.costForNomadInUsd }}<span class="text-[11px] font-normal text-white/60">/mo</span>
+                  {{ formatCost(Number(city.costForNomadInUsd)) }}<span class="text-[11px] font-normal text-white/60">/mo</span>
                 </div>
                 <AuthContainer>
                   <FavoriteButton :city-slug="city.slug" />
@@ -272,6 +272,9 @@ import type { Level } from '@prisma/client'
 import type { GetCitiesSchema } from '~/shared/global.schema'
 import { DEFAULT_CITIES_LIMIT } from '~/shared/global.schema'
 import { getUserCurrentMonthString, OPTIONS_ORDER_BY, REGION_SLUG_MAP } from '~/shared/global.utils'
+import { useCurrency } from '~/composables/useCurrency'
+
+const { formatCost, rawConvert } = useCurrency()
 
 defineI18nRoute({
   paths: {

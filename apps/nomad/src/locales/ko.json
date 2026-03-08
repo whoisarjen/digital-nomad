@@ -421,5 +421,9 @@
     "howItWorksDesc": "솅겐 지역은 180일 기간 내 최대 90일까지 무비자 체류를 허용합니다. 이 계산기는 공식 롤링 윈도우 방식을 사용합니다.",
     "nonSchengenTitle": "일수가 부족하신가요? 비솅겐 지역을 확인하세요",
     "toolsNav": "도구"
+  },
+  "currency": {
+    "selectCurrency": "통화",
+    "updatedHourly": "환율 매시간 업데이트"
   }
 }

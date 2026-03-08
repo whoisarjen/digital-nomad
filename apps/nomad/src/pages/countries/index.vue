@@ -109,7 +109,7 @@
                 </p>
               </div>
               <p v-if="country.avgCost" class="text-emerald-400 text-xs font-medium tabular-nums">
-                ~${{ Math.round(country.avgCost) }}<span class="text-white/30 font-normal">/mo</span>
+                ~{{ formatCost(Math.round(country.avgCost)) }}<span class="text-white/30 font-normal">/mo</span>
               </p>
             </NuxtLink>
           </div>
@@ -120,6 +120,10 @@
 </template>
 
 <script setup lang="ts">
+import { useCurrency } from '~/composables/useCurrency'
+
+const { formatCost, rawConvert } = useCurrency()
+
 defineI18nRoute({
   paths: {
     en: '/countries',

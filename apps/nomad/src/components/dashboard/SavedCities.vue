@@ -66,7 +66,7 @@
               <h4 class="text-sm font-semibold text-gray-900 leading-tight truncate">{{ city.name }}</h4>
               <div class="flex items-center gap-2 mt-1 text-xs text-gray-400">
                 <span class="truncate">{{ city.country }}</span>
-                <span v-if="city.costForNomadInUsd" class="text-emerald-600 font-medium tabular-nums">${{ city.costForNomadInUsd }}</span>
+                <span v-if="city.costForNomadInUsd" class="text-emerald-600 font-medium tabular-nums">{{ formatCost(Number(city.costForNomadInUsd)) }}</span>
               </div>
             </div>
           </NuxtLink>
@@ -84,6 +84,10 @@
 </template>
 
 <script setup lang="ts">
+import { useCurrency } from '~/composables/useCurrency'
+
+const { formatCost, rawConvert } = useCurrency()
+
 const { t } = useCustomI18n()
 const localePath = useLocalePath()
 const { toggleFavorite } = useFavoriteSlugs()

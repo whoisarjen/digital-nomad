@@ -422,5 +422,9 @@
     "howItWorksDesc": "L'espace Schengen permet des séjours sans visa jusqu'à 90 jours sur toute période de 180 jours. Ce calculateur utilise la méthode officielle de fenêtre glissante.",
     "nonSchengenTitle": "Peu de jours ? Essayez ces destinations hors Schengen",
     "toolsNav": "Outils"
+  },
+  "currency": {
+    "selectCurrency": "Devise",
+    "updatedHourly": "Taux mis à jour toutes les heures"
   }
 }

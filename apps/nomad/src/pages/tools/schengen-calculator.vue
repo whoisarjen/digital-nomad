@@ -268,7 +268,7 @@
             </div>
             <div class="text-xs text-gray-400 mt-0.5">{{ city.country }}</div>
             <div class="text-xs font-medium text-emerald-600 mt-1 tabular-nums">
-              ${{ city.cost }}/mo
+              {{ formatCost(city.cost) }}/mo
             </div>
           </NuxtLink>
         </div>
@@ -280,6 +280,9 @@
 
 <script setup lang="ts">
 import { useSchengenCalculator, type SchengenEntry } from '~/composables/useSchengenCalculator'
+import { useCurrency } from '~/composables/useCurrency'
+
+const { formatCost, rawConvert } = useCurrency()
 
 defineI18nRoute({
   paths: {

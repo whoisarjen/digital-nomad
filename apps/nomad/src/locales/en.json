@@ -437,5 +437,9 @@
     "howItWorksDesc": "The Schengen Area allows visa-free stays of up to 90 days within any rolling 180-day period. This calculator uses the official rolling window method to accurately track your remaining days.",
     "nonSchengenTitle": "Running low? Try these non-Schengen destinations",
     "toolsNav": "Tools"
+  },
+  "currency": {
+    "selectCurrency": "Currency",
+    "updatedHourly": "Rates updated hourly"
   }
 }

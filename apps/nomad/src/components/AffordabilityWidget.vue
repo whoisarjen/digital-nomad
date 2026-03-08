@@ -92,7 +92,7 @@
         <div class="flex items-center justify-between mb-1">
           <span class="text-sm font-medium" :class="resultLabelClass">{{ $t(resultLabel) }}</span>
           <span class="text-2xl font-bold tabular-nums" :class="resultAmountClass">
-            ${{ Math.abs(resultAmount) }}
+            {{ formatCost(Math.abs(resultAmount)) }}
           </span>
         </div>
         <div class="text-xs text-gray-500">
@@ -110,12 +110,12 @@
         <span class="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold" :class="statusBadgeClass">
           {{ $t(statusLabel) }}
         </span>
-        <span class="text-xs text-gray-400">${{ activeCost }}/mo {{ $t('affordability.forLifestyle', { tier: $t(activeTierLabel) }) }}</span>
+        <span class="text-xs text-gray-400">{{ formatCost(activeCost) }}/mo {{ $t('affordability.forLifestyle', { tier: $t(activeTierLabel) }) }}</span>
       </div>
 
       <!-- Budget info + clear -->
       <div class="flex items-center justify-between text-xs text-gray-400 pt-3 border-t border-gray-50">
-        <span>{{ mode === 'income' ? $t('affordability.monthlyIncome') : $t('affordability.totalSavings') }}: <span class="font-semibold text-gray-600">${{ budget }}</span></span>
+        <span>{{ mode === 'income' ? $t('affordability.monthlyIncome') : $t('affordability.totalSavings') }}: <span class="font-semibold text-gray-600">{{ formatCost(budget) }}</span></span>
         <button
           @click="clearBudget"
           class="text-gray-400 hover:text-red-500 transition-colors"
@@ -128,6 +128,10 @@
 </template>
 
 <script lang="ts" setup>
+import { useCurrency } from '~/composables/useCurrency'
+
+const { formatCost, rawConvert } = useCurrency()
+
 const props = defineProps<{
   costNomad: number
   costExpat: number

@@ -340,8 +340,8 @@
                         <!-- Budget delta inline after score -->
                         <Tooltip
                           :message="budget - Number(city.costForNomadInUsd) >= 0
-                            ? `$${(budget - Number(city.costForNomadInUsd)).toLocaleString()} left over from $${budget.toLocaleString()}`
-                            : `$${Math.abs(budget - Number(city.costForNomadInUsd)).toLocaleString()} over from $${budget.toLocaleString()}`"
+                            ? `${formatCost(budget - Number(city.costForNomadInUsd))} left over from ${formatCost(budget)}`
+                            : `${formatCost(Math.abs(budget - Number(city.costForNomadInUsd)))} over from ${formatCost(budget)}`"
                           position="top"
                           align="left"
                         >
@@ -351,7 +351,7 @@
                           >
                             <LucideThumbsUp v-if="budget - Number(city.costForNomadInUsd) >= 0" :size="9" />
                             <LucideThumbsDown v-else :size="9" />
-                            ${{ Math.abs(budget - Number(city.costForNomadInUsd)).toLocaleString() }}
+                            {{ formatCost(Math.abs(budget - Number(city.costForNomadInUsd))) }}
                           </span>
                         </Tooltip>
                         <!-- Photo credit camera -->
@@ -381,7 +381,7 @@
                   <!-- Price + Favorite (top right, above link) -->
                   <div class="absolute top-3 right-3 z-20 flex items-center gap-2">
                     <div class="bg-black/50 rounded-full px-2.5 py-1 text-sm font-semibold text-emerald-400 tabular-nums pointer-events-none">
-                      ${{ city.costForNomadInUsd }}<span class="text-[11px] font-normal text-white/60">/mo</span>
+                      {{ formatCost(Number(city.costForNomadInUsd)) }}<span class="text-[11px] font-normal text-white/60">/mo</span>
                     </div>
                     <AuthContainer>
                       <FavoriteButton :city-slug="city.slug" />
@@ -450,6 +450,7 @@ import type { Level } from '@prisma/client';
 import type { GetCitiesSchema } from '~/shared/global.schema';
 import { DEFAULT_CITIES_LIMIT } from '~/shared/global.schema';
 import { getUserCurrentMonthString, OPTIONS_ORDER_BY } from '~/shared/global.utils';
+import { useCurrency } from '~/composables/useCurrency'
 
 defineI18nRoute({
   paths: {
@@ -461,6 +462,7 @@ defineI18nRoute({
 const { locale, t } = useCustomI18n()
 const localePath = useLocalePath()
 const { budget } = useBudget()
+const { formatCost, rawConvert } = useCurrency()
 
 const route = useRoute()
 const router = useRouter()

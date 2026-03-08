@@ -49,7 +49,7 @@ describe('AffordabilityWidget', () => {
       global: { mocks: { $t: (k: string) => k } },
     })
     // Budget 3000 - nomad cost 2000 = +1000 surplus
-    expect(wrapper.text()).toContain('1000')
+    expect(wrapper.text()).toContain('$1,000')
   })
 
   it('shows deficit when nomad cost exceeds budget', async () => {

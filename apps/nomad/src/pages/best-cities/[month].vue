@@ -73,7 +73,7 @@
             </div>
 
             <span class="text-emerald-400 text-sm font-medium tabular-nums text-right">
-              ${{ Math.round(Number(city.costForNomadInUsd)) }}<span class="text-white/30 font-normal text-xs">/mo</span>
+              {{ formatCost(Math.round(Number(city.costForNomadInUsd))) }}<span class="text-white/30 font-normal text-xs">/mo</span>
             </span>
 
             <span class="text-white/60 text-sm tabular-nums text-right">
@@ -88,6 +88,9 @@
 
 <script setup lang="ts">
 import { MONTH_SLUG_MAP, MONTH_DISPLAY_NAMES, type MonthSlug } from '~/shared/months.constant'
+import { useCurrency } from '~/composables/useCurrency'
+
+const { formatCost, rawConvert } = useCurrency()
 
 const route = useRoute()
 const { t } = useCustomI18n()

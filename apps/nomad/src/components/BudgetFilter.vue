@@ -2,7 +2,7 @@
   <div class="flex flex-col gap-3">
     <div class="flex items-center justify-between">
       <span class="text-sm font-medium text-gray-700">{{ $t('budget.filterLabel') }}</span>
-      <span class="text-sm font-semibold text-gray-900 tabular-nums">${{ budget.toLocaleString() }}/mo</span>
+      <span class="text-sm font-semibold text-gray-900 tabular-nums">{{ formatCost(budget) }}/mo</span>
     </div>
 
     <input
@@ -16,8 +16,8 @@
     />
 
     <div class="flex items-center justify-between text-xs text-gray-400">
-      <span>$300</span>
-      <span>$15,000</span>
+      <span>{{ formatCost(300) }}</span>
+      <span>{{ formatCost(15000) }}</span>
     </div>
 
     <label class="flex items-center gap-2.5 cursor-pointer mt-1">
@@ -33,6 +33,10 @@
 </template>
 
 <script lang="ts" setup>
+import { useCurrency } from '~/composables/useCurrency'
+
+const { formatCost, rawConvert } = useCurrency()
+
 const props = defineProps<{
   modelValue?: string
 }>()

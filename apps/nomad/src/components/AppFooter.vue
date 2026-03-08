@@ -63,7 +63,10 @@
         <p class="text-xs text-white/30">
           &copy; {{ new Date().getFullYear() }} {{ $t('footer.copyright') }}
         </p>
-        <LanguagePicker direction="above" />
+        <div class="flex items-center gap-1">
+          <CurrencyPicker direction="above" />
+          <LanguagePicker direction="above" />
+        </div>
       </div>
     </div>
   </footer>

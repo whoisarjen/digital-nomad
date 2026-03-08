@@ -38,6 +38,7 @@
         >
           {{ $t('auth.signUp') }}
         </NuxtLink>
+        <CurrencyPicker />
         <LanguagePicker />
       </nav>
 
@@ -110,6 +111,7 @@
             class="mobile-nav-link flex items-center gap-3 px-4 py-3"
             :style="{ animationDelay: `${(navLinks.length + 2) * 50}ms` }"
           >
+            <CurrencyPicker />
             <LanguagePicker />
           </div>
         </div>

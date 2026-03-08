@@ -56,7 +56,7 @@
           <template v-if="data">
             <span class="flex items-center gap-2 bg-white/[0.06] border border-white/[0.08] rounded-full px-4 py-2 text-sm text-white/70">
               <LucideWallet :size="14" class="text-emerald-400" />
-              ${{ data.costForNomadInUsd }}/mo
+              {{ formatCost(Number(data.costForNomadInUsd)) }}/mo
             </span>
             <span class="flex items-center gap-2 bg-white/[0.06] border border-white/[0.08] rounded-full px-4 py-2 text-sm text-white/70">
               <LucideWifi :size="14" class="text-cyan-400" />
@@ -120,7 +120,7 @@
                 </div>
                 <span class="text-[11px] font-medium text-gray-400 uppercase tracking-wide">{{ $t('city.nomadCost') }}</span>
               </div>
-              <p class="text-2xl font-bold text-gray-900 tabular-nums">${{ data.costForNomadInUsd }}<span class="text-sm font-normal text-gray-400">/mo</span></p>
+              <p class="text-2xl font-bold text-gray-900 tabular-nums">{{ formatCost(Number(data.costForNomadInUsd)) }}<span class="text-sm font-normal text-gray-400">/mo</span></p>
             </template>
             <template v-else>
               <div class="flex items-center gap-2 mb-2">
@@ -253,19 +253,19 @@
               <template v-if="data">
                 <div class="flex justify-between items-center py-3 border-b border-gray-50">
                   <span class="text-sm text-gray-500">{{ $t('city.nomad') }}</span>
-                  <span class="text-sm font-semibold text-emerald-600 tabular-nums">${{ data.costForNomadInUsd }}/mo</span>
+                  <span class="text-sm font-semibold text-emerald-600 tabular-nums">{{ formatCost(Number(data.costForNomadInUsd)) }}/mo</span>
                 </div>
                 <div class="flex justify-between items-center py-3 border-b border-gray-50">
                   <span class="text-sm text-gray-500">{{ $t('city.expat') }}</span>
-                  <span class="text-sm font-semibold text-gray-700 tabular-nums">${{ data.costForExpatInUsd }}/mo</span>
+                  <span class="text-sm font-semibold text-gray-700 tabular-nums">{{ formatCost(Number(data.costForExpatInUsd)) }}/mo</span>
                 </div>
                 <div class="flex justify-between items-center py-3 border-b border-gray-50">
                   <span class="text-sm text-gray-500">{{ $t('city.local') }}</span>
-                  <span class="text-sm font-semibold text-gray-700 tabular-nums">${{ data.costForLocalInUsd }}/mo</span>
+                  <span class="text-sm font-semibold text-gray-700 tabular-nums">{{ formatCost(Number(data.costForLocalInUsd)) }}/mo</span>
                 </div>
                 <div class="flex justify-between items-center py-3">
                   <span class="text-sm text-gray-500">{{ $t('city.family') }}</span>
-                  <span class="text-sm font-semibold text-gray-700 tabular-nums">${{ data.costForFamilyInUsd }}/mo</span>
+                  <span class="text-sm font-semibold text-gray-700 tabular-nums">{{ formatCost(Number(data.costForFamilyInUsd)) }}/mo</span>
                 </div>
               </template>
               <template v-else>
@@ -581,6 +581,9 @@ import { formatNumber } from '~/shared/global.utils';
 import { buildCityFaqItems } from '~/utils/cityFaq';
 import { getLocaleBcp47 } from '~/utils/i18n-content';
 import { getElectricityTip } from '~/utils/electricityTip'
+import { useCurrency } from '~/composables/useCurrency'
+
+const { formatCost, rawConvert } = useCurrency()
 
 defineI18nRoute({
   paths: {
@@ -701,7 +704,7 @@ useHead(() => {
 
   const { name, country, costForNomadInUsd, internetSpeedCity, safety } = data.value
   const title = `${name}, ${country} — Digital Nomad Guide`
-  const description = `Live and work in ${name}. Nomad cost $${costForNomadInUsd}/mo, ${internetSpeedCity} Mbps internet, ${formatLevel(safety)} safety rating.`
+  const description = `Live and work in ${name}. Nomad cost ${formatCost(Number(costForNomadInUsd))}/mo, ${internetSpeedCity} Mbps internet, ${formatLevel(safety)} safety rating.`
 
   const imageUrl = data.value.image?.url
   const ogImage = imageUrl?.startsWith('https://')

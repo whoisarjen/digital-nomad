@@ -432,5 +432,9 @@
     "howItWorksDesc": "Strefa Schengen pozwala na pobyt bez wizy do 90 dni w każdym ruchomym okresie 180 dni. Ten kalkulator używa oficjalnej metody ruchomego okna do dokładnego śledzenia pozostałych dni.",
     "nonSchengenTitle": "Mało dni? Sprawdź te destynacje poza Schengen",
     "toolsNav": "Narzędzia"
+  },
+  "currency": {
+    "selectCurrency": "Waluta",
+    "updatedHourly": "Kursy aktualizowane co godzinę"
   }
 }

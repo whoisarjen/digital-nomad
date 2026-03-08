@@ -422,5 +422,9 @@
     "howItWorksDesc": "Der Schengen-Raum erlaubt visumfreie Aufenthalte von bis zu 90 Tagen in jedem rollierenden 180-Tage-Zeitraum. Dieser Rechner verwendet die offizielle Methode des rollierenden Fensters.",
     "nonSchengenTitle": "Wenige Tage übrig? Probiere diese Nicht-Schengen-Ziele",
     "toolsNav": "Werkzeuge"
+  },
+  "currency": {
+    "selectCurrency": "Währung",
+    "updatedHourly": "Kurse stündlich aktualisiert"
   }
 }

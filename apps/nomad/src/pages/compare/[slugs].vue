@@ -292,11 +292,11 @@
               </div>
               <div class="flex items-end justify-between gap-1">
                 <div class="text-center flex-1">
-                  <p class="text-lg font-bold tabular-nums" :class="costWinner === 'cityA' ? 'text-emerald-600' : 'text-gray-400'">${{ data.cityA.costForNomadInUsd }}</p>
+                  <p class="text-lg font-bold tabular-nums" :class="costWinner === 'cityA' ? 'text-emerald-600' : 'text-gray-400'">{{ formatCost(Number(data.cityA.costForNomadInUsd)) }}</p>
                   <p class="text-[10px] text-gray-400 mt-0.5 truncate">{{ data.cityA.name }}</p>
                 </div>
                 <div class="text-center flex-1">
-                  <p class="text-lg font-bold tabular-nums" :class="costWinner === 'cityB' ? 'text-emerald-600' : 'text-gray-400'">${{ data.cityB.costForNomadInUsd }}</p>
+                  <p class="text-lg font-bold tabular-nums" :class="costWinner === 'cityB' ? 'text-emerald-600' : 'text-gray-400'">{{ formatCost(Number(data.cityB.costForNomadInUsd)) }}</p>
                   <p class="text-[10px] text-gray-400 mt-0.5 truncate">{{ data.cityB.name }}</p>
                 </div>
               </div>
@@ -500,8 +500,8 @@
               </div>
               <div v-for="row in costRows" :key="row.label" class="flex justify-between items-center py-2.5 border-b border-gray-50 last:border-0">
                 <span class="text-sm text-gray-500 w-20">{{ row.label }}</span>
-                <span class="text-sm font-semibold tabular-nums text-right flex-1" :class="row.winnerA ? 'text-emerald-600' : 'text-gray-700'">${{ row.valueA }}/mo</span>
-                <span class="text-sm font-semibold tabular-nums text-right flex-1" :class="row.winnerB ? 'text-emerald-600' : 'text-gray-700'">${{ row.valueB }}/mo</span>
+                <span class="text-sm font-semibold tabular-nums text-right flex-1" :class="row.winnerA ? 'text-emerald-600' : 'text-gray-700'">{{ formatCost(Number(row.valueA)) }}/mo</span>
+                <span class="text-sm font-semibold tabular-nums text-right flex-1" :class="row.winnerB ? 'text-emerald-600' : 'text-gray-700'">{{ formatCost(Number(row.valueB)) }}/mo</span>
               </div>
             </section>
 
@@ -794,6 +794,9 @@
 <script lang="ts" setup>
 import type { Level } from '@prisma/client'
 import { formatNumber, buildCompareSlug } from '~/shared/global.utils'
+import { useCurrency } from '~/composables/useCurrency'
+
+const { formatCost, rawConvert } = useCurrency()
 
 defineI18nRoute({
   paths: {

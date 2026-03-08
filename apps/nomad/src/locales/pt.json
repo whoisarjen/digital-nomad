@@ -422,5 +422,9 @@
     "howItWorksDesc": "O Espaço Schengen permite estadias sem visto de até 90 dias em qualquer período de 180 dias. Esta calculadora usa o método oficial de janela móvel.",
     "nonSchengenTitle": "Poucos dias? Experimente estes destinos fora do Schengen",
     "toolsNav": "Ferramentas"
+  },
+  "currency": {
+    "selectCurrency": "Moeda",
+    "updatedHourly": "Taxas atualizadas a cada hora"
   }
 }

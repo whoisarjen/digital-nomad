@@ -421,5 +421,9 @@
     "howItWorksDesc": "シェンゲン圏では、180日間で最大90日のビザなし滞在が可能です。この計算機は公式のローリングウィンドウ方式を使用しています。",
     "nonSchengenTitle": "日数が足りない？シェンゲン圏外の目的地をチェック",
     "toolsNav": "ツール"
+  },
+  "currency": {
+    "selectCurrency": "通貨",
+    "updatedHourly": "為替レートは毎時更新"
   }
 }
