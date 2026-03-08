@@ -58,6 +58,9 @@ model Country {
   internetSpeed        Int @default(0)
   internetSpeedRanking Int @default(0)
   englishProficiency   Int @default(0)
+  plugTypes            String?
+  voltage              Int?
+  frequency            Int?
 
   cities City[]
 }
