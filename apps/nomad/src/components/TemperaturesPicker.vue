@@ -34,13 +34,29 @@
 <script setup lang="ts">
 import { getRangesFromQuery } from '~/shared/global.utils';
 
+const props = defineProps<{
+  modelValue?: string[]
+}>();
+
+const emit = defineEmits<{
+  'update:modelValue': [value: string[]]
+}>();
+
+const isControlled = computed(() => props.modelValue !== undefined);
+
 const route = useRoute();
 const router = useRouter();
 
 const toStringArray = (val: string | string[] | undefined): string[] =>
   Array.isArray(val) ? val : val ? [val] : []
 
-const temperatures = computed(() => getRangesFromQuery(-50, 50)(toStringArray(route.query['temperatures'] as string | string[] | undefined)))
+const parseRanges = getRangesFromQuery(-50, 50);
+
+const temperatures = computed(() =>
+  isControlled.value
+    ? parseRanges(props.modelValue ?? [])
+    : parseRanges(toStringArray(route.query['temperatures'] as string | string[] | undefined))
+);
 
 const minValue = ref<number>(temperatures.value.min);
 const maxValue = ref<number>(temperatures.value.max);
@@ -50,16 +66,20 @@ function validateRange() {
   if (maxValue.value > 50) maxValue.value = 50;
   if (minValue.value >= maxValue.value) minValue.value = maxValue.value - 1;
 
-  router.push({
-    query: {
-      ...route.query,
-      temperatures: [`gte:${minValue.value}`, `lte:${maxValue.value}`],
-    },
-  });
+  if (isControlled.value) {
+    emit('update:modelValue', [`gte:${minValue.value}`, `lte:${maxValue.value}`]);
+  } else {
+    router.push({
+      query: {
+        ...route.query,
+        temperatures: [`gte:${minValue.value}`, `lte:${maxValue.value}`],
+      },
+    });
+  }
 }
 
 watch(
-  () => route.query,
+  () => isControlled.value ? props.modelValue : route.query,
   () => {
     const updatedTemps = temperatures.value;
     minValue.value = updatedTemps.min;
