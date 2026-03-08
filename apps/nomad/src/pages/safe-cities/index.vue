@@ -149,7 +149,7 @@
           <div>
             <div class="text-[10px] font-bold tracking-[0.35em] text-emerald-400 uppercase mb-2">All safe cities</div>
             <h2 class="text-2xl sm:text-3xl font-black text-white">
-              Top 20 cities, HIGH safety rating
+              {{ safeCitiesData?.stats.cityCount ?? '…' }} cities, HIGH safety rating
             </h2>
           </div>
           <span class="hidden sm:block text-xs text-white/25 pb-1">Ranked by nomad score</span>
@@ -177,7 +177,7 @@
           </div>
 
           <NuxtLink
-            v-for="(city, index) in safeCitiesData.cities.slice(0, 20)"
+            v-for="(city, index) in safeCitiesData.cities"
             :key="city.slug"
             :to="localePath({ name: 'cities-slug', params: { slug: city.slug } })"
             class="city-row group grid grid-cols-[2rem_1fr_auto_auto_auto] gap-3 sm:gap-4 items-center px-4 py-3 sm:py-3.5 rounded-xl hover:bg-white/[0.04] transition-colors"
