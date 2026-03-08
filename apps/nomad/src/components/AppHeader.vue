@@ -34,6 +34,12 @@
           {{ $t('nav.countries') }}
         </NuxtLink>
         <NuxtLink
+          :to="localePath('best-cities')"
+          class="text-sm text-white/70 hover:text-white font-medium"
+        >
+          {{ $t('nav.bestCities') }}
+        </NuxtLink>
+        <NuxtLink
           :to="localePath('compare')"
           class="text-sm text-white/70 hover:text-white font-medium"
         >

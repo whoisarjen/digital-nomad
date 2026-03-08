@@ -4,7 +4,8 @@
     "regions": "Bölgeler",
     "countries": "Ülkeler",
     "compare": "Karşılaştır",
-    "blog": "Blog"
+    "blog": "Blog",
+    "bestCities": "Rankings"
   },
   "hero": {
     "titleLine1": "Her şehir, çözümlenmiş.",
@@ -343,6 +344,7 @@
     "exploreCities": "Şehirleri Keşfet",
     "compare": "Şehirleri Karşılaştır",
     "blog": "Blog",
+    "bestCities": "Rankings",
     "joinCommunity": "Topluluğa Katıl",
     "copyright": "Digital Nomad"
   },

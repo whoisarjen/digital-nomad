@@ -1,25 +1,34 @@
 import { ref } from 'vue'
 
 const STORAGE_KEY = 'nomad:budget'
+const DEFAULT_BUDGET = 2000
 
-const budget = ref<number | null>(null)
+const budget = ref<number>(DEFAULT_BUDGET)
+const budgetActive = ref(false)
 
 if (typeof window !== 'undefined') {
   const stored = localStorage.getItem(STORAGE_KEY)
-  budget.value = stored !== null ? Number(stored) : null
+  if (stored !== null) budget.value = Number(stored)
 }
 
 export function useBudget() {
   function setBudget(v: number | null) {
-    budget.value = v
-    if (typeof window !== 'undefined') {
-      if (v === null) {
+    if (v === null) {
+      budget.value = DEFAULT_BUDGET
+      if (typeof window !== 'undefined') {
         localStorage.removeItem(STORAGE_KEY)
-      } else {
+      }
+    } else {
+      budget.value = v
+      if (typeof window !== 'undefined') {
         localStorage.setItem(STORAGE_KEY, String(v))
       }
     }
   }
 
-  return { budget, setBudget }
+  function toggleBudget() {
+    budgetActive.value = !budgetActive.value
+  }
+
+  return { budget, budgetActive, setBudget, toggleBudget }
 }

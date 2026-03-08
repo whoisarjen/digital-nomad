@@ -4,7 +4,8 @@
     "regions": "Regioni",
     "countries": "Paesi",
     "compare": "Confronta",
-    "blog": "Blog"
+    "blog": "Blog",
+    "bestCities": "Rankings"
   },
   "hero": {
     "titleLine1": "Ogni città, decodificata.",
@@ -343,6 +344,7 @@
     "exploreCities": "Esplora le Città",
     "compare": "Confronta le Città",
     "blog": "Blog",
+    "bestCities": "Rankings",
     "joinCommunity": "Unisciti alla Community",
     "copyright": "Digital Nomad"
   },

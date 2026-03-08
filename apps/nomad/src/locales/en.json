@@ -4,7 +4,8 @@
     "regions": "Regions",
     "countries": "Countries",
     "compare": "Compare",
-    "blog": "Blog"
+    "blog": "Blog",
+    "bestCities": "Rankings"
   },
   "hero": {
     "titleLine1": "Every city, decoded.",
@@ -388,7 +389,10 @@
     "filterLabel": "My monthly budget",
     "savesPerMonth": "Save ${amount}/mo",
     "overBudget": "${amount} over budget",
-    "clearBudget": "Clear budget"
+    "clearBudget": "Clear budget",
+    "toggleTooltip": "Toggle budget overlay on city cards",
+    "tooltipSurplus": "${budget}/mo budget — saves ${diff} vs this city's ${cost}/mo",
+    "tooltipDeficit": "${budget}/mo budget — ${diff} short of this city's ${cost}/mo"
   },
   "bestCities": {
     "title": "Best Cities for Digital Nomads {year}",
