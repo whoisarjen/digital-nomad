@@ -1,7 +1,7 @@
 import { ref } from 'vue'
 
 const STORAGE_KEY = 'nomad:budget'
-const DEFAULT_BUDGET = 2000
+const DEFAULT_BUDGET = 1500
 
 const budget = ref<number>(DEFAULT_BUDGET)
 const budgetActive = ref(false)

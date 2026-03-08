@@ -2,19 +2,12 @@
   <div class="flex flex-col gap-3">
     <div class="flex items-center justify-between">
       <span class="text-sm font-medium text-gray-700">{{ $t('budget.filterLabel') }}</span>
-      <button
-        v-if="budget !== null"
-        @click="clearBudget"
-        class="text-xs text-gray-400 hover:text-red-500 transition-colors"
-      >
-        {{ $t('budget.clearBudget') }}
-      </button>
+      <span class="text-sm font-semibold text-gray-900 tabular-nums">${{ budget.toLocaleString() }}/mo</span>
     </div>
 
-    <!-- Slider -->
     <input
       type="range"
-      :value="sliderValue"
+      :value="budget"
       min="300"
       max="15000"
       step="100"
@@ -22,30 +15,46 @@
       @input="onSliderInput"
     />
 
-    <!-- Value display -->
-    <div class="flex items-center justify-between text-xs text-gray-500">
+    <div class="flex items-center justify-between text-xs text-gray-400">
       <span>$300</span>
-      <span class="font-semibold text-gray-800 tabular-nums">
-        {{ budget !== null ? `$${budget}` : `$${sliderValue}` }}/mo
-      </span>
       <span>$15,000</span>
     </div>
+
+    <label class="flex items-center gap-2.5 cursor-pointer mt-1">
+      <input
+        type="checkbox"
+        :checked="isFilterActive"
+        class="size-4 rounded accent-primary-600 cursor-pointer"
+        @change="onToggleFilter"
+      />
+      <span class="text-sm text-gray-700">{{ $t('budget.onlyAffordable') }}</span>
+    </label>
   </div>
 </template>
 
 <script lang="ts" setup>
 const { budget, setBudget } = useBudget()
+const route = useRoute()
+const router = useRouter()
 
-const sliderValue = ref<number>(budget.value ?? 3000)
+const isFilterActive = computed(() => !!route.query.costs)
 
 function onSliderInput(e: Event) {
-  const v = Number((e.target as HTMLInputElement).value)
-  sliderValue.value = v
-  setBudget(v)
+  const val = Number((e.target as HTMLInputElement).value)
+  setBudget(val)
+  if (isFilterActive.value) {
+    router.push({ query: { ...route.query, costs: String(val) } })
+  }
 }
 
-function clearBudget() {
-  setBudget(null)
-  sliderValue.value = 3000
+function onToggleFilter(e: Event) {
+  const checked = (e.target as HTMLInputElement).checked
+  const query = { ...route.query }
+  if (checked) {
+    query.costs = String(budget.value)
+  } else {
+    delete query.costs
+  }
+  router.push({ query })
 }
 </script>

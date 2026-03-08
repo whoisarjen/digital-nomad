@@ -82,7 +82,7 @@
         <!-- Skeleton -->
         <template v-if="!countryData || countryStatus !== 'success'">
           <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-            <div v-for="i in 10" :key="i" class="aspect-[3/4] rounded-2xl skeleton" />
+            <CityCardSkeleton v-for="i in 10" :key="i" />
           </div>
         </template>
 

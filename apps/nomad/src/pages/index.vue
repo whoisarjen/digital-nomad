@@ -289,7 +289,7 @@
             <div class="gap-4 w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
               <!-- Skeleton Loading -->
               <template v-if="status === 'pending'">
-                <div v-for="city in skeletonCount" :key="city" class="aspect-[3/4] rounded-2xl skeleton" />
+                <CityCardSkeleton v-for="city in skeletonCount" :key="city" />
               </template>
 
               <!-- City Cards -->
@@ -334,40 +334,53 @@
                           <span>{{ formatSafetyLabel(city.safety) }}</span>
                         </div>
                         <div class="flex items-center gap-1">
-                          <LucideWifi :size="11" class="text-white/50" />
-                          <span>{{ city.internetSpeedCity }} Mbps</span>
-                        </div>
-                        <div class="flex items-center gap-1">
                           <LucideStar :size="11" class="text-amber-400 fill-amber-400" />
                           <span class="font-semibold text-white">{{ city.totalScore }}</span>
                         </div>
+                        <!-- Budget delta inline after score -->
+                        <Tooltip
+                          :message="budget - Number(city.costForNomadInUsd) >= 0
+                            ? `$${(budget - Number(city.costForNomadInUsd)).toLocaleString()} left over from $${budget.toLocaleString()}`
+                            : `$${Math.abs(budget - Number(city.costForNomadInUsd)).toLocaleString()} over from $${budget.toLocaleString()}`"
+                          position="top"
+                          align="left"
+                        >
+                          <span
+                            class="inline-flex items-center rounded-full px-1.5 py-0.5 text-[10px] font-semibold text-white tabular-nums cursor-default"
+                            :class="budget - Number(city.costForNomadInUsd) >= 0 ? 'bg-emerald-500/60' : 'bg-red-500/60'"
+                          >
+                            ${{ Math.abs(budget - Number(city.costForNomadInUsd)).toLocaleString() }}
+                          </span>
+                        </Tooltip>
+                        <!-- Photo credit camera -->
+                        <Tooltip
+                          v-if="city.image"
+                          :message="`Photo by ${city.image.ownerName} / Unsplash`"
+                          position="top"
+                          align="right"
+                          class="ml-auto"
+                        >
+                          <a
+                            :href="`https://unsplash.com/@${city.image.ownerUsername}?utm_source=Digital%20Nomad&utm_medium=referral`"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="flex items-center text-white/40 hover:text-white/70 transition-colors"
+                            @click.stop
+                          >
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="size-3">
+                              <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z" />
+                              <circle cx="12" cy="13" r="3" />
+                            </svg>
+                          </a>
+                        </Tooltip>
                       </div>
                     </div>
                   </NuxtLink>
                   <!-- Price + Favorite (top right, above link) -->
-                  <div class="absolute top-3 right-3 z-20 flex flex-col items-end gap-1.5">
-                    <div class="flex items-center gap-2">
-                      <div class="bg-black/50 rounded-full px-2.5 py-1 text-sm font-semibold text-emerald-400 tabular-nums pointer-events-none">
-                        ${{ city.costForNomadInUsd }}<span class="text-[11px] font-normal text-white/60">/mo</span>
-                      </div>
+                  <div class="absolute top-3 right-3 z-20 flex items-center gap-2">
+                    <div class="bg-black/50 rounded-full px-2.5 py-1 text-sm font-semibold text-emerald-400 tabular-nums pointer-events-none">
+                      ${{ city.costForNomadInUsd }}<span class="text-[11px] font-normal text-white/60">/mo</span>
                     </div>
-                    <!-- Budget delta badge -->
-                    <div
-                      v-if="budget !== null"
-                      class="rounded-full px-2.5 py-1 text-[11px] font-bold tabular-nums pointer-events-none"
-                      :class="budget - Number(city.costForNomadInUsd) >= 0
-                        ? 'bg-emerald-500/80 text-white'
-                        : 'bg-red-500/80 text-white'"
-                    >
-                      <template v-if="budget - Number(city.costForNomadInUsd) >= 0">
-                        +${{ budget - Number(city.costForNomadInUsd) }}
-                      </template>
-                      <template v-else>
-                        -${{ Math.abs(budget - Number(city.costForNomadInUsd)) }}
-                      </template>
-                    </div>
-                  </div>
-                  <div class="absolute top-3 right-3 z-20 flex items-center gap-2 pointer-events-none" style="display:none">
                     <AuthContainer>
                       <FavoriteButton :city-slug="city.slug" />
                       <template #fallback>
@@ -375,8 +388,6 @@
                       </template>
                     </AuthContainer>
                   </div>
-
-                  <UnsplashCredit v-if="city.image" :owner-name="city.image.ownerName" :owner-username="city.image.ownerUsername" position="bottom-right" />
                 </div>
               </template>
             </div>
@@ -400,8 +411,6 @@
     <!-- Filters Drawer -->
     <FiltersDrawer
       v-model="filtersOpen"
-      :cost-min="filters?.data.costs.costMin ?? 0"
-      :cost-max="filters?.data.costs.costMax ?? 0"
       :pickers="filters?.pickers"
       :active-filter-count="activeFilterCount"
       :is-favorites-active="isFavoritesFilterActive"
@@ -449,6 +458,7 @@ defineI18nRoute({
 
 const { locale, t } = useCustomI18n()
 const localePath = useLocalePath()
+const { budget } = useBudget()
 
 const route = useRoute()
 const router = useRouter()
@@ -568,3 +578,4 @@ const showFloatingFilter = computed(() =>
 
 const skeletonCount = computed(() => Number(route.query.limit) || DEFAULT_CITIES_LIMIT)
 </script>
+

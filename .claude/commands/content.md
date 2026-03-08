@@ -16,6 +16,34 @@ Read these files to understand what exists:
 
 ## Step 2: Pick Keywords (Keyword Analyst)
 
+### Step 2a: Check GSC for Organic Keyword Opportunities
+
+Query Google Search Console for keywords Google already associates with the site. Run via bash:
+
+```bash
+echo '{"jsonrpc":"2.0","method":"tools/call","params":{"name":"search_analytics","arguments":{"siteUrl":"sc-domain:nomad.whoisarjen.com","startDate":"YYYY-MM-DD","endDate":"YYYY-MM-DD","dimensions":"query","rowLimit":100}},"id":1}' | GOOGLE_APPLICATION_CREDENTIALS=/Users/kamilowczarek/.config/gsc-credentials.json npx -y mcp-server-gsc 2>/dev/null
+```
+
+Use the last 30 days as the date range.
+
+**If GSC query fails** (timeout, auth error, empty response, or any error): log a warning to the user ("GSC unavailable, proceeding with discovery keywords") and skip directly to Step 2b. Do NOT block the pipeline.
+
+**Analyze GSC keywords (only if data returned):**
+1. Look for queries with **impressions ≥ 5** — keywords Google already ranks or considers the site for
+2. Cross-reference with existing articles (`SELECT slug FROM "Article"`) — skip keywords already covered
+3. A GSC keyword is "interesting" if:
+   - It has ≥ 10 impressions AND no matching article exists, OR
+   - It has any clicks (even 1), OR
+   - It targets a city/topic the site has data for but no article yet
+4. Extract the city name or topic from the query (e.g. "digital nomad sao vicente" → city: sao-vicente-cape-verde)
+5. Verify the extracted city slug exists in the DB
+
+**Decision:**
+- If interesting GSC keywords found → prioritize them for article creation (fill remaining slots with discovery)
+- If no interesting GSC keywords (< 3 queries, all low impressions, or all already covered) → skip to Step 2b entirely
+
+### Step 2b: Discovery Keywords (Normal Flow)
+
 Query the database to decide what to write. Use Neon MCP (`mcp__Neon__run_sql`, projectId: `flat-shape-62285932`).
 
 ### Gather data:
@@ -33,12 +61,14 @@ SELECT slug FROM "Article";
 
 ### Pick N keywords using this logic:
 1. Check `published-log.md` for what types exist (city-cost / comparison / filtered)
-2. Balance the batch: ~60% city-cost, ~20% comparison, ~20% filtered/regional
-3. For **city-cost**: pick highest-population cities with no article yet
-4. For **comparison**: pick pairs in same region, both in top-50, no comparison exists
-5. For **filtered**: rotate through cheapest, safest, best internet, best weather, by region, seasonal
-6. Ensure at least 2 different regions in the batch
-7. Verify all city slugs exist in DB
+2. **GSC-sourced keywords come first** — if Step 2a found opportunities, use those slots first
+3. Fill remaining slots with discovery: ~60% city-cost, ~20% comparison, ~20% filtered/regional
+4. For **city-cost**: pick highest-population cities with no article yet
+5. For **comparison**: pick pairs in same region, both in top-50, no comparison exists
+6. For **filtered**: rotate through cheapest, safest, best internet, best weather, by region, seasonal
+7. Ensure at least 2 different regions in the batch
+8. Verify all city slugs exist in DB
+9. **Never duplicate** — check both `published-log.md` AND existing article slugs in DB
 
 ## Step 3: Spawn N Pipeline Agents (All in Parallel, Background)
 

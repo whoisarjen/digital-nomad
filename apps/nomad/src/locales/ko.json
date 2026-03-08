@@ -373,6 +373,7 @@
   },
   "budget": {
     "filterLabel": "월 예산",
+    "onlyAffordable": "예산 내 도시만 표시",
     "savesPerMonth": "${amount}/월 절약",
     "overBudget": "${amount} 예산 초과",
     "clearBudget": "예산 지우기"

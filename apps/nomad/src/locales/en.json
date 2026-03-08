@@ -387,6 +387,7 @@
   },
   "budget": {
     "filterLabel": "My monthly budget",
+    "onlyAffordable": "Only show cities within my budget",
     "savesPerMonth": "Save ${amount}/mo",
     "overBudget": "${amount} over budget",
     "clearBudget": "Clear budget",

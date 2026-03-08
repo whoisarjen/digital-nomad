@@ -4,7 +4,7 @@
     <!-- Desktop-only informational tooltip -->
     <div
       v-if="!disabled"
-      class="hidden md:block absolute z-30 whitespace-nowrap text-[11px] font-medium pointer-events-none opacity-0 group-hover/tooltip:opacity-100 transition-opacity duration-200"
+      class="hidden md:block absolute z-50 whitespace-nowrap text-[11px] font-medium pointer-events-none opacity-0 group-hover/tooltip:opacity-100 transition-opacity duration-200"
       :class="[
         position === 'bottom'
           ? 'top-full mt-2'

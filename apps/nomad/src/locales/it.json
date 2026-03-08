@@ -375,6 +375,7 @@
   },
   "budget": {
     "filterLabel": "Il mio budget mensile",
+    "onlyAffordable": "Mostra solo città nel mio budget",
     "savesPerMonth": "Risparmia ${amount}/mese",
     "overBudget": "${amount} oltre il budget",
     "clearBudget": "Cancella budget"

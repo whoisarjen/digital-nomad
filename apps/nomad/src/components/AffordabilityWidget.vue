@@ -90,7 +90,7 @@
       <!-- Result card -->
       <div class="rounded-xl border p-4 mb-4" :class="resultCardClass">
         <div class="flex items-center justify-between mb-1">
-          <span class="text-sm font-medium" :class="resultLabelClass">{{ resultLabel }}</span>
+          <span class="text-sm font-medium" :class="resultLabelClass">{{ $t(resultLabel) }}</span>
           <span class="text-2xl font-bold tabular-nums" :class="resultAmountClass">
             ${{ Math.abs(resultAmount) }}
           </span>
@@ -108,7 +108,7 @@
       <!-- Status badge -->
       <div class="flex items-center gap-2 text-sm mb-4">
         <span class="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold" :class="statusBadgeClass">
-          {{ statusLabel }}
+          {{ $t(statusLabel) }}
         </span>
         <span class="text-xs text-gray-400">${{ activeCost }}/mo {{ $t('affordability.forLifestyle', { tier: $t(activeTierLabel) }) }}</span>
       </div>

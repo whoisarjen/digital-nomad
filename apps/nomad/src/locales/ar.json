@@ -373,6 +373,7 @@
   },
   "budget": {
     "filterLabel": "ميزانيتي الشهرية",
+    "onlyAffordable": "عرض المدن ضمن ميزانيتي فقط",
     "savesPerMonth": "وفر ${amount}/شهر",
     "overBudget": "${amount} فوق الميزانية",
     "clearBudget": "مسح الميزانية"

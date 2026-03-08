@@ -1,22 +1,28 @@
 // @vitest-environment happy-dom
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { ref, computed } from 'vue'
+import { ref, computed, reactive } from 'vue'
 import { mount } from '@vue/test-utils'
 
 vi.stubGlobal('ref', ref)
 vi.stubGlobal('computed', computed)
 
-const mockBudget = ref<number | null>(null)
-const mockSetBudget = vi.fn((v: number | null) => { mockBudget.value = v })
-
+const mockBudget = ref<number>(2000)
+const mockSetBudget = vi.fn((v: number | null) => { mockBudget.value = v ?? 2000 })
 vi.stubGlobal('useBudget', () => ({ budget: mockBudget, setBudget: mockSetBudget }))
+
+const mockRoute = reactive({ query: {} as Record<string, any> })
+const mockPush = vi.fn()
+vi.stubGlobal('useRoute', () => mockRoute)
+vi.stubGlobal('useRouter', () => ({ push: mockPush }))
 
 import BudgetFilter from '~/components/BudgetFilter.vue'
 
 describe('BudgetFilter', () => {
   beforeEach(() => {
-    mockBudget.value = null
+    mockBudget.value = 2000
     mockSetBudget.mockClear()
+    mockRoute.query = {}
+    mockPush.mockClear()
   })
 
   it('renders label', () => {
@@ -43,37 +49,63 @@ describe('BudgetFilter', () => {
     expect(mockSetBudget).toHaveBeenCalledWith(3000)
   })
 
-  it('shows clear button when budget is set', () => {
-    mockBudget.value = 2000
+  it('shows current budget value', () => {
+    mockBudget.value = 2500
     const wrapper = mount(BudgetFilter, {
       global: { mocks: { $t: (k: string) => k } },
     })
-    expect(wrapper.text()).toContain('budget.clearBudget')
+    expect(wrapper.text()).toContain('2,500')
   })
 
-  it('does not show clear button when budget is null', () => {
+  it('does not show a clear button', () => {
     const wrapper = mount(BudgetFilter, {
       global: { mocks: { $t: (k: string) => k } },
     })
     expect(wrapper.text()).not.toContain('budget.clearBudget')
   })
 
-  it('calls setBudget(null) when clear button is clicked', async () => {
-    mockBudget.value = 2000
+  it('renders a "show only affordable" toggle', () => {
     const wrapper = mount(BudgetFilter, {
       global: { mocks: { $t: (k: string) => k } },
     })
-    const clearBtn = wrapper.findAll('button').find(b => b.text().includes('budget.clearBudget'))
-    expect(clearBtn).toBeDefined()
-    await clearBtn!.trigger('click')
-    expect(mockSetBudget).toHaveBeenCalledWith(null)
+    expect(wrapper.find('input[type="checkbox"]').exists()).toBe(true)
   })
 
-  it('shows current budget value when set', () => {
-    mockBudget.value = 2500
+  it('toggle is unchecked when prices filter is not in query', () => {
+    mockRoute.query = {}
     const wrapper = mount(BudgetFilter, {
       global: { mocks: { $t: (k: string) => k } },
     })
-    expect(wrapper.text()).toContain('2500')
+    const checkbox = wrapper.find('input[type="checkbox"]').element as HTMLInputElement
+    expect(checkbox.checked).toBe(false)
+  })
+
+  it('toggle is checked when costs filter is active in query', () => {
+    mockRoute.query = { costs: '2000' }
+    const wrapper = mount(BudgetFilter, {
+      global: { mocks: { $t: (k: string) => k } },
+    })
+    const checkbox = wrapper.find('input[type="checkbox"]').element as HTMLInputElement
+    expect(checkbox.checked).toBe(true)
+  })
+
+  it('checking the toggle adds costs filter to query', async () => {
+    mockRoute.query = {}
+    const wrapper = mount(BudgetFilter, {
+      global: { mocks: { $t: (k: string) => k } },
+    })
+    await wrapper.find('input[type="checkbox"]').setValue(true)
+    await wrapper.find('input[type="checkbox"]').trigger('change')
+    expect(mockPush).toHaveBeenCalledWith({ query: { costs: '2000' } })
+  })
+
+  it('unchecking the toggle removes costs filter from query', async () => {
+    mockRoute.query = { costs: '2000' }
+    const wrapper = mount(BudgetFilter, {
+      global: { mocks: { $t: (k: string) => k } },
+    })
+    await wrapper.find('input[type="checkbox"]').setValue(false)
+    await wrapper.find('input[type="checkbox"]').trigger('change')
+    expect(mockPush).toHaveBeenCalledWith({ query: {} })
   })
 })

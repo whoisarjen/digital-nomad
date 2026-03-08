@@ -373,6 +373,7 @@
   },
   "budget": {
     "filterLabel": "月間予算",
+    "onlyAffordable": "予算内の都市のみ表示",
     "savesPerMonth": "${amount}/月節約",
     "overBudget": "予算を${amount}オーバー",
     "clearBudget": "予算をクリア"

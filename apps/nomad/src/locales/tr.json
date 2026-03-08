@@ -375,6 +375,7 @@
   },
   "budget": {
     "filterLabel": "Aylık bütçem",
+    "onlyAffordable": "Yalnızca bütçemdeki şehirleri göster",
     "savesPerMonth": "${amount}/ay tasarruf",
     "overBudget": "Bütçeyi ${amount} aştı",
     "clearBudget": "Bütçeyi temizle"

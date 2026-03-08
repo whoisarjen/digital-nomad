@@ -143,7 +143,7 @@
         <div class="gap-4 w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
           <!-- Skeleton Loading -->
           <template v-if="status === 'pending'">
-            <div v-for="city in skeletonCount" :key="city" class="aspect-[3/4] rounded-2xl skeleton" />
+            <CityCardSkeleton v-for="city in skeletonCount" :key="city" />
           </template>
 
           <!-- City Cards -->

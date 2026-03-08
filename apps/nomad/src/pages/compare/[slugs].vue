@@ -2,29 +2,181 @@
   <div class="min-h-screen bg-[#060E1B]">
     <!-- ─── Loading Skeleton ─── -->
     <template v-if="!data || status !== 'success'">
+      <!-- Dark header skeleton -->
       <section class="pt-24 pb-20 px-6">
         <div class="max-w-screen-xl mx-auto flex flex-col gap-4">
-          <div class="h-3 skeleton w-48" />
-          <div class="h-12 skeleton w-2/3" />
-          <div class="h-5 skeleton w-56" />
-          <div class="flex gap-2.5 mt-2">
+          <!-- Breadcrumb: Home / Compare / City A vs City B -->
+          <div class="flex items-center gap-3">
+            <div class="h-3 skeleton w-20 rounded" />
+            <div class="h-3 skeleton w-2 rounded" />
+            <div class="h-3 skeleton w-16 rounded" />
+            <div class="h-3 skeleton w-2 rounded" />
+            <div class="h-3 skeleton w-40 rounded" />
+          </div>
+          <!-- H1: "City A vs City B" -->
+          <div class="h-10 sm:h-12 md:h-14 skeleton w-3/4 rounded-lg" />
+          <!-- Subtitle -->
+          <div class="h-5 skeleton w-64 rounded" />
+          <!-- 3 quick diff badges -->
+          <div class="flex flex-wrap gap-2.5 mt-2">
             <div v-for="i in 3" :key="i" class="h-9 skeleton w-36 rounded-full" />
           </div>
         </div>
       </section>
+
+      <!-- Light content skeleton -->
       <div class="bg-gray-50 rounded-t-[2rem] -mt-2 relative z-10">
         <div class="max-w-screen-xl mx-auto px-6 py-12">
+
+          <!-- Side-by-side hero images (aspect-16/9, overlaps dark zone) -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 -mt-24 mb-10">
-            <div class="h-48 sm:h-64 skeleton rounded-2xl" />
-            <div class="h-48 sm:h-64 skeleton rounded-2xl" />
+            <div class="aspect-[16/9] skeleton rounded-2xl" />
+            <div class="aspect-[16/9] skeleton rounded-2xl" />
           </div>
+
+          <!-- 6 metric cards: icon label + two city values -->
           <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 mb-10">
-            <div v-for="i in 6" :key="i" class="h-28 skeleton rounded-2xl" />
+            <div v-for="i in 6" :key="i" class="bg-white rounded-2xl p-4 border border-gray-100">
+              <div class="flex items-center gap-2 mb-3">
+                <div class="size-7 skeleton rounded-lg" />
+                <div class="h-2.5 skeleton w-14 rounded" />
+              </div>
+              <div class="flex justify-between gap-1">
+                <div class="flex-1 flex flex-col items-center gap-1.5">
+                  <div class="h-6 skeleton w-10 rounded" />
+                  <div class="h-2 skeleton w-8 rounded" />
+                </div>
+                <div class="flex-1 flex flex-col items-center gap-1.5">
+                  <div class="h-6 skeleton w-10 rounded" />
+                  <div class="h-2 skeleton w-8 rounded" />
+                </div>
+              </div>
+            </div>
           </div>
+
+          <!-- Auto-generated content (intro + cost + internet + safety + weather sections) -->
+          <div class="bg-white rounded-2xl border border-gray-100 p-6 md:p-8 mb-10">
+            <div class="space-y-2 mb-6">
+              <div class="h-4 skeleton w-full rounded" />
+              <div class="h-4 skeleton w-full rounded" />
+              <div class="h-4 skeleton w-3/4 rounded" />
+            </div>
+            <div class="mb-6">
+              <div class="flex items-center gap-2 mb-3">
+                <div class="size-7 skeleton rounded-lg" />
+                <div class="h-4 skeleton w-32 rounded" />
+              </div>
+              <div class="space-y-2">
+                <div class="h-4 skeleton w-full rounded" />
+                <div class="h-4 skeleton w-5/6 rounded" />
+              </div>
+            </div>
+            <div class="mb-6">
+              <div class="flex items-center gap-2 mb-3">
+                <div class="size-7 skeleton rounded-lg" />
+                <div class="h-4 skeleton w-28 rounded" />
+              </div>
+              <div class="h-4 skeleton w-full rounded" />
+            </div>
+            <div class="mb-6">
+              <div class="flex items-center gap-2 mb-3">
+                <div class="size-7 skeleton rounded-lg" />
+                <div class="h-4 skeleton w-36 rounded" />
+              </div>
+              <div class="space-y-2">
+                <div class="h-4 skeleton w-full rounded" />
+                <div class="h-4 skeleton w-4/5 rounded" />
+              </div>
+            </div>
+            <div>
+              <div class="flex items-center gap-2 mb-3">
+                <div class="size-7 skeleton rounded-lg" />
+                <div class="h-4 skeleton w-32 rounded" />
+              </div>
+              <div class="h-4 skeleton w-full rounded" />
+            </div>
+          </div>
+
+          <!-- 4 detailed comparison tables (Cost, Internet, Environment, Quality) -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-10">
-            <div v-for="i in 4" :key="i" class="h-56 skeleton rounded-2xl" />
+            <div v-for="i in 4" :key="i" class="bg-white rounded-2xl border border-gray-100 p-6">
+              <div class="flex items-center gap-2.5 mb-5">
+                <div class="size-8 skeleton rounded-xl" />
+                <div class="h-4 skeleton w-36 rounded" />
+              </div>
+              <div class="flex justify-between items-center pb-2 mb-1 border-b border-gray-100">
+                <div class="w-20" />
+                <div class="h-3 skeleton flex-1 mx-2 rounded" />
+                <div class="h-3 skeleton flex-1 rounded" />
+              </div>
+              <div
+                v-for="j in (i % 2 === 0 ? 2 : 4)"
+                :key="j"
+                class="flex justify-between items-center py-2.5 border-b border-gray-50 last:border-0"
+              >
+                <div class="h-3.5 skeleton w-20 rounded" />
+                <div class="h-3.5 skeleton flex-1 mx-2 rounded" />
+                <div class="h-3.5 skeleton flex-1 rounded" />
+              </div>
+            </div>
           </div>
-          <div class="h-48 skeleton rounded-2xl" />
+
+          <!-- Monthly weather comparison (12 rows) -->
+          <div class="bg-white rounded-2xl border border-gray-100 p-6 mb-10">
+            <div class="flex items-center gap-2.5 mb-5">
+              <div class="size-8 skeleton rounded-xl" />
+              <div class="h-4 skeleton w-44 rounded" />
+            </div>
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-10" />
+              <div class="h-3 skeleton flex-1 rounded" />
+              <div class="h-3 skeleton flex-1 rounded" />
+            </div>
+            <div class="space-y-1.5">
+              <div v-for="m in 12" :key="m" class="flex items-center gap-3">
+                <div class="w-10 h-5 skeleton rounded" />
+                <div class="flex-1 h-10 skeleton rounded-lg" />
+                <div class="flex-1 h-10 skeleton rounded-lg" />
+              </div>
+            </div>
+          </div>
+
+          <!-- "Who should choose" (2 cards with bullet lists) -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-10">
+            <div v-for="i in 2" :key="i" class="bg-white rounded-2xl border border-gray-100 p-6">
+              <div class="h-5 skeleton w-3/4 rounded mb-4" />
+              <div class="space-y-3">
+                <div v-for="j in 4" :key="j" class="flex items-start gap-2.5">
+                  <div class="size-4 skeleton rounded mt-0.5 flex-shrink-0" />
+                  <div class="h-4 skeleton flex-1 rounded" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Overall verdict -->
+          <div class="bg-white rounded-2xl border border-gray-100 p-6 md:p-8 mb-10">
+            <div class="flex items-center gap-2.5 mb-3">
+              <div class="size-8 skeleton rounded-xl" />
+              <div class="h-4 skeleton w-36 rounded" />
+            </div>
+            <div class="space-y-2">
+              <div class="h-4 skeleton w-full rounded" />
+              <div class="h-4 skeleton w-4/5 rounded" />
+            </div>
+          </div>
+
+          <!-- Related comparisons -->
+          <div class="mb-10">
+            <div class="flex items-center justify-between mb-4">
+              <div class="h-5 skeleton w-48 rounded" />
+              <div class="h-4 skeleton w-24 rounded" />
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              <div v-for="i in 3" :key="i" class="h-14 skeleton rounded-2xl" />
+            </div>
+          </div>
+
         </div>
       </div>
     </template>
