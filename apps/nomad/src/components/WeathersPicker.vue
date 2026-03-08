@@ -20,8 +20,18 @@
 <script setup lang="ts">
 import type { WeatherIcon } from '@prisma/client';
 
+const props = defineProps<{
+  modelValue?: string[]
+}>();
+
+const emit = defineEmits<{
+  'update:modelValue': [value: string[]]
+}>();
+
 const route = useRoute();
 const router = useRouter();
+
+const isControlled = computed(() => props.modelValue !== undefined);
 
 const WEATHERS_ICONS = {
   SUN: true,
@@ -34,7 +44,11 @@ const WEATHERS_ICONS = {
 const toStringArray = (val: string | string[] | undefined): string[] =>
   Array.isArray(val) ? val : val ? [val] : []
 
-const selectedOptions = ref<string[]>(toStringArray(route.query.weathers as string | string[] | undefined));
+const selectedOptions = ref<string[]>(
+  isControlled.value
+    ? [...(props.modelValue ?? [])]
+    : toStringArray(route.query.weathers as string | string[] | undefined)
+);
 
 function selectWeather(value: string) {
   const index = selectedOptions.value.indexOf(value);
@@ -46,19 +60,31 @@ function selectWeather(value: string) {
     newSelections = [...selectedOptions.value, value];
   }
 
-  router.push({
-    query: {
-      ...route.query,
-      page: undefined,
-      weathers: newSelections.length ? newSelections : undefined,
-    },
-  });
+  if (isControlled.value) {
+    emit('update:modelValue', newSelections);
+  } else {
+    router.push({
+      query: {
+        ...route.query,
+        page: undefined,
+        weathers: newSelections.length ? newSelections : undefined,
+      },
+    });
+  }
 }
 
+watch(() => props.modelValue, (newVal) => {
+  if (isControlled.value) {
+    selectedOptions.value = newVal ? [...newVal] : [];
+  }
+});
+
 watch(() => route.query.weathers, (newVal) => {
-  selectedOptions.value = Array.isArray(newVal)
-    ? (newVal as string[])
-    : newVal ? [newVal] : [];
+  if (!isControlled.value) {
+    selectedOptions.value = Array.isArray(newVal)
+      ? (newVal as string[])
+      : newVal ? [newVal] : [];
+  }
 }, {
   immediate: true,
 });

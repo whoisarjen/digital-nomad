@@ -20,6 +20,16 @@
 <script setup lang="ts">
 import { getUserCurrentMonthString } from '~/shared/global.utils';
 
+const props = defineProps<{
+  modelValue?: string
+}>()
+
+const emit = defineEmits<{
+  'update:modelValue': [value: string]
+}>()
+
+const isControlled = computed(() => props.modelValue !== undefined)
+
 const { t } = useCustomI18n()
 const route = useRoute();
 const router = useRouter();
@@ -32,9 +42,19 @@ const months = computed(() => MONTH_KEYS.map((key, i) => ({
 })));
 
 const currentMonthString = computed(() => getUserCurrentMonthString())
-const selectedOption = ref<string | null>(route.query.months as string || currentMonthString.value);
+const selectedOption = ref<string | null>(
+  isControlled.value
+    ? props.modelValue!
+    : (route.query.months as string || currentMonthString.value)
+);
 
 function selectMonth(value: string) {
+  if (isControlled.value) {
+    selectedOption.value = value;
+    emit('update:modelValue', value);
+    return;
+  }
+
   if (selectedOption.value !== value) {
     selectedOption.value = value;
   }
@@ -48,8 +68,16 @@ function selectMonth(value: string) {
   });
 }
 
+watch(() => props.modelValue, (newVal) => {
+  if (isControlled.value && newVal !== undefined) {
+    selectedOption.value = newVal;
+  }
+});
+
 watch(() => route.query.months, (newVal) => {
-  selectedOption.value = newVal as string || currentMonthString.value;
+  if (!isControlled.value) {
+    selectedOption.value = newVal as string || currentMonthString.value;
+  }
 }, {
   immediate: true,
 });

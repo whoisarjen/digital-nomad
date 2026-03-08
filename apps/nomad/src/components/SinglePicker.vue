@@ -45,7 +45,14 @@ const props = defineProps<{
   options: Option[]
   isLabel?: boolean
   customDefaultOption?: Option
+  modelValue?: string
 }>()
+
+const emit = defineEmits<{
+  'update:modelValue': [value: string]
+}>()
+
+const isControlled = computed(() => props.modelValue !== undefined)
 
 const defaultOption = computed(() => props.customDefaultOption ?? ({
     label: `All ${props.name.split('_').join(' ')}`,
@@ -76,10 +83,19 @@ const preparedOptions = computed(() => {
 const route = useRoute()
 const router = useRouter()
 
-const selectedOption = ref<string | number>(route.query[props.name as keyof typeof route['query']] as string | number | undefined ?? defaultOption.value.value)
+const selectedOption = ref<string>(
+    isControlled.value
+        ? props.modelValue!
+        : (route.query[props.name as keyof typeof route['query']] as string | undefined ?? defaultOption.value.value)
+)
 
 function updateQuery(event: Event) {
-    const value = (event.target as HTMLSelectElement).value as string | number
+    const value = (event.target as HTMLSelectElement).value
+
+    if (isControlled.value) {
+        emit('update:modelValue', value)
+        return
+    }
 
     router.push({
         query: {
@@ -90,8 +106,16 @@ function updateQuery(event: Event) {
     })
 }
 
+watch(() => props.modelValue, (newVal) => {
+    if (isControlled.value && newVal !== undefined) {
+        selectedOption.value = newVal
+    }
+})
+
 watch(() => route.query[props.name], (newVal) => {
-    selectedOption.value = newVal as string | number | undefined ?? defaultOption.value.value
+    if (!isControlled.value) {
+        selectedOption.value = (newVal as string | undefined) ?? defaultOption.value.value
+    }
 }, {
     immediate: true,
 })

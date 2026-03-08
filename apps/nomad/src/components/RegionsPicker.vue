@@ -18,37 +18,64 @@
 <script setup lang="ts">
 import { OPTIONS_REGIONS } from '~/shared/global.utils';
 
+const props = defineProps<{
+  modelValue?: string[]
+}>();
+
+const emit = defineEmits<{
+  'update:modelValue': [value: string[]]
+}>();
+
+const isControlled = computed(() => props.modelValue !== undefined);
+
 const route = useRoute();
 const router = useRouter();
 
 const toStringArray = (val: string | string[] | undefined): string[] =>
   Array.isArray(val) ? val : val ? [val] : []
 
-const selectedOptions = ref<string[]>(toStringArray(route.query.regions as string | string[] | undefined));
+const selectedOptions = ref<string[]>(
+  props.modelValue !== undefined
+    ? [...props.modelValue]
+    : toStringArray(route.query.regions as string | string[] | undefined)
+);
 
 function selectRegion(value: string) {
   const index = selectedOptions.value.indexOf(value);
 
-  let newSelections = []
+  let newSelections: string[] = []
   if (index !== -1) {
     newSelections = selectedOptions.value.filter(option => option !== value);
   } else {
     newSelections = [...selectedOptions.value, value];
   }
 
-  router.push({
-    query: {
-      ...route.query,
-      page: undefined,
-      regions: newSelections.length ? newSelections : undefined,
-    },
-  });
+  if (isControlled.value) {
+    selectedOptions.value = newSelections;
+    emit('update:modelValue', newSelections);
+  } else {
+    router.push({
+      query: {
+        ...route.query,
+        page: undefined,
+        regions: newSelections.length ? newSelections : undefined,
+      },
+    });
+  }
 }
 
+watch(() => props.modelValue, (newVal) => {
+  if (newVal !== undefined) {
+    selectedOptions.value = [...newVal];
+  }
+});
+
 watch(() => route.query.regions, (newVal) => {
-  selectedOptions.value = Array.isArray(newVal)
-    ? (newVal as string[])
-    : newVal ? [newVal] : [];
+  if (!isControlled.value) {
+    selectedOptions.value = Array.isArray(newVal)
+      ? (newVal as string[])
+      : newVal ? [newVal] : [];
+  }
 }, {
   immediate: true,
 });
