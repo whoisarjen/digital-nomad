@@ -26,8 +26,10 @@ describe('TemperaturesPicker', () => {
     })
 
     const inputs = wrapper.findAll('input[type="number"]')
-    expect((inputs[0]!.element as HTMLInputElement).value).toBe('10')
-    expect((inputs[1]!.element as HTMLInputElement).value).toBe('30')
+    const minEl = inputs.at(0)!
+    const maxEl = inputs.at(1)!
+    expect((minEl.element as HTMLInputElement).value).toBe('10')
+    expect((maxEl.element as HTMLInputElement).value).toBe('30')
   })
 
   it('emits update:modelValue instead of calling router.push in controlled mode', async () => {
@@ -36,7 +38,7 @@ describe('TemperaturesPicker', () => {
       global: { mocks: { $t: (k: string) => k } },
     })
 
-    const minInput = wrapper.findAll('input[type="number"]')[0]!
+    const minInput = wrapper.findAll('input[type="number"]').at(0)!
     await minInput.setValue(5)
     await minInput.trigger('input')
 
@@ -50,7 +52,7 @@ describe('TemperaturesPicker', () => {
       global: { mocks: { $t: (k: string) => k } },
     })
 
-    const maxInput = wrapper.findAll('input[type="number"]')[1]!
+    const maxInput = wrapper.findAll('input[type="number"]').at(1)!
     await maxInput.setValue(40)
     await maxInput.trigger('input')
 
@@ -73,7 +75,7 @@ describe('TemperaturesPicker', () => {
     await wrapper.setProps({ modelValue: ['gte:5', 'lte:25'] })
 
     const inputs = wrapper.findAll('input[type="number"]')
-    expect((inputs[0]!.element as HTMLInputElement).value).toBe('5')
-    expect((inputs[1]!.element as HTMLInputElement).value).toBe('25')
+    expect((inputs.at(0)!.element as HTMLInputElement).value).toBe('5')
+    expect((inputs.at(1)!.element as HTMLInputElement).value).toBe('25')
   })
 })
