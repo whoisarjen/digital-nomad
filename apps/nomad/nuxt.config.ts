@@ -117,6 +117,10 @@ export default defineNuxtConfig({
         sources: ['/api/__sitemap__/countries'],
         includeAppSources: false,
       },
+      'best-cities': {
+        sources: ['/api/__sitemap__/best-cities'],
+        includeAppSources: false,
+      },
     },
   },
   robots: {
