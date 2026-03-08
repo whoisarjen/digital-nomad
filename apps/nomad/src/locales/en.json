@@ -5,7 +5,9 @@
     "countries": "Countries",
     "compare": "Compare",
     "blog": "Blog",
-    "bestCities": "Rankings"
+    "bestCities": "Rankings",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu"
   },
   "hero": {
     "titleLine1": "Every city, decoded.",

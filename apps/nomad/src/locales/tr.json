@@ -5,7 +5,9 @@
     "countries": "Ülkeler",
     "compare": "Karşılaştır",
     "blog": "Blog",
-    "bestCities": "Rankings"
+    "bestCities": "Rankings",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu"
   },
   "hero": {
     "titleLine1": "Her şehir, çözümlenmiş.",

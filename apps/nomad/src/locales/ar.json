@@ -4,7 +4,10 @@
     "regions": "المناطق",
     "countries": "الدول",
     "compare": "مقارنة",
-    "blog": "المدونة"
+    "blog": "المدونة",
+    "bestCities": "Rankings",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu"
   },
   "hero": {
     "titleLine1": "كل مدينة، مفكّكة.",

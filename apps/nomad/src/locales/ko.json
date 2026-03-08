@@ -4,7 +4,10 @@
     "regions": "지역",
     "countries": "국가",
     "compare": "비교",
-    "blog": "블로그"
+    "blog": "블로그",
+    "bestCities": "Rankings",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu"
   },
   "hero": {
     "titleLine1": "모든 도시, 분석 완료.",

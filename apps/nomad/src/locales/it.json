@@ -5,7 +5,9 @@
     "countries": "Paesi",
     "compare": "Confronta",
     "blog": "Blog",
-    "bestCities": "Rankings"
+    "bestCities": "Rankings",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu"
   },
   "hero": {
     "titleLine1": "Ogni città, decodificata.",

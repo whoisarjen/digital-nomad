@@ -5,7 +5,9 @@
     "countries": "Kraje",
     "compare": "Porównaj",
     "blog": "Blog",
-    "bestCities": "Rankingi"
+    "bestCities": "Rankingi",
+    "openMenu": "Otwórz menu",
+    "closeMenu": "Zamknij menu"
   },
   "hero": {
     "titleLine1": "Każde miasto, rozszyfrowane.",

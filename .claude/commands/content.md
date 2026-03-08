@@ -146,6 +146,7 @@ Hard fails (do NOT insert):
 - titleEn and titlePl must be non-empty
 - contentEn must be 500+ words
 - Primary city slug must exist in City table
+- **Featured image must be reachable** — run `curl -sL -o /dev/null -w "%{http_code}" "[featuredImageUrl]"` and verify HTTP 200. If not 200, try a different Unsplash image. If 3 attempts fail → hard fail.
 
 Soft warnings (insert anyway, note in report):
 - Any meta title over 60 chars → truncate

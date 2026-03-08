@@ -4,7 +4,10 @@
     "regions": "地域",
     "countries": "国",
     "compare": "比較",
-    "blog": "ブログ"
+    "blog": "ブログ",
+    "bestCities": "Rankings",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu"
   },
   "hero": {
     "titleLine1": "すべての都市を、解析。",
