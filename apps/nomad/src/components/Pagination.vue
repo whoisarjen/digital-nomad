@@ -34,7 +34,7 @@ const visiblePages = computed(() => {
 <template>
   <section
     v-if="pagesCount > 1"
-    class="flex items-center justify-center mt-5 gap-1"
+    class="flex items-center justify-center mt-5 gap-1 w-full"
   >
     <NuxtLink
       v-if="currentPage > 1"

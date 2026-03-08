@@ -118,6 +118,81 @@ model City {
 
   articles  ArticleCityMap[]
   favorites Favorite[]
+
+  // Restaurants
+  mealInexpensiveRestaurant Decimal? @db.Decimal(10, 2)
+  mealMidRangeRestaurant    Decimal? @db.Decimal(10, 2)
+  mcMeal                    Decimal? @db.Decimal(10, 2)
+  domesticBeerRestaurant    Decimal? @db.Decimal(10, 2)
+  importedBeerRestaurant    Decimal? @db.Decimal(10, 2)
+  cappuccino                Decimal? @db.Decimal(10, 2)
+  cokeRestaurant            Decimal? @db.Decimal(10, 2)
+  waterRestaurant           Decimal? @db.Decimal(10, 2)
+
+  // Markets
+  milk1L             Decimal? @db.Decimal(10, 2)
+  bread500g          Decimal? @db.Decimal(10, 2)
+  rice1kg            Decimal? @db.Decimal(10, 2)
+  eggs12             Decimal? @db.Decimal(10, 2)
+  localCheese1kg     Decimal? @db.Decimal(10, 2)
+  chickenFillets1kg  Decimal? @db.Decimal(10, 2)
+  beefRound1kg       Decimal? @db.Decimal(10, 2)
+  apples1kg          Decimal? @db.Decimal(10, 2)
+  banana1kg          Decimal? @db.Decimal(10, 2)
+  oranges1kg         Decimal? @db.Decimal(10, 2)
+  tomato1kg          Decimal? @db.Decimal(10, 2)
+  potato1kg          Decimal? @db.Decimal(10, 2)
+  onion1kg           Decimal? @db.Decimal(10, 2)
+  lettuce            Decimal? @db.Decimal(10, 2)
+  water15L           Decimal? @db.Decimal(10, 2)
+  wineBottleMidRange Decimal? @db.Decimal(10, 2)
+  domesticBeerMarket Decimal? @db.Decimal(10, 2)
+  importedBeerMarket Decimal? @db.Decimal(10, 2)
+  cigarettes20Pack   Decimal? @db.Decimal(10, 2)
+
+  // Transportation
+  oneWayTicket         Decimal? @db.Decimal(10, 2)
+  monthlyTransportPass Decimal? @db.Decimal(10, 2)
+  taxiStart            Decimal? @db.Decimal(10, 2)
+  taxi1km              Decimal? @db.Decimal(10, 2)
+  taxi1hourWaiting     Decimal? @db.Decimal(10, 2)
+  gasoline1L           Decimal? @db.Decimal(10, 2)
+  volkswagenGolf       Decimal? @db.Decimal(10, 2)
+  toyotaCorolla        Decimal? @db.Decimal(10, 2)
+
+  // Utilities
+  utilitiesMonthly85m2 Decimal? @db.Decimal(10, 2)
+  mobileMinutePrepaid  Decimal? @db.Decimal(10, 2)
+  internet60mbps       Decimal? @db.Decimal(10, 2)
+
+  // Sports & Leisure
+  fitnessClubMonthly Decimal? @db.Decimal(10, 2)
+  tennisCourt1h      Decimal? @db.Decimal(10, 2)
+  cinema1seat        Decimal? @db.Decimal(10, 2)
+
+  // Childcare
+  preschoolMonthly                 Decimal? @db.Decimal(10, 2)
+  internationalPrimarySchoolYearly Decimal? @db.Decimal(10, 2)
+
+  // Clothing
+  jeans                Decimal? @db.Decimal(10, 2)
+  summerDress          Decimal? @db.Decimal(10, 2)
+  nikeShoes            Decimal? @db.Decimal(10, 2)
+  leatherBusinessShoes Decimal? @db.Decimal(10, 2)
+
+  // Rent (monthly)
+  apartment1brCentre  Decimal? @db.Decimal(10, 2)
+  apartment1brOutside Decimal? @db.Decimal(10, 2)
+  apartment3brCentre  Decimal? @db.Decimal(10, 2)
+  apartment3brOutside Decimal? @db.Decimal(10, 2)
+
+  // Buy apartment
+  pricePerM2Centre  Decimal? @db.Decimal(10, 2)
+  pricePerM2Outside Decimal? @db.Decimal(10, 2)
+
+  // Salary & Finance
+  averageMonthlyNetSalary Decimal? @db.Decimal(10, 2)
+  mortgageInterestRate    Decimal? @db.Decimal(10, 4)
 }
 
 model Weather {

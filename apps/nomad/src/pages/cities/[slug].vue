@@ -433,8 +433,11 @@
           :cost-expat="Number(data.costForExpatInUsd)"
           :cost-local="Number(data.costForLocalInUsd)"
           :cost-family="Number(data.costForFamilyInUsd)"
-          class="mb-10"
+          class="mb-5"
         />
+
+        <!-- ─── Granular Cost Breakdown ─── -->
+        <CostBreakdown v-if="data" :prices="data" class="mb-10" />
 
         <!-- ─── Monthly Weather ─── -->
         <section class="bg-white rounded-2xl border border-gray-100 p-6 mb-10">

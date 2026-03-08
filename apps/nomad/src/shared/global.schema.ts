@@ -150,7 +150,7 @@ export const getArticlesSchema = z.object({
         .string()
         .optional()
         .transform((val) => (val ? Number(val) : undefined))
-        .pipe(z.number().positive().max(50).optional().default(12)),
+        .pipe(z.number().positive().max(50).optional().default(10)),
     city: z.string().optional(),
     q: z.string().max(SEARCH_BAR_MAXIMUM_Q_LENGTH).optional(),
 });

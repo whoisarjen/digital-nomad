@@ -1,6 +1,6 @@
-# IDEA-08: Affiliate Integration
+# IDEA-27: Affiliate Integration
 **Status:** NOT_STARTED
-**Priority:** 08/23
+**Priority:** 27/27
 **Complexity:** S
 
 ## What's Already Implemented

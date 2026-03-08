@@ -1,6 +1,6 @@
-# IDEA-10: Digital Nomad Visa Directory
+# IDEA-29: Digital Nomad Visa Directory
 **Status:** NOT_STARTED
-**Priority:** 10/23
+**Priority:** 29/29
 **Complexity:** XL
 
 ## What's Already Implemented

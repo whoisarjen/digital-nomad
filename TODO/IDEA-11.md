@@ -1,7 +1,16 @@
 # IDEA-11: Granular Cost Breakdown
-**Status:** NOT_STARTED
+**Status:** IN_PROGRESS
 **Priority:** 11/23
-**Complexity:** XL
+**Complexity:** M
+
+## What's Already Done
+- 55 price fields added directly to `City` model (flat, no separate table)
+- Data seeded for all matched cities via `/api/_legacy_cron/seed-city-prices` endpoint
+- Source: Numbeo data (TheChance101/cost-of-living on GitHub, ~4956 cities)
+- Collector endpoint at `apps/collector/server/api/_legacy_cron/seed-city-prices.get.ts`
+- Raw JSON at `packages/db/cost-of-living.json`
+
+## Remaining Work
 
 ## What's Already Implemented
 - Aggregate cost fields exist (`costForNomadInUsd`, `costForExpatInUsd`, `costForLocalInUsd`, `costForFamilyInUsd`) but no line-item breakdown

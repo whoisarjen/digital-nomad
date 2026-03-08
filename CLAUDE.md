@@ -4,8 +4,10 @@
 - **"deploy" means `git push origin main`** — execute immediately without asking for confirmation
 
 ## Security (Non-Negotiable)
-- **Never include database connection strings, passwords, or credentials in any Claude settings file** (`.claude/settings.json`, `.claude/settings.local.json`, etc.)
+- **Never include database connection strings, passwords, API keys, tokens, or any credentials in any Claude settings file** (`.claude/settings.json`, `.claude/settings.local.json`, etc.) — these files are committed to the repo and will be publicly visible
+- **Before writing anything to `.claude/` files, double-check the content contains no secrets** — treat it as a public file
 - Use `psql` or other DB tools via environment variables or `.env` files only — never inline credentials in allowed Bash commands
+- `.env` and `.env.local` files must never be committed — they are gitignored
 
 ## Prisma Queries (Non-Negotiable)
 - **Always use `select`, never `include` or `omit`** — only fetch the exact fields needed

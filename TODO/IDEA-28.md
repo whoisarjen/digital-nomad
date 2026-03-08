@@ -1,6 +1,6 @@
-# IDEA-09: Weekly Email Newsletter
+# IDEA-28: Weekly Email Newsletter
 **Status:** NOT_STARTED
-**Priority:** 09/23
+**Priority:** 28/28
 **Complexity:** M
 
 ## What's Already Implemented

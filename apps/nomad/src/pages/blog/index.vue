@@ -44,7 +44,7 @@
             </div>
           </div>
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div v-for="i in 6" :key="i" class="rounded-2xl overflow-hidden bg-white border border-gray-200">
+            <div v-for="i in 9" :key="i" class="rounded-2xl overflow-hidden bg-white border border-gray-200">
               <div class="aspect-[3/2] skeleton rounded-none" />
               <div class="p-5 flex flex-col gap-3">
                 <div class="h-5 skeleton w-3/4" />
@@ -139,9 +139,7 @@
             </NuxtLink>
           </div>
 
-          <div v-if="(articles.pagesCount ?? 0) > 1" class="flex justify-center mt-10">
-            <Pagination :pages-count="articles.pagesCount ?? 0" />
-          </div>
+          <Pagination v-if="(articles.pagesCount ?? 0) > 1" :pages-count="articles.pagesCount ?? 0" class="mt-10" />
         </template>
 
         <!-- Empty -->

@@ -183,7 +183,18 @@
       "Bash(npx tsx src/seeds/electricity.ts)",
       "Bash(sudo chmod -R u+w /Users/kamilowczarek/Documents/GitHub/digital-nomad/node_modules/.prisma/)",
       "Bash(node -e \"import\\(''dotenv''\\).then\\(d => { d.default.config\\({ path: ''.env.local'' }\\); console.log\\(''DATABASE_URL set:'', !!process.env.DATABASE_URL\\); }\\)\")",
-      "Bash(npm run test:run -- \"src/server/api/cities/__tests__/\\\\[slug\\\\].get.test.ts\")"
+      "Bash(npm run test:run -- \"src/server/api/cities/__tests__/\\\\[slug\\\\].get.test.ts\")",
+      "Bash(mv /Users/kamilowczarek/Documents/GitHub/digital-nomad/TODO/IDEA-01.md /Users/kamilowczarek/Documents/GitHub/digital-nomad/TODO/IDEA-24.md)",
+      "Bash(mv /Users/kamilowczarek/Documents/GitHub/digital-nomad/TODO/IDEA-04.md /Users/kamilowczarek/Documents/GitHub/digital-nomad/TODO/IDEA-25.md)",
+      "Bash(npx nuxi dev --port 3000)",
+      "Bash(awk -F',' '{print NF; exit}')",
+      "Bash(node /tmp/convert-cost-of-living.mjs)",
+      "Bash(python3 -m json.tool)",
+      "Bash(npm run db:generate --workspace=@nomad/db)",
+      "Bash(npx nuxi dev --port 3002)",
+      "Bash(npx nuxi dev --port 3003)",
+      "Bash(lsof -ti:3000)",
+      "Bash(sudo chmod -R 755 /Users/kamilowczarek/Documents/GitHub/digital-nomad/node_modules/.prisma/)"
     ],
     "additionalDirectories": [
       "/tmp",

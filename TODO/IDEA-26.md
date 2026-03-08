@@ -1,6 +1,6 @@
-# IDEA-07: "Which City Matches Me" Quiz
+# IDEA-26: "Which City Matches Me" Quiz
 **Status:** NOT_STARTED
-**Priority:** 07/23
+**Priority:** 26/26
 **Complexity:** M
 
 ## What's Already Implemented
