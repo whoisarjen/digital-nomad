@@ -300,16 +300,44 @@
                     <span v-if="data.internetSpeedCityRanking" class="text-[10px] font-medium text-gray-400 bg-gray-50 rounded-full px-2 py-0.5 tabular-nums">#{{ data.internetSpeedCityRanking }}</span>
                   </div>
                 </div>
-                <div class="flex justify-between items-center py-3">
+                <div class="flex justify-between items-center py-3 border-b border-gray-50">
                   <span class="text-sm text-gray-500">{{ $t('city.countrySpeed') }}</span>
                   <div class="flex items-center gap-2">
                     <span class="text-sm font-semibold text-gray-700 tabular-nums">{{ data.internetSpeedCountry }} Mbps</span>
                     <span v-if="data.internetSpeedCountryRanking" class="text-[10px] font-medium text-gray-400 bg-gray-50 rounded-full px-2 py-0.5 tabular-nums">#{{ data.internetSpeedCountryRanking }}</span>
                   </div>
                 </div>
+                <div class="flex justify-between items-center py-3 border-b border-gray-50">
+                  <span class="text-sm text-gray-500">{{ $t('city.plugType') }}</span>
+                  <div class="flex items-center gap-1">
+                    <template v-if="data.plugTypes">
+                      <span
+                        v-for="type in data.plugTypes.split(',')"
+                        :key="type"
+                        class="inline-flex items-center justify-center size-6 rounded-md bg-gray-100 text-xs font-bold text-gray-700"
+                      >{{ type.trim() }}</span>
+                    </template>
+                    <span v-else class="text-sm text-gray-400">N/A</span>
+                  </div>
+                </div>
+                <div class="flex justify-between items-center py-3 border-b border-gray-50">
+                  <span class="text-sm text-gray-500">{{ $t('city.voltage') }}</span>
+                  <span
+                    class="text-sm font-semibold tabular-nums"
+                    :class="data.voltage && data.voltage < 200 ? 'text-amber-600' : 'text-gray-700'"
+                  >{{ data.voltage ? `${data.voltage}V` : 'N/A' }}</span>
+                </div>
+                <div class="flex justify-between items-center py-3">
+                  <span class="text-sm text-gray-500">{{ $t('city.frequency') }}</span>
+                  <span class="text-sm font-semibold text-gray-700 tabular-nums">{{ data.frequency ? `${data.frequency} Hz` : 'N/A' }}</span>
+                </div>
+                <div v-if="electricityTip" class="flex items-start gap-2 pt-3 mt-1 border-t border-gray-50">
+                  <LucideZap :size="14" class="text-amber-500 mt-0.5 shrink-0" />
+                  <p class="text-xs text-gray-500 leading-relaxed">{{ electricityTip }}</p>
+                </div>
               </template>
               <template v-else>
-                <div v-for="i in 2" :key="i" class="flex justify-between items-center py-3" :class="{ 'border-b border-gray-50': i < 2 }">
+                <div v-for="i in 5" :key="i" class="flex justify-between items-center py-3" :class="{ 'border-b border-gray-50': i < 5 }">
                   <div class="h-3.5 w-24 skeleton rounded" />
                   <div class="h-3.5 w-24 skeleton rounded" />
                 </div>
@@ -552,6 +580,7 @@ import type { Level } from '@prisma/client';
 import { formatNumber } from '~/shared/global.utils';
 import { buildCityFaqItems } from '~/utils/cityFaq';
 import { getLocaleBcp47 } from '~/utils/i18n-content';
+import { getElectricityTip } from '~/utils/electricityTip'
 
 defineI18nRoute({
   paths: {
@@ -662,6 +691,10 @@ const getAirQualityClass = (score: number) => {
   if (score >= 3) return 'text-yellow-600'
   return 'text-red-600'
 }
+
+const electricityTip = computed(() =>
+  data.value ? getElectricityTip(data.value.plugTypes ?? null, data.value.voltage ?? null) : null
+)
 
 useHead(() => {
   if (!data.value) return {}
