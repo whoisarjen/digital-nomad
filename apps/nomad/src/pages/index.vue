@@ -346,9 +346,11 @@
                           align="left"
                         >
                           <span
-                            class="inline-flex items-center rounded-full px-1.5 py-0.5 text-[10px] font-semibold text-white tabular-nums cursor-default"
+                            class="inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 text-[10px] font-semibold text-white tabular-nums cursor-default"
                             :class="budget - Number(city.costForNomadInUsd) >= 0 ? 'bg-emerald-500/60' : 'bg-red-500/60'"
                           >
+                            <LucideThumbsUp v-if="budget - Number(city.costForNomadInUsd) >= 0" :size="9" />
+                            <LucideThumbsDown v-else :size="9" />
                             ${{ Math.abs(budget - Number(city.costForNomadInUsd)).toLocaleString() }}
                           </span>
                         </Tooltip>
