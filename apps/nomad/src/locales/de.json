@@ -397,5 +397,30 @@
     "cost": "Cost/mo",
     "internet": "Internet",
     "topCity": "Top City"
+  },
+  "schengen": {
+    "title": "Schengen 90/180-Tage-Rechner",
+    "subtitle": "Verfolge deine Schengen-Tage und plane visumfreie Reisen durch Europa",
+    "metaDesc": "Kostenloser Schengen-Visum-Rechner für digitale Nomaden. Verfolge dein 90/180-Tage-Limit und erhalte das nächste sichere Einreisedatum.",
+    "addEntry": "Reise hinzufügen",
+    "removeEntry": "Entfernen",
+    "entryDate": "Einreisedatum",
+    "exitDate": "Ausreisedatum",
+    "daysUsed": "{days} Tage genutzt",
+    "daysRemaining": "{days} Tage verbleibend",
+    "daysRemainingOf": "von 90 Tagen",
+    "nextSafeEntry": "Nächste sichere Einreise",
+    "overLimit": "Über dem 90-Tage-Limit!",
+    "safeStatus": "Du bist im Limit",
+    "warningStatus": "Tage werden knapp",
+    "noEntries": "Füge oben deinen ersten Schengen-Eintrag hinzu",
+    "checkDate": "Prüfdatum",
+    "today": "Heute",
+    "days": "Tage",
+    "tripDays": "{days}T",
+    "howItWorks": "So funktioniert es",
+    "howItWorksDesc": "Der Schengen-Raum erlaubt visumfreie Aufenthalte von bis zu 90 Tagen in jedem rollierenden 180-Tage-Zeitraum. Dieser Rechner verwendet die offizielle Methode des rollierenden Fensters.",
+    "nonSchengenTitle": "Wenige Tage übrig? Probiere diese Nicht-Schengen-Ziele",
+    "toolsNav": "Werkzeuge"
   }
 }

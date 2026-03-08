@@ -407,5 +407,30 @@
     "cost": "Koszt/mies.",
     "internet": "Internet",
     "topCity": "Najlepsze miasto"
+  },
+  "schengen": {
+    "title": "Kalkulator Schengen 90/180 dni",
+    "subtitle": "Śledź dni w strefie Schengen i planuj podróże bez wizy po Europie",
+    "metaDesc": "Darmowy kalkulator wizowy Schengen dla cyfrowych nomadów. Śledź limit 90/180 dni, sprawdź pozostałe dni i datę następnego wjazdu.",
+    "addEntry": "Dodaj podróż",
+    "removeEntry": "Usuń",
+    "entryDate": "Data wjazdu",
+    "exitDate": "Data wyjazdu",
+    "daysUsed": "{days} dni wykorzystanych",
+    "daysRemaining": "{days} dni pozostało",
+    "daysRemainingOf": "z 90 dni",
+    "nextSafeEntry": "Następny bezpieczny wjazd",
+    "overLimit": "Przekroczono limit 90 dni!",
+    "safeStatus": "Jesteś w limicie",
+    "warningStatus": "Kończy się ilość dni",
+    "noEntries": "Dodaj swój pierwszy wjazd do strefy Schengen powyżej",
+    "checkDate": "Data sprawdzenia",
+    "today": "Dziś",
+    "days": "dni",
+    "tripDays": "{days}d",
+    "howItWorks": "Jak to działa",
+    "howItWorksDesc": "Strefa Schengen pozwala na pobyt bez wizy do 90 dni w każdym ruchomym okresie 180 dni. Ten kalkulator używa oficjalnej metody ruchomego okna do dokładnego śledzenia pozostałych dni.",
+    "nonSchengenTitle": "Mało dni? Sprawdź te destynacje poza Schengen",
+    "toolsNav": "Narzędzia"
   }
 }

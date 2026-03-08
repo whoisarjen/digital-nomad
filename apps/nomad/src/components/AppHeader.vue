@@ -133,6 +133,7 @@ const navLinks = computed(() => [
   { to: localePath('best-cities'), label: t('nav.bestCities') },
   { to: localePath('compare'), label: t('nav.compare') },
   { to: localePath('blog'), label: t('nav.blog') },
+  { to: localePath('tools-schengen-calculator'), label: t('schengen.toolsNav') },
 ])
 
 watch(() => route.fullPath, () => {

@@ -397,5 +397,30 @@
     "cost": "Cost/mo",
     "internet": "Internet",
     "topCity": "Top City"
+  },
+  "schengen": {
+    "title": "Schengen 90/180 Gün Hesaplayıcı",
+    "subtitle": "Schengen bölgesindeki günlerinizi takip edin ve Avrupa'da vizesiz seyahat planlayın",
+    "metaDesc": "Dijital göçebeler için ücretsiz Schengen vize hesaplayıcı. 90/180 gün limitinizi takip edin ve bir sonraki güvenli giriş tarihini öğrenin.",
+    "addEntry": "Seyahat ekle",
+    "removeEntry": "Kaldır",
+    "entryDate": "Giriş tarihi",
+    "exitDate": "Çıkış tarihi",
+    "daysUsed": "{days} gün kullanıldı",
+    "daysRemaining": "{days} gün kaldı",
+    "daysRemainingOf": "90 günden",
+    "nextSafeEntry": "Sonraki güvenli giriş",
+    "overLimit": "90 gün limiti aşıldı!",
+    "safeStatus": "Limit dahilsindesiniz",
+    "warningStatus": "Günler azalıyor",
+    "noEntries": "Yukarıdan ilk Schengen girişinizi ekleyin",
+    "checkDate": "Kontrol tarihi",
+    "today": "Bugün",
+    "days": "gün",
+    "tripDays": "{days}g",
+    "howItWorks": "Nasıl çalışır",
+    "howItWorksDesc": "Schengen Alanı, herhangi bir 180 günlük dönem içinde 90 güne kadar vizesiz kalışa izin verir. Bu hesaplayıcı resmi kayan pencere yöntemini kullanır.",
+    "nonSchengenTitle": "Günler azalıyor mu? Bu Schengen dışı destinasyonları deneyin",
+    "toolsNav": "Araçlar"
   }
 }

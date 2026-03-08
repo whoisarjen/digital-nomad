@@ -103,6 +103,13 @@ export const buildCompareSlug = (slugA: string, slugB: string) => {
   return `${first}-vs-${second}`;
 }
 
+// 26 Schengen Area member country codes (ISO 3166-1 alpha-2)
+export const SCHENGEN_COUNTRY_CODES = new Set([
+  'AT', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR',
+  'DE', 'GR', 'HU', 'IS', 'IT', 'LV', 'LI', 'LT', 'LU', 'MT',
+  'NL', 'NO', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE', 'CH',
+])
+
 // Locale-specific path segments for the /regions/ prefix
 export const REGION_PATH_BY_LOCALE: Partial<Record<string, string>> = {
   pl: 'regiony',

@@ -397,5 +397,30 @@
     "cost": "Cost/mo",
     "internet": "Internet",
     "topCity": "Top City"
+  },
+  "schengen": {
+    "title": "Calculateur Schengen 90/180 Jours",
+    "subtitle": "Suivez vos jours dans l'espace Schengen et planifiez vos voyages sans visa en Europe",
+    "metaDesc": "Calculateur de visa Schengen gratuit pour nomades numériques. Suivez votre limite de 90/180 jours et obtenez la prochaine date d'entrée sûre.",
+    "addEntry": "Ajouter un voyage",
+    "removeEntry": "Supprimer",
+    "entryDate": "Date d'entrée",
+    "exitDate": "Date de sortie",
+    "daysUsed": "{days} jours utilisés",
+    "daysRemaining": "{days} jours restants",
+    "daysRemainingOf": "sur 90 jours",
+    "nextSafeEntry": "Prochaine entrée sûre",
+    "overLimit": "Limite de 90 jours dépassée !",
+    "safeStatus": "Vous êtes dans la limite",
+    "warningStatus": "Il vous reste peu de jours",
+    "noEntries": "Ajoutez votre première entrée Schengen ci-dessus",
+    "checkDate": "Date de vérification",
+    "today": "Aujourd'hui",
+    "days": "jours",
+    "tripDays": "{days}j",
+    "howItWorks": "Comment ça marche",
+    "howItWorksDesc": "L'espace Schengen permet des séjours sans visa jusqu'à 90 jours sur toute période de 180 jours. Ce calculateur utilise la méthode officielle de fenêtre glissante.",
+    "nonSchengenTitle": "Peu de jours ? Essayez ces destinations hors Schengen",
+    "toolsNav": "Outils"
   }
 }

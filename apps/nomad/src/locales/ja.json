@@ -396,5 +396,30 @@
     "cost": "Cost/mo",
     "internet": "Internet",
     "topCity": "Top City"
+  },
+  "schengen": {
+    "title": "シェンゲン90/180日カリキュレーター",
+    "subtitle": "シェンゲン圏の滞在日数を追跡し、ヨーロッパのビザなし旅行を計画",
+    "metaDesc": "デジタルノマド向け無料シェンゲンビザ計算機。90/180日の制限を追跡し、次の安全な入国日を確認。",
+    "addEntry": "旅行を追加",
+    "removeEntry": "削除",
+    "entryDate": "入国日",
+    "exitDate": "出国日",
+    "daysUsed": "{days}日使用",
+    "daysRemaining": "{days}日残り",
+    "daysRemainingOf": "90日中",
+    "nextSafeEntry": "次の安全な入国日",
+    "overLimit": "90日の制限を超えています！",
+    "safeStatus": "制限内です",
+    "warningStatus": "残り日数が少なくなっています",
+    "noEntries": "上からシェンゲン入国を追加してください",
+    "checkDate": "確認日",
+    "today": "今日",
+    "days": "日",
+    "tripDays": "{days}日",
+    "howItWorks": "仕組み",
+    "howItWorksDesc": "シェンゲン圏では、180日間で最大90日のビザなし滞在が可能です。この計算機は公式のローリングウィンドウ方式を使用しています。",
+    "nonSchengenTitle": "日数が足りない？シェンゲン圏外の目的地をチェック",
+    "toolsNav": "ツール"
   }
 }

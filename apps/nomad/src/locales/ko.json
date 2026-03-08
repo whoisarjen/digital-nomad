@@ -396,5 +396,30 @@
     "cost": "Cost/mo",
     "internet": "Internet",
     "topCity": "Top City"
+  },
+  "schengen": {
+    "title": "솅겐 90/180일 계산기",
+    "subtitle": "솅겐 지역 체류일을 추적하고 유럽 무비자 여행을 계획하세요",
+    "metaDesc": "디지털 노마드를 위한 무료 솅겐 비자 계산기. 90/180일 한도를 추적하고 다음 안전한 입국 날짜를 확인하세요.",
+    "addEntry": "여행 추가",
+    "removeEntry": "삭제",
+    "entryDate": "입국일",
+    "exitDate": "출국일",
+    "daysUsed": "{days}일 사용",
+    "daysRemaining": "{days}일 남음",
+    "daysRemainingOf": "90일 중",
+    "nextSafeEntry": "다음 안전 입국일",
+    "overLimit": "90일 한도 초과!",
+    "safeStatus": "한도 내에 있습니다",
+    "warningStatus": "남은 일수가 적습니다",
+    "noEntries": "위에서 첫 솅겐 입국을 추가하세요",
+    "checkDate": "확인 날짜",
+    "today": "오늘",
+    "days": "일",
+    "tripDays": "{days}일",
+    "howItWorks": "작동 방식",
+    "howItWorksDesc": "솅겐 지역은 180일 기간 내 최대 90일까지 무비자 체류를 허용합니다. 이 계산기는 공식 롤링 윈도우 방식을 사용합니다.",
+    "nonSchengenTitle": "일수가 부족하신가요? 비솅겐 지역을 확인하세요",
+    "toolsNav": "도구"
   }
 }

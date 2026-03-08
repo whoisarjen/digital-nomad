@@ -45,6 +45,12 @@
             {{ $t('footer.blog') }}
           </NuxtLink>
           <NuxtLink
+            :to="localePath('tools-schengen-calculator')"
+            class="text-sm text-white/50 hover:text-white/80 transition-colors"
+          >
+            {{ $t('schengen.toolsNav') }}
+          </NuxtLink>
+          <NuxtLink
             :to="localePath('join')"
             class="text-sm text-white/50 hover:text-white/80 transition-colors"
           >

@@ -397,5 +397,30 @@
     "cost": "Cost/mo",
     "internet": "Internet",
     "topCity": "Top City"
+  },
+  "schengen": {
+    "title": "Calculadora Schengen 90/180 Días",
+    "subtitle": "Controla tus días en la zona Schengen y planifica viajes sin visa por Europa",
+    "metaDesc": "Calculadora gratuita de visa Schengen para nómadas digitales. Controla tu límite de 90/180 días y obtén la próxima fecha de entrada segura.",
+    "addEntry": "Añadir viaje",
+    "removeEntry": "Eliminar",
+    "entryDate": "Fecha de entrada",
+    "exitDate": "Fecha de salida",
+    "daysUsed": "{days} días usados",
+    "daysRemaining": "{days} días restantes",
+    "daysRemainingOf": "de 90 días",
+    "nextSafeEntry": "Próxima entrada segura",
+    "overLimit": "¡Superado el límite de 90 días!",
+    "safeStatus": "Estás dentro del límite",
+    "warningStatus": "Te quedan pocos días",
+    "noEntries": "Añade tu primera entrada Schengen arriba para empezar",
+    "checkDate": "Fecha de verificación",
+    "today": "Hoy",
+    "days": "días",
+    "tripDays": "{days}d",
+    "howItWorks": "Cómo funciona",
+    "howItWorksDesc": "El espacio Schengen permite estancias sin visa de hasta 90 días en cualquier período de 180 días. Esta calculadora usa el método oficial de ventana móvil.",
+    "nonSchengenTitle": "¿Pocos días? Prueba estos destinos fuera de Schengen",
+    "toolsNav": "Herramientas"
   }
 }

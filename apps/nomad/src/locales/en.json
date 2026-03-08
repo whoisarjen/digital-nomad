@@ -412,5 +412,30 @@
     "cost": "Cost/mo",
     "internet": "Internet",
     "topCity": "Top City"
+  },
+  "schengen": {
+    "title": "Schengen 90/180 Day Calculator",
+    "subtitle": "Track your Schengen zone days and plan visa-free travel across Europe",
+    "metaDesc": "Free Schengen visa calculator for digital nomads. Track your 90/180-day limit, see days remaining, and get next safe entry date.",
+    "addEntry": "Add trip",
+    "removeEntry": "Remove",
+    "entryDate": "Entry date",
+    "exitDate": "Exit date",
+    "daysUsed": "{days} days used",
+    "daysRemaining": "{days} days remaining",
+    "daysRemainingOf": "of 90 days",
+    "nextSafeEntry": "Next safe entry",
+    "overLimit": "Over the 90-day limit!",
+    "safeStatus": "You're within the limit",
+    "warningStatus": "Running low on days",
+    "noEntries": "Add your first Schengen entry above to start tracking",
+    "checkDate": "Check date",
+    "today": "Today",
+    "days": "days",
+    "tripDays": "{days}d",
+    "howItWorks": "How it works",
+    "howItWorksDesc": "The Schengen Area allows visa-free stays of up to 90 days within any rolling 180-day period. This calculator uses the official rolling window method to accurately track your remaining days.",
+    "nonSchengenTitle": "Running low? Try these non-Schengen destinations",
+    "toolsNav": "Tools"
   }
 }
