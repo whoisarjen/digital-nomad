@@ -214,6 +214,26 @@
             <Tooltip :message="$t('tooltip.sort')">
               <SortPicker />
             </Tooltip>
+            <Tooltip :message="$t('tooltip.filters')" align="right">
+              <button
+                @click="filtersOpen = true"
+                class="flex items-center gap-2 px-4 py-2 rounded-lg border text-sm font-medium transition-colors cursor-pointer max-md:flex-1"
+                :class="activeFilterCount
+                  ? 'bg-primary-50 text-primary-800 border-primary-300 hover:bg-primary-100'
+                  : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100'"
+              >
+                <LucideSlidersHorizontal :size="15" />
+                <span>{{ $t('filters.title') }}</span>
+                <span
+                  class="min-w-[18px] h-[18px] rounded-full text-[10px] font-bold flex items-center justify-center px-1 tabular-nums"
+                  :class="activeFilterCount
+                    ? 'bg-accent-500 text-white'
+                    : 'invisible'"
+                >
+                  {{ activeFilterCount || '0' }}
+                </span>
+              </button>
+            </Tooltip>
             <Tooltip :message="$t('tooltip.favorites')" :disabled="!isLoggedIn">
               <AuthGate :message="$t('favorites.signInRequired')" position="bottom" align="center" v-slot="{ isLocked }">
                 <button
@@ -236,26 +256,6 @@
                   />
                 </button>
               </AuthGate>
-            </Tooltip>
-            <Tooltip :message="$t('tooltip.filters')" align="right">
-              <button
-                @click="filtersOpen = true"
-                class="flex items-center gap-2 px-4 py-2 rounded-lg border text-sm font-medium transition-colors cursor-pointer max-md:flex-1"
-                :class="activeFilterCount
-                  ? 'bg-primary-50 text-primary-800 border-primary-300 hover:bg-primary-100'
-                  : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100'"
-              >
-                <LucideSlidersHorizontal :size="15" />
-                <span>{{ $t('filters.title') }}</span>
-                <span
-                  class="min-w-[18px] h-[18px] rounded-full text-[10px] font-bold flex items-center justify-center px-1 tabular-nums"
-                  :class="activeFilterCount
-                    ? 'bg-accent-500 text-white'
-                    : 'invisible'"
-                >
-                  {{ activeFilterCount || '0' }}
-                </span>
-              </button>
             </Tooltip>
             <Tooltip :message="$t('tooltip.resetFilters')" align="right">
               <button
