@@ -84,6 +84,11 @@ export default defineEventHandler(async () => {
                 operation: 'gte',
                 options: OPTIONS_LEVEL_GTE,
             },
+            english_proficiency: {
+                type: 'single',
+                operation: 'gte',
+                options: OPTIONS_LEVEL_GTE,
+            },
         },
     } as const
 })

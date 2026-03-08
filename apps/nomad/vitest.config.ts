@@ -25,6 +25,7 @@ export default defineConfig({
           'getLocale',
           'getLocalizedSelect',
           'getValidatedRouterParams',
+          'getValidatedQuery',
           'getQuery',
           'prisma',
           'buildLocalizedEntries',

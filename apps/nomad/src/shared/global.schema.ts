@@ -119,6 +119,10 @@ export const getCitiesSchema = z.object({
         .enum(OPTIONS_LEVEL_GTE.map(({ value }) => value) as [string, ...string[]])
         .transform(value => mapLevelToQuery(value, 'gte'))
         .optional(),
+    english_proficiency: z
+        .enum(OPTIONS_LEVEL_GTE.map(({ value }) => value) as [string, ...string[]])
+        .transform(value => value === 'HIGH' ? 550 : 450)
+        .optional(),
     favoritesOnly: z
         .string()
         .optional()

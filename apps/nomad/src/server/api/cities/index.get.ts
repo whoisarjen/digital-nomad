@@ -129,6 +129,12 @@ const getCityPrismaQuery = (query: z.infer<typeof getCitiesSchema>) => {
         })
     }
 
+    if (query.english_proficiency) {
+        AND.push({
+            country: { englishProficiency: { gte: query.english_proficiency } }
+        })
+    }
+
     if (AND.length) {
         return { AND }
     }

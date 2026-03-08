@@ -14,6 +14,7 @@ export default defineEventHandler(async (event) => {
           region: true,
           internetSpeed: true,
           internetSpeedRanking: true,
+          englishProficiency: true,
         },
       },
       costForNomadInUsd: true,
@@ -56,11 +57,15 @@ export default defineEventHandler(async (event) => {
 
   const { country: countryData, ...cityFields } = city
 
+  const ep = countryData.englishProficiency
+  const englishProficiency = ep === 0 ? null : ep >= 550 ? 'HIGH' : ep >= 450 ? 'MIDDLE' : 'LOW'
+
   return {
     ...cityFields,
     country: countryData.name,
     region: countryData.region,
     internetSpeedCountry: countryData.internetSpeed,
     internetSpeedCountryRanking: countryData.internetSpeedRanking,
+    englishProficiency,
   }
 })
