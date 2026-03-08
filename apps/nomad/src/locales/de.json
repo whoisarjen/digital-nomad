@@ -7,7 +7,8 @@
     "blog": "Blog",
     "bestCities": "Rankings",
     "openMenu": "Open menu",
-    "closeMenu": "Close menu"
+    "closeMenu": "Close menu",
+    "safeCities": "Safe Cities"
   },
   "hero": {
     "titleLine1": "Jede Stadt, entschlüsselt.",
@@ -146,7 +147,8 @@
     "noArticles": "Keine Artikel gefunden",
     "faqTitle": "Häufig Gestellte Fragen",
     "backToBlog": "Zurück zum Blog",
-    "latestPost": "Neueste"
+    "latestPost": "Neueste",
+    "exploreCities": "Diese Städte erkunden"
   },
   "auth": {
     "signUp": "Registrieren",
@@ -352,7 +354,8 @@
     "blog": "Blog",
     "bestCities": "Rankings",
     "joinCommunity": "Community Beitreten",
-    "copyright": "Digital Nomad"
+    "copyright": "Digital Nomad",
+    "safeCities": "Safe Cities"
   },
   "tooltip": {
     "orderBy": "Städte nach Metrik sortieren",
@@ -498,5 +501,24 @@
   "currency": {
     "selectCurrency": "Währung",
     "updatedHourly": "Kurse stündlich aktualisiert"
+  },
+  "safeCitiesPage": {
+    "breadcrumb": "Safe Cities",
+    "allH1": "Safest Cities for Digital Nomads",
+    "womenH1": "Safest Cities for Solo Female Travelers",
+    "regionalH1": "Safest Cities in {region} for Digital Nomads",
+    "allSubtitle": "{count} cities rated HIGH safety worldwide, ranked by nomad score",
+    "womenSubtitle": "{count} cities with HIGH safety — curated for solo female travelers",
+    "regionalSubtitle": "{count} cities in {region} rated HIGH safety",
+    "metaTitleAll": "Safest Cities for Digital Nomads {year}",
+    "metaTitleWomen": "Safest Cities for Women Traveling Solo {year}",
+    "metaTitleRegional": "Safest Cities in {region} for Digital Nomads {year}",
+    "metaDescAll": "Explore {count} of the safest cities for digital nomads worldwide. Every city carries a HIGH safety rating, ranked by nomad score.",
+    "metaDescWomen": "Find the safest cities for solo female digital nomads. {count} cities with HIGH safety ratings, ranked by nomad score.",
+    "metaDescRegional": "Discover the safest cities in {region} for digital nomads. {count} cities with HIGH safety ratings, ranked by nomad score.",
+    "statCities": "Safe cities",
+    "statCostRange": "Cost range",
+    "statAvgInternet": "Avg. internet",
+    "noResults": "No safe cities found for this filter."
   }
 }

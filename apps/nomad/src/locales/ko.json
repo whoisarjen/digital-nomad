@@ -7,7 +7,8 @@
     "blog": "블로그",
     "bestCities": "Rankings",
     "openMenu": "Open menu",
-    "closeMenu": "Close menu"
+    "closeMenu": "Close menu",
+    "safeCities": "Safe Cities"
   },
   "hero": {
     "titleLine1": "모든 도시, 분석 완료.",
@@ -146,7 +147,8 @@
     "noArticles": "기사를 찾을 수 없습니다",
     "faqTitle": "자주 묻는 질문",
     "backToBlog": "블로그로 돌아가기",
-    "latestPost": "최신"
+    "latestPost": "최신",
+    "exploreCities": "이 도시들 탐색하기"
   },
   "auth": {
     "signUp": "회원가입",
@@ -351,7 +353,8 @@
     "compare": "도시 비교",
     "blog": "블로그",
     "joinCommunity": "커뮤니티 가입",
-    "copyright": "Digital Nomad"
+    "copyright": "Digital Nomad",
+    "safeCities": "Safe Cities"
   },
   "tooltip": {
     "orderBy": "지표별 도시 정렬",
@@ -497,5 +500,24 @@
   "currency": {
     "selectCurrency": "통화",
     "updatedHourly": "환율 매시간 업데이트"
+  },
+  "safeCitiesPage": {
+    "breadcrumb": "Safe Cities",
+    "allH1": "Safest Cities for Digital Nomads",
+    "womenH1": "Safest Cities for Solo Female Travelers",
+    "regionalH1": "Safest Cities in {region} for Digital Nomads",
+    "allSubtitle": "{count} cities rated HIGH safety worldwide, ranked by nomad score",
+    "womenSubtitle": "{count} cities with HIGH safety — curated for solo female travelers",
+    "regionalSubtitle": "{count} cities in {region} rated HIGH safety",
+    "metaTitleAll": "Safest Cities for Digital Nomads {year}",
+    "metaTitleWomen": "Safest Cities for Women Traveling Solo {year}",
+    "metaTitleRegional": "Safest Cities in {region} for Digital Nomads {year}",
+    "metaDescAll": "Explore {count} of the safest cities for digital nomads worldwide. Every city carries a HIGH safety rating, ranked by nomad score.",
+    "metaDescWomen": "Find the safest cities for solo female digital nomads. {count} cities with HIGH safety ratings, ranked by nomad score.",
+    "metaDescRegional": "Discover the safest cities in {region} for digital nomads. {count} cities with HIGH safety ratings, ranked by nomad score.",
+    "statCities": "Safe cities",
+    "statCostRange": "Cost range",
+    "statAvgInternet": "Avg. internet",
+    "noResults": "No safe cities found for this filter."
   }
 }

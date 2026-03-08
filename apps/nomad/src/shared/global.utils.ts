@@ -120,6 +120,34 @@ export const REGION_PATH_BY_LOCALE: Partial<Record<string, string>> = {
   it: 'regioni',
 }
 
+// 'all' is reserved for the index page (/safe-cities), not a [context] route
+export const SAFE_CITIES_SLUG_MAP = {
+  'all': null,
+  'women': null,
+  'europe': 'Europe',
+  'asia': 'Asia',
+  'latin-america': 'LatinAmerica',
+  'middle-east': 'MiddleEast',
+  'north-america': 'NorthAmerica',
+  'africa': 'Africa',
+  'oceania': 'Oceania',
+} as const
+
+// Slugs used for /safe-cities/[context] routes (excludes 'all' — that's the index page)
+export const SAFE_CITIES_CONTEXT_SLUGS = (
+  Object.keys(SAFE_CITIES_SLUG_MAP) as Array<keyof typeof SAFE_CITIES_SLUG_MAP>
+).filter((s) => s !== 'all')
+
+export const SAFE_CITIES_PATH_BY_LOCALE: Partial<Record<string, string>> = {
+  pl: 'bezpieczne-miasta',
+  es: 'ciudades-seguras',
+  de: 'sichere-staedte',
+  pt: 'cidades-seguras',
+  fr: 'villes-sures',
+  tr: 'guvenli-sehirler',
+  it: 'citta-sicure',
+}
+
 // Locale-specific path segments for the /countries/ prefix
 export const COUNTRY_PATH_BY_LOCALE: Partial<Record<string, string>> = {
   pl: 'kraje',

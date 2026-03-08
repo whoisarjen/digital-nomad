@@ -92,8 +92,45 @@
           <div class="article-content" v-html="data.content" />
 
           <!-- FAQ -->
-          <div v-if="data.faqs?.length" class="mt-12 pt-10 border-t border-gray-200">
-            <ArticleFaq :faqs="data.faqs" />
+          <div v-if="validFaqs.length" class="mt-12 pt-10 border-t border-gray-200">
+            <ArticleFaq :faqs="validFaqs" />
+          </div>
+
+          <!-- Connected Cities -->
+          <div v-if="data.cities?.length" class="mt-12 pt-10 border-t border-gray-200">
+            <p class="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-5">
+              {{ $t('blog.exploreCities') }}
+            </p>
+
+            <div class="flex flex-col gap-4">
+              <NuxtLink
+                v-for="mapping in sortedCities.slice(0, 3)"
+                :key="mapping.city.slug"
+                :to="localePath({ name: 'cities-slug', params: { slug: mapping.city.slug } })"
+                class="group relative block overflow-hidden rounded-2xl aspect-[16/7]"
+              >
+                <CustomNuxtImg
+                  v-if="mapping.city.image"
+                  :src="mapping.city.image.url"
+                  :alt="mapping.city.name"
+                  width="800"
+                  height="350"
+                  loading="lazy"
+                  class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                />
+                <div v-else class="absolute inset-0 bg-gray-800" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
+                <div class="absolute bottom-0 left-0 right-0 p-6 flex items-end justify-between">
+                  <div>
+                    <p class="text-xs font-medium text-white/60 mb-1">{{ mapping.city.country }}</p>
+                    <h3 class="text-2xl font-bold text-white">{{ mapping.city.name }}</h3>
+                  </div>
+                  <span class="flex items-center gap-1.5 text-xs font-semibold text-primary-300 bg-black/40 border border-primary-500/40 px-3 py-1.5 rounded-full backdrop-blur-sm group-hover:border-primary-400/60 transition-colors">
+                    Explore <LucideArrowRight :size="11" />
+                  </span>
+                </div>
+              </NuxtLink>
+            </div>
           </div>
 
           <!-- Back to blog -->
@@ -136,6 +173,16 @@ watch(
 
 const { data, status } = await useArticleBySlug(queryParams, { lazy: true })
 
+const sortedCities = computed(() =>
+  data.value?.cities
+    ? [...data.value.cities].sort((a, b) => (b.isPrimary ? 1 : 0) - (a.isPrimary ? 1 : 0))
+    : [],
+)
+
+const validFaqs = computed(() =>
+  (data.value?.faqs ?? []).filter(faq => faq.question),
+)
+
 useHead(() => {
   if (!data.value) return {}
   const title = data.value.metaTitle || data.value.title
@@ -176,11 +223,11 @@ useSchemaOrg(() => {
     }),
   ]
 
-  if (data.value.faqs?.length) {
+  if (validFaqs.value.length) {
     schemas.push(
       {
         '@type': 'FAQPage',
-        'mainEntity': (data.value.faqs as { question: string; answer: string }[]).map(faq => ({
+        'mainEntity': (validFaqs.value as { question: string; answer: string }[]).map(faq => ({
           '@type': 'Question',
           'name': faq.question,
           'acceptedAnswer': {

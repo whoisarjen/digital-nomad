@@ -194,7 +194,20 @@
       "Bash(npx nuxi dev --port 3002)",
       "Bash(npx nuxi dev --port 3003)",
       "Bash(lsof -ti:3000)",
-      "Bash(sudo chmod -R 755 /Users/kamilowczarek/Documents/GitHub/digital-nomad/node_modules/.prisma/)"
+      "Bash(sudo chmod -R 755 /Users/kamilowczarek/Documents/GitHub/digital-nomad/node_modules/.prisma/)",
+      "Bash(npm run test:run --workspace=apps/nomad -- --reporter=verbose src/server/api/safe-cities)",
+      "Bash(npm run test:run --workspace=apps/nomad)",
+      "Bash(npm run test:run -- --reporter=verbose src/server/api/tools/__tests__/runway.get.test.ts)",
+      "Bash(sed -i '' 's/\"\"latestPost\"\": \"\"Latest\"\"/\"\"latestPost\"\": \"\"Latest\"\",\\\\n    \"\"exploreCities\"\": \"\"Explore these cities\"\"/' apps/nomad/src/locales/en.json)",
+      "Bash(sed -i '' 's/\"\"latestPost\"\": \"\"Najnowszy\"\"/\"\"latestPost\"\": \"\"Najnowszy\"\",\\\\n    \"\"exploreCities\"\": \"\"Odkryj te miasta\"\"/' apps/nomad/src/locales/pl.json)",
+      "Bash(sed -i '' 's/\"\"latestPost\"\": \"\"Neueste\"\"/\"\"latestPost\"\": \"\"Neueste\"\",\\\\n    \"\"exploreCities\"\": \"\"Diese Städte erkunden\"\"/' apps/nomad/src/locales/de.json)",
+      "Bash(sed -i '' 's/\"\"latestPost\"\": \"\"Reciente\"\"/\"\"latestPost\"\": \"\"Reciente\"\",\\\\n    \"\"exploreCities\"\": \"\"Explorar estas ciudades\"\"/' apps/nomad/src/locales/es.json)",
+      "Bash(sed -i '' 's|\"\"latestPost\"\": \"\"Récent\"\"|\"\"latestPost\"\": \"\"Récent\"\",\\\\n    \"\"exploreCities\"\": \"\"Explorer ces villes\"\"|' apps/nomad/src/locales/fr.json)",
+      "Bash(sed -i '' 's/\"\"latestPost\"\": \"\"Recente\"\"/\"\"latestPost\"\": \"\"Recente\"\",\\\\n    \"\"exploreCities\"\": \"\"Esplora queste città\"\"/' apps/nomad/src/locales/it.json)",
+      "Bash(sed -i '' 's/\"\"latestPost\"\": \"\"En Yeni\"\"/\"\"latestPost\"\": \"\"En Yeni\"\",\\\\n    \"\"exploreCities\"\": \"\"Bu şehirleri keşfet\"\"/' apps/nomad/src/locales/tr.json)",
+      "Bash(sed -i '' 's/\"\"latestPost\"\": \"\"최신\"\"/\"\"latestPost\"\": \"\"최신\"\",\\\\n    \"\"exploreCities\"\": \"\"이 도시들 탐색하기\"\"/' apps/nomad/src/locales/ko.json)",
+      "Bash(sed -i '' 's/\"\"latestPost\"\": \"\"الأحدث\"\"/\"\"latestPost\"\": \"\"الأحدث\"\",\\\\n    \"\"exploreCities\"\": \"\"استكشف هذه المدن\"\"/' apps/nomad/src/locales/ar.json)",
+      "Bash(sed -i '' 's/\"\"latestPost\"\": \"\"最新\"\"/\"\"latestPost\"\": \"\"最新\"\",\\\\n    \"\"exploreCities\"\": \"\"これらの都市を探索する\"\"/' apps/nomad/src/locales/ja.json)"
     ],
     "additionalDirectories": [
       "/tmp",
@@ -206,7 +219,8 @@
       "/Users/kamilowczarek/Documents/GitHub/digital-nomad/.claude",
       "/Users/kamilowczarek/Documents/GitHub/digital-nomad/docs",
       "/Users/kamilowczarek/Documents/GitHub/digital-nomad/TODO",
-      "/Users/kamilowczarek/Documents/GitHub/digital-nomad/packages/db"
+      "/Users/kamilowczarek/Documents/GitHub/digital-nomad/packages/db",
+      "/Users/kamilowczarek/Documents/GitHub/digital-nomad/apps/nomad/src/server/api/tools"
     ]
   }
 }

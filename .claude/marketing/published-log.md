@@ -27,16 +27,21 @@
 | 2026-03-08 | cairo-vs-istanbul-digital-nomads-2026 | comparison | cairo vs istanbul for digital nomads | cairo-egypt, istanbul-turkey | published | Cairo Numbeo null; Istanbul Numbeo available |
 | 2026-03-08 | best-cities-middle-east-digital-nomads-2026 | filtered | best cities in the middle east for digital nomads 2026 | dubai-united-arab-emirates + 7 more | published | none |
 | 2026-03-09 | first-time-in-bangkok-digital-nomad-guide | city-cost | first time in bangkok digital nomad guide | bangkok-thailand | regenerated | airQuality null, used airQualityNow 69 AQI; contentEn 12,953 chars; contentPl 5,062 chars |
+| 2026-03-09 | cost-of-living-shanghai-digital-nomads-2026 | city-cost | cost of living in shanghai for digital nomads | shanghai-china | published | contentEn 11,367 chars; 10/10 translations |
+| 2026-03-09 | cost-of-living-lagos-digital-nomads-2026 | city-cost | cost of living in lagos for digital nomads | lagos-nigeria | published | contentEn 3,560 chars (thin — candidate for regen); safety LOW; internet 25 Mbps below avg |
+| 2026-03-09 | cost-of-living-lima-digital-nomads-2026 | city-cost | cost of living in lima for digital nomads | lima-peru | published | contentEn 18,148 chars; 10/10 translations |
+| 2026-03-09 | beijing-vs-moscow-digital-nomads-2026 | comparison | beijing vs moscow for digital nomads | beijing-china, moscow-russia | published | contentEn 9,868 chars; 10/10 translations |
+| 2026-03-09 | cairo-vs-istanbul-digital-nomads-2026 | comparison | cairo vs istanbul for digital nomads | cairo-egypt, istanbul-turkey | regenerated | contentEn 15,490 chars (up from 7,770); 10/10 translations |
 
 ## Stats
 
 | Metric | Count |
 |---|---|
-| Total published | 21 |
-| City-cost articles | 13 |
-| Comparison articles | 4 |
+| Total published | 26 |
+| City-cost articles | 16 |
+| Comparison articles | 6 |
 | Filtered/regional articles | 4 |
-| Regenerated (thin → full) | 5 |
+| Regenerated (thin → full) | 6 |
 | Failed inserts | 0 |
 
 ## Regions Covered
@@ -44,11 +49,11 @@
 | Region | Articles |
 |---|---|
 | Southeast Asia | 6 |
-| Europe | 3 |
-| Latin America | 4 |
+| Europe | 4 |
+| Latin America | 5 |
 | Middle East | 4 |
-| East Asia | 3 |
+| East Asia | 5 |
 | South Asia | 2 |
-| Africa | 1 |
+| Africa | 2 |
 | Oceania | 0 |
 | North America | 2 |

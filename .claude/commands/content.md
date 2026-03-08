@@ -80,7 +80,7 @@ Run this with Bash tool timeout of 15000ms. Use the last 30 days as the date ran
 
 ### Step 2b: Discovery Keywords (Normal Flow)
 
-Query the database to decide what to write. Use Neon MCP (`mcp__Neon__run_sql`, projectId: `flat-shape-62285932`).
+Query the database to decide what to write. Use Neon MCP (`mcp__Neon__run_sql`, projectId: `flat-hall-28884706`).
 
 ### Gather data:
 ```sql
@@ -123,7 +123,7 @@ You are a content pipeline for nomad.whoisarjen.com. Create ONE complete article
 
 ## Step 1: Query DB for Real Data
 
-Use Neon MCP (mcp__Neon__run_sql, projectId: "flat-shape-62285932") to get real numbers.
+Use Neon MCP (mcp__Neon__run_sql, projectId: "flat-hall-28884706") to get real numbers.
 
 For city-cost articles, run:
 SELECT name, country, region, "costForNomadInUsd", "costForExpatInUsd", "costForLocalInUsd",
@@ -175,15 +175,34 @@ Translation rules:
 
 Collect all 10 translations.
 
+## Step 3b: Pick and Verify Featured Image (MANDATORY — do this before translating)
+
+**URL format is non-negotiable:** Always use `https://images.unsplash.com/photo-XXXXXXXXXXXXXXXXXX?w=1200&h=630&fit=crop`
+- `XXXXXXXXXXXXXXXXXX` is the Unsplash photo ID (digits and letters, typically 19 chars)
+- Never use `unsplash.com/photos/...` browser URLs — they are not direct image URLs and will break
+- Never guess or hallucinate a photo ID — only use IDs you have verified return HTTP 200
+
+**Process:**
+1. Check existing used images: `SELECT "featuredImageUrl" FROM "Article" WHERE "featuredImageUrl" IS NOT NULL`
+2. Choose a candidate Unsplash photo ID relevant to the city/topic
+3. **Immediately verify with curl:**
+   ```bash
+   curl -sL -o /dev/null -w "%{http_code}" "https://images.unsplash.com/photo-[ID]?w=1200&h=630&fit=crop" --max-time 10
+   ```
+4. If response is NOT 200 → discard this ID, try a different one
+5. Repeat until you have a confirmed 200 response — up to 5 attempts
+6. If all 5 attempts fail → use this known-working fallback and note it in the report:
+   `https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=1200&h=630&fit=crop`
+7. Store the verified URL as `featuredImageUrl`
+
 ## Step 4: Validate
 
 Hard fails (do NOT insert):
-- Check slug doesn't already exist: SELECT slug FROM "Article" WHERE slug = '[slug]'
+- Check slug doesn't already exist: `SELECT slug FROM "Article" WHERE slug = '[slug]'`
 - titleEn and titlePl must be non-empty
 - contentEn must be 500+ words
 - Primary city slug must exist in City table
-- **Featured image must be reachable** — run `curl -sL -o /dev/null -w "%{http_code}" "[featuredImageUrl]"` and verify HTTP 200. If not 200, try a different Unsplash image. If 3 attempts fail → hard fail.
-- **Prefer unique images** — check existing articles for used images: `SELECT "featuredImageUrl" FROM "Article" WHERE "featuredImageUrl" IS NOT NULL`. Try to pick an Unsplash image not already used. If no unique image can be found, a duplicate is acceptable.
+- featuredImageUrl curl returned 200 (verified in Step 3b — if skipped, treat as hard fail)
 
 Soft warnings (insert anyway, note in report):
 - Any meta title over 60 chars → truncate
@@ -207,8 +226,14 @@ INSERT INTO "Article" (
   "titleTr", "excerptTr", "contentTr", "metaTitleTr", "metaDescTr",
   "titleJa", "excerptJa", "contentJa", "metaTitleJa", "metaDescJa",
   "titleIt", "excerptIt", "contentIt", "metaTitleIt", "metaDescIt",
-  faqs, "readingTimeMinutes"
+  faqs, "readingTimeMinutes",
+  "featuredImageUrl", "featuredImageAlt", "featuredImageOwnerName", "featuredImageOwnerUsername"
 ) VALUES (...);
+
+-- featuredImageUrl: the curl-verified images.unsplash.com URL from Step 3b
+-- featuredImageAlt: short description of what the image shows (e.g. "Bangkok skyline at dusk")
+-- featuredImageOwnerName: Unsplash photographer's display name (use empty string '' if unknown)
+-- featuredImageOwnerUsername: Unsplash photographer's username (use NULL if unknown)
 
 Then insert city links:
 INSERT INTO "ArticleCityMap" ("articleSlug", "citySlug", "isPrimary") VALUES ('[slug]', '[city]', true);

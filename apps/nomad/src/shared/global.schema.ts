@@ -2,7 +2,7 @@
 
 import type { Level, Region, WeatherIcon } from '@prisma/client';
 import { z } from 'zod';
-import { DEFAULT_SORT_VALUE, OPTIONS_ORDER_BY, OPTIONS_LEVEL_LTE, OPTIONS_RANKS, SEARCH_BAR_MAXIMUM_Q_LENGTH, OPTIONS_LEVEL_GTE, getRangesFromQuery, type OrderByOptionValue, OPTIONS_REGIONS, REGION_SLUG_MAP } from '~/shared/global.utils';
+import { DEFAULT_SORT_VALUE, OPTIONS_ORDER_BY, OPTIONS_LEVEL_LTE, OPTIONS_RANKS, SEARCH_BAR_MAXIMUM_Q_LENGTH, OPTIONS_LEVEL_GTE, getRangesFromQuery, type OrderByOptionValue, OPTIONS_REGIONS, REGION_SLUG_MAP, SAFE_CITIES_SLUG_MAP } from '~/shared/global.utils';
 
 const MAX_LIMIT_OF_ITEMS_TO_LOAD = 100
 export const DEFAULT_CITIES_LIMIT = 40
@@ -195,6 +195,17 @@ export const getRegionSchema = z.object({
 })
 
 export type GetRegionSchema = z.infer<typeof getRegionSchema>
+
+// Safe cities schemas
+
+export const getSafeCitiesSchema = z.object({
+  context: z.string().refine(
+    (val) => Object.keys(SAFE_CITIES_SLUG_MAP).includes(val),
+    { message: 'Invalid safe cities context' },
+  ),
+})
+
+export type GetSafeCitiesSchema = z.infer<typeof getSafeCitiesSchema>
 
 // Compare schemas
 
