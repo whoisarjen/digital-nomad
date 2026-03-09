@@ -135,6 +135,28 @@ const getCityPrismaQuery = (query: z.infer<typeof getCitiesSchema>) => {
         })
     }
 
+    if (query.lifestyle?.length) {
+        for (const preset of query.lifestyle) {
+            if (preset === 'budget_food') {
+                AND.push({ mealInexpensiveRestaurant: { lt: 5 } })
+            } else if (preset === 'cheap_beer') {
+                AND.push({ domesticBeerRestaurant: { lt: 2 } })
+            } else if (preset === 'fast_internet') {
+                AND.push({ internetSpeedCity: { gte: 60 } })
+            } else if (preset === 'affordable_gym') {
+                AND.push({ fitnessClubMonthly: { lt: 30 } })
+            } else if (preset === 'budget_rent') {
+                AND.push({ apartment1brOutside: { lt: 500 } })
+            } else if (preset === 'nomad_bundle') {
+                AND.push({
+                    apartment1brOutside: { lt: 800, not: null },
+                    fitnessClubMonthly: { not: null },
+                    internet60mbps: { not: null },
+                })
+            }
+        }
+    }
+
     if (AND.length) {
         return { AND }
     }

@@ -104,6 +104,11 @@
               <RegionsPicker v-model="draftRegions" />
             </div>
 
+            <!-- Lifestyle presets (full width on desktop) -->
+            <div class="md:col-span-2 bg-white rounded-xl border border-gray-100 p-4">
+              <LifestyleFilterPicker v-model="draftLifestyle" />
+            </div>
+
             <!-- Dynamic pickers from API -->
             <template v-if="pickers">
               <div v-for="key of Object.keys(pickers)" :key="key" class="bg-white rounded-xl border border-gray-100 p-4 flex flex-col">
@@ -148,7 +153,7 @@
 
 <script setup lang="ts">
 import type { LocationQueryValue } from 'vue-router'
-import { getUserCurrentMonthString } from '~/shared/global.utils'
+import { getUserCurrentMonthString, type LifestylePreset } from '~/shared/global.utils'
 
 type DraftQuery = Record<string, LocationQueryValue | LocationQueryValue[]>
 
@@ -233,6 +238,15 @@ const draftCosts = computed<string | undefined>({
   set: (val) => {
     const next = { ...draftQuery.value }
     if (val !== undefined) { next.costs = val } else { delete next.costs }
+    draftQuery.value = next
+  },
+})
+
+const draftLifestyle = computed<LifestylePreset[]>({
+  get: () => toStringArray(draftQuery.value.lifestyle) as LifestylePreset[],
+  set: (val) => {
+    const next = { ...draftQuery.value }
+    if (val.length) { next.lifestyle = val } else { delete next.lifestyle }
     draftQuery.value = next
   },
 })

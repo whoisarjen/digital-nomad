@@ -560,24 +560,26 @@ function clearMonthFilter() {
   router.push({ query })
 }
 
-// Floating filter pill — appears when toolbar scrolls out of view
+// Floating filter pill — appears only when toolbar has scrolled above the viewport
 const toolbarRef = ref<HTMLElement | null>(null)
-const hasReachedExplore = ref(false)
-const isToolbarInView = ref(true)
+const isToolbarAboveViewport = ref(false)
 
 onMounted(() => {
   if (!toolbarRef.value) return
   const observer = new IntersectionObserver(([entry]) => {
     if (!entry) return
-    if (entry.isIntersecting) hasReachedExplore.value = true
-    isToolbarInView.value = entry.isIntersecting
+    if (!entry.isIntersecting) {
+      isToolbarAboveViewport.value = entry.boundingClientRect.bottom < 0
+    } else {
+      isToolbarAboveViewport.value = false
+    }
   })
   observer.observe(toolbarRef.value)
   onUnmounted(() => observer.disconnect())
 })
 
 const showFloatingFilter = computed(() =>
-  hasReachedExplore.value && !isToolbarInView.value && !filtersOpen.value
+  isToolbarAboveViewport.value && !filtersOpen.value
 )
 
 const skeletonCount = computed(() => Number(route.query.limit) || DEFAULT_CITIES_LIMIT)

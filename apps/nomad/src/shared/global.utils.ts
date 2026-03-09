@@ -148,6 +148,18 @@ export const SAFE_CITIES_PATH_BY_LOCALE: Partial<Record<string, string>> = {
   it: 'citta-sicure',
 }
 
+// Lifestyle filter presets
+export const LIFESTYLE_PRESETS = [
+  'budget_food',
+  'cheap_beer',
+  'fast_internet',
+  'affordable_gym',
+  'budget_rent',
+  'nomad_bundle',
+] as const
+
+export type LifestylePreset = typeof LIFESTYLE_PRESETS[number]
+
 // Locale-specific path segments for the /countries/ prefix
 export const COUNTRY_PATH_BY_LOCALE: Partial<Record<string, string>> = {
   pl: 'kraje',

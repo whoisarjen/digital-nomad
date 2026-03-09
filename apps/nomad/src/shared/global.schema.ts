@@ -2,7 +2,7 @@
 
 import type { Level, Region, WeatherIcon } from '@prisma/client';
 import { z } from 'zod';
-import { DEFAULT_SORT_VALUE, OPTIONS_ORDER_BY, OPTIONS_LEVEL_LTE, OPTIONS_RANKS, SEARCH_BAR_MAXIMUM_Q_LENGTH, OPTIONS_LEVEL_GTE, getRangesFromQuery, type OrderByOptionValue, OPTIONS_REGIONS, REGION_SLUG_MAP, SAFE_CITIES_SLUG_MAP } from '~/shared/global.utils';
+import { DEFAULT_SORT_VALUE, OPTIONS_ORDER_BY, OPTIONS_LEVEL_LTE, OPTIONS_RANKS, SEARCH_BAR_MAXIMUM_Q_LENGTH, OPTIONS_LEVEL_GTE, getRangesFromQuery, type OrderByOptionValue, OPTIONS_REGIONS, REGION_SLUG_MAP, SAFE_CITIES_SLUG_MAP, LIFESTYLE_PRESETS, type LifestylePreset } from '~/shared/global.utils';
 
 const MAX_LIMIT_OF_ITEMS_TO_LOAD = 100
 export const DEFAULT_CITIES_LIMIT = 40
@@ -127,6 +127,16 @@ export const getCitiesSchema = z.object({
         .string()
         .optional()
         .transform((val) => val === 'true'),
+    lifestyle: z
+        .union([
+            z.enum([...LIFESTYLE_PRESETS] as [LifestylePreset, ...LifestylePreset[]]),
+            z.array(z.enum([...LIFESTYLE_PRESETS] as [LifestylePreset, ...LifestylePreset[]])),
+        ])
+        .optional()
+        .transform((val): LifestylePreset[] => {
+            if (!val) return []
+            return Array.isArray(val) ? val : [val]
+        }),
 });
 
 export type GetCitiesSchema = z.infer<typeof getCitiesSchema>;
@@ -243,3 +253,11 @@ export const getFavoritesSchema = z.object({
         .transform((val) => (val ? Number(val) : undefined))
         .pipe(z.number().positive().max(50).optional().default(12)),
 });
+
+// Day-cost schema
+
+export const getDayCostSchema = z.object({
+  citySlug: z.string().min(1),
+})
+
+export type GetDayCostSchema = z.infer<typeof getDayCostSchema>
