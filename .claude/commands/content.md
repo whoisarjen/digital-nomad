@@ -10,9 +10,13 @@ Execute the full pipeline: analyze → write → translate → validate → inse
 
 ## Step 1: Read Current State
 
-Read these files to understand what exists:
-- `.claude/marketing/published-log.md` — articles already published (avoid duplicates)
+Read this file to understand templates and rules:
 - `.claude/marketing/content/strategy/daily-content-automation-plan.md` — templates and rules
+
+Query the DB for existing articles (this is the single source of truth — no log files):
+```sql
+SELECT slug, "titleEn", "publishedAt" FROM "Article" ORDER BY "publishedAt" DESC;
+```
 
 ## Step 1b: Check for Short Articles Needing Regeneration
 
@@ -120,7 +124,7 @@ Every article belongs to exactly one **niche**. Use this list — pick the most 
 
 ### Pick N keywords using this logic:
 
-1. **Check what niches are already covered** — scan `published-log.md` for the `niche:` tag on each entry. Build a list of saturated niches (≥ 3 articles).
+1. **Check what niches are already covered** — infer niche from existing article slugs/titles in DB. Build a list of saturated niches (≥ 3 articles).
 2. **GSC-sourced keywords come first** — assign each a niche from the taxonomy above.
 3. **For remaining slots, maximize niche diversity in this batch:**
    - Never pick the same niche twice in one batch if N ≤ 8.
@@ -133,8 +137,7 @@ Every article belongs to exactly one **niche**. Use this list — pick the most 
 7. For **filtered/best/regional/lifestyle/seasonal**: craft a keyword around the niche + available DB data.
 8. Ensure at least 2 different geographic regions across the batch.
 9. Verify all city slugs exist in DB.
-10. **Never duplicate** — check both `published-log.md` AND existing article slugs in DB.
-11. **Log niche** — include `niche: [niche-id]` in the published-log entry for each article.
+10. **Never duplicate** — check existing article slugs in DB.
 
 ## Step 3: Spawn N Pipeline Agents (All in Parallel, Background)
 
@@ -182,6 +185,8 @@ Use the data to write a **2000-2500 word** article. Every number MUST come from 
 
 **CRITICAL LENGTH REQUIREMENT:** The final `contentEn` HTML must be at least **8,000 characters** (not words — characters including HTML tags). Articles under 8000 chars are flagged as "thin" and will be regenerated, wasting the entire pipeline run. Aim for 10,000-15,000 chars to have comfortable margin.
 
+**NO LINKS:** Do not include any links (`<a>` tags, markdown links, or URLs) in article content. No internal links, no external links, no references. Pure text and data tables only.
+
 **How to hit 8,000+ chars reliably:**
 - Write 7-10 H2/H3 sections (not 3-4 short ones)
 - Each section should be 2-4 substantial paragraphs (not 1-2 sentences)
@@ -215,7 +220,7 @@ Each translator receives the EN title, excerpt, content, metaTitle, metaDesc, an
 Translation rules:
 - Numbers, prices, speeds stay the same
 - City names stay in original form
-- Internal links stay the same
+- No links in translated content either (same as EN — pure text and data tables)
 - Meta title under 60 chars in target language
 - Meta description 120-155 chars in target language
 - Natural translation, not word-for-word
@@ -230,14 +235,14 @@ Collect all 10 translations.
 - Never guess or hallucinate a photo ID — only use IDs you have verified return HTTP 200
 
 **Process:**
-1. Check existing used images: `SELECT "featuredImageUrl" FROM "Article" WHERE "featuredImageUrl" IS NOT NULL`
-2. Choose a candidate Unsplash photo ID relevant to the city/topic
+1. Get recently used images: `SELECT "featuredImageUrl" FROM "Article" WHERE "featuredImageUrl" IS NOT NULL ORDER BY "publishedAt" DESC LIMIT 50`
+2. Choose a candidate Unsplash photo ID relevant to the city/topic — **must NOT match any of the 50 most recent images**
 3. **Immediately verify with curl:**
    ```bash
    curl -sL -o /dev/null -w "%{http_code}" "https://images.unsplash.com/photo-[ID]?w=1200&h=630&fit=crop" --max-time 10
    ```
-4. If response is NOT 200 → discard this ID, try a different one
-5. Repeat until you have a confirmed 200 response — up to 5 attempts
+4. If response is NOT 200 OR the URL matches a recent image → discard this ID, try a different one
+5. Repeat until you have a confirmed unique + 200 response — up to 5 attempts
 6. If all 5 attempts fail → use this known-working fallback and note it in the report:
    `https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=1200&h=630&fit=crop`
 7. Store the verified URL as `featuredImageUrl`
@@ -298,11 +303,7 @@ Return a summary:
 - Any warnings
 ```
 
-## Step 4: Collect Results & Log
-
-As each pipeline agent completes (they report independently), append to `.claude/marketing/published-log.md`.
-
-## Step 5: Report Summary
+## Step 4: Report Summary
 
 After all N agents finish, present:
 
