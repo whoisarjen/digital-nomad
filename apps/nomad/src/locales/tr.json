@@ -8,7 +8,17 @@
     "bestCities": "Rankings",
     "openMenu": "Open menu",
     "closeMenu": "Close menu",
-    "safeCities": "Safe Cities"
+    "safeCities": "Safe Cities",
+    "discover": "Discover",
+    "rankings": "Rankings",
+    "tools": "Tools",
+    "exploreCitiesDesc": "Browse 300+ cities with cost data",
+    "regionsDesc": "Southeast Asia, Latam, Europe…",
+    "countriesDesc": "Country-level comparisons",
+    "bestCitiesDesc": "Top rated for nomads overall",
+    "safeCitiesDesc": "Low crime, stable infrastructure",
+    "compareDesc": "Side-by-side cost breakdown",
+    "toolsDesc": "Schengen calculator, budget builder…"
   },
   "hero": {
     "titleLine1": "Her şehir, çözümlenmiş.",
@@ -135,7 +145,8 @@
     "selectLanguage": "Dil seçin"
   },
   "search": {
-    "placeholder": "Ara"
+    "placeholder": "Ara",
+    "noResults": "No cities found"
   },
   "blog": {
     "title": "Blog",

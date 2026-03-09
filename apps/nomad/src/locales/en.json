@@ -8,7 +8,17 @@
     "bestCities": "Rankings",
     "safeCities": "Safe Cities",
     "openMenu": "Open menu",
-    "closeMenu": "Close menu"
+    "closeMenu": "Close menu",
+    "discover": "Discover",
+    "rankings": "Rankings",
+    "tools": "Tools",
+    "exploreCitiesDesc": "Browse 300+ cities with cost data",
+    "regionsDesc": "Southeast Asia, Latam, Europe…",
+    "countriesDesc": "Country-level comparisons",
+    "bestCitiesDesc": "Top rated for nomads overall",
+    "safeCitiesDesc": "Low crime, stable infrastructure",
+    "compareDesc": "Side-by-side cost breakdown",
+    "toolsDesc": "Schengen calculator, budget builder…"
   },
   "hero": {
     "titleLine1": "Every city, decoded.",
@@ -135,7 +145,8 @@
     "selectLanguage": "Select language"
   },
   "search": {
-    "placeholder": "Search for"
+    "placeholder": "Search cities or countries…",
+    "noResults": "No cities found"
   },
   "blog": {
     "title": "Blog",

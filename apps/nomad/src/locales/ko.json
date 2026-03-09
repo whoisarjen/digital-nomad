@@ -8,7 +8,17 @@
     "bestCities": "Rankings",
     "openMenu": "Open menu",
     "closeMenu": "Close menu",
-    "safeCities": "Safe Cities"
+    "safeCities": "Safe Cities",
+    "discover": "Discover",
+    "rankings": "Rankings",
+    "tools": "Tools",
+    "exploreCitiesDesc": "Browse 300+ cities with cost data",
+    "regionsDesc": "Southeast Asia, Latam, Europe…",
+    "countriesDesc": "Country-level comparisons",
+    "bestCitiesDesc": "Top rated for nomads overall",
+    "safeCitiesDesc": "Low crime, stable infrastructure",
+    "compareDesc": "Side-by-side cost breakdown",
+    "toolsDesc": "Schengen calculator, budget builder…"
   },
   "hero": {
     "titleLine1": "모든 도시, 분석 완료.",
@@ -135,7 +145,8 @@
     "selectLanguage": "언어 선택"
   },
   "search": {
-    "placeholder": "검색"
+    "placeholder": "검색",
+    "noResults": "No cities found"
   },
   "blog": {
     "title": "블로그",
