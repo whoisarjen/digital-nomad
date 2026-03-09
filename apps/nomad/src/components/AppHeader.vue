@@ -19,14 +19,16 @@
               <path d="M2 4l4 4 4-4"/>
             </svg>
           </button>
-          <div class="absolute top-full left-0 mt-2 w-64 bg-[#0d1b2e] border border-white/10 rounded-2xl p-2 shadow-2xl opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-150 -translate-y-1 group-hover:translate-y-0">
-            <NuxtLink v-for="link in discoverLinks" :key="link.to" :to="link.to" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/[0.06] transition-colors">
-              <div class="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center text-sm flex-shrink-0">{{ link.icon }}</div>
-              <div>
-                <div class="text-sm font-medium text-white">{{ link.label }}</div>
-                <div class="text-xs text-white/40">{{ link.desc }}</div>
-              </div>
-            </NuxtLink>
+          <div class="absolute top-full left-0 pt-2 w-64 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-150 -translate-y-1 group-hover:translate-y-0">
+            <div class="bg-[#0d1b2e] border border-white/10 rounded-2xl p-2 shadow-2xl">
+              <NuxtLink v-for="link in discoverLinks" :key="link.to" :to="link.to" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/[0.06] transition-colors">
+                <div class="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center text-sm flex-shrink-0">{{ link.icon }}</div>
+                <div>
+                  <div class="text-sm font-medium text-white">{{ link.label }}</div>
+                  <div class="text-xs text-white/40">{{ link.desc }}</div>
+                </div>
+              </NuxtLink>
+            </div>
           </div>
         </div>
 
@@ -38,14 +40,16 @@
               <path d="M2 4l4 4 4-4"/>
             </svg>
           </button>
-          <div class="absolute top-full left-0 mt-2 w-56 bg-[#0d1b2e] border border-white/10 rounded-2xl p-2 shadow-2xl opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-150 -translate-y-1 group-hover:translate-y-0">
-            <NuxtLink v-for="link in rankingsLinks" :key="link.to" :to="link.to" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/[0.06] transition-colors">
-              <div class="w-8 h-8 rounded-lg bg-orange-500/10 flex items-center justify-center text-sm flex-shrink-0">{{ link.icon }}</div>
-              <div>
-                <div class="text-sm font-medium text-white">{{ link.label }}</div>
-                <div class="text-xs text-white/40">{{ link.desc }}</div>
-              </div>
-            </NuxtLink>
+          <div class="absolute top-full left-0 pt-2 w-56 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-150 -translate-y-1 group-hover:translate-y-0">
+            <div class="bg-[#0d1b2e] border border-white/10 rounded-2xl p-2 shadow-2xl">
+              <NuxtLink v-for="link in rankingsLinks" :key="link.to" :to="link.to" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/[0.06] transition-colors">
+                <div class="w-8 h-8 rounded-lg bg-orange-500/10 flex items-center justify-center text-sm flex-shrink-0">{{ link.icon }}</div>
+                <div>
+                  <div class="text-sm font-medium text-white">{{ link.label }}</div>
+                  <div class="text-xs text-white/40">{{ link.desc }}</div>
+                </div>
+              </NuxtLink>
+            </div>
           </div>
         </div>
 
@@ -57,18 +61,20 @@
               <path d="M2 4l4 4 4-4"/>
             </svg>
           </button>
-          <div class="absolute top-full left-0 mt-2 w-72 bg-[#0d1b2e] border border-white/10 rounded-2xl p-2 shadow-2xl opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-150 -translate-y-1 group-hover:translate-y-0">
-            <NuxtLink v-for="link in toolsLinks" :key="link.to" :to="link.to" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/[0.06] transition-colors">
-              <div class="w-8 h-8 rounded-lg bg-purple-500/10 flex items-center justify-center text-sm flex-shrink-0">{{ link.icon }}</div>
-              <div>
-                <div class="text-sm font-medium text-white">{{ link.label }}</div>
-                <div class="text-xs text-white/40">{{ link.desc }}</div>
-              </div>
-            </NuxtLink>
-            <div class="h-px bg-white/10 mx-2 my-1" />
-            <NuxtLink :to="localePath('tools')" class="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-white/[0.06] transition-colors">
-              <div class="text-xs font-medium text-white/50">{{ $t('nav.seeAllTools') }} &rarr;</div>
-            </NuxtLink>
+          <div class="absolute top-full left-0 pt-2 w-72 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-150 -translate-y-1 group-hover:translate-y-0">
+            <div class="bg-[#0d1b2e] border border-white/10 rounded-2xl p-2 shadow-2xl">
+              <NuxtLink v-for="link in toolsLinks" :key="link.to" :to="link.to" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/[0.06] transition-colors">
+                <div class="w-8 h-8 rounded-lg bg-purple-500/10 flex items-center justify-center text-sm flex-shrink-0">{{ link.icon }}</div>
+                <div>
+                  <div class="text-sm font-medium text-white">{{ link.label }}</div>
+                  <div class="text-xs text-white/40">{{ link.desc }}</div>
+                </div>
+              </NuxtLink>
+              <div class="h-px bg-white/10 mx-2 my-1" />
+              <NuxtLink :to="localePath('tools')" class="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-white/[0.06] transition-colors">
+                <div class="text-xs font-medium text-white/50">{{ $t('nav.seeAllTools') }} &rarr;</div>
+              </NuxtLink>
+            </div>
           </div>
         </div>
 
