@@ -31,8 +31,6 @@ model QualityIndex {
   isNumberData               Boolean  @default(true)
 
   climate Json?
-
-  @@map("Numbeo")
 }
 
 enum Region {
@@ -113,7 +111,7 @@ model City {
 
   imageId  Int?
   image    Image?
-  qualityIndexId String?   @map("numbeoId")
+  qualityIndexId String?
   qualityIndex   QualityIndex?
 
   articles  ArticleCityMap[]

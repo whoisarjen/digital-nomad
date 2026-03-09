@@ -219,7 +219,7 @@
     "dataSources": "데이터 출처",
     "weatherSource": "Open-Meteo — 기상 관측소 기반 날씨 데이터, 매월 업데이트",
     "internetSource": "글로벌 인터넷 순위 지수 — 자기 보고 아님",
-    "costSource": "Numbeo 지수 — 도시별 9가지 품질 차원",
+    "costSource": "삶의 질 지수 — 도시별 9가지 차원",
     "costTiers": "도시별 4가지 비용 등급: 노마드, 주재원, 현지인, 가족",
     "peakCities": "현재 성수기인 도시 {count}개",
     "free": "모든 기능 무료 이용",
@@ -290,7 +290,7 @@
     "monthlyWeather": "월별 날씨 비교",
     "whoShouldChoose": "{city}를 선택해야 할 사람은?",
     "overallVerdict": "종합 평가",
-    "dataAttribution": "데이터 출처: Open-Meteo(날씨), Numbeo(품질 지수) 및 글로벌 인터넷 속도 순위. 매월 업데이트.",
+    "dataAttribution": "데이터 출처: Open-Meteo(날씨) 및 글로벌 인터넷 속도 순위. 매월 업데이트.",
     "intro": {
       "sameCountry": "{cityA}와(과) {cityB}는 모두 {countryA}에 위치해 있어, 이 지역에서 거점을 계획하는 디지털 노마드에게 가장 흔한 비교 중 하나입니다. 이 가이드는 비용, 인터넷, 안전, 날씨, 삶의 질에 대한 주요 차이점을 분석합니다.",
       "sameRegion": "{cityA}({countryA})와(과) {cityB}({countryB})는 모두 {regionA}에 위치하며 서로 다른 노마드 라이프스타일을 제공합니다. 가장 중요한 지표에서 어떻게 비교되는지 확인하세요.",

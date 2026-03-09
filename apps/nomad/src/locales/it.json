@@ -219,7 +219,7 @@
     "dataSources": "Da Dove Provengono i Nostri Dati",
     "weatherSource": "Open-Meteo — dati meteo da stazioni, aggiornamento mensile",
     "internetSource": "Indice internet globale classificato — non auto-dichiarato",
-    "costSource": "Indici Numbeo — 9 dimensioni di qualità per città",
+    "costSource": "Indici di qualità della vita — 9 dimensioni per città",
     "costTiers": "4 livelli di costo per città: nomade, espatriato, locale, famiglia",
     "peakCities": "{count} città in alta stagione in questo momento",
     "free": "$0 per accedere a tutto",
@@ -290,7 +290,7 @@
     "monthlyWeather": "Confronto Meteo Mensile",
     "whoShouldChoose": "Chi Dovrebbe Scegliere {city}?",
     "overallVerdict": "Verdetto Generale",
-    "dataAttribution": "Dati da Open-Meteo (meteo), Numbeo (indici di qualità) e classifiche globali di velocità internet. Aggiornamento mensile.",
+    "dataAttribution": "Dati da Open-Meteo (meteo) e classifiche globali di velocità internet. Aggiornamento mensile.",
     "intro": {
       "sameCountry": "{cityA} e {cityB} si trovano entrambe in {countryA}, rendendo questo uno dei confronti più comuni per i nomadi digitali che pianificano una base nella regione. Questa guida analizza le differenze chiave in costi, internet, sicurezza, meteo e qualità della vita.",
       "sameRegion": "{cityA} ({countryA}) e {cityB} ({countryB}) si trovano entrambe in {regionA}, offrendo approcci diversi allo stile di vita nomade. Ecco come si confrontano nelle metriche più importanti.",

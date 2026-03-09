@@ -219,7 +219,7 @@
     "dataSources": "Where Our Data Comes From",
     "weatherSource": "Open-Meteo — station-based weather, updated monthly",
     "internetSource": "Global ranked internet index — not self-reported",
-    "costSource": "Numbeo indices — 9 quality dimensions per city",
+    "costSource": "Quality of life indices — 9 dimensions per city",
     "costTiers": "4 cost tiers per city: nomad, expat, local, family",
     "peakCities": "{count} cities at peak season right now",
     "free": "$0 to access everything",
@@ -290,7 +290,7 @@
     "monthlyWeather": "Monthly Weather Comparison",
     "whoShouldChoose": "Who Should Choose {city}?",
     "overallVerdict": "Overall Verdict",
-    "dataAttribution": "Data from Open-Meteo (weather), Numbeo (quality indices), and global internet speed rankings. Updated monthly.",
+    "dataAttribution": "Data from Open-Meteo (weather) and global internet speed rankings. Updated monthly.",
     "intro": {
       "sameCountry": "{cityA} and {cityB} are both in {countryA}, making this one of the most common comparisons for digital nomads planning a base in the region. This guide breaks down the key differences across cost, internet, safety, weather, and quality of life.",
       "sameRegion": "{cityA} ({countryA}) and {cityB} ({countryB}) are both in {regionA}, offering different takes on the nomad lifestyle. Here is how they compare across the metrics that matter most.",
@@ -488,7 +488,7 @@
     "comparison": "That's {ratio}× cheaper than {city}",
     "comparisonExpensive": "That's {ratio}× more expensive than {city}",
     "perDay": "/ day",
-    "dataNote": "Prices based on Numbeo data. All amounts in USD.",
+    "dataNote": "All amounts in USD.",
     "noData": "No price data for this city yet"
   },
   "runway": {
@@ -627,7 +627,7 @@
     "item": "Item",
     "diff": "Diff",
     "items": "items",
-    "source": "Prices from Numbeo. Lower is better for all cost items."
+    "source": "Lower is better for all cost items."
   },
   "salaryPower": {
     "title": "Local Salary vs. Nomad Cost",

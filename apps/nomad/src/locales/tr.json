@@ -219,7 +219,7 @@
     "dataSources": "Verilerimiz Nereden Geliyor",
     "weatherSource": "Open-Meteo — istasyon bazlı hava durumu, aylık güncelleme",
     "internetSource": "Küresel sıralı internet endeksi — kendi beyanına dayalı değil",
-    "costSource": "Numbeo endeksleri — şehir başına 9 kalite boyutu",
+    "costSource": "Yaşam kalitesi endeksleri — şehir başına 9 boyut",
     "costTiers": "Şehir başına 4 maliyet seviyesi: göçebe, gurbetçi, yerel, aile",
     "peakCities": "Şu anda yüksek sezonda {count} şehir",
     "free": "Her şeye erişim $0",
@@ -290,7 +290,7 @@
     "monthlyWeather": "Aylık Hava Durumu Karşılaştırması",
     "whoShouldChoose": "{city} Şehrini Kim Tercih Etmeli?",
     "overallVerdict": "Genel Değerlendirme",
-    "dataAttribution": "Veriler Open-Meteo (hava durumu), Numbeo (kalite endeksleri) ve küresel internet hızı sıralamalarından alınmıştır. Aylık güncellenir.",
+    "dataAttribution": "Veriler Open-Meteo (hava durumu) ve küresel internet hızı sıralamalarından alınmıştır. Aylık güncellenir.",
     "intro": {
       "sameCountry": "{cityA} ve {cityB} her ikisi de {countryA} ülkesindedir ve bu, bölgede üs kurmayı planlayan dijital göçebeler için en yaygın karşılaştırmalardan biridir. Bu rehber; maliyet, internet, güvenlik, hava durumu ve yaşam kalitesindeki temel farkları ortaya koymaktadır.",
       "sameRegion": "{cityA} ({countryA}) ve {cityB} ({countryB}) her ikisi de {regionA} bölgesindedir ve göçebe yaşam tarzına farklı yaklaşımlar sunar. İşte en önemli metriklerde nasıl karşılaştırıldıkları.",

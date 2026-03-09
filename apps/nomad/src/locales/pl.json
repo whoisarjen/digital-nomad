@@ -219,7 +219,7 @@
     "dataSources": "Skąd pochodzą nasze dane",
     "weatherSource": "Open-Meteo — dane stacyjne, aktualizowane co miesiąc",
     "internetSource": "Globalny ranking internetu — nie samodzielne testy",
-    "costSource": "Indeksy Numbeo — 9 wymiarów jakości na miasto",
+    "costSource": "Indeksy jakości życia — 9 wymiarów na miasto",
     "costTiers": "4 poziomy kosztów na miasto: nomad, expat, lokalny, rodzina",
     "peakCities": "{count} miast w szczycie sezonu",
     "free": "0 zł za pełny dostęp",
@@ -290,7 +290,7 @@
     "monthlyWeather": "Porównanie pogody miesięcznej",
     "whoShouldChoose": "Kto powinien wybrać {city}?",
     "overallVerdict": "Ogólny werdykt",
-    "dataAttribution": "Dane z Open-Meteo (pogoda), Numbeo (indeksy jakości) i globalnych rankingów prędkości internetu. Aktualizowane co miesiąc.",
+    "dataAttribution": "Dane z Open-Meteo (pogoda) i globalnych rankingów prędkości internetu. Aktualizowane co miesiąc.",
     "intro": {
       "sameCountry": "{cityA} i {cityB} znajdują się w {countryA}, co czyni to jedno z najczęstszych porównań dla cyfrowych nomadów planujących bazę w regionie. Ten przewodnik przedstawia kluczowe różnice w kosztach, internecie, bezpieczeństwie, pogodzie i jakości życia.",
       "sameRegion": "{cityA} ({countryA}) i {cityB} ({countryB}) leżą w regionie {regionA}, oferując różne podejście do życia nomada. Oto jak wypadają w najważniejszych kategoriach.",
@@ -559,7 +559,7 @@
     "item": "Pozycja",
     "diff": "Różnica",
     "items": "pozycji",
-    "source": "Ceny z Numbeo. Im niżej, tym lepiej dla wszystkich pozycji kosztowych."
+    "source": "Im niżej, tym lepiej dla wszystkich pozycji kosztowych."
   },
   "salaryPower": {
     "title": "Lokalna płaca vs. koszt nomada",
@@ -612,7 +612,7 @@
     "comparison": "To {ratio}× taniej niż w {city}",
     "comparisonExpensive": "To {ratio}× drożej niż w {city}",
     "perDay": "/ dzień",
-    "dataNote": "Ceny oparte na danych Numbeo. Wszystkie kwoty w USD.",
+    "dataNote": "Wszystkie kwoty w USD.",
     "noData": "Brak danych cenowych dla tego miasta"
   },
   "safeCitiesPage": {
