@@ -34,7 +34,7 @@ LIMIT 10;
 - Regenerate them first, consuming slots from the N requested (e.g. if 5 requested and 2 thin articles found → regenerate 2, create 3 new)
 - Use the same pipeline agent prompt (Step 3) but with mode: **regenerate** — the agent receives the existing slug and must:
   1. Query all DB data fresh (City, MonthSummary, QualityIndex)
-  2. Write a full new article (1500-2500 words EN)
+  2. Write a full new article (2000-2500 words EN, minimum 10,000 characters — see length requirements in Step 2)
   3. Translate to all 10 languages
   4. **UPDATE** (not INSERT) the existing row:
      ```sql
@@ -178,14 +178,16 @@ For filtered articles: query top 10-15 by the filter metric.
 
 ## Step 2: Write English Article
 
-Use the data to write a 1500-2500 word article. Every number MUST come from the query results.
+Use the data to write a **2000-2500 word** article. Every number MUST come from the query results.
+
+**CRITICAL LENGTH REQUIREMENT:** The final `contentEn` HTML must be at least **8,000 characters** (not words — characters including HTML tags). Articles under 8000 chars are flagged as "thin" and will be regenerated, wasting the entire pipeline run. Aim for 9,000-12,000 chars to have comfortable margin. After writing, count the characters — if under 8,000, expand sections before proceeding.
 
 [Include the relevant template from the strategy doc based on article type]
 
 Output these English fields:
 - titleEn (under 70 chars)
 - excerptEn (1-2 sentences with key data point)
-- contentEn (full markdown, 1500-2500 words)
+- contentEn (full markdown, **2000-2500 words, minimum 8,000 characters**)
 - metaTitleEn (under 60 chars)
 - metaDescEn (120-155 chars, include key number)
 - FAQ pairs: 4-6 pairs — **both `questionEn` and `answerEn` must be non-empty strings for every pair** (never null, never empty string). Omit a pair entirely rather than including one with a missing answer.
@@ -231,7 +233,7 @@ Collect all 10 translations.
 Hard fails (do NOT insert):
 - Check slug doesn't already exist: `SELECT slug FROM "Article" WHERE slug = '[slug]'`
 - titleEn and titlePl must be non-empty
-- contentEn must be 500+ words
+- contentEn must be **2000+ words AND 8,000+ characters** (articles under 8000 chars get flagged for regeneration — hard-fail now to avoid wasting the pipeline). If too short, go back to Step 2 and expand the article before continuing.
 - Primary city slug must exist in City table
 - featuredImageUrl curl returned 200 (verified in Step 3b — if skipped, treat as hard fail)
 - Every FAQ pair in `faqs` must have both a non-empty `question` and a non-empty `answer` — drop any pair missing either field rather than inserting null/empty values (prevents Google Search Console "missing field" errors)
