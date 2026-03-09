@@ -1,23 +1,79 @@
 <template>
   <div class="min-h-screen">
-    <!-- Loading -->
+    <!-- Loading skeleton — 1:1 match of article layout -->
     <template v-if="!data || status !== 'success'">
+      <!-- Header zone: pt-24 pb-16, max-w-screen-md -->
       <section class="pt-24 pb-16 px-6">
-        <div class="max-w-screen-md mx-auto flex flex-col gap-4">
-          <div class="h-3 skeleton w-32" />
-          <div class="h-10 skeleton w-3/4" />
-          <div class="h-4 skeleton w-1/3" />
+        <div class="max-w-screen-md mx-auto">
+          <!-- Breadcrumb: Home / Blog / Title -->
+          <div class="flex items-center gap-3 mb-6">
+            <div class="h-3 skeleton w-20" />
+            <div class="h-3 skeleton w-2" />
+            <div class="h-3 skeleton w-12" />
+            <div class="h-3 skeleton w-2" />
+            <div class="h-3 skeleton w-32" />
+          </div>
+          <!-- Title: text-3xl sm:text-4xl, 2 lines -->
+          <div class="h-10 skeleton w-[90%] mb-2" />
+          <div class="h-10 skeleton w-[65%]" />
+          <!-- Meta: date + read time -->
+          <div class="flex items-center gap-4 mt-4">
+            <div class="h-4 skeleton w-28" />
+            <div class="h-4 skeleton w-20" />
+          </div>
+          <!-- City tags -->
+          <div class="flex flex-wrap gap-2 mt-5">
+            <div class="h-7 skeleton w-28 rounded-full" />
+            <div class="h-7 skeleton w-24 rounded-full" />
+            <div class="h-7 skeleton w-32 rounded-full" />
+          </div>
         </div>
       </section>
+
+      <!-- Content zone: max-w-screen-md px-6 py-12 -->
       <div class="relative z-10">
-        <div class="max-w-screen-md mx-auto px-6 py-12 flex flex-col gap-4">
-          <div class="h-4 skeleton w-full" />
-          <div class="h-4 skeleton w-full" />
-          <div class="h-4 skeleton w-2/3" />
-          <div class="h-64 skeleton w-full mt-4 rounded-xl" />
-          <div class="h-4 skeleton w-full mt-4" />
-          <div class="h-4 skeleton w-full" />
-          <div class="h-4 skeleton w-1/2" />
+        <div class="max-w-screen-md mx-auto px-6 pb-12">
+          <!-- Hero image: aspect-[2/1], -mt-20, rounded-2xl -->
+          <div class="aspect-[2/1] skeleton rounded-2xl -mt-20 mb-10 shadow-xl" />
+
+          <!-- Article body: paragraphs + heading + more paragraphs -->
+          <div class="flex flex-col gap-3">
+            <div class="h-4 skeleton w-full" />
+            <div class="h-4 skeleton w-full" />
+            <div class="h-4 skeleton w-[85%]" />
+            <div class="h-4 skeleton w-full" />
+            <div class="h-4 skeleton w-[70%]" />
+
+            <div class="h-7 skeleton w-[55%] mt-5 mb-1" />
+
+            <div class="h-4 skeleton w-full" />
+            <div class="h-4 skeleton w-full" />
+            <div class="h-4 skeleton w-[90%]" />
+            <div class="h-4 skeleton w-full" />
+            <div class="h-4 skeleton w-[60%]" />
+
+            <div class="h-7 skeleton w-[45%] mt-5 mb-1" />
+
+            <div class="h-4 skeleton w-full" />
+            <div class="h-4 skeleton w-[95%]" />
+            <div class="h-4 skeleton w-full" />
+            <div class="h-4 skeleton w-[75%]" />
+          </div>
+
+          <!-- Connected cities: 3 × aspect-[16/7] rounded-2xl -->
+          <div class="mt-12 pt-10 border-t border-white/[0.1]">
+            <div class="h-3 skeleton w-32 mb-5" />
+            <div class="flex flex-col gap-4">
+              <div class="aspect-[16/7] skeleton rounded-2xl" />
+              <div class="aspect-[16/7] skeleton rounded-2xl" />
+              <div class="aspect-[16/7] skeleton rounded-2xl" />
+            </div>
+          </div>
+
+          <!-- Back link -->
+          <div class="mt-12 pt-8 border-t border-white/[0.1]">
+            <div class="h-4 skeleton w-28" />
+          </div>
         </div>
       </div>
     </template>
