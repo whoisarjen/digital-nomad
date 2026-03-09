@@ -436,6 +436,19 @@
     "nonSchengenTitle": "Mało dni? Sprawdź te destynacje poza Schengen",
     "toolsNav": "Narzędzia"
   },
+  "lifestyle": {
+    "title": "Styl życia",
+    "activeCount": "aktywne",
+    "hint": "Kilka presetów łączy się logiką AND — widoczne są tylko miasta spełniające wszystkie wybrane warunki.",
+    "presets": {
+      "budget_food": "Tanie jedzenie (posiłek < 5 $)",
+      "cheap_beer": "Piwo poniżej 2 $",
+      "fast_internet": "Szybki internet (60+ Mbps)",
+      "affordable_gym": "Siłownia poniżej 30 $/mies.",
+      "budget_rent": "Kawalerka poniżej 500 $",
+      "nomad_bundle": "Pakiet nomada < 800 $"
+    }
+  },
   "costBreakdown": {
     "title": "Cennik",
     "cat": {
@@ -508,9 +521,66 @@
       "mortgageRate": "Oprocentowanie kredytu hipotecznego (20 lat)"
     }
   },
+  "comparePriceTable": {
+    "title": "Szczegółowe porównanie cen",
+    "item": "Pozycja",
+    "diff": "Różnica",
+    "items": "pozycji",
+    "source": "Ceny z Numbeo. Im niżej, tym lepiej dla wszystkich pozycji kosztowych."
+  },
+  "salaryPower": {
+    "title": "Lokalna płaca vs. koszt nomada",
+    "localSalary": "Lokalna płaca",
+    "nomadCost": "Koszt nomada",
+    "ratio": "Współczynnik kosztu",
+    "insightAbove": "Lokalny mieszkaniec zarabia {salary}/mies., a styl życia nomada kosztuje {cost} — to {ratio}× lokalna pensja.",
+    "insightBelow": "Lokalny mieszkaniec zarabia {salary}/mies. — o {pct}% więcej niż koszt nomada wynoszący {cost}/mies."
+  },
   "currency": {
     "selectCurrency": "Waluta",
     "updatedHourly": "Kursy aktualizowane co godzinę"
+  },
+  "tools": {
+    "badge": "Narzędzia",
+    "title": "Narzędzia nomada",
+    "subtitle": "Darmowe kalkulatory i narzędzia do planowania życia cyfrowego nomada — bez rejestracji.",
+    "metaTitle": "Darmowe narzędzia dla digital nomadów | Kalkulatory",
+    "metaDesc": "Darmowe narzędzia dla digital nomadów: kalkulator Schengen, kalkulator kosztów i runway i więcej.",
+    "open": "Otwórz narzędzie",
+    "badgeFree": "Bezpłatne",
+    "badgeNew": "Nowe",
+    "schengenName": "Kalkulator Schengen",
+    "schengenDesc": "Śledź limit 90/180 dni w strefie Schengen, sprawdź pozostałe dni i datę następnego wjazdu.",
+    "runwayName": "Kalkulator Kosztów i Runway",
+    "runwayDesc": "Podaj oszczędności i dochód, by zobaczyć na ile miesięcy wystarczą w ponad 500 miastach.",
+    "dayInLifeName": "Dzień z życia",
+    "dayInLifeDesc": "Zbuduj swój typowy dzień nomada — posiłki, kawa, transport, piwo — i sprawdź ile to kosztuje w dowolnym mieście.",
+    "dayInLife": "dzien-z-zycia"
+  },
+  "dayInLife": {
+    "breadcrumb": "Dzień z życia",
+    "title": "Ile kosztuje twój dzień?",
+    "subtitle": "Wybierz miasto. Zbuduj swój dzień. Sprawdź prawdziwy koszt.",
+    "metaTitle": "Kalkulator dnia nomada | Narzędzie Digital Nomad",
+    "metaDesc": "Zbuduj typowy dzień nomada — posiłki, kawa, taksówka, piwo — i od razu sprawdź koszt w ponad 500 miastach. Podziel się wynikiem.",
+    "pickCity": "Wybierz miasto",
+    "searchCity": "Szukaj miasta...",
+    "noCity": "Wybierz miasto, aby zobaczyć koszt dnia",
+    "dailyCost": "Twój dzień kosztuje",
+    "shareDay": "Udostępnij ten dzień",
+    "copied": "Skopiowano!",
+    "buildYourDay": "Zbuduj swój dzień",
+    "cheapMeal": "Tani posiłek",
+    "midRangeMeal": "Posiłek średniej klasy",
+    "coffee": "Kawa / cappuccino",
+    "beer": "Lokalne piwo",
+    "taxiKm": "Taksówka (km)",
+    "publicTransport": "Komunikacja miejska",
+    "comparison": "To {ratio}× taniej niż w {city}",
+    "comparisonExpensive": "To {ratio}× drożej niż w {city}",
+    "perDay": "/ dzień",
+    "dataNote": "Ceny oparte na danych Numbeo. Wszystkie kwoty w USD.",
+    "noData": "Brak danych cenowych dla tego miasta"
   },
   "safeCitiesPage": {
     "breadcrumb": "Safe Cities",
@@ -530,5 +600,57 @@
     "statCostRange": "Cost range",
     "statAvgInternet": "Avg. internet",
     "noResults": "No safe cities found for this filter."
+  },
+  "quiz": {
+    "metaTitle": "Which City Is Right for Me? | Digital Nomad Quiz",
+    "metaDesc": "Answer 5 quick questions to discover your ideal digital nomad city based on budget, climate, internet, safety, and region.",
+    "badge": "Quiz",
+    "title": "Which City Is Right for Me?",
+    "subtitle": "5 questions. Instant recommendations based on real data.",
+    "step": "{current} / {total}",
+    "next": "Next",
+    "back": "Back",
+    "seeResults": "See My Cities",
+    "retake": "Retake Quiz",
+    "shareResults": "Share Results",
+    "copied": "Link copied!",
+    "resultsTitle": "Your Top Matches",
+    "resultsSubtitle": "Based on your answers, these cities fit your lifestyle best.",
+    "matchScore": "{score}% match",
+    "noResults": "No cities matched your criteria. Try broadening your preferences.",
+    "loading": "Finding your cities…",
+    "perMonth": "/mo",
+    "stepBudget": {
+      "question": "What's your monthly budget?",
+      "opt0": "Under $1,000",
+      "opt1": "$1,000 – $1,500",
+      "opt2": "$1,500 – $2,500",
+      "opt3": "$2,500+"
+    },
+    "stepClimate": {
+      "question": "What climate do you prefer?",
+      "opt0": "Cold — under 12°C",
+      "opt1": "Mild — 12 to 22°C",
+      "opt2": "Warm — 22 to 28°C",
+      "opt3": "Hot — above 28°C",
+      "opt4": "Doesn't matter"
+    },
+    "stepInternet": {
+      "question": "How fast does your internet need to be?",
+      "opt0": "Basic — 20+ Mbps",
+      "opt1": "Good — 50+ Mbps",
+      "opt2": "Fast — 100+ Mbps",
+      "opt3": "Doesn't matter"
+    },
+    "stepSafety": {
+      "question": "What's your safety preference?",
+      "opt0": "Safe — I want peace of mind",
+      "opt1": "Moderate — normal precautions are fine",
+      "opt2": "Adventurous — safety isn't a dealbreaker"
+    },
+    "stepRegions": {
+      "question": "Any region preference?",
+      "anywhere": "Anywhere in the world"
+    }
   }
 }

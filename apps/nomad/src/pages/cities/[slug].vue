@@ -267,6 +267,10 @@
                   <span class="text-sm text-gray-500">{{ $t('city.family') }}</span>
                   <span class="text-sm font-semibold text-gray-700 tabular-nums">{{ formatCost(Number(data.costForFamilyInUsd)) }}/mo</span>
                 </div>
+                <SalaryPurchasingPower
+                  :salary="data.averageMonthlyNetSalary !== null ? Number(data.averageMonthlyNetSalary) : null"
+                  :nomad-cost="data.costForNomadInUsd !== null ? Number(data.costForNomadInUsd) : null"
+                />
               </template>
               <template v-else>
                 <div v-for="i in 4" :key="i" class="flex justify-between items-center py-3" :class="{ 'border-b border-gray-50': i < 4 }">

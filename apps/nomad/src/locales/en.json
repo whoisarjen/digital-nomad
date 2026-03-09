@@ -428,7 +428,35 @@
     "schengenName": "Schengen Calculator",
     "schengenDesc": "Track your 90/180-day Schengen limit, see days remaining, and get your next safe re-entry date.",
     "runwayName": "Cost & Runway Calculator",
-    "runwayDesc": "Enter your savings and income to see how many months you can live in 500+ cities worldwide."
+    "runwayDesc": "Enter your savings and income to see how many months you can live in 500+ cities worldwide.",
+    "dayInLifeName": "Day in the Life",
+    "dayInLifeDesc": "Build your perfect nomad day — meals, coffee, transport, beer — and see exactly what it costs in any city.",
+    "dayInLife": "day-in-the-life"
+  },
+  "dayInLife": {
+    "breadcrumb": "Day in the Life",
+    "title": "What Does Your Day Cost?",
+    "subtitle": "Pick your city. Build your day. See the real cost.",
+    "metaTitle": "Day in the Life Budget Builder | Digital Nomad Tool",
+    "metaDesc": "Build your typical nomad day — meals, coffee, taxi, beer — and instantly see what it costs in any of 500+ cities. Share your result.",
+    "pickCity": "Pick a city",
+    "searchCity": "Search city...",
+    "noCity": "Select a city to see your day's cost",
+    "dailyCost": "Your day costs",
+    "shareDay": "Share this day",
+    "copied": "Copied!",
+    "buildYourDay": "Build your day",
+    "cheapMeal": "Cheap meal",
+    "midRangeMeal": "Mid-range meal",
+    "coffee": "Coffee / cappuccino",
+    "beer": "Local beer",
+    "taxiKm": "Taxi (km)",
+    "publicTransport": "Public transport",
+    "comparison": "That's {ratio}× cheaper than {city}",
+    "comparisonExpensive": "That's {ratio}× more expensive than {city}",
+    "perDay": "/ day",
+    "dataNote": "Prices based on Numbeo data. All amounts in USD.",
+    "noData": "No price data for this city yet"
   },
   "runway": {
     "breadcrumb": "Runway Calculator",
@@ -475,6 +503,19 @@
     "howItWorksDesc": "The Schengen Area allows visa-free stays of up to 90 days within any rolling 180-day period. This calculator uses the official rolling window method to accurately track your remaining days.",
     "nonSchengenTitle": "Running low? Try these non-Schengen destinations",
     "toolsNav": "Tools"
+  },
+  "lifestyle": {
+    "title": "Lifestyle",
+    "activeCount": "active",
+    "hint": "Multiple presets combine with AND logic — only cities matching all selected conditions appear.",
+    "presets": {
+      "budget_food": "Cheap eats (meal < $5)",
+      "cheap_beer": "Beer under $2",
+      "fast_internet": "Fast internet (60+ Mbps)",
+      "affordable_gym": "Gym under $30/mo",
+      "budget_rent": "1br under $500",
+      "nomad_bundle": "Nomad bundle < $800"
+    }
   },
   "costBreakdown": {
     "title": "Price Breakdown",
@@ -548,6 +589,21 @@
       "mortgageRate": "Mortgage interest rate (20yr fixed)"
     }
   },
+  "comparePriceTable": {
+    "title": "Granular Price Comparison",
+    "item": "Item",
+    "diff": "Diff",
+    "items": "items",
+    "source": "Prices from Numbeo. Lower is better for all cost items."
+  },
+  "salaryPower": {
+    "title": "Local Salary vs. Nomad Cost",
+    "localSalary": "Local salary",
+    "nomadCost": "Nomad cost",
+    "ratio": "Cost ratio",
+    "insightAbove": "A local earns {salary}/mo but a nomad lifestyle costs {cost} — that's {ratio}× the local wage.",
+    "insightBelow": "A local earns {salary}/mo — {pct}% more than the {cost}/mo nomad cost."
+  },
   "currency": {
     "selectCurrency": "Currency",
     "updatedHourly": "Rates updated hourly"
@@ -570,5 +626,57 @@
     "statCostRange": "Cost range",
     "statAvgInternet": "Avg. internet",
     "noResults": "No safe cities found for this filter."
+  },
+  "quiz": {
+    "metaTitle": "Which City Is Right for Me? | Digital Nomad Quiz",
+    "metaDesc": "Answer 5 quick questions to discover your ideal digital nomad city based on budget, climate, internet, safety, and region.",
+    "badge": "Quiz",
+    "title": "Which City Is Right for Me?",
+    "subtitle": "5 questions. Instant recommendations based on real data.",
+    "step": "{current} / {total}",
+    "next": "Next",
+    "back": "Back",
+    "seeResults": "See My Cities",
+    "retake": "Retake Quiz",
+    "shareResults": "Share Results",
+    "copied": "Link copied!",
+    "resultsTitle": "Your Top Matches",
+    "resultsSubtitle": "Based on your answers, these cities fit your lifestyle best.",
+    "matchScore": "{score}% match",
+    "noResults": "No cities matched your criteria. Try broadening your preferences.",
+    "loading": "Finding your cities…",
+    "perMonth": "/mo",
+    "stepBudget": {
+      "question": "What's your monthly budget?",
+      "opt0": "Under $1,000",
+      "opt1": "$1,000 – $1,500",
+      "opt2": "$1,500 – $2,500",
+      "opt3": "$2,500+"
+    },
+    "stepClimate": {
+      "question": "What climate do you prefer?",
+      "opt0": "Cold — under 12°C",
+      "opt1": "Mild — 12 to 22°C",
+      "opt2": "Warm — 22 to 28°C",
+      "opt3": "Hot — above 28°C",
+      "opt4": "Doesn't matter"
+    },
+    "stepInternet": {
+      "question": "How fast does your internet need to be?",
+      "opt0": "Basic — 20+ Mbps",
+      "opt1": "Good — 50+ Mbps",
+      "opt2": "Fast — 100+ Mbps",
+      "opt3": "Doesn't matter"
+    },
+    "stepSafety": {
+      "question": "What's your safety preference?",
+      "opt0": "Safe — I want peace of mind",
+      "opt1": "Moderate — normal precautions are fine",
+      "opt2": "Adventurous — safety isn't a dealbreaker"
+    },
+    "stepRegions": {
+      "question": "Any region preference?",
+      "anywhere": "Anywhere in the world"
+    }
   }
 }
