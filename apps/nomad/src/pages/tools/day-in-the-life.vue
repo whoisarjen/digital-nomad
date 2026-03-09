@@ -8,7 +8,7 @@
 
       <div class="relative z-10 max-w-5xl mx-auto px-6 pt-24 pb-12 text-center">
         <!-- Breadcrumb pill -->
-        <div class="inline-flex items-center gap-2 bg-white/[0.06] border border-white/[0.08] rounded-full px-4 py-1.5 text-sm text-gray-400 mb-6">
+        <div class="inline-flex items-center gap-2 bg-white/[0.06] border border-white/[0.08] rounded-full px-4 py-1.5 text-sm text-white/50 mb-6">
           <NuxtLink :to="localePath('tools')" class="hover:text-white transition-colors">{{ $t('tools.badge') }}</NuxtLink>
           <span class="text-white/20">/</span>
           <LucideSunrise :size="14" class="text-amber-400" />
@@ -18,7 +18,7 @@
         <h1 class="text-4xl sm:text-5xl md:text-6xl font-black text-white tracking-tight leading-[1.05] mb-4">
           {{ $t('dayInLife.title') }}
         </h1>
-        <p class="text-base md:text-lg text-gray-400 max-w-xl mx-auto leading-relaxed">
+        <p class="text-base md:text-lg text-white/50 max-w-xl mx-auto leading-relaxed">
           {{ $t('dayInLife.subtitle') }}
         </p>
       </div>
@@ -37,12 +37,12 @@
               {{ $t('dayInLife.pickCity') }}
             </label>
             <div class="relative">
-              <LucideSearch :size="16" class="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none" />
+              <LucideSearch :size="16" class="absolute left-3.5 top-1/2 -translate-y-1/2 text-white/40 pointer-events-none" />
               <input
                 v-model="citySearch"
                 type="text"
                 :placeholder="$t('dayInLife.searchCity')"
-                class="w-full pl-10 pr-4 py-3 rounded-xl bg-white/[0.06] border border-white/[0.10] text-white placeholder-gray-600 focus:outline-none focus:border-amber-400/50 focus:bg-white/[0.08] transition-all text-base"
+                class="w-full pl-10 pr-4 py-3 rounded-xl bg-white/[0.06] border border-white/[0.10] text-white placeholder-white/30 focus:outline-none focus:border-amber-400/50 focus:bg-white/[0.08] transition-all text-base"
                 @focus="searchFocused = true"
                 @blur="onSearchBlur"
               />
@@ -58,7 +58,7 @@
                   @mousedown.prevent="selectCity(city)"
                 >
                   <span class="text-sm font-medium text-white">{{ city.name }}</span>
-                  <span class="text-xs text-gray-500">{{ city.country }}</span>
+                  <span class="text-xs text-white/40">{{ city.country }}</span>
                 </button>
               </div>
             </div>
@@ -81,7 +81,7 @@
           <!-- Day Items -->
           <div class="bg-white/[0.04] border border-white/[0.08] rounded-2xl overflow-hidden">
             <div class="px-5 pt-5 pb-3">
-              <p class="text-xs font-bold uppercase tracking-widest text-gray-500">{{ $t('dayInLife.buildYourDay') }}</p>
+              <p class="text-xs font-bold uppercase tracking-widest text-white/40">{{ $t('dayInLife.buildYourDay') }}</p>
             </div>
 
             <div class="divide-y divide-white/[0.05]">
@@ -97,7 +97,7 @@
           </div>
 
           <!-- Data note -->
-          <p class="text-xs text-gray-600 text-center">{{ $t('dayInLife.dataNote') }}</p>
+          <p class="text-xs text-white/30 text-center">{{ $t('dayInLife.dataNote') }}</p>
         </div>
 
         <!-- RIGHT: Cost Display (sticky) -->
@@ -108,7 +108,7 @@
             <!-- Corner glow -->
             <div class="absolute -top-8 -right-8 w-32 h-32 bg-amber-500/10 rounded-full blur-2xl pointer-events-none" />
 
-            <p class="text-xs font-bold uppercase tracking-widest text-gray-500 mb-5">{{ $t('dayInLife.dailyCost') }}</p>
+            <p class="text-xs font-bold uppercase tracking-widest text-white/40 mb-5">{{ $t('dayInLife.dailyCost') }}</p>
 
             <!-- Cost number -->
             <div v-if="selectedCity && priceData" class="mb-1">
@@ -117,13 +117,13 @@
                   {{ formatCost(dailyCost) }}
                 </span>
               </div>
-              <p class="text-sm text-gray-500 mt-2">{{ $t('dayInLife.perDay') }}</p>
+              <p class="text-sm text-white/40 mt-2">{{ $t('dayInLife.perDay') }}</p>
             </div>
 
             <!-- No city selected -->
             <div v-else-if="!selectedCity" class="py-4">
               <div class="text-5xl font-black text-white/10 tabular-nums">$—</div>
-              <p class="text-sm text-gray-600 mt-2">{{ $t('dayInLife.noCity') }}</p>
+              <p class="text-sm text-white/30 mt-2">{{ $t('dayInLife.noCity') }}</p>
             </div>
 
             <!-- Loading -->
@@ -144,15 +144,15 @@
                 :key="item.key"
                 class="flex items-center justify-between text-sm"
               >
-                <span class="text-gray-500 flex items-center gap-1.5">
+                <span class="text-white/40 flex items-center gap-1.5">
                   <span>{{ item.emoji }}</span>
                   <span>{{ $t(item.labelKey) }}</span>
-                  <span class="text-gray-700">×{{ item.qty }}</span>
+                  <span class="text-white/30">×{{ item.qty }}</span>
                 </span>
-                <span class="tabular-nums font-medium text-gray-300">{{ formatCost(item.subtotal) }}</span>
+                <span class="tabular-nums font-medium text-white/60">{{ formatCost(item.subtotal) }}</span>
               </div>
               <div class="flex items-center justify-between pt-2 border-t border-white/[0.06]">
-                <span class="text-xs font-bold uppercase tracking-widest text-gray-500">Total</span>
+                <span class="text-xs font-bold uppercase tracking-widest text-white/40">Total</span>
                 <span class="text-sm font-black text-amber-400 tabular-nums">{{ formatCost(dailyCost) }}</span>
               </div>
             </div>
@@ -160,17 +160,17 @@
 
           <!-- Comparison card (shows when city is selected) -->
           <div v-if="selectedCity && priceData && dailyCost > 0 && comparisonCity" class="bg-white/[0.03] border border-white/[0.06] rounded-2xl p-5">
-            <p class="text-xs font-bold uppercase tracking-widest text-gray-600 mb-3">vs.</p>
+            <p class="text-xs font-bold uppercase tracking-widest text-white/30 mb-3">vs.</p>
             <div class="flex items-center justify-between gap-3">
               <div>
                 <p class="text-sm font-semibold text-white">{{ comparisonCity.name }}</p>
-                <p class="text-xs text-gray-600">{{ comparisonCity.country }}</p>
+                <p class="text-xs text-white/40">{{ comparisonCity.country }}</p>
               </div>
               <div class="text-right">
                 <p class="text-lg font-black tabular-nums" :class="comparisonRatio > 1 ? 'text-emerald-400' : 'text-red-400'">
                   {{ comparisonRatio > 1 ? `${comparisonRatio.toFixed(1)}×` : `${(1/comparisonRatio).toFixed(1)}×` }}
                 </p>
-                <p class="text-[11px] text-gray-600">{{ comparisonRatio > 1 ? 'cheaper' : 'pricier' }}</p>
+                <p class="text-[11px] text-white/40">{{ comparisonRatio > 1 ? 'cheaper' : 'pricier' }}</p>
               </div>
             </div>
           </div>

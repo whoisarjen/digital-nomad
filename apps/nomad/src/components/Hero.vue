@@ -14,7 +14,7 @@
       <h1 v-if="cityName" class="text-4xl md:text-5xl font-bold drop-shadow-lg">
         {{ cityName }}
       </h1>
-      <p v-if="country" class="mt-1 text-lg text-gray-200 drop-shadow">
+      <p v-if="country" class="mt-1 text-lg text-white/80 drop-shadow">
         {{ country }}<span v-if="region"> · {{ region.replace(/([A-Z])/g, ' $1').trim() }}</span>
       </p>
       <UnsplashCredit :owner-name="image.ownerName" :owner-username="image.ownerUsername" />

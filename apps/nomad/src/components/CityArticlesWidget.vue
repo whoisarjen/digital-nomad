@@ -132,7 +132,7 @@
           </p>
           <div class="flex items-center gap-2 text-[11px] text-white/30 mt-auto pt-2 border-t border-white/[0.05]">
             <span class="font-medium text-primary-500">{{ $t('blog.minRead', { min: article.readingTimeMinutes }) }}</span>
-            <span class="text-gray-200">·</span>
+            <span class="text-white/20">·</span>
             <time v-if="article.publishedAt" :datetime="article.publishedAt">
               {{ formatDate(article.publishedAt) }}
             </time>

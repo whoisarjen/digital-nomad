@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col gap-2 w-full">
-    <label class="block text-sm font-medium text-gray-700">
+    <label class="block text-sm font-medium text-white/60">
       {{ $t('filters.prices') }}
     </label>
     <div class="flex items-center gap-2">
@@ -10,7 +10,7 @@
           v-model.number="minValue"
           :min="props.min"
           :max="props.max"
-          class="w-full rounded-lg border bg-white text-gray-700 border-gray-300 focus:outline-none text-sm p-2 pl-4 pr-5"
+          class="w-full rounded-lg border bg-white/[0.06] text-white border-white/[0.1] focus:outline-none focus:border-white/[0.2] text-sm p-2 pl-4 pr-5"
           @input="validateRange"
         />
         <span class="absolute right-2 top-1/2 transform -translate-y-1/2 text-sm">$</span>
@@ -22,7 +22,7 @@
           v-model.number="maxValue"
           :min="props.min"
           :max="props.max"
-          class="w-full rounded-lg border bg-white text-gray-700 border-gray-300 focus:outline-none text-sm p-2 pl-4 pr-5"
+          class="w-full rounded-lg border bg-white/[0.06] text-white border-white/[0.1] focus:outline-none focus:border-white/[0.2] text-sm p-2 pl-4 pr-5"
           @input="validateRange"
         />
         <span class="absolute right-2 top-1/2 transform -translate-y-1/2 text-sm">$</span>

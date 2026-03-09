@@ -16,15 +16,15 @@
             : 'left-1/2 -translate-x-1/2',
       ]"
     >
-      <div class="bg-gray-900 text-white rounded-lg px-3 py-1.5 shadow-lg">
+      <div class="bg-white/[0.12] backdrop-blur-md text-white rounded-lg px-3 py-1.5 shadow-lg border border-white/[0.1]">
         {{ message }}
         <!-- Arrow -->
         <div
           class="absolute border-[5px] border-transparent"
           :class="[
             position === 'bottom'
-              ? 'bottom-full -mb-px border-b-gray-900'
-              : 'top-full -mt-px border-t-gray-900',
+              ? 'bottom-full -mb-px border-b-white/[0.12]'
+              : 'top-full -mt-px border-t-white/[0.12]',
             align === 'left'
               ? 'left-3'
               : align === 'right'

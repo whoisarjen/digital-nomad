@@ -79,23 +79,23 @@
           <div class="flex flex-wrap justify-center gap-6 sm:gap-10 mt-2">
             <div class="flex flex-col items-center gap-0.5">
               <span class="text-2xl sm:text-3xl font-bold">500+</span>
-              <span class="text-xs text-gray-500">{{ $t('landing.statCitiesLabel') }}</span>
+              <span class="text-xs text-white/50">{{ $t('landing.statCitiesLabel') }}</span>
             </div>
             <div class="hidden sm:block w-px h-12 bg-white/10" />
             <div class="flex flex-col items-center gap-0.5">
               <span class="text-2xl sm:text-3xl font-bold">12+</span>
-              <span class="text-xs text-gray-500">{{ $t('landing.statDataLabel') }}</span>
+              <span class="text-xs text-white/50">{{ $t('landing.statDataLabel') }}</span>
             </div>
             <div class="hidden sm:block w-px h-12 bg-white/10" />
             <div class="flex flex-col items-center gap-0.5">
               <span class="text-2xl sm:text-3xl font-bold text-emerald-400">{{ $t('landing.free') }}</span>
-              <span class="text-xs text-gray-500">{{ $t('landing.statAccessLabel') }}</span>
+              <span class="text-xs text-white/50">{{ $t('landing.statAccessLabel') }}</span>
             </div>
           </div>
         </div>
 
         <!-- Scroll hint -->
-        <div class="absolute bottom-6 left-1/2 -translate-x-1/2 text-gray-600 animate-bounce">
+        <div class="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/30 animate-bounce">
           <LucideChevronDown :size="22" />
         </div>
       </section>
