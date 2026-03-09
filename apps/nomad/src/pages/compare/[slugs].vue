@@ -724,6 +724,15 @@
             </p>
           </section>
 
+          <!-- ─── Granular Price Comparison Table ─── -->
+          <ComparePriceTable
+            class="mb-10"
+            :city-a-name="data.cityA.name"
+            :city-b-name="data.cityB.name"
+            :city-a-prices="data.cityA"
+            :city-b-prices="data.cityB"
+          />
+
           <!-- ─── Data Attribution ─── -->
           <p class="text-xs text-gray-400 mb-8">
             {{ $t('compare.dataAttribution') }}
