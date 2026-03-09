@@ -1,6 +1,6 @@
-# IDEA-17: Nomad Season Community Ratings
+# IDEA-35: Nomad Season Community Ratings
 **Status:** NOT_STARTED
-**Priority:** 17/23
+**Priority:** 35/35
 **Complexity:** M
 
 ## What's Already Implemented

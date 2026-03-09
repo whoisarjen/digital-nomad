@@ -1,6 +1,6 @@
-# IDEA-18: User City Reviews
+# IDEA-36: User City Reviews
 **Status:** NOT_STARTED
-**Priority:** 18/23
+**Priority:** 36/36
 **Complexity:** M
 
 ## What's Already Implemented

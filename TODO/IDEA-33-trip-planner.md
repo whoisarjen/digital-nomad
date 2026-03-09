@@ -1,6 +1,6 @@
-# IDEA-15: Trip Planner (Extend Favorites)
+# IDEA-33: Trip Planner (Extend Favorites)
 **Status:** NOT_STARTED
-**Priority:** 15/23
+**Priority:** 33/33
 **Complexity:** XL
 
 ## What's Already Implemented

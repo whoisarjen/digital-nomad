@@ -1,6 +1,6 @@
-# IDEA-16: City Tips (User-Generated Content)
+# IDEA-34: City Tips (User-Generated Content)
 **Status:** NOT_STARTED
-**Priority:** 16/23
+**Priority:** 34/34
 **Complexity:** L
 
 ## What's Already Implemented

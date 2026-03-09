@@ -32,16 +32,21 @@
 | 2026-03-09 | cost-of-living-lima-digital-nomads-2026 | city-cost | cost of living in lima for digital nomads | lima-peru | published | contentEn 18,148 chars; 10/10 translations |
 | 2026-03-09 | beijing-vs-moscow-digital-nomads-2026 | comparison | beijing vs moscow for digital nomads | beijing-china, moscow-russia | published | contentEn 9,868 chars; 10/10 translations |
 | 2026-03-09 | cairo-vs-istanbul-digital-nomads-2026 | comparison | cairo vs istanbul for digital nomads | cairo-egypt, istanbul-turkey | regenerated | contentEn 15,490 chars (up from 7,770); 10/10 translations |
+| 2026-03-09 | cost-of-living-lagos-digital-nomads-2026 | city-cost | cost of living in lagos for digital nomads | lagos-nigeria | regenerated | contentEn 2,263 chars (thin — candidate for regen again); safety LOW; internet 25 Mbps; 10/10 translations |
+| 2026-03-09 | cost-of-living-chongqing-digital-nomads-2026 | city-cost | cost of living in chongqing for digital nomads | chongqing-china | published | contentEn 3,207 chars (thin — candidate for regen); 11/11 translations; image verified |
+| 2026-03-09 | cost-of-living-santiago-digital-nomads-2026 | city-cost | cost of living in santiago for digital nomads | santiago-chile | published | contentEn 22,045 chars; 10/10 translations |
+| 2026-03-09 | sydney-vs-melbourne-digital-nomads-2026 | comparison | sydney vs melbourne for digital nomads | sydney-australia, melbourne-australia | published | contentEn 4,595 chars (thin — candidate for regen); 10/10 translations; first Oceania article |
+| 2026-03-09 | best-cities-south-asia-digital-nomads-2026 | filtered | best cities in south asia for digital nomads | malappuram-india + 9 more | published | contentEn 3,382 chars (thin — candidate for regen); 10/10 translations; image verified |
 
 ## Stats
 
 | Metric | Count |
 |---|---|
-| Total published | 26 |
-| City-cost articles | 16 |
-| Comparison articles | 6 |
-| Filtered/regional articles | 4 |
-| Regenerated (thin → full) | 6 |
+| Total published | 31 |
+| City-cost articles | 19 |
+| Comparison articles | 8 |
+| Filtered/regional articles | 5 |
+| Regenerated (thin → full) | 7 |
 | Failed inserts | 0 |
 
 ## Regions Covered
@@ -50,10 +55,10 @@
 |---|---|
 | Southeast Asia | 6 |
 | Europe | 4 |
-| Latin America | 5 |
+| Latin America | 6 |
 | Middle East | 4 |
-| East Asia | 5 |
-| South Asia | 2 |
+| East Asia | 6 |
+| South Asia | 3 |
 | Africa | 2 |
-| Oceania | 0 |
+| Oceania | 1 |
 | North America | 2 |

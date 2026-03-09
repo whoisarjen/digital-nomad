@@ -1,6 +1,6 @@
-# IDEA-14: City Check-Ins ("I'm Here Now")
+# IDEA-32: City Check-Ins ("I'm Here Now")
 **Status:** NOT_STARTED
-**Priority:** 14/23
+**Priority:** 32/32
 **Complexity:** L
 
 ## What's Already Implemented

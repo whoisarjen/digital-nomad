@@ -1,6 +1,6 @@
-# IDEA-19: Public Nomad Profiles
+# IDEA-37: Public Nomad Profiles
 **Status:** NOT_STARTED
-**Priority:** 19/23
+**Priority:** 37/37
 **Complexity:** M
 
 ## What's Already Implemented

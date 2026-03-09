@@ -1,6 +1,6 @@
-# IDEA-12: Neighborhood Guides
+# IDEA-31: AI-Generated Neighborhood Guides (Claude writes EN+PL descriptions, seed script populates all cities at scale)
 **Status:** NOT_STARTED
-**Priority:** 12/23
+**Priority:** 31/31
 **Complexity:** XL
 
 ## What's Already Implemented
