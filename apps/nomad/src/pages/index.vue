@@ -573,7 +573,7 @@
       >
         <button
           @click="filtersOpen = true"
-          class="pointer-events-auto flex items-center gap-2 px-5 py-3 rounded-full text-white shadow-xl shadow-black/20 hover:bg-[#0d1c34] transition-colors cursor-pointer"
+          class="pointer-events-auto flex items-center gap-2 px-5 py-3 rounded-full text-white shadow-xl shadow-black/40 bg-[#0d1c34] border border-white/[0.12] hover:bg-[#112240] transition-colors cursor-pointer"
         >
           <LucideSlidersHorizontal :size="15" />
           <span class="text-sm font-medium">{{ $t('filters.title') }}</span>
