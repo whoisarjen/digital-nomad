@@ -94,8 +94,22 @@ useSchemaOrg([
 
 const iconCalendar = resolveComponent('LucideCalendarDays')
 const iconPiggyBank = resolveComponent('LucidePiggyBank')
+const iconSunrise = resolveComponent('LucideSunrise')
+const iconSparkles = resolveComponent('LucideSparkles')
 
 const tools = computed(() => [
+  {
+    route: 'quiz',
+    name: t('quiz.title'),
+    description: t('quiz.subtitle'),
+    badge: t('landing.new'),
+    icon: iconSparkles,
+    iconBgClass: 'bg-amber-500/15',
+    iconClass: 'text-amber-400',
+    glowClass: 'bg-amber-500/[0.04]',
+    badgeClass: 'bg-amber-500/20 text-amber-300',
+    ctaClass: 'text-amber-400',
+  },
   {
     route: 'tools-schengen-calculator',
     name: t('tools.schengenName'),
@@ -119,6 +133,18 @@ const tools = computed(() => [
     glowClass: 'bg-accent-500/[0.04]',
     badgeClass: 'bg-accent-500/20 text-accent-300',
     ctaClass: 'text-accent-400',
+  },
+  {
+    route: 'tools-day-in-the-life',
+    name: t('tools.dayInLifeName'),
+    description: t('tools.dayInLifeDesc'),
+    badge: t('tools.badgeNew'),
+    icon: iconSunrise,
+    iconBgClass: 'bg-amber-500/15',
+    iconClass: 'text-amber-400',
+    glowClass: 'bg-amber-500/[0.04]',
+    badgeClass: 'bg-amber-500/20 text-amber-300',
+    ctaClass: 'text-amber-400',
   },
 ])
 </script>

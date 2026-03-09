@@ -59,6 +59,12 @@
               {{ $t('schengen.toolsNav') }}
             </NuxtLink>
             <NuxtLink
+              :to="localePath('tools-day-in-the-life')"
+              class="text-sm text-white/50 hover:text-white/80 transition-colors"
+            >
+              {{ $t('tools.dayInLifeName') }}
+            </NuxtLink>
+            <NuxtLink
               :to="localePath('join')"
               class="text-sm text-white/50 hover:text-white/80 transition-colors"
             >
