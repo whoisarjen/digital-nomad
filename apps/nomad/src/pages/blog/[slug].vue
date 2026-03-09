@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-[#060E1B]">
+  <div class="min-h-screen">
     <!-- Loading -->
     <template v-if="!data || status !== 'success'">
       <section class="pt-24 pb-16 px-6">
@@ -9,7 +9,7 @@
           <div class="h-4 skeleton w-1/3" />
         </div>
       </section>
-      <div class="bg-gray-50 rounded-t-[2rem] -mt-2 relative z-10">
+      <div class="relative z-10">
         <div class="max-w-screen-md mx-auto px-6 py-12 flex flex-col gap-4">
           <div class="h-4 skeleton w-full" />
           <div class="h-4 skeleton w-full" />
@@ -76,7 +76,7 @@
       </section>
 
       <!-- Content zone -->
-      <div class="bg-gray-50 rounded-t-[2rem] -mt-2 relative z-10">
+      <div class="relative z-10">
         <article class="max-w-screen-md mx-auto px-6 py-12">
           <!-- Hero image -->
           <div v-if="data.featuredImageUrl" class="relative -mt-20 mb-10 rounded-2xl overflow-hidden shadow-xl aspect-[2/1] group/img">
@@ -92,13 +92,13 @@
           <div class="article-content" v-html="data.content" />
 
           <!-- FAQ -->
-          <div v-if="validFaqs.length" class="mt-12 pt-10 border-t border-gray-200">
+          <div v-if="validFaqs.length" class="mt-12 pt-10 border-t border-white/[0.1]">
             <ArticleFaq :faqs="validFaqs" />
           </div>
 
           <!-- Connected Cities -->
-          <div v-if="data.cities?.length" class="mt-12 pt-10 border-t border-gray-200">
-            <p class="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-5">
+          <div v-if="data.cities?.length" class="mt-12 pt-10 border-t border-white/[0.1]">
+            <p class="text-xs font-semibold uppercase tracking-widest text-white/40 mb-5">
               {{ $t('blog.exploreCities') }}
             </p>
 
@@ -134,10 +134,10 @@
           </div>
 
           <!-- Back to blog -->
-          <div class="mt-12 pt-8 border-t border-gray-200">
+          <div class="mt-12 pt-8 border-t border-white/[0.1]">
             <NuxtLink
               :to="localePath({ name: 'blog' })"
-              class="inline-flex items-center gap-2 text-sm font-medium text-gray-500 hover:text-primary-600 transition-colors"
+              class="inline-flex items-center gap-2 text-sm font-medium text-white/40 hover:text-primary-400 transition-colors"
             >
               <LucideArrowLeft :size="14" />
               {{ $t('blog.backToBlog') }}
@@ -180,7 +180,7 @@ const sortedCities = computed(() =>
 )
 
 const validFaqs = computed(() =>
-  (data.value?.faqs ?? []).filter(faq => faq.question),
+  (data.value?.faqs ?? []).filter(faq => faq.question && faq.answer),
 )
 
 useHead(() => {
@@ -252,25 +252,26 @@ const formatDate = (date: string) => {
 </script>
 
 <style scoped>
-.article-content :deep(h1) { font-size: 1.875rem; font-weight: 700; margin-top: 2.5rem; margin-bottom: 0.75rem; color: #111827; letter-spacing: -0.01em; }
-.article-content :deep(h2) { font-size: 1.5rem; font-weight: 700; margin-top: 2rem; margin-bottom: 0.75rem; color: #111827; letter-spacing: -0.01em; }
-.article-content :deep(h3) { font-size: 1.25rem; font-weight: 600; margin-top: 1.75rem; margin-bottom: 0.5rem; color: #111827; }
-.article-content :deep(p) { margin-bottom: 1.25rem; line-height: 1.8; color: #374151; font-size: 1.0625rem; }
+.article-content :deep(h1) { font-size: 1.875rem; font-weight: 700; margin-top: 2.5rem; margin-bottom: 0.75rem; color: #f9fafb; letter-spacing: -0.01em; }
+.article-content :deep(h2) { font-size: 1.5rem; font-weight: 700; margin-top: 2rem; margin-bottom: 0.75rem; color: #f9fafb; letter-spacing: -0.01em; }
+.article-content :deep(h3) { font-size: 1.25rem; font-weight: 600; margin-top: 1.75rem; margin-bottom: 0.5rem; color: #f3f4f6; }
+.article-content :deep(p) { margin-bottom: 1.25rem; line-height: 1.8; color: rgba(255,255,255,0.7); font-size: 1.0625rem; }
 .article-content :deep(ul),
-.article-content :deep(ol) { margin-bottom: 1.25rem; padding-left: 1.5rem; color: #374151; }
+.article-content :deep(ol) { margin-bottom: 1.25rem; padding-left: 1.5rem; color: rgba(255,255,255,0.7); }
 .article-content :deep(li) { margin-bottom: 0.375rem; line-height: 1.8; font-size: 1.0625rem; }
 .article-content :deep(ul) { list-style-type: disc; }
 .article-content :deep(ol) { list-style-type: decimal; }
 .article-content :deep(a) { color: #2A9D8F; text-decoration: underline; text-underline-offset: 2px; }
-.article-content :deep(a:hover) { color: #1E7D72; }
-.article-content :deep(blockquote) { border-left: 3px solid #2A9D8F; padding-left: 1.25rem; margin: 1.5rem 0; color: #6b7280; font-style: italic; background: #f9fafb; padding: 1rem 1.25rem; border-radius: 0 0.5rem 0.5rem 0; }
+.article-content :deep(a:hover) { color: #3BBDAF; }
+.article-content :deep(blockquote) { border-left: 3px solid #2A9D8F; margin: 1.5rem 0; color: rgba(255,255,255,0.5); font-style: italic; background: rgba(255,255,255,0.04); padding: 1rem 1.25rem; border-radius: 0 0.5rem 0.5rem 0; }
 .article-content :deep(img) { max-width: 100%; height: auto; border-radius: 0.75rem; margin: 1.5rem 0; }
-.article-content :deep(pre) { background: #0f172a; color: #e2e8f0; padding: 1.25rem; border-radius: 0.75rem; overflow-x: auto; margin-bottom: 1.25rem; font-size: 0.875rem; border: 1px solid #1e293b; }
-.article-content :deep(code) { background: #f1f5f9; padding: 0.125rem 0.375rem; border-radius: 0.25rem; font-size: 0.875rem; color: #0f172a; }
+.article-content :deep(pre) { background: rgba(0,0,0,0.4); color: #e2e8f0; padding: 1.25rem; border-radius: 0.75rem; overflow-x: auto; margin-bottom: 1.25rem; font-size: 0.875rem; border: 1px solid rgba(255,255,255,0.08); }
+.article-content :deep(code) { background: rgba(255,255,255,0.08); padding: 0.125rem 0.375rem; border-radius: 0.25rem; font-size: 0.875rem; color: #e2e8f0; }
 .article-content :deep(pre code) { background: transparent; padding: 0; color: inherit; }
-.article-content :deep(hr) { border: none; border-top: 1px solid #e5e7eb; margin: 2.5rem 0; }
-.article-content :deep(table) { width: 100%; border-collapse: collapse; margin-bottom: 1.25rem; border-radius: 0.5rem; overflow: hidden; }
+.article-content :deep(hr) { border: none; border-top: 1px solid rgba(255,255,255,0.1); margin: 2.5rem 0; }
+.article-content :deep(table) { width: 100%; border-collapse: collapse; margin-bottom: 1.25rem; border-radius: 0.5rem; overflow: hidden; background-color: #060E1B !important; }
+.article-content :deep(tr) { background-color: #060E1B !important; }
 .article-content :deep(th),
-.article-content :deep(td) { border: 1px solid #e5e7eb; padding: 0.625rem 0.875rem; text-align: left; font-size: 0.9375rem; }
-.article-content :deep(th) { background: #f8fafc; font-weight: 600; color: #111827; }
+.article-content :deep(td) { border: 1px solid rgba(255,255,255,0.1) !important; padding: 0.625rem 0.875rem; text-align: left; font-size: 0.9375rem; color: rgba(255,255,255,0.7) !important; background-color: #060E1B !important; }
+.article-content :deep(th) { background-color: rgba(255,255,255,0.06) !important; font-weight: 600; color: #f9fafb !important; }
 </style>

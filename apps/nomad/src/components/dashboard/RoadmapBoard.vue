@@ -1,23 +1,23 @@
 <template>
-  <div class="bg-white rounded-xl border border-gray-200 p-6">
+  <div class="bg-white/[0.04] rounded-xl border border-white/[0.1] p-6">
     <div class="flex items-center justify-between mb-5">
-      <h3 class="text-lg font-bold text-gray-900">{{ $t('dashboard.roadmap') }}</h3>
-      <span class="text-sm text-gray-400">
+      <h3 class="text-lg font-bold text-white">{{ $t('dashboard.roadmap') }}</h3>
+      <span class="text-sm text-white/40">
         {{ $t('dashboard.votesUsed', { used: votesUsed, total: 3 }) }}
       </span>
     </div>
 
     <!-- Loading skeleton -->
     <template v-if="status === 'pending'">
-      <div v-for="n in 4" :key="n" class="py-4 flex items-start justify-between gap-4" :class="{ 'border-t border-gray-100': n > 1 }">
+      <div v-for="n in 4" :key="n" class="py-4 flex items-start justify-between gap-4" :class="{ 'border-t border-white/[0.07]': n > 1 }">
         <div class="flex-1">
           <div class="flex items-center gap-2 mb-2">
-            <div class="h-4 w-32 bg-gray-100 rounded animate-pulse" />
-            <div class="h-5 w-16 bg-gray-100 rounded-full animate-pulse" />
+            <div class="h-4 w-32 skeleton rounded" />
+            <div class="h-5 w-16 skeleton rounded-full" />
           </div>
-          <div class="h-3 w-48 bg-gray-50 rounded animate-pulse" />
+          <div class="h-3 w-48 skeleton rounded" />
         </div>
-        <div class="h-14 w-14 bg-gray-50 rounded-lg animate-pulse" />
+        <div class="h-14 w-14 skeleton rounded-lg" />
       </div>
     </template>
 
@@ -26,7 +26,7 @@
       <div
         v-for="(feature, i) in sortedFeatures"
         :key="feature.id"
-        :class="{ 'border-t border-gray-100': i > 0 }"
+        :class="{ 'border-t border-white/[0.07]': i > 0 }"
       >
         <DashboardFeatureCard
           :feature="feature"
@@ -35,7 +35,7 @@
           @vote="handleVote"
         />
       </div>
-      <p v-if="!sortedFeatures.length" class="py-8 text-center text-sm text-gray-400">
+      <p v-if="!sortedFeatures.length" class="py-8 text-center text-sm text-white/40">
         No features yet
       </p>
     </template>

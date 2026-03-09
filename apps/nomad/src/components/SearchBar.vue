@@ -1,16 +1,16 @@
 <template>
   <div class="order-last sm:order-2 w-full pb-0">
     <div
-      class="bg-white rounded-lg px-4 py-2 flex items-center gap-2 group border border-gray-300"
+      class="bg-white/[0.06] rounded-lg px-4 py-2 flex items-center gap-2 group border border-white/[0.12] focus-within:border-white/25 transition-colors"
     >
       <input
         v-model="q"
-        class="w-full bg-white text-black border-0 focus:outline-none text-sm"
+        class="w-full bg-transparent text-white placeholder:text-white/30 border-0 focus:outline-none text-sm"
         :placeholder="typedPlaceholder"
       >
       <LucideX
         v-if="q"
-        class="text-gray-400 hover:text-gray-600 cursor-pointer flex-shrink-0"
+        class="text-white/30 hover:text-white/60 cursor-pointer flex-shrink-0"
         @click="q = ''"
       />
     </div>

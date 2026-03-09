@@ -1,7 +1,7 @@
 <template>
-  <div class="bg-gray-100 min-h-screen">
+  <div class="min-h-screen">
     <!-- Dark hero with inputs -->
-    <section class="relative bg-[#060E1B] text-white overflow-hidden">
+    <section class="relative text-white overflow-hidden">
       <div class="absolute inset-0 overflow-hidden pointer-events-none">
         <div class="absolute -top-1/3 -right-[15%] w-[50%] h-[50%] rounded-full bg-accent-500/[0.06] blur-[100px] animate-float" />
         <div class="absolute -bottom-[20%] -left-[10%] w-[40%] h-[40%] rounded-full bg-primary-500/[0.04] blur-[80px] animate-float-reverse" />
@@ -9,7 +9,7 @@
 
       <div class="relative z-10 max-w-4xl mx-auto px-6 pt-24 pb-10 text-center">
         <!-- Breadcrumb pill -->
-        <div class="inline-flex items-center gap-2 bg-white/[0.06] border border-white/[0.08] rounded-full px-4 py-1.5 text-sm text-gray-400 mb-6">
+        <div class="inline-flex items-center gap-2 bg-white/[0.06] border border-white/[0.08] rounded-full px-4 py-1.5 text-sm text-white/40 mb-6">
           <NuxtLink :to="localePath('tools')" class="hover:text-white transition-colors">{{ $t('tools.badge') }}</NuxtLink>
           <span class="text-white/20">/</span>
           <LucidePiggyBank :size="14" class="text-accent-400" />
@@ -19,7 +19,7 @@
         <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight leading-tight mb-4">
           {{ $t('runway.title') }}
         </h1>
-        <p class="text-base md:text-lg text-gray-400 max-w-2xl mx-auto leading-relaxed mb-10">
+        <p class="text-base md:text-lg text-white/40 max-w-2xl mx-auto leading-relaxed mb-10">
           {{ $t('runway.subtitle') }}
         </p>
 
@@ -28,11 +28,11 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-6">
             <!-- Savings -->
             <div>
-              <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">
+              <label class="block text-xs font-semibold uppercase tracking-wider text-white/40 mb-2">
                 {{ $t('runway.savings') }}
               </label>
               <div class="relative">
-                <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 font-medium">$</span>
+                <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-white/40 font-medium">$</span>
                 <input
                   v-model.number="rawSavings"
                   type="number"
@@ -46,12 +46,12 @@
 
             <!-- Monthly income -->
             <div>
-              <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">
+              <label class="block text-xs font-semibold uppercase tracking-wider text-white/40 mb-2">
                 {{ $t('runway.income') }}
-                <span class="normal-case text-gray-500 font-normal ml-1">({{ $t('runway.optional') }})</span>
+                <span class="normal-case text-white/50 font-normal ml-1">({{ $t('runway.optional') }})</span>
               </label>
               <div class="relative">
-                <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 font-medium">$</span>
+                <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-white/40 font-medium">$</span>
                 <input
                   v-model.number="rawIncome"
                   type="number"
@@ -76,7 +76,7 @@
                 class="py-2 rounded-lg text-sm font-semibold transition-all duration-200"
                 :class="activeTier === tier.key
                   ? 'bg-accent-500 text-white shadow-sm'
-                  : 'text-gray-400 hover:text-gray-200'"
+                  : 'text-white/40 hover:text-white/80'"
                 @click="activeTier = tier.key"
               >
                 {{ $t(tier.label) }}
@@ -91,44 +91,44 @@
     <section class="max-w-4xl mx-auto px-6 -mt-2 pb-20">
 
       <!-- Empty state -->
-      <div v-if="!rawSavings" class="bg-white rounded-2xl border border-gray-200 shadow-sm p-12 text-center">
-        <div class="w-16 h-16 bg-accent-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
+      <div v-if="!rawSavings" class="bg-white/[0.04] rounded-2xl border border-white/[0.1] p-12 text-center">
+        <div class="w-16 h-16 bg-accent-500/[0.15] rounded-2xl flex items-center justify-center mx-auto mb-4">
           <LucidePiggyBank :size="28" class="text-accent-500" />
         </div>
-        <h2 class="text-lg font-bold text-gray-900 mb-2">{{ $t('runway.emptyTitle') }}</h2>
-        <p class="text-sm text-gray-500 max-w-sm mx-auto">{{ $t('runway.emptyDesc') }}</p>
+        <h2 class="text-lg font-bold text-white mb-2">{{ $t('runway.emptyTitle') }}</h2>
+        <p class="text-sm text-white/50 max-w-sm mx-auto">{{ $t('runway.emptyDesc') }}</p>
       </div>
 
       <!-- Results -->
       <template v-else-if="savings">
         <!-- Summary bar -->
-        <div class="bg-white rounded-2xl border border-gray-200 shadow-sm px-6 py-4 mb-4 flex flex-wrap items-center gap-4 justify-between">
+        <div class="bg-white/[0.04] rounded-2xl border border-white/[0.1] px-6 py-4 mb-4 flex flex-wrap items-center gap-4 justify-between">
           <div class="flex items-center gap-6">
             <div>
-              <div class="text-xs text-gray-400 uppercase tracking-wider">{{ $t('runway.savings') }}</div>
-              <div class="text-lg font-bold tabular-nums text-gray-900">${{ formatNum(savings) }}</div>
+              <div class="text-xs text-white/40 uppercase tracking-wider">{{ $t('runway.savings') }}</div>
+              <div class="text-lg font-bold tabular-nums text-white">${{ formatNum(savings) }}</div>
             </div>
             <template v-if="income">
-              <div class="text-gray-200">|</div>
+              <div class="text-white/20">|</div>
               <div>
-                <div class="text-xs text-gray-400 uppercase tracking-wider">{{ $t('runway.income') }}/mo</div>
-                <div class="text-lg font-bold tabular-nums text-gray-900">${{ formatNum(income) }}</div>
+                <div class="text-xs text-white/40 uppercase tracking-wider">{{ $t('runway.income') }}/mo</div>
+                <div class="text-lg font-bold tabular-nums text-white">${{ formatNum(income) }}</div>
               </div>
             </template>
-            <div class="text-gray-200">|</div>
+            <div class="text-white/20">|</div>
             <div>
-              <div class="text-xs text-gray-400 uppercase tracking-wider">{{ $t('runway.lifestyle') }}</div>
-              <div class="text-lg font-bold text-gray-900">{{ $t(tiers.find(t => t.key === activeTier)?.label ?? '') }}</div>
+              <div class="text-xs text-white/40 uppercase tracking-wider">{{ $t('runway.lifestyle') }}</div>
+              <div class="text-lg font-bold text-white">{{ $t(tiers.find(t => t.key === activeTier)?.label ?? '') }}</div>
             </div>
           </div>
-          <div class="text-xs text-gray-400">
+          <div class="text-xs text-white/40">
             {{ $t('runway.resultsCount', { count: visibleCities.length, total: rankedCities.length }) }}
           </div>
         </div>
 
         <!-- Loading skeleton -->
         <div v-if="isLoading" class="flex flex-col gap-2">
-          <div v-for="i in 8" :key="i" class="bg-white rounded-xl border border-gray-200 h-16 animate-pulse" />
+          <div v-for="i in 8" :key="i" class="bg-white/[0.04] rounded-xl border border-white/[0.1] h-16 animate-pulse" />
         </div>
 
         <!-- City rows -->
@@ -137,22 +137,22 @@
             v-for="(city, i) in visibleCities"
             :key="city.slug"
             :to="localePath({ name: 'cities-slug', params: { slug: city.slug } })"
-            class="group bg-white rounded-xl border border-gray-200 hover:border-accent-300 hover:shadow-sm transition-all px-5 py-4 flex items-center gap-4"
+            class="group bg-white/[0.04] rounded-xl border border-white/[0.1] hover:border-accent-400/40 transition-all px-5 py-4 flex items-center gap-4"
           >
             <!-- Rank -->
-            <span class="w-8 flex-shrink-0 text-center text-sm font-bold tabular-nums text-gray-300 group-hover:text-accent-500 transition-colors">
+            <span class="w-8 flex-shrink-0 text-center text-sm font-bold tabular-nums text-white/30 group-hover:text-accent-500 transition-colors">
               {{ i + 1 }}
             </span>
 
             <!-- City info -->
             <div class="flex-1 min-w-0">
               <div class="flex items-baseline gap-2">
-                <span class="font-bold text-gray-900 group-hover:text-accent-600 transition-colors truncate">{{ city.name }}</span>
-                <span class="text-xs text-gray-400 flex-shrink-0">{{ city.country }}</span>
+                <span class="font-bold text-white group-hover:text-accent-400 transition-colors truncate">{{ city.name }}</span>
+                <span class="text-xs text-white/40 flex-shrink-0">{{ city.country }}</span>
               </div>
               <!-- Runway bar -->
               <div class="mt-2 flex items-center gap-3">
-                <div class="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                <div class="flex-1 h-1.5 bg-white/[0.08] rounded-full overflow-hidden">
                   <div
                     v-if="!city.isIndefinite"
                     class="h-full rounded-full transition-all duration-500"
@@ -169,22 +169,22 @@
 
             <!-- Cost/mo -->
             <div class="flex-shrink-0 text-right">
-              <div class="text-xs text-gray-400">{{ $t('runway.costPerMonth') }}</div>
-              <div class="text-sm font-semibold text-gray-700 tabular-nums">${{ formatNum(city.cost) }}/mo</div>
+              <div class="text-xs text-white/40">{{ $t('runway.costPerMonth') }}</div>
+              <div class="text-sm font-semibold text-white/80 tabular-nums">${{ formatNum(city.cost) }}/mo</div>
             </div>
 
             <!-- Runway badge -->
             <div class="flex-shrink-0 text-right min-w-[90px]">
               <span
                 class="inline-flex items-center gap-1 rounded-full px-3 py-1 text-sm font-bold tabular-nums"
-                :class="city.isIndefinite ? 'bg-emerald-50 text-emerald-700' : runwayBadgeClass(city.runway)"
+                :class="city.isIndefinite ? 'bg-emerald-500/[0.15] text-emerald-400' : runwayBadgeClass(city.runway)"
               >
                 <LucideInfinity v-if="city.isIndefinite" :size="14" />
                 <template v-else>{{ city.runway.toFixed(1) }} {{ $t('runway.months') }}</template>
               </span>
             </div>
 
-            <LucideChevronRight :size="16" class="flex-shrink-0 text-gray-300 group-hover:text-accent-400 transition-colors" />
+            <LucideChevronRight :size="16" class="flex-shrink-0 text-white/30 group-hover:text-accent-400 transition-colors" />
           </NuxtLink>
         </div>
 
@@ -192,7 +192,7 @@
         <div v-if="rankedCities.length > visibleCount" class="text-center mt-6">
           <button
             @click="visibleCount += 50"
-            class="inline-flex items-center gap-2 bg-white border border-gray-200 hover:border-accent-300 text-gray-700 hover:text-accent-600 font-semibold text-sm px-6 py-3 rounded-xl transition-all shadow-sm hover:shadow"
+            class="inline-flex items-center gap-2 bg-white/[0.04] border border-white/[0.1] hover:border-accent-400/40 text-white/80 hover:text-accent-400 font-semibold text-sm px-6 py-3 rounded-xl transition-all"
           >
             <LucideChevronDown :size="16" />
             {{ $t('runway.showMore', { count: Math.min(50, rankedCities.length - visibleCount) }) }}
@@ -360,10 +360,10 @@ function runwayBarClass(runway: number): string {
 }
 
 function runwayBadgeClass(runway: number): string {
-  if (runway >= 36) return 'bg-emerald-50 text-emerald-700'
-  if (runway >= 18) return 'bg-primary-50 text-primary-700'
-  if (runway >= 6) return 'bg-amber-50 text-amber-700'
-  return 'bg-red-50 text-red-600'
+  if (runway >= 36) return 'bg-emerald-500/[0.15] text-emerald-400'
+  if (runway >= 18) return 'bg-primary-500/[0.15] text-primary-400'
+  if (runway >= 6) return 'bg-amber-500/[0.15] text-amber-400'
+  return 'bg-red-500/[0.15] text-red-400'
 }
 
 // ─── SEO ───

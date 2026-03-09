@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col gap-2 w-full">
-    <label class="block text-sm font-medium text-gray-700">
+    <label class="block text-sm font-medium text-white/60">
       {{ $t('filters.temperatures') }}
     </label>
     <div class="flex items-center gap-2">
@@ -10,19 +10,19 @@
           v-model.number="minValue"
           :min="-50"
           :max="50"
-          class="w-full p-2 pl-4 pr-10 rounded-lg border bg-white text-gray-700 border-gray-300 focus:outline-none text-sm"
+          class="w-full p-2 pl-4 pr-10 rounded-lg border bg-white/[0.06] text-white/70 border-white/[0.1] focus:outline-none focus:border-white/25 text-sm placeholder:text-white/30"
           @input="validateRange"
         />
         <span class="absolute right-2 top-1/2 transform -translate-y-1/2 text-sm">°C</span>
       </div>
-      <span>{{ $t('filters.to') }}</span>
+      <span class="text-white/40">{{ $t('filters.to') }}</span>
       <div class="relative w-full">
         <input
           type="number"
           v-model.number="maxValue"
           :min="-50"
           :max="50"
-          class="w-full p-2 pl-4 pr-10 rounded-lg border bg-white text-gray-700 border-gray-300 focus:outline-none text-sm"
+          class="w-full p-2 pl-4 pr-10 rounded-lg border bg-white/[0.06] text-white/70 border-white/[0.1] focus:outline-none focus:border-white/25 text-sm placeholder:text-white/30"
           @input="validateRange"
         />
         <span class="absolute right-2 top-1/2 transform -translate-y-1/2 text-sm">°C</span>

@@ -1,11 +1,11 @@
 <template>
-  <section v-if="hasAnyData" class="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+  <section v-if="hasAnyData" class="bg-white/[0.04] rounded-2xl border border-white/[0.07] overflow-hidden">
     <!-- Header -->
     <div class="px-6 pt-6 pb-4 flex items-center gap-2.5">
-      <div class="size-8 rounded-xl bg-amber-50 flex items-center justify-center shrink-0">
-        <LucideReceiptText :size="16" class="text-amber-600" />
+      <div class="size-8 rounded-xl bg-amber-500/10 flex items-center justify-center shrink-0">
+        <LucideReceiptText :size="16" class="text-amber-400" />
       </div>
-      <h2 class="text-base font-bold text-gray-900">{{ $t('costBreakdown.title') }}</h2>
+      <h2 class="text-base font-bold text-white">{{ $t('costBreakdown.title') }}</h2>
     </div>
 
     <!-- Category nav -->
@@ -16,33 +16,33 @@
           :key="cat.key"
           class="flex items-center gap-1.5 shrink-0 rounded-full px-3 py-1.5 text-xs font-semibold transition-colors whitespace-nowrap"
           :class="activeCategory === cat.key
-            ? 'bg-gray-900 text-white'
-            : 'bg-gray-100 text-gray-500 hover:bg-gray-200 hover:text-gray-700'"
+            ? 'bg-white/[0.15] text-white'
+            : 'bg-white/[0.06] text-white/40 hover:bg-white/[0.1] hover:text-white/70'"
           @click="activeCategory = cat.key"
         >
           <span>{{ cat.icon }}</span>
           {{ $t(cat.labelKey) }}
           <span
             class="text-[10px] rounded-full px-1.5 py-0.5 tabular-nums"
-            :class="activeCategory === cat.key ? 'bg-white/20 text-white' : 'bg-gray-200 text-gray-400'"
+            :class="activeCategory === cat.key ? 'bg-white/20 text-white' : 'bg-white/[0.08] text-white/30'"
           >{{ cat.count }}</span>
         </button>
       </div>
     </div>
 
     <!-- Items list -->
-    <div class="divide-y divide-gray-50 border-t border-gray-50">
+    <div class="divide-y divide-white/[0.05] border-t border-white/[0.05]">
       <div
         v-for="item in activeItems"
         :key="item.key"
         class="flex items-center justify-between px-6 py-3"
       >
-        <span class="text-sm text-gray-500">{{ $t(item.labelKey) }}</span>
+        <span class="text-sm text-white/40">{{ $t(item.labelKey) }}</span>
         <span
           v-if="item.value !== null"
-          class="text-sm font-semibold text-gray-800 tabular-nums"
+          class="text-sm font-semibold text-white/80 tabular-nums"
         >{{ formatCost(item.value) }}</span>
-        <span v-else class="text-sm text-gray-300">—</span>
+        <span v-else class="text-sm text-white/20">—</span>
       </div>
     </div>
 

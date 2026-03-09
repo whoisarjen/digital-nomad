@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-[#060E1B]">
+  <div class="min-h-screen">
     <!-- ─── Loading Skeleton ─── -->
     <template v-if="!data || status !== 'success'">
       <!-- Dark header skeleton -->
@@ -25,7 +25,7 @@
       </section>
 
       <!-- Light content skeleton -->
-      <div class="bg-gray-50 rounded-t-[2rem] -mt-2 relative z-10">
+      <div class="relative z-10">
         <div class="max-w-screen-xl mx-auto px-6 py-12">
 
           <!-- Side-by-side hero images (aspect-16/9, overlaps dark zone) -->
@@ -36,7 +36,7 @@
 
           <!-- 6 metric cards: icon label + two city values -->
           <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 mb-10">
-            <div v-for="i in 6" :key="i" class="bg-white rounded-2xl p-4 border border-gray-100">
+            <div v-for="i in 6" :key="i" class="bg-white/[0.04] border border-white/[0.07] rounded-2xl p-4">
               <div class="flex items-center gap-2 mb-3">
                 <div class="size-7 skeleton rounded-lg" />
                 <div class="h-2.5 skeleton w-14 rounded" />
@@ -55,7 +55,7 @@
           </div>
 
           <!-- Auto-generated content (intro + cost + internet + safety + weather sections) -->
-          <div class="bg-white rounded-2xl border border-gray-100 p-6 md:p-8 mb-10">
+          <div class="bg-white/[0.04] border border-white/[0.07] rounded-2xl p-6 md:p-8 mb-10">
             <div class="space-y-2 mb-6">
               <div class="h-4 skeleton w-full rounded" />
               <div class="h-4 skeleton w-full rounded" />
@@ -99,12 +99,12 @@
 
           <!-- 4 detailed comparison tables (Cost, Internet, Environment, Quality) -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-10">
-            <div v-for="i in 4" :key="i" class="bg-white rounded-2xl border border-gray-100 p-6">
+            <div v-for="i in 4" :key="i" class="bg-white/[0.04] border border-white/[0.07] rounded-2xl p-6">
               <div class="flex items-center gap-2.5 mb-5">
                 <div class="size-8 skeleton rounded-xl" />
                 <div class="h-4 skeleton w-36 rounded" />
               </div>
-              <div class="flex justify-between items-center pb-2 mb-1 border-b border-gray-100">
+              <div class="flex justify-between items-center pb-2 mb-1 border-b border-white/[0.07]">
                 <div class="w-20" />
                 <div class="h-3 skeleton flex-1 mx-2 rounded" />
                 <div class="h-3 skeleton flex-1 rounded" />
@@ -112,7 +112,7 @@
               <div
                 v-for="j in (i % 2 === 0 ? 2 : 4)"
                 :key="j"
-                class="flex justify-between items-center py-2.5 border-b border-gray-50 last:border-0"
+                class="flex justify-between items-center py-2.5 border-b border-white/[0.04] last:border-0"
               >
                 <div class="h-3.5 skeleton w-20 rounded" />
                 <div class="h-3.5 skeleton flex-1 mx-2 rounded" />
@@ -122,7 +122,7 @@
           </div>
 
           <!-- Monthly weather comparison (12 rows) -->
-          <div class="bg-white rounded-2xl border border-gray-100 p-6 mb-10">
+          <div class="bg-white/[0.04] border border-white/[0.07] rounded-2xl p-6 mb-10">
             <div class="flex items-center gap-2.5 mb-5">
               <div class="size-8 skeleton rounded-xl" />
               <div class="h-4 skeleton w-44 rounded" />
@@ -143,7 +143,7 @@
 
           <!-- "Who should choose" (2 cards with bullet lists) -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-10">
-            <div v-for="i in 2" :key="i" class="bg-white rounded-2xl border border-gray-100 p-6">
+            <div v-for="i in 2" :key="i" class="bg-white/[0.04] border border-white/[0.07] rounded-2xl p-6">
               <div class="h-5 skeleton w-3/4 rounded mb-4" />
               <div class="space-y-3">
                 <div v-for="j in 4" :key="j" class="flex items-start gap-2.5">
@@ -155,7 +155,7 @@
           </div>
 
           <!-- Overall verdict -->
-          <div class="bg-white rounded-2xl border border-gray-100 p-6 md:p-8 mb-10">
+          <div class="bg-white/[0.04] border border-white/[0.07] rounded-2xl p-6 md:p-8 mb-10">
             <div class="flex items-center gap-2.5 mb-3">
               <div class="size-8 skeleton rounded-xl" />
               <div class="h-4 skeleton w-36 rounded" />
@@ -243,7 +243,7 @@
       </section>
 
       <!-- ─── Light Content Zone ─── -->
-      <div class="bg-gray-50 rounded-t-[2rem] -mt-2 relative z-10">
+      <div class="relative z-10">
         <div class="max-w-screen-xl mx-auto px-6 py-12">
 
           <!-- ─── Side-by-side Hero Images ─── -->
@@ -283,155 +283,155 @@
           <!-- ─── Key Metrics Comparison Strip ─── -->
           <section class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 mb-10">
             <!-- Nomad Cost -->
-            <div class="bg-white rounded-2xl p-4 border border-gray-100">
+            <div class="bg-white/[0.04] border border-white/[0.07] rounded-2xl p-4">
               <div class="flex items-center gap-2 mb-3">
                 <div class="size-7 rounded-lg bg-emerald-50 flex items-center justify-center">
                   <LucideWallet :size="14" class="text-emerald-600" />
                 </div>
-                <span class="text-[11px] font-medium text-gray-400 uppercase tracking-wide">{{ $t('city.nomadCost') }}</span>
+                <span class="text-[11px] font-medium text-white/40 uppercase tracking-wide">{{ $t('city.nomadCost') }}</span>
               </div>
               <div class="flex items-end justify-between gap-1">
                 <div class="text-center flex-1">
-                  <p class="text-lg font-bold tabular-nums" :class="costWinner === 'cityA' ? 'text-emerald-600' : 'text-gray-400'">{{ formatCost(Number(data.cityA.costForNomadInUsd)) }}</p>
-                  <p class="text-[10px] text-gray-400 mt-0.5 truncate">{{ data.cityA.name }}</p>
+                  <p class="text-lg font-bold tabular-nums" :class="costWinner === 'cityA' ? 'text-emerald-600' : 'text-white/40'">{{ formatCost(Number(data.cityA.costForNomadInUsd)) }}</p>
+                  <p class="text-[10px] text-white/40 mt-0.5 truncate">{{ data.cityA.name }}</p>
                 </div>
                 <div class="text-center flex-1">
-                  <p class="text-lg font-bold tabular-nums" :class="costWinner === 'cityB' ? 'text-emerald-600' : 'text-gray-400'">{{ formatCost(Number(data.cityB.costForNomadInUsd)) }}</p>
-                  <p class="text-[10px] text-gray-400 mt-0.5 truncate">{{ data.cityB.name }}</p>
+                  <p class="text-lg font-bold tabular-nums" :class="costWinner === 'cityB' ? 'text-emerald-600' : 'text-white/40'">{{ formatCost(Number(data.cityB.costForNomadInUsd)) }}</p>
+                  <p class="text-[10px] text-white/40 mt-0.5 truncate">{{ data.cityB.name }}</p>
                 </div>
               </div>
             </div>
 
             <!-- Internet Speed -->
-            <div class="bg-white rounded-2xl p-4 border border-gray-100">
+            <div class="bg-white/[0.04] border border-white/[0.07] rounded-2xl p-4">
               <div class="flex items-center gap-2 mb-3">
                 <div class="size-7 rounded-lg bg-cyan-50 flex items-center justify-center">
-                  <LucideWifi :size="14" class="text-cyan-600" />
+                  <LucideWifi :size="14" class="text-cyan-400" />
                 </div>
-                <span class="text-[11px] font-medium text-gray-400 uppercase tracking-wide">{{ $t('city.internet') }}</span>
+                <span class="text-[11px] font-medium text-white/40 uppercase tracking-wide">{{ $t('city.internet') }}</span>
               </div>
               <div class="flex items-end justify-between gap-1">
                 <div class="text-center flex-1">
-                  <p class="text-lg font-bold tabular-nums" :class="speedWinner === 'cityA' ? 'text-cyan-600' : 'text-gray-400'">{{ data.cityA.internetSpeedCity }}</p>
-                  <p class="text-[10px] text-gray-400 mt-0.5">Mbps</p>
+                  <p class="text-lg font-bold tabular-nums" :class="speedWinner === 'cityA' ? 'text-cyan-400' : 'text-white/40'">{{ data.cityA.internetSpeedCity }}</p>
+                  <p class="text-[10px] text-white/40 mt-0.5">Mbps</p>
                 </div>
                 <div class="text-center flex-1">
-                  <p class="text-lg font-bold tabular-nums" :class="speedWinner === 'cityB' ? 'text-cyan-600' : 'text-gray-400'">{{ data.cityB.internetSpeedCity }}</p>
-                  <p class="text-[10px] text-gray-400 mt-0.5">Mbps</p>
+                  <p class="text-lg font-bold tabular-nums" :class="speedWinner === 'cityB' ? 'text-cyan-400' : 'text-white/40'">{{ data.cityB.internetSpeedCity }}</p>
+                  <p class="text-[10px] text-white/40 mt-0.5">Mbps</p>
                 </div>
               </div>
             </div>
 
             <!-- Safety -->
-            <div class="bg-white rounded-2xl p-4 border border-gray-100">
+            <div class="bg-white/[0.04] border border-white/[0.07] rounded-2xl p-4">
               <div class="flex items-center gap-2 mb-3">
                 <div class="size-7 rounded-lg bg-blue-50 flex items-center justify-center">
                   <LucideShieldCheck :size="14" class="text-blue-600" />
                 </div>
-                <span class="text-[11px] font-medium text-gray-400 uppercase tracking-wide">{{ $t('city.safety') }}</span>
+                <span class="text-[11px] font-medium text-white/40 uppercase tracking-wide">{{ $t('city.safety') }}</span>
               </div>
               <div class="flex items-end justify-between gap-1">
                 <div class="text-center flex-1">
                   <div class="flex items-center justify-center gap-1.5">
                     <span class="size-2 rounded-full" :class="getLevelDotClass(data.cityA.safety)" />
-                    <p class="text-sm font-bold capitalize" :class="safetyWinner === 'cityA' ? getLevelTextClass(data.cityA.safety) : 'text-gray-400'">{{ formatLevel(data.cityA.safety) }}</p>
+                    <p class="text-sm font-bold capitalize" :class="safetyWinner === 'cityA' ? getLevelTextClass(data.cityA.safety) : 'text-white/40'">{{ formatLevel(data.cityA.safety) }}</p>
                   </div>
-                  <p class="text-[10px] text-gray-400 mt-1 truncate">{{ data.cityA.name }}</p>
+                  <p class="text-[10px] text-white/40 mt-1 truncate">{{ data.cityA.name }}</p>
                 </div>
                 <div class="text-center flex-1">
                   <div class="flex items-center justify-center gap-1.5">
                     <span class="size-2 rounded-full" :class="getLevelDotClass(data.cityB.safety)" />
-                    <p class="text-sm font-bold capitalize" :class="safetyWinner === 'cityB' ? getLevelTextClass(data.cityB.safety) : 'text-gray-400'">{{ formatLevel(data.cityB.safety) }}</p>
+                    <p class="text-sm font-bold capitalize" :class="safetyWinner === 'cityB' ? getLevelTextClass(data.cityB.safety) : 'text-white/40'">{{ formatLevel(data.cityB.safety) }}</p>
                   </div>
-                  <p class="text-[10px] text-gray-400 mt-1 truncate">{{ data.cityB.name }}</p>
+                  <p class="text-[10px] text-white/40 mt-1 truncate">{{ data.cityB.name }}</p>
                 </div>
               </div>
             </div>
 
             <!-- Air Quality -->
-            <div class="bg-white rounded-2xl p-4 border border-gray-100">
+            <div class="bg-white/[0.04] border border-white/[0.07] rounded-2xl p-4">
               <div class="flex items-center gap-2 mb-3">
                 <div class="size-7 rounded-lg bg-green-50 flex items-center justify-center">
                   <LucideLeaf :size="14" class="text-green-600" />
                 </div>
-                <span class="text-[11px] font-medium text-gray-400 uppercase tracking-wide">{{ $t('city.airQuality') }}</span>
+                <span class="text-[11px] font-medium text-white/40 uppercase tracking-wide">{{ $t('city.airQuality') }}</span>
               </div>
               <div class="flex items-end justify-between gap-1">
                 <div class="text-center flex-1">
-                  <p class="text-lg font-bold tabular-nums" :class="airWinner === 'cityA' ? getAirQualityClass(data.cityA.airQualityScore) : 'text-gray-400'">{{ data.cityA.airQualityScore }}<span class="text-xs font-normal text-gray-300">/5</span></p>
-                  <p class="text-[10px] text-gray-400 mt-0.5 truncate">{{ data.cityA.name }}</p>
+                  <p class="text-lg font-bold tabular-nums" :class="airWinner === 'cityA' ? getAirQualityClass(data.cityA.airQualityScore) : 'text-white/40'">{{ data.cityA.airQualityScore }}<span class="text-xs font-normal text-white/30">/5</span></p>
+                  <p class="text-[10px] text-white/40 mt-0.5 truncate">{{ data.cityA.name }}</p>
                 </div>
                 <div class="text-center flex-1">
-                  <p class="text-lg font-bold tabular-nums" :class="airWinner === 'cityB' ? getAirQualityClass(data.cityB.airQualityScore) : 'text-gray-400'">{{ data.cityB.airQualityScore }}<span class="text-xs font-normal text-gray-300">/5</span></p>
-                  <p class="text-[10px] text-gray-400 mt-0.5 truncate">{{ data.cityB.name }}</p>
+                  <p class="text-lg font-bold tabular-nums" :class="airWinner === 'cityB' ? getAirQualityClass(data.cityB.airQualityScore) : 'text-white/40'">{{ data.cityB.airQualityScore }}<span class="text-xs font-normal text-white/30">/5</span></p>
+                  <p class="text-[10px] text-white/40 mt-0.5 truncate">{{ data.cityB.name }}</p>
                 </div>
               </div>
             </div>
 
             <!-- Healthcare -->
-            <div class="bg-white rounded-2xl p-4 border border-gray-100">
+            <div class="bg-white/[0.04] border border-white/[0.07] rounded-2xl p-4">
               <div class="flex items-center gap-2 mb-3">
                 <div class="size-7 rounded-lg bg-rose-50 flex items-center justify-center">
                   <LucideHeart :size="14" class="text-rose-500" />
                 </div>
-                <span class="text-[11px] font-medium text-gray-400 uppercase tracking-wide">{{ $t('city.healthcare') }}</span>
+                <span class="text-[11px] font-medium text-white/40 uppercase tracking-wide">{{ $t('city.healthcare') }}</span>
               </div>
               <div class="flex items-end justify-between gap-1">
                 <div class="text-center flex-1">
                   <div class="flex items-center justify-center gap-1.5">
                     <span class="size-2 rounded-full" :class="getLevelDotClass(data.cityA.healthCare)" />
-                    <p class="text-sm font-bold capitalize" :class="healthWinner === 'cityA' ? getLevelTextClass(data.cityA.healthCare) : 'text-gray-400'">{{ formatLevel(data.cityA.healthCare) }}</p>
+                    <p class="text-sm font-bold capitalize" :class="healthWinner === 'cityA' ? getLevelTextClass(data.cityA.healthCare) : 'text-white/40'">{{ formatLevel(data.cityA.healthCare) }}</p>
                   </div>
-                  <p class="text-[10px] text-gray-400 mt-1 truncate">{{ data.cityA.name }}</p>
+                  <p class="text-[10px] text-white/40 mt-1 truncate">{{ data.cityA.name }}</p>
                 </div>
                 <div class="text-center flex-1">
                   <div class="flex items-center justify-center gap-1.5">
                     <span class="size-2 rounded-full" :class="getLevelDotClass(data.cityB.healthCare)" />
-                    <p class="text-sm font-bold capitalize" :class="healthWinner === 'cityB' ? getLevelTextClass(data.cityB.healthCare) : 'text-gray-400'">{{ formatLevel(data.cityB.healthCare) }}</p>
+                    <p class="text-sm font-bold capitalize" :class="healthWinner === 'cityB' ? getLevelTextClass(data.cityB.healthCare) : 'text-white/40'">{{ formatLevel(data.cityB.healthCare) }}</p>
                   </div>
-                  <p class="text-[10px] text-gray-400 mt-1 truncate">{{ data.cityB.name }}</p>
+                  <p class="text-[10px] text-white/40 mt-1 truncate">{{ data.cityB.name }}</p>
                 </div>
               </div>
             </div>
 
             <!-- Population -->
-            <div class="bg-white rounded-2xl p-4 border border-gray-100">
+            <div class="bg-white/[0.04] border border-white/[0.07] rounded-2xl p-4">
               <div class="flex items-center gap-2 mb-3">
-                <div class="size-7 rounded-lg bg-gray-50 flex items-center justify-center">
-                  <LucideUsers :size="14" class="text-gray-500" />
+                <div class="size-7 rounded-lg bg-white/[0.06] flex items-center justify-center">
+                  <LucideUsers :size="14" class="text-white/50" />
                 </div>
-                <span class="text-[11px] font-medium text-gray-400 uppercase tracking-wide">{{ $t('city.population') }}</span>
+                <span class="text-[11px] font-medium text-white/40 uppercase tracking-wide">{{ $t('city.population') }}</span>
               </div>
               <div class="flex items-end justify-between gap-1">
                 <div class="text-center flex-1">
-                  <p class="text-lg font-bold text-gray-900 tabular-nums">{{ formatNumber(data.cityA.population) }}</p>
-                  <p class="text-[10px] text-gray-400 mt-0.5 truncate">{{ data.cityA.name }}</p>
+                  <p class="text-lg font-bold text-white tabular-nums">{{ formatNumber(data.cityA.population) }}</p>
+                  <p class="text-[10px] text-white/40 mt-0.5 truncate">{{ data.cityA.name }}</p>
                 </div>
                 <div class="text-center flex-1">
-                  <p class="text-lg font-bold text-gray-900 tabular-nums">{{ formatNumber(data.cityB.population) }}</p>
-                  <p class="text-[10px] text-gray-400 mt-0.5 truncate">{{ data.cityB.name }}</p>
+                  <p class="text-lg font-bold text-white tabular-nums">{{ formatNumber(data.cityB.population) }}</p>
+                  <p class="text-[10px] text-white/40 mt-0.5 truncate">{{ data.cityB.name }}</p>
                 </div>
               </div>
             </div>
           </section>
 
           <!-- ─── Auto-generated Content ─── -->
-          <section class="bg-white rounded-2xl border border-gray-100 p-6 md:p-8 mb-10">
+          <section class="bg-white/[0.04] border border-white/[0.07] rounded-2xl p-6 md:p-8 mb-10">
             <!-- Intro -->
-            <p v-if="contentSections.intro" class="text-gray-600 leading-relaxed text-[15px] mb-6">
+            <p v-if="contentSections.intro" class="text-white/60 leading-relaxed text-[15px] mb-6">
               {{ $t(contentSections.intro.key, contentSections.intro.params) }}
             </p>
 
             <!-- Cost Section -->
             <div v-if="contentSections.cost.length" class="mb-6">
-              <h2 class="text-base font-bold text-gray-900 mb-3 flex items-center gap-2.5">
+              <h2 class="text-base font-bold text-white mb-3 flex items-center gap-2.5">
                 <div class="size-7 rounded-lg bg-emerald-50 flex items-center justify-center">
                   <LucideWallet :size="14" class="text-emerald-600" />
                 </div>
                 {{ $t('compare.costOfLiving') }}
               </h2>
               <div class="space-y-2">
-                <p v-for="(section, i) in contentSections.cost" :key="i" class="text-gray-600 leading-relaxed text-[15px]">
+                <p v-for="(section, i) in contentSections.cost" :key="i" class="text-white/60 leading-relaxed text-[15px]">
                   {{ $t(section.key, section.params) }}
                 </p>
               </div>
@@ -439,30 +439,30 @@
 
             <!-- Internet Section -->
             <div v-if="contentSections.internet" class="mb-6">
-              <h2 class="text-base font-bold text-gray-900 mb-3 flex items-center gap-2.5">
+              <h2 class="text-base font-bold text-white mb-3 flex items-center gap-2.5">
                 <div class="size-7 rounded-lg bg-cyan-50 flex items-center justify-center">
-                  <LucideWifi :size="14" class="text-cyan-600" />
+                  <LucideWifi :size="14" class="text-cyan-400" />
                 </div>
                 {{ $t('compare.internetHeading') }}
               </h2>
-              <p class="text-gray-600 leading-relaxed text-[15px]">
+              <p class="text-white/60 leading-relaxed text-[15px]">
                 {{ $t(contentSections.internet.key, contentSections.internet.params) }}
               </p>
             </div>
 
             <!-- Safety & Healthcare Section -->
             <div v-if="contentSections.safety || contentSections.healthcare" class="mb-6">
-              <h2 class="text-base font-bold text-gray-900 mb-3 flex items-center gap-2.5">
+              <h2 class="text-base font-bold text-white mb-3 flex items-center gap-2.5">
                 <div class="size-7 rounded-lg bg-blue-50 flex items-center justify-center">
                   <LucideShieldCheck :size="14" class="text-blue-600" />
                 </div>
                 {{ $t('compare.qualityOfLife') }}
               </h2>
               <div class="space-y-2">
-                <p v-if="contentSections.safety" class="text-gray-600 leading-relaxed text-[15px]">
+                <p v-if="contentSections.safety" class="text-white/60 leading-relaxed text-[15px]">
                   {{ $t(contentSections.safety.key, contentSections.safety.params) }}
                 </p>
-                <p v-if="contentSections.healthcare" class="text-gray-600 leading-relaxed text-[15px]">
+                <p v-if="contentSections.healthcare" class="text-white/60 leading-relaxed text-[15px]">
                   {{ $t(contentSections.healthcare.key, contentSections.healthcare.params) }}
                 </p>
               </div>
@@ -470,13 +470,13 @@
 
             <!-- Weather Section -->
             <div v-if="contentSections.weather" class="mb-0">
-              <h2 class="text-base font-bold text-gray-900 mb-3 flex items-center gap-2.5">
+              <h2 class="text-base font-bold text-white mb-3 flex items-center gap-2.5">
                 <div class="size-7 rounded-lg bg-amber-50 flex items-center justify-center">
                   <LucideCloudSun :size="14" class="text-amber-600" />
                 </div>
                 {{ $t('compare.monthlyWeather') }}
               </h2>
-              <p class="text-gray-600 leading-relaxed text-[15px]">
+              <p class="text-white/60 leading-relaxed text-[15px]">
                 {{ $t(contentSections.weather.key, contentSections.weather.params) }}
               </p>
             </div>
@@ -485,112 +485,112 @@
           <!-- ─── Detailed Comparison Tables ─── -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-10">
             <!-- Cost of Living -->
-            <section class="bg-white rounded-2xl border border-gray-100 p-6">
-              <h2 class="text-base font-bold text-gray-900 mb-5 flex items-center gap-2.5">
+            <section class="bg-white/[0.04] border border-white/[0.07] rounded-2xl p-6">
+              <h2 class="text-base font-bold text-white mb-5 flex items-center gap-2.5">
                 <div class="size-8 rounded-xl bg-emerald-50 flex items-center justify-center">
                   <LucideWallet :size="16" class="text-emerald-600" />
                 </div>
                 {{ $t('compare.costOfLiving') }}
               </h2>
               <!-- Column headers -->
-              <div class="flex justify-between items-center pb-2 mb-1 border-b border-gray-100">
-                <span class="text-[11px] font-medium text-gray-400 uppercase tracking-wide w-20" />
-                <span class="text-[11px] font-semibold text-gray-500 uppercase tracking-wide text-right flex-1 truncate">{{ data.cityA.name }}</span>
-                <span class="text-[11px] font-semibold text-gray-500 uppercase tracking-wide text-right flex-1 truncate">{{ data.cityB.name }}</span>
+              <div class="flex justify-between items-center pb-2 mb-1 border-b border-white/[0.07]">
+                <span class="text-[11px] font-medium text-white/40 uppercase tracking-wide w-20" />
+                <span class="text-[11px] font-semibold text-white/50 uppercase tracking-wide text-right flex-1 truncate">{{ data.cityA.name }}</span>
+                <span class="text-[11px] font-semibold text-white/50 uppercase tracking-wide text-right flex-1 truncate">{{ data.cityB.name }}</span>
               </div>
-              <div v-for="row in costRows" :key="row.label" class="flex justify-between items-center py-2.5 border-b border-gray-50 last:border-0">
-                <span class="text-sm text-gray-500 w-20">{{ row.label }}</span>
-                <span class="text-sm font-semibold tabular-nums text-right flex-1" :class="row.winnerA ? 'text-emerald-600' : 'text-gray-700'">{{ formatCost(Number(row.valueA)) }}/mo</span>
-                <span class="text-sm font-semibold tabular-nums text-right flex-1" :class="row.winnerB ? 'text-emerald-600' : 'text-gray-700'">{{ formatCost(Number(row.valueB)) }}/mo</span>
+              <div v-for="row in costRows" :key="row.label" class="flex justify-between items-center py-2.5 border-b border-white/[0.04] last:border-0">
+                <span class="text-sm text-white/50 w-20">{{ row.label }}</span>
+                <span class="text-sm font-semibold tabular-nums text-right flex-1" :class="row.winnerA ? 'text-emerald-600' : 'text-white/80'">{{ formatCost(Number(row.valueA)) }}/mo</span>
+                <span class="text-sm font-semibold tabular-nums text-right flex-1" :class="row.winnerB ? 'text-emerald-600' : 'text-white/80'">{{ formatCost(Number(row.valueB)) }}/mo</span>
               </div>
             </section>
 
             <!-- Internet & Infrastructure -->
-            <section class="bg-white rounded-2xl border border-gray-100 p-6">
-              <h2 class="text-base font-bold text-gray-900 mb-5 flex items-center gap-2.5">
+            <section class="bg-white/[0.04] border border-white/[0.07] rounded-2xl p-6">
+              <h2 class="text-base font-bold text-white mb-5 flex items-center gap-2.5">
                 <div class="size-8 rounded-xl bg-cyan-50 flex items-center justify-center">
-                  <LucideWifi :size="16" class="text-cyan-600" />
+                  <LucideWifi :size="16" class="text-cyan-400" />
                 </div>
                 {{ $t('compare.internetHeading') }}
               </h2>
-              <div class="flex justify-between items-center pb-2 mb-1 border-b border-gray-100">
-                <span class="text-[11px] font-medium text-gray-400 uppercase tracking-wide w-24" />
-                <span class="text-[11px] font-semibold text-gray-500 uppercase tracking-wide text-right flex-1 truncate">{{ data.cityA.name }}</span>
-                <span class="text-[11px] font-semibold text-gray-500 uppercase tracking-wide text-right flex-1 truncate">{{ data.cityB.name }}</span>
+              <div class="flex justify-between items-center pb-2 mb-1 border-b border-white/[0.07]">
+                <span class="text-[11px] font-medium text-white/40 uppercase tracking-wide w-24" />
+                <span class="text-[11px] font-semibold text-white/50 uppercase tracking-wide text-right flex-1 truncate">{{ data.cityA.name }}</span>
+                <span class="text-[11px] font-semibold text-white/50 uppercase tracking-wide text-right flex-1 truncate">{{ data.cityB.name }}</span>
               </div>
-              <div class="flex justify-between items-center py-2.5 border-b border-gray-50">
-                <span class="text-sm text-gray-500 w-24">{{ $t('city.citySpeed') }}</span>
+              <div class="flex justify-between items-center py-2.5 border-b border-white/[0.04]">
+                <span class="text-sm text-white/50 w-24">{{ $t('city.citySpeed') }}</span>
                 <div class="flex items-center justify-end gap-1.5 flex-1">
-                  <span class="text-sm font-semibold tabular-nums" :class="speedWinner === 'cityA' ? 'text-cyan-600' : 'text-gray-700'">{{ data.cityA.internetSpeedCity }} Mbps</span>
-                  <span v-if="data.cityA.internetSpeedCityRanking" class="text-[10px] font-medium text-gray-400 bg-gray-50 rounded-full px-1.5 py-0.5 tabular-nums">#{{ data.cityA.internetSpeedCityRanking }}</span>
+                  <span class="text-sm font-semibold tabular-nums" :class="speedWinner === 'cityA' ? 'text-cyan-400' : 'text-white/80'">{{ data.cityA.internetSpeedCity }} Mbps</span>
+                  <span v-if="data.cityA.internetSpeedCityRanking" class="text-[10px] font-medium text-white/40 bg-white/[0.06] rounded-full px-1.5 py-0.5 tabular-nums">#{{ data.cityA.internetSpeedCityRanking }}</span>
                 </div>
                 <div class="flex items-center justify-end gap-1.5 flex-1">
-                  <span class="text-sm font-semibold tabular-nums" :class="speedWinner === 'cityB' ? 'text-cyan-600' : 'text-gray-700'">{{ data.cityB.internetSpeedCity }} Mbps</span>
-                  <span v-if="data.cityB.internetSpeedCityRanking" class="text-[10px] font-medium text-gray-400 bg-gray-50 rounded-full px-1.5 py-0.5 tabular-nums">#{{ data.cityB.internetSpeedCityRanking }}</span>
+                  <span class="text-sm font-semibold tabular-nums" :class="speedWinner === 'cityB' ? 'text-cyan-400' : 'text-white/80'">{{ data.cityB.internetSpeedCity }} Mbps</span>
+                  <span v-if="data.cityB.internetSpeedCityRanking" class="text-[10px] font-medium text-white/40 bg-white/[0.06] rounded-full px-1.5 py-0.5 tabular-nums">#{{ data.cityB.internetSpeedCityRanking }}</span>
                 </div>
               </div>
               <div class="flex justify-between items-center py-2.5">
-                <span class="text-sm text-gray-500 w-24">{{ $t('city.countrySpeed') }}</span>
-                <span class="text-sm font-semibold text-gray-700 tabular-nums text-right flex-1">{{ data.cityA.internetSpeedCountry }} Mbps</span>
-                <span class="text-sm font-semibold text-gray-700 tabular-nums text-right flex-1">{{ data.cityB.internetSpeedCountry }} Mbps</span>
+                <span class="text-sm text-white/50 w-24">{{ $t('city.countrySpeed') }}</span>
+                <span class="text-sm font-semibold text-white/80 tabular-nums text-right flex-1">{{ data.cityA.internetSpeedCountry }} Mbps</span>
+                <span class="text-sm font-semibold text-white/80 tabular-nums text-right flex-1">{{ data.cityB.internetSpeedCountry }} Mbps</span>
               </div>
             </section>
 
             <!-- Environment & Health -->
-            <section class="bg-white rounded-2xl border border-gray-100 p-6">
-              <h2 class="text-base font-bold text-gray-900 mb-5 flex items-center gap-2.5">
+            <section class="bg-white/[0.04] border border-white/[0.07] rounded-2xl p-6">
+              <h2 class="text-base font-bold text-white mb-5 flex items-center gap-2.5">
                 <div class="size-8 rounded-xl bg-green-50 flex items-center justify-center">
                   <LucideLeaf :size="16" class="text-green-600" />
                 </div>
                 {{ $t('compare.environmentHealth') }}
               </h2>
-              <div class="flex justify-between items-center pb-2 mb-1 border-b border-gray-100">
-                <span class="text-[11px] font-medium text-gray-400 uppercase tracking-wide w-24" />
-                <span class="text-[11px] font-semibold text-gray-500 uppercase tracking-wide text-right flex-1 truncate">{{ data.cityA.name }}</span>
-                <span class="text-[11px] font-semibold text-gray-500 uppercase tracking-wide text-right flex-1 truncate">{{ data.cityB.name }}</span>
+              <div class="flex justify-between items-center pb-2 mb-1 border-b border-white/[0.07]">
+                <span class="text-[11px] font-medium text-white/40 uppercase tracking-wide w-24" />
+                <span class="text-[11px] font-semibold text-white/50 uppercase tracking-wide text-right flex-1 truncate">{{ data.cityA.name }}</span>
+                <span class="text-[11px] font-semibold text-white/50 uppercase tracking-wide text-right flex-1 truncate">{{ data.cityB.name }}</span>
               </div>
-              <div class="flex justify-between items-center py-2.5 border-b border-gray-50">
-                <span class="text-sm text-gray-500 w-24">{{ $t('city.airQualityScore') }}</span>
-                <span class="text-sm font-semibold tabular-nums text-right flex-1" :class="airWinner === 'cityA' ? getAirQualityClass(data.cityA.airQualityScore) : 'text-gray-700'">{{ data.cityA.airQualityScore }}/5</span>
-                <span class="text-sm font-semibold tabular-nums text-right flex-1" :class="airWinner === 'cityB' ? getAirQualityClass(data.cityB.airQualityScore) : 'text-gray-700'">{{ data.cityB.airQualityScore }}/5</span>
+              <div class="flex justify-between items-center py-2.5 border-b border-white/[0.04]">
+                <span class="text-sm text-white/50 w-24">{{ $t('city.airQualityScore') }}</span>
+                <span class="text-sm font-semibold tabular-nums text-right flex-1" :class="airWinner === 'cityA' ? getAirQualityClass(data.cityA.airQualityScore) : 'text-white/80'">{{ data.cityA.airQualityScore }}/5</span>
+                <span class="text-sm font-semibold tabular-nums text-right flex-1" :class="airWinner === 'cityB' ? getAirQualityClass(data.cityB.airQualityScore) : 'text-white/80'">{{ data.cityB.airQualityScore }}/5</span>
               </div>
-              <div class="flex justify-between items-center py-2.5 border-b border-gray-50">
-                <span class="text-sm text-gray-500 w-24">{{ $t('city.pollution') }}</span>
+              <div class="flex justify-between items-center py-2.5 border-b border-white/[0.04]">
+                <span class="text-sm text-white/50 w-24">{{ $t('city.pollution') }}</span>
                 <span class="text-sm font-semibold capitalize text-right flex-1" :class="getLevelTextClass(data.cityA.pollution, true)">{{ formatLevel(data.cityA.pollution) }}</span>
                 <span class="text-sm font-semibold capitalize text-right flex-1" :class="getLevelTextClass(data.cityB.pollution, true)">{{ formatLevel(data.cityB.pollution) }}</span>
               </div>
-              <div class="flex justify-between items-center py-2.5 border-b border-gray-50">
-                <span class="text-sm text-gray-500 w-24">{{ $t('city.climate') }}</span>
+              <div class="flex justify-between items-center py-2.5 border-b border-white/[0.04]">
+                <span class="text-sm text-white/50 w-24">{{ $t('city.climate') }}</span>
                 <span class="text-sm font-semibold capitalize text-right flex-1" :class="getLevelTextClass(data.cityA.climate)">{{ formatLevel(data.cityA.climate) }}</span>
                 <span class="text-sm font-semibold capitalize text-right flex-1" :class="getLevelTextClass(data.cityB.climate)">{{ formatLevel(data.cityB.climate) }}</span>
               </div>
               <div class="flex justify-between items-center py-2.5">
-                <span class="text-sm text-gray-500 w-24">{{ $t('city.humidity') }}</span>
-                <span class="text-sm font-semibold text-gray-700 text-right flex-1">{{ data.cityA.humidity }}</span>
-                <span class="text-sm font-semibold text-gray-700 text-right flex-1">{{ data.cityB.humidity }}</span>
+                <span class="text-sm text-white/50 w-24">{{ $t('city.humidity') }}</span>
+                <span class="text-sm font-semibold text-white/80 text-right flex-1">{{ data.cityA.humidity }}</span>
+                <span class="text-sm font-semibold text-white/80 text-right flex-1">{{ data.cityB.humidity }}</span>
               </div>
             </section>
 
             <!-- Quality of Life -->
-            <section class="bg-white rounded-2xl border border-gray-100 p-6">
-              <h2 class="text-base font-bold text-gray-900 mb-5 flex items-center gap-2.5">
+            <section class="bg-white/[0.04] border border-white/[0.07] rounded-2xl p-6">
+              <h2 class="text-base font-bold text-white mb-5 flex items-center gap-2.5">
                 <div class="size-8 rounded-xl bg-rose-50 flex items-center justify-center">
                   <LucideHeart :size="16" class="text-rose-500" />
                 </div>
                 {{ $t('compare.qualityOfLife') }}
               </h2>
-              <div class="flex justify-between items-center pb-2 mb-1 border-b border-gray-100">
-                <span class="text-[11px] font-medium text-gray-400 uppercase tracking-wide w-24" />
-                <span class="text-[11px] font-semibold text-gray-500 uppercase tracking-wide text-right flex-1 truncate">{{ data.cityA.name }}</span>
-                <span class="text-[11px] font-semibold text-gray-500 uppercase tracking-wide text-right flex-1 truncate">{{ data.cityB.name }}</span>
+              <div class="flex justify-between items-center pb-2 mb-1 border-b border-white/[0.07]">
+                <span class="text-[11px] font-medium text-white/40 uppercase tracking-wide w-24" />
+                <span class="text-[11px] font-semibold text-white/50 uppercase tracking-wide text-right flex-1 truncate">{{ data.cityA.name }}</span>
+                <span class="text-[11px] font-semibold text-white/50 uppercase tracking-wide text-right flex-1 truncate">{{ data.cityB.name }}</span>
               </div>
-              <div class="flex justify-between items-center py-2.5 border-b border-gray-50">
-                <span class="text-sm text-gray-500 w-24">{{ $t('city.safety') }}</span>
+              <div class="flex justify-between items-center py-2.5 border-b border-white/[0.04]">
+                <span class="text-sm text-white/50 w-24">{{ $t('city.safety') }}</span>
                 <span class="text-sm font-semibold capitalize text-right flex-1" :class="getLevelTextClass(data.cityA.safety)">{{ formatLevel(data.cityA.safety) }}</span>
                 <span class="text-sm font-semibold capitalize text-right flex-1" :class="getLevelTextClass(data.cityB.safety)">{{ formatLevel(data.cityB.safety) }}</span>
               </div>
               <div class="flex justify-between items-center py-2.5">
-                <span class="text-sm text-gray-500 w-24">{{ $t('city.healthcare') }}</span>
+                <span class="text-sm text-white/50 w-24">{{ $t('city.healthcare') }}</span>
                 <span class="text-sm font-semibold capitalize text-right flex-1" :class="getLevelTextClass(data.cityA.healthCare)">{{ formatLevel(data.cityA.healthCare) }}</span>
                 <span class="text-sm font-semibold capitalize text-right flex-1" :class="getLevelTextClass(data.cityB.healthCare)">{{ formatLevel(data.cityB.healthCare) }}</span>
               </div>
@@ -598,16 +598,16 @@
           </div>
 
           <!-- ─── Monthly Weather Comparison ─── -->
-          <section class="bg-white rounded-2xl border border-gray-100 p-6 mb-10">
-            <h2 class="text-base font-bold text-gray-900 mb-5 flex items-center gap-2.5">
-              <div class="size-8 rounded-xl bg-primary-50 flex items-center justify-center">
+          <section class="bg-white/[0.04] border border-white/[0.07] rounded-2xl p-6 mb-10">
+            <h2 class="text-base font-bold text-white mb-5 flex items-center gap-2.5">
+              <div class="size-8 rounded-xl bg-primary-500/[0.15] flex items-center justify-center">
                 <LucideCalendar :size="16" class="text-primary-600" />
               </div>
               {{ $t('compare.monthlyWeather') }}
             </h2>
 
             <!-- Column labels -->
-            <div class="flex items-center gap-3 mb-4 text-[11px] font-semibold uppercase tracking-wide text-gray-400">
+            <div class="flex items-center gap-3 mb-4 text-[11px] font-semibold uppercase tracking-wide text-white/40">
               <div class="w-10" />
               <div class="flex-1 text-center">{{ data.cityA.name }}</div>
               <div class="flex-1 text-center">{{ data.cityB.name }}</div>
@@ -617,10 +617,10 @@
               <div
                 v-for="(pair, i) in weatherPairs"
                 :key="i"
-                class="flex items-center gap-3 rounded-xl py-2 px-2 transition-colors hover:bg-gray-50"
+                class="flex items-center gap-3 rounded-xl py-2 px-2 transition-colors hover:bg-white/[0.05]"
               >
                 <!-- Month label -->
-                <div class="w-10 text-[11px] font-semibold uppercase tracking-wide text-gray-500 text-center shrink-0">
+                <div class="w-10 text-[11px] font-semibold uppercase tracking-wide text-white/50 text-center shrink-0">
                   {{ getMonthShort(pair.month) }}
                 </div>
 
@@ -630,21 +630,21 @@
                   :class="{
                     'bg-emerald-50/60 border-emerald-200': pair.levelA === 'HIGH',
                     'bg-amber-50/60 border-amber-200': pair.levelA === 'MIDDLE',
-                    'bg-gray-50 border-gray-100': pair.levelA === 'LOW',
+                    'bg-white/[0.04] border-white/[0.07]': pair.levelA === 'LOW',
                   }"
                 >
                   <div class="flex items-center gap-2">
                     <WeatherIcon :weather-icon="pair.iconA" />
-                    <span class="text-sm font-bold text-gray-900 tabular-nums">{{ pair.tempA }}°</span>
+                    <span class="text-sm font-bold text-white tabular-nums">{{ pair.tempA }}°</span>
                   </div>
                   <div class="flex items-center gap-2.5">
-                    <span class="text-[10px] text-gray-400 tabular-nums">{{ pair.rainA }}mm</span>
+                    <span class="text-[10px] text-white/40 tabular-nums">{{ pair.rainA }}mm</span>
                     <span
                       class="text-xs font-bold tabular-nums"
                       :class="{
                         'text-emerald-600': pair.levelA === 'HIGH',
                         'text-amber-600': pair.levelA === 'MIDDLE',
-                        'text-gray-400': pair.levelA === 'LOW',
+                        'text-white/40': pair.levelA === 'LOW',
                       }"
                     >{{ pair.scoreA }}</span>
                   </div>
@@ -656,21 +656,21 @@
                   :class="{
                     'bg-emerald-50/60 border-emerald-200': pair.levelB === 'HIGH',
                     'bg-amber-50/60 border-amber-200': pair.levelB === 'MIDDLE',
-                    'bg-gray-50 border-gray-100': pair.levelB === 'LOW',
+                    'bg-white/[0.04] border-white/[0.07]': pair.levelB === 'LOW',
                   }"
                 >
                   <div class="flex items-center gap-2">
                     <WeatherIcon :weather-icon="pair.iconB" />
-                    <span class="text-sm font-bold text-gray-900 tabular-nums">{{ pair.tempB }}°</span>
+                    <span class="text-sm font-bold text-white tabular-nums">{{ pair.tempB }}°</span>
                   </div>
                   <div class="flex items-center gap-2.5">
-                    <span class="text-[10px] text-gray-400 tabular-nums">{{ pair.rainB }}mm</span>
+                    <span class="text-[10px] text-white/40 tabular-nums">{{ pair.rainB }}mm</span>
                     <span
                       class="text-xs font-bold tabular-nums"
                       :class="{
                         'text-emerald-600': pair.levelB === 'HIGH',
                         'text-amber-600': pair.levelB === 'MIDDLE',
-                        'text-gray-400': pair.levelB === 'LOW',
+                        'text-white/40': pair.levelB === 'LOW',
                       }"
                     >{{ pair.scoreB }}</span>
                   </div>
@@ -681,25 +681,25 @@
 
           <!-- ─── Who Should Choose ─── -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-10">
-            <section class="bg-white rounded-2xl border border-gray-100 p-6">
-              <h2 class="text-base font-bold text-gray-900 mb-4">
+            <section class="bg-white/[0.04] border border-white/[0.07] rounded-2xl p-6">
+              <h2 class="text-base font-bold text-white mb-4">
                 {{ $t('compare.whoShouldChoose', { city: data.cityA.name }) }}
               </h2>
               <ul class="space-y-2.5">
                 <li v-for="(bullet, i) in content.profileBulletsA" :key="i" class="flex items-start gap-2.5">
                   <LucideCheck :size="16" class="text-primary-500 mt-0.5 shrink-0" />
-                  <span class="text-sm text-gray-600 leading-relaxed">{{ $t(bullet.key, bullet.params) }}</span>
+                  <span class="text-sm text-white/60 leading-relaxed">{{ $t(bullet.key, bullet.params) }}</span>
                 </li>
               </ul>
             </section>
-            <section class="bg-white rounded-2xl border border-gray-100 p-6">
-              <h2 class="text-base font-bold text-gray-900 mb-4">
+            <section class="bg-white/[0.04] border border-white/[0.07] rounded-2xl p-6">
+              <h2 class="text-base font-bold text-white mb-4">
                 {{ $t('compare.whoShouldChoose', { city: data.cityB.name }) }}
               </h2>
               <ul class="space-y-2.5">
                 <li v-for="(bullet, i) in content.profileBulletsB" :key="i" class="flex items-start gap-2.5">
                   <LucideCheck :size="16" class="text-primary-500 mt-0.5 shrink-0" />
-                  <span class="text-sm text-gray-600 leading-relaxed">{{ $t(bullet.key, bullet.params) }}</span>
+                  <span class="text-sm text-white/60 leading-relaxed">{{ $t(bullet.key, bullet.params) }}</span>
                 </li>
               </ul>
             </section>
@@ -709,17 +709,17 @@
           <section
             class="rounded-2xl border p-6 md:p-8 mb-10"
             :class="{
-              'bg-primary-50/50 border-primary-200': content.verdictWinner !== 'tied',
-              'bg-white border-gray-100': content.verdictWinner === 'tied',
+              'bg-primary-500/[0.08] border-primary-400/40': content.verdictWinner !== 'tied',
+              'bg-white/[0.04] border-white/[0.07]': content.verdictWinner === 'tied',
             }"
           >
-            <h2 class="text-base font-bold text-gray-900 mb-3 flex items-center gap-2.5">
-              <div class="size-8 rounded-xl bg-primary-100 flex items-center justify-center">
+            <h2 class="text-base font-bold text-white mb-3 flex items-center gap-2.5">
+              <div class="size-8 rounded-xl bg-primary-500/[0.15] flex items-center justify-center">
                 <LucideTrophy :size="16" class="text-primary-600" />
               </div>
               {{ $t('compare.overallVerdict') }}
             </h2>
-            <p v-if="contentSections.verdict" class="text-gray-700 leading-relaxed text-[15px]">
+            <p v-if="contentSections.verdict" class="text-white/80 leading-relaxed text-[15px]">
               {{ $t(contentSections.verdict.key, contentSections.verdict.params) }}
             </p>
           </section>
@@ -734,14 +734,14 @@
           />
 
           <!-- ─── Data Attribution ─── -->
-          <p class="text-xs text-gray-400 mb-8">
+          <p class="text-xs text-white/40 mb-8">
             {{ $t('compare.dataAttribution') }}
           </p>
 
           <!-- ─── Related Comparisons ─── -->
           <section v-if="relatedData && relatedData.length" class="mb-10">
             <div class="flex items-center justify-between mb-4">
-              <h2 class="text-base font-bold text-gray-900">
+              <h2 class="text-base font-bold text-white">
                 {{ $t('compare.relatedComparisons') }}
               </h2>
               <NuxtLink
@@ -756,14 +756,14 @@
                 v-for="pair in relatedData"
                 :key="pair.slugs"
                 :to="localePath({ name: 'compare-slugs', params: { slugs: pair.slugs } })"
-                class="bg-white rounded-2xl border border-gray-100 px-5 py-4 flex items-center justify-between gap-3 hover:border-primary-200 hover:shadow-sm transition-all group"
+                class="bg-white/[0.04] border border-white/[0.07] rounded-2xl px-5 py-4 flex items-center justify-between gap-3 hover:border-primary-400/40 hover:shadow-sm transition-all group"
               >
                 <div class="flex items-center gap-2 min-w-0">
-                  <span class="text-sm font-semibold text-gray-900 truncate">{{ pair.cityAName }}</span>
-                  <span class="text-xs text-gray-300 shrink-0">vs</span>
-                  <span class="text-sm font-semibold text-gray-900 truncate">{{ pair.cityBName }}</span>
+                  <span class="text-sm font-semibold text-white truncate">{{ pair.cityAName }}</span>
+                  <span class="text-xs text-white/30 shrink-0">vs</span>
+                  <span class="text-sm font-semibold text-white truncate">{{ pair.cityBName }}</span>
                 </div>
-                <LucideArrowRight :size="14" class="text-gray-300 group-hover:text-primary-500 transition-colors shrink-0" />
+                <LucideArrowRight :size="14" class="text-white/30 group-hover:text-primary-500 transition-colors shrink-0" />
               </NuxtLink>
             </div>
           </section>
@@ -772,7 +772,7 @@
           <div class="flex flex-wrap items-center justify-between gap-4 pb-4">
             <NuxtLink
               :to="localePath('compare')"
-              class="inline-flex items-center gap-2 text-sm font-medium text-gray-400 hover:text-primary-600 transition-colors"
+              class="inline-flex items-center gap-2 text-sm font-medium text-white/40 hover:text-primary-600 transition-colors"
             >
               <LucideArrowLeft :size="14" />
               {{ $t('compare.title') }}
@@ -979,7 +979,7 @@ const getLevelDotClass = (level: Level | undefined | null) => {
 }
 
 const getLevelTextClass = (level: Level | undefined | null, inverted = false) => {
-  if (!level) return 'text-gray-500'
+  if (!level) return 'text-white/50'
   const isGood = inverted ? level === 'LOW' : level === 'HIGH'
   const isMid = level === 'MIDDLE'
   if (isGood) return 'text-emerald-600'
@@ -988,7 +988,7 @@ const getLevelTextClass = (level: Level | undefined | null, inverted = false) =>
 }
 
 const getAirQualityClass = (score: number | null) => {
-  if (!score) return 'text-gray-500'
+  if (!score) return 'text-white/50'
   if (score >= 4) return 'text-emerald-600'
   if (score >= 3) return 'text-yellow-600'
   return 'text-red-600'

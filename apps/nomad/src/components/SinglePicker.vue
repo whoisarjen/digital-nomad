@@ -1,6 +1,6 @@
 <template>
     <div class="flex flex-col gap-2 w-full">
-      <label v-if="isLabel" :for="name" class="block text-sm font-medium text-gray-700">{{ props.name.split('_').map(s => s[0]?.toUpperCase() + s.slice(1)).join(' ') }}</label>
+      <label v-if="isLabel" :for="name" class="block text-sm font-medium text-white/60">{{ props.name.split('_').map(s => s[0]?.toUpperCase() + s.slice(1)).join(' ') }}</label>
       <div class="relative">
         <select
           :id="name"
@@ -8,14 +8,14 @@
           @change="updateQuery"
           class="w-full p-2 pl-4 pr-10 rounded-lg border cursor-pointer text-sm transition-colors focus:outline-none text-left"
           :class="selectedOption !== defaultOption.value
-            ? 'bg-primary-50 border-primary-300 text-primary-800 hover:bg-primary-100'
-            : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100'"
+            ? 'bg-primary-500/[0.15] border-primary-500/40 text-primary-300 hover:bg-primary-500/[0.22]'
+            : 'bg-white/[0.06] text-white/70 border-white/[0.1] hover:bg-white/[0.09]'"
         >
           <option
             v-for="option of preparedOptions"
             :key="option.value"
             :value="option.value"
-            class="text-sm text-gray-700"
+            class="text-sm bg-[#0d1b2e] text-white/80"
           >
             {{ getLabel(option) }}
           </option>
@@ -24,8 +24,8 @@
           <lucideChevronDown
             class="w-5 h-5"
             :class="{
-              'text-primary-600': selectedOption !== defaultOption.value,
-              'text-gray-500': selectedOption === defaultOption.value,
+              'text-primary-400': selectedOption !== defaultOption.value,
+              'text-white/40': selectedOption === defaultOption.value,
             }"
           />
         </div>

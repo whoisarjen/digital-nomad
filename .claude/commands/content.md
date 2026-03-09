@@ -95,16 +95,46 @@ LIMIT 100;
 SELECT slug FROM "Article";
 ```
 
+### Niche/Category Taxonomy
+
+Every article belongs to exactly one **niche**. Use this list — pick the most specific match:
+
+| Niche ID | Description | Example keywords |
+|----------|-------------|-----------------|
+| `city-cost` | Cost of living breakdown for a city | "cost of living in Bangkok for digital nomads" |
+| `city-comparison` | Two cities head-to-head | "Lisbon vs Porto for remote workers" |
+| `best-budget` | Cheapest destinations (filtered list) | "cheapest cities for digital nomads in Asia" |
+| `best-internet` | Top cities for remote work by internet speed | "best cities for remote work fast wifi 2025" |
+| `best-safety` | Safest cities for nomads (filtered list) | "safest cities for digital nomads solo female" |
+| `best-weather` | Best climate / seasonal guides | "best cities for digital nomads year-round sun" |
+| `best-healthcare` | Cities ranked by healthcare quality | "best healthcare cities for expats" |
+| `best-quality-life` | Quality of life composite rankings | "highest quality of life cities digital nomads" |
+| `regional-guide` | Best cities in a specific region/continent | "best cities for digital nomads in Southeast Asia" |
+| `lifestyle-budget` | Nomad lifestyle on a budget (< $1500/mo) | "live abroad on $1000 a month digital nomad" |
+| `lifestyle-luxury` | High-end nomad destinations (> $3000/mo) | "luxury digital nomad destinations 2025" |
+| `lifestyle-family` | Nomad-friendly cities for families / kids | "best cities for families with kids digital nomad" |
+| `lifestyle-solo-female` | Safe cities for solo female travelers | "best cities solo female digital nomad safe" |
+| `lifestyle-coworking` | Cities with best coworking scene | "best coworking cities digital nomads" |
+| `visa-guide` | Digital nomad visa availability by country | "countries with digital nomad visa 2025" |
+| `seasonal` | Best destinations by month or season | "where to go as digital nomad in January" |
+
 ### Pick N keywords using this logic:
-1. Check `published-log.md` for what types exist (city-cost / comparison / filtered)
-2. **GSC-sourced keywords come first** — if Step 2a found opportunities, use those slots first
-3. Fill remaining slots with discovery: ~60% city-cost, ~20% comparison, ~20% filtered/regional
-4. For **city-cost**: pick highest-population cities with no article yet
-5. For **comparison**: pick pairs in same region, both in top-50, no comparison exists
-6. For **filtered**: rotate through cheapest, safest, best internet, best weather, by region, seasonal
-7. Ensure at least 2 different regions in the batch
-8. Verify all city slugs exist in DB
-9. **Never duplicate** — check both `published-log.md` AND existing article slugs in DB
+
+1. **Check what niches are already covered** — scan `published-log.md` for the `niche:` tag on each entry. Build a list of saturated niches (≥ 3 articles).
+2. **GSC-sourced keywords come first** — assign each a niche from the taxonomy above.
+3. **For remaining slots, maximize niche diversity in this batch:**
+   - Never pick the same niche twice in one batch if N ≤ 8.
+   - Prefer niches with 0 existing articles > niches with 1-2 articles > niches with 3+ articles.
+   - Aim for at least 3 different niches per batch (or all different if N ≤ 5).
+4. **Niche selection order for discovery slots** (rotate, skipping already-used in this batch):
+   - `city-cost` → `city-comparison` → `best-budget` → `best-internet` → `best-safety` → `best-weather` → `regional-guide` → `lifestyle-budget` → `best-healthcare` → `lifestyle-family` → `best-quality-life` → `lifestyle-coworking` → `lifestyle-solo-female` → `lifestyle-luxury` → `visa-guide` → `seasonal`
+5. For **city-cost**: pick highest-population cities with no article yet.
+6. For **city-comparison**: pick pairs in same region, both in top-50, no comparison exists.
+7. For **filtered/best/regional/lifestyle/seasonal**: craft a keyword around the niche + available DB data.
+8. Ensure at least 2 different geographic regions across the batch.
+9. Verify all city slugs exist in DB.
+10. **Never duplicate** — check both `published-log.md` AND existing article slugs in DB.
+11. **Log niche** — include `niche: [niche-id]` in the published-log entry for each article.
 
 ## Step 3: Spawn N Pipeline Agents (All in Parallel, Background)
 
@@ -117,6 +147,7 @@ You are a content pipeline for nomad.whoisarjen.com. Create ONE complete article
 
 ## Your Article
 - Type: [city-cost / comparison / filtered]
+- Niche: [niche-id from taxonomy]
 - Keyword: "[the keyword]"
 - City slugs: [list]
 - Suggested slug: "[slug]"
@@ -157,7 +188,7 @@ Output these English fields:
 - contentEn (full markdown, 1500-2500 words)
 - metaTitleEn (under 60 chars)
 - metaDescEn (120-155 chars, include key number)
-- FAQ pairs: 4-6 questionEn/answerEn pairs
+- FAQ pairs: 4-6 pairs — **both `questionEn` and `answerEn` must be non-empty strings for every pair** (never null, never empty string). Omit a pair entirely rather than including one with a missing answer.
 
 ## Step 3: Translate to 10 Languages (Parallel)
 
@@ -203,6 +234,7 @@ Hard fails (do NOT insert):
 - contentEn must be 500+ words
 - Primary city slug must exist in City table
 - featuredImageUrl curl returned 200 (verified in Step 3b — if skipped, treat as hard fail)
+- Every FAQ pair in `faqs` must have both a non-empty `question` and a non-empty `answer` — drop any pair missing either field rather than inserting null/empty values (prevents Google Search Console "missing field" errors)
 
 Soft warnings (insert anyway, note in report):
 - Any meta title over 60 chars → truncate
@@ -244,6 +276,7 @@ Return a summary:
 - Status: published / failed
 - Slug
 - Type and keyword
+- **Niche** (from taxonomy)
 - Word count (EN)
 - Translations completed (X/10)
 - Any warnings
@@ -264,10 +297,11 @@ After all N agents finish, present:
 **Published:** X/N
 **Failed:** Y (with reasons)
 
-| # | Slug | Type | Languages | Warnings |
-|---|------|------|-----------|----------|
+| # | Slug | Niche | Languages | Warnings |
+|---|------|-------|-----------|----------|
 | 1 | cost-of-living-bangkok-... | city-cost | 11/11 | none |
-| 2 | lisbon-vs-porto-... | comparison | 10/11 | KO translation short |
+| 2 | lisbon-vs-porto-... | city-comparison | 10/11 | KO translation short |
+| 3 | cheapest-cities-southeast-asia-... | best-budget | 11/11 | none |
 | ...
 
 **Next trigger will analyze fresh and pick the next best keywords.**

@@ -52,7 +52,7 @@ describe('MonthsPicker', () => {
     // July button (index 6) should have the selected class
     const buttons = wrapper.findAll('.cursor-pointer')
     expect(buttons[6]).toBeDefined()
-    expect(buttons[6]!.classes()).toContain('bg-primary-50')
+    expect(buttons[6]!.classes().some(c => c.includes('bg-primary-500'))).toBe(true)
   })
 
   it('calls router.push in standalone mode (no modelValue)', async () => {

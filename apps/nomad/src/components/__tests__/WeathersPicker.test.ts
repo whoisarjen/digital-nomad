@@ -47,7 +47,7 @@ describe('WeathersPicker', () => {
 
     // SUN is currently selected (route.query.weathers = 'SUN')
     // Click it to deselect — newSelections becomes []
-    await wrapper.find('.bg-primary-50').trigger('click')
+    await wrapper.find('[class*="bg-primary-500"]').trigger('click')
 
     expect(mockPush).toHaveBeenCalledWith(
       expect.objectContaining({

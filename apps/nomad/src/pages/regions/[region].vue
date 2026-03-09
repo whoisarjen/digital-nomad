@@ -1,7 +1,7 @@
 <template>
-  <div class="bg-gray-100">
+  <div class="">
     <!-- Dark hero zone -->
-    <div class="bg-[#060E1B] text-white">
+    <div class="text-white">
       <!-- Loading skeleton -->
       <template v-if="!regionData || regionStatus !== 'success'">
         <section class="pt-24 pb-20 px-6">
@@ -74,7 +74,7 @@
     </div>
 
     <!-- Light content zone — filterable city grid -->
-    <section class="bg-gray-100 px-6 pt-16 pb-10">
+    <section class="px-6 pt-16 pb-10">
       <div class="flex flex-col gap-6 max-w-[1600px] mx-auto w-full">
         <!-- Search + Sort + Filter trigger -->
         <section ref="toolbarRef" class="flex gap-1.5 flex-col md:flex-row items-center">
@@ -100,10 +100,10 @@
                   :disabled="isLocked"
                   class="px-4 py-2.5 flex items-center justify-center rounded-lg border transition-all duration-200"
                   :class="isLocked
-                    ? 'bg-gray-50 border-gray-200 text-gray-300 cursor-not-allowed'
+                    ? 'bg-white/[0.03] border-white/[0.06] text-white/20 cursor-not-allowed'
                     : isFavoritesFilterActive
-                      ? 'bg-rose-50 border-rose-300 text-rose-500 hover:bg-rose-100 cursor-pointer shadow-sm shadow-rose-200/50'
-                      : 'bg-white border-gray-300 text-gray-400 hover:text-rose-400 hover:border-rose-200 hover:bg-rose-50/50 cursor-pointer'"
+                      ? 'bg-rose-500/[0.15] border-rose-500/40 text-rose-400 hover:bg-rose-500/[0.22] cursor-pointer'
+                      : 'bg-white/[0.06] border-white/[0.1] text-white/40 hover:text-rose-400 hover:border-rose-400/30 hover:bg-rose-500/[0.08] cursor-pointer'"
                   :aria-label="$t('favorites.onlyFavorites')"
                 >
                   <LucideHeart
@@ -121,8 +121,8 @@
                 @click="filtersOpen = true"
                 class="flex items-center gap-2 px-4 py-2 rounded-lg border text-sm font-medium transition-colors cursor-pointer max-md:flex-1"
                 :class="activeFilterCount
-                  ? 'bg-primary-50 text-primary-800 border-primary-300 hover:bg-primary-100'
-                  : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100'"
+                  ? 'bg-primary-500/[0.15] text-primary-300 border-primary-500/40 hover:bg-primary-500/[0.22]'
+                  : 'bg-white/[0.06] text-white/70 border-white/[0.1] hover:bg-white/[0.09]'"
               >
                 <LucideSlidersHorizontal :size="15" />
                 <span>{{ $t('filters.title') }}</span>
@@ -251,7 +251,7 @@
       >
         <button
           @click="filtersOpen = true"
-          class="pointer-events-auto flex items-center gap-2 px-5 py-3 rounded-full bg-[#060E1B] text-white shadow-xl shadow-black/20 hover:bg-[#0d1c34] transition-colors cursor-pointer"
+          class="pointer-events-auto flex items-center gap-2 px-5 py-3 rounded-full text-white shadow-xl shadow-black/20 hover:bg-[#0d1c34] transition-colors cursor-pointer"
         >
           <LucideSlidersHorizontal :size="15" />
           <span class="text-sm font-medium">{{ $t('filters.title') }}</span>

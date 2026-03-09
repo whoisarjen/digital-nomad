@@ -1,5 +1,5 @@
 <template>
-  <div class="block text-sm font-medium text-gray-700">{{ $t('filters.regions') }}</div>
+  <div class="block text-sm font-medium text-white/60">{{ $t('filters.regions') }}</div>
   <div class="flex flex-wrap gap-1">
     <div
       v-for="region in OPTIONS_REGIONS"
@@ -7,8 +7,8 @@
       @click="selectRegion(region.value)"
       class="px-4 py-2 rounded-lg border cursor-pointer text-center text-sm transition-colors flex-grow"
       :class="selectedOptions.includes(region.value)
-        ? 'bg-primary-50 border-primary-300 text-primary-800 hover:bg-primary-100'
-        : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100'"
+        ? 'bg-primary-500/[0.15] border-primary-500/40 text-primary-300 hover:bg-primary-500/[0.22]'
+        : 'bg-white/[0.06] text-white/60 border-white/[0.1] hover:bg-white/[0.09]'"
     >
       {{ $t(`regions.${region.value}`) }}
     </div>

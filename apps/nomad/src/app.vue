@@ -12,6 +12,9 @@ useHead({
     lang: () => i18nHead.value.htmlAttrs?.lang,
     dir: () => getHtmlDir(i18nHead.value.htmlAttrs?.lang ?? 'en'),
   },
+  bodyAttrs: {
+    style: 'background-color: #060E1B;',
+  },
   link: () => i18nHead.value.link ?? [],
   meta: () => i18nHead.value.meta ?? [],
 })

@@ -13,8 +13,8 @@
       class="absolute invisible opacity-0 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100 transition-all duration-200 z-[9999] right-0"
       :class="direction === 'above' ? 'bottom-full mb-1' : 'top-full mt-1'"
     >
-      <div class="bg-white min-w-48 shadow-xl py-2 rounded-xl border">
-        <h3 class="px-3 font-medium mb-2 block text-center text-gray-900 text-sm">
+      <div class="bg-[#0d1b2e] min-w-48 shadow-xl py-2 rounded-xl border border-white/[0.1]">
+        <h3 class="px-3 font-medium mb-2 block text-center text-white text-sm">
           {{ $t('currency.selectCurrency') }}
         </h3>
         <div class="divide-y max-h-80 overflow-y-auto">
@@ -22,14 +22,14 @@
             v-for="curr in SUPPORTED_CURRENCIES"
             :key="curr.code"
             @click="setCurrency(curr.code)"
-            class="w-full py-2.5 flex justify-between hover:bg-gray-100 focus:bg-gray-100 focus:outline-none transition-all cursor-pointer px-3 items-center min-h-11 text-sm"
-            :class="currency === curr.code ? 'text-primary-600 font-semibold bg-primary-50' : 'text-gray-900'"
+            class="w-full py-2.5 flex justify-between hover:bg-white/[0.08] focus:bg-white/[0.08] focus:outline-none transition-all cursor-pointer px-3 items-center min-h-11 text-sm"
+            :class="currency === curr.code ? 'text-primary-400 font-semibold bg-primary-500/[0.15]' : 'text-white'"
           >
             <span class="flex items-center gap-2">
               <span class="w-6 text-center font-mono text-xs opacity-60">{{ curr.symbol }}</span>
               <span>{{ curr.name }}</span>
             </span>
-            <span class="text-xs text-gray-400 font-mono">{{ curr.code }}</span>
+            <span class="text-xs text-white/40 font-mono">{{ curr.code }}</span>
           </button>
         </div>
       </div>

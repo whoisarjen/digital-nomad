@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-[#060E1B]">
+  <div class="min-h-screen">
     <!-- Hero -->
     <section class="relative overflow-hidden">
       <div class="absolute inset-0 overflow-hidden pointer-events-none">

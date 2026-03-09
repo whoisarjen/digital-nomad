@@ -27,7 +27,7 @@ describe('RegionsPicker', () => {
 
     // Europe is currently selected (route.query.regions = 'Europe')
     // Click it to deselect — newSelections becomes []
-    await wrapper.find('.bg-primary-50').trigger('click')
+    await wrapper.find('[class*="bg-primary-500"]').trigger('click')
 
     expect(mockPush).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -69,6 +69,6 @@ describe('RegionsPicker', () => {
     })
 
     // Europe should be highlighted
-    expect(wrapper.findAll('.bg-primary-50').length).toBe(1)
+    expect(wrapper.findAll('[class*="bg-primary-500"]').length).toBe(1)
   })
 })

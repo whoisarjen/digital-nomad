@@ -1,8 +1,8 @@
 <template>
-  <section class="bg-white rounded-2xl border border-gray-100 p-6">
-    <h2 class="text-base font-bold text-gray-900 mb-5 flex items-center gap-2.5">
-      <div class="size-8 rounded-xl bg-violet-50 flex items-center justify-center">
-        <LucideCalculator :size="16" class="text-violet-600" />
+  <section class="bg-white/[0.04] rounded-2xl border border-white/[0.07] p-6">
+    <h2 class="text-base font-bold text-white mb-5 flex items-center gap-2.5">
+      <div class="size-8 rounded-xl bg-violet-500/10 flex items-center justify-center">
+        <LucideCalculator :size="16" class="text-violet-400" />
       </div>
       {{ $t('affordability.widgetTitle') }}
     </h2>
@@ -11,17 +11,17 @@
     <template v-if="budget === null">
       <div class="flex flex-col gap-3">
         <!-- Mode toggle -->
-        <div class="flex rounded-lg border border-gray-200 overflow-hidden text-sm font-medium">
+        <div class="flex rounded-lg border border-white/[0.1] overflow-hidden text-sm font-medium">
           <button
             class="flex-1 py-2 transition-colors"
-            :class="mode === 'income' ? 'bg-primary-600 text-white' : 'bg-white text-gray-600 hover:bg-gray-50'"
+            :class="mode === 'income' ? 'bg-primary-600 text-white' : 'bg-transparent text-white/50 hover:bg-white/[0.05]'"
             @click="mode = 'income'"
           >
             {{ $t('affordability.monthlyIncome') }}
           </button>
           <button
             class="flex-1 py-2 transition-colors"
-            :class="mode === 'savings' ? 'bg-primary-600 text-white' : 'bg-white text-gray-600 hover:bg-gray-50'"
+            :class="mode === 'savings' ? 'bg-primary-600 text-white' : 'bg-transparent text-white/50 hover:bg-white/[0.05]'"
             @click="mode = 'savings'"
           >
             {{ $t('affordability.totalSavings') }}
@@ -31,14 +31,14 @@
         <!-- Input -->
         <div class="flex gap-2">
           <div class="relative flex-1">
-            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">$</span>
+            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-white/30 text-sm">$</span>
             <input
               v-model.number="inputValue"
               type="number"
               min="300"
               max="15000"
               step="100"
-              class="w-full pl-7 pr-3 py-2.5 rounded-lg border border-gray-200 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              class="w-full pl-7 pr-3 py-2.5 rounded-lg border border-white/[0.1] bg-white/[0.05] text-sm text-white placeholder-white/20 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               :placeholder="mode === 'income' ? '3000' : '10000'"
               @keydown.enter="applyBudget"
             />
@@ -57,12 +57,12 @@
     <!-- Results (when budget is set) -->
     <template v-else>
       <!-- Lifestyle tier tabs -->
-      <div class="flex gap-1 mb-4 rounded-lg bg-gray-100 p-1 text-xs font-medium">
+      <div class="flex gap-1 mb-4 rounded-lg bg-white/[0.06] p-1 text-xs font-medium">
         <button
           v-for="tier in tiers"
           :key="tier.key"
           class="flex-1 py-1.5 rounded-md transition-colors"
-          :class="activeTier === tier.key ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'"
+          :class="activeTier === tier.key ? 'bg-white/[0.12] text-white shadow-sm' : 'text-white/40 hover:text-white/70'"
           @click="activeTier = tier.key"
         >
           {{ $t(tier.label) }}
@@ -70,17 +70,17 @@
       </div>
 
       <!-- Mode toggle (compact) -->
-      <div class="flex rounded-md border border-gray-200 overflow-hidden text-xs font-medium mb-4">
+      <div class="flex rounded-md border border-white/[0.1] overflow-hidden text-xs font-medium mb-4">
         <button
           class="flex-1 py-1.5 transition-colors"
-          :class="mode === 'income' ? 'bg-primary-600 text-white' : 'bg-white text-gray-500 hover:bg-gray-50'"
+          :class="mode === 'income' ? 'bg-primary-600 text-white' : 'bg-transparent text-white/40 hover:bg-white/[0.05]'"
           @click="mode = 'income'"
         >
           {{ $t('affordability.monthlyIncome') }}
         </button>
         <button
           class="flex-1 py-1.5 transition-colors"
-          :class="mode === 'savings' ? 'bg-primary-600 text-white' : 'bg-white text-gray-500 hover:bg-gray-50'"
+          :class="mode === 'savings' ? 'bg-primary-600 text-white' : 'bg-transparent text-white/40 hover:bg-white/[0.05]'"
           @click="mode = 'savings'"
         >
           {{ $t('affordability.totalSavings') }}
@@ -95,7 +95,7 @@
             {{ formatCost(Math.abs(resultAmount)) }}
           </span>
         </div>
-        <div class="text-xs text-gray-500">
+        <div class="text-xs text-white/30">
           <template v-if="mode === 'income'">
             {{ $t('affordability.budgetVsCost', { budget: budget, cost: activeCost }) }}
           </template>
@@ -107,18 +107,18 @@
 
       <!-- Status badge -->
       <div class="flex items-center gap-2 text-sm mb-4">
-        <span class="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold" :class="statusBadgeClass">
+        <span class="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold border" :class="statusBadgeClass">
           {{ $t(statusLabel) }}
         </span>
-        <span class="text-xs text-gray-400">{{ formatCost(activeCost) }}/mo {{ $t('affordability.forLifestyle', { tier: $t(activeTierLabel) }) }}</span>
+        <span class="text-xs text-white/30">{{ formatCost(activeCost) }}/mo {{ $t('affordability.forLifestyle', { tier: $t(activeTierLabel) }) }}</span>
       </div>
 
       <!-- Budget info + clear -->
-      <div class="flex items-center justify-between text-xs text-gray-400 pt-3 border-t border-gray-50">
-        <span>{{ mode === 'income' ? $t('affordability.monthlyIncome') : $t('affordability.totalSavings') }}: <span class="font-semibold text-gray-600">{{ formatCost(budget) }}</span></span>
+      <div class="flex items-center justify-between text-xs text-white/30 pt-3 border-t border-white/[0.06]">
+        <span>{{ mode === 'income' ? $t('affordability.monthlyIncome') : $t('affordability.totalSavings') }}: <span class="font-semibold text-white/60">{{ formatCost(budget) }}</span></span>
         <button
           @click="clearBudget"
-          class="text-gray-400 hover:text-red-500 transition-colors"
+          class="text-white/30 hover:text-red-400 transition-colors"
         >
           {{ $t('budget.clearBudget') }}
         </button>
@@ -186,21 +186,21 @@ const resultLabel = computed(() => {
 })
 
 const resultCardClass = computed(() => {
-  if (isSurplus.value) return 'border-emerald-100 bg-emerald-50/50'
-  if (isTight.value) return 'border-amber-100 bg-amber-50/50'
-  return 'border-red-100 bg-red-50/50'
+  if (isSurplus.value) return 'border-emerald-500/20 bg-emerald-500/[0.08]'
+  if (isTight.value) return 'border-amber-500/20 bg-amber-500/[0.08]'
+  return 'border-red-500/20 bg-red-500/[0.08]'
 })
 
 const resultLabelClass = computed(() => {
-  if (isSurplus.value) return 'text-emerald-700'
-  if (isTight.value) return 'text-amber-700'
-  return 'text-red-700'
+  if (isSurplus.value) return 'text-emerald-400'
+  if (isTight.value) return 'text-amber-400'
+  return 'text-red-400'
 })
 
 const resultAmountClass = computed(() => {
-  if (isSurplus.value) return 'text-emerald-600'
-  if (isTight.value) return 'text-amber-600'
-  return 'text-red-600'
+  if (isSurplus.value) return 'text-emerald-400'
+  if (isTight.value) return 'text-amber-400'
+  return 'text-red-400'
 })
 
 const statusLabel = computed(() => {
@@ -210,9 +210,9 @@ const statusLabel = computed(() => {
 })
 
 const statusBadgeClass = computed(() => {
-  if (isSurplus.value) return 'bg-emerald-100 text-emerald-700'
-  if (isTight.value) return 'bg-amber-100 text-amber-700'
-  return 'bg-red-100 text-red-700'
+  if (isSurplus.value) return 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'
+  if (isTight.value) return 'bg-amber-500/10 border-amber-500/20 text-amber-400'
+  return 'bg-red-500/10 border-red-500/20 text-red-400'
 })
 
 function applyBudget() {

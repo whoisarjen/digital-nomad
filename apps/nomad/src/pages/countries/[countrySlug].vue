@@ -1,7 +1,7 @@
 <template>
-  <div class="bg-gray-100">
+  <div class="">
     <!-- Dark hero zone -->
-    <div class="bg-[#060E1B] text-white">
+    <div class="text-white">
       <!-- Loading skeleton -->
       <template v-if="!countryData || countryStatus !== 'success'">
         <section class="pt-24 pb-20 px-6">
@@ -77,7 +77,7 @@
     </div>
 
     <!-- Light content zone — top cities -->
-    <section class="bg-gray-100 px-6 pt-12 pb-16">
+    <section class="px-6 pt-12 pb-16">
       <div class="max-w-screen-xl mx-auto">
         <!-- Skeleton -->
         <template v-if="!countryData || countryStatus !== 'success'">

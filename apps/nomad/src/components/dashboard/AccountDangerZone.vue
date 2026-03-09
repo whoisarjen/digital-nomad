@@ -1,9 +1,9 @@
 <template>
-  <div class="bg-white rounded-xl border border-gray-200 p-6">
-    <h3 class="text-lg font-bold text-gray-900 mb-1">{{ $t('dashboard.account') }}</h3>
+  <div class="bg-white/[0.04] rounded-xl border border-white/[0.1] p-6">
+    <h3 class="text-lg font-bold text-white mb-1">{{ $t('dashboard.account') }}</h3>
 
     <template v-if="!confirming">
-      <p class="text-sm text-gray-500 mb-4">{{ $t('dashboard.deleteConfirm').split('.')[0] }}.</p>
+      <p class="text-sm text-white/50 mb-4">{{ $t('dashboard.deleteConfirm').split('.')[0] }}.</p>
       <button
         @click="confirming = true"
         class="text-sm text-red-500 hover:text-red-600 font-medium transition-colors"
@@ -27,7 +27,7 @@
         </button>
         <button
           @click="confirming = false"
-          class="text-sm text-gray-500 hover:text-gray-700 font-medium px-4 py-2 transition-colors"
+          class="text-sm text-white/50 hover:text-white/80 font-medium px-4 py-2 transition-colors"
         >
           {{ $t('dashboard.cancel') }}
         </button>

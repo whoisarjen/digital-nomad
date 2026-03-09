@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col gap-2">
-    <div class="text-sm font-medium text-gray-700">{{ $t('filters.months') }}</div>
+    <div class="text-sm font-medium text-white/60">{{ $t('filters.months') }}</div>
     <div class="flex flex-wrap gap-1">
       <div
         v-for="month in months"
@@ -8,8 +8,8 @@
         @click="selectMonth(month.value)"
         class="px-4 py-2 rounded-lg border cursor-pointer text-center text-sm transition-colors min-w-16 flex-grow"
         :class="selectedOption === month.value
-          ? 'bg-primary-50 border-primary-300 text-primary-800 hover:bg-primary-100'
-          : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100'"
+          ? 'bg-primary-500/[0.15] border-primary-500/40 text-primary-300 hover:bg-primary-500/[0.22]'
+          : 'bg-white/[0.06] text-white/60 border-white/[0.1] hover:bg-white/[0.09]'"
       >
         {{ month.label }}
       </div>

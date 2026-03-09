@@ -69,6 +69,7 @@ export default defineConfig({
             'src/server/**/__tests__/**/*.{test,spec}.ts',
             'src/shared/**/__tests__/**/*.{test,spec}.ts',
             'src/utils/**/__tests__/**/*.{test,spec}.ts',
+            'src/pages/**/__tests__/**/*.{test,spec}.ts',
           ],
           environment: 'node',
         },

@@ -1,7 +1,7 @@
 <template>
-  <div class="bg-gray-100 min-h-screen">
+  <div class="min-h-screen">
     <!-- Dark hero zone -->
-    <section class="relative bg-[#060E1B] text-white overflow-hidden">
+    <section class="relative text-white overflow-hidden">
       <!-- Ambient orbs -->
       <div class="absolute inset-0 overflow-hidden">
         <div class="absolute -top-1/3 -right-[15%] w-[50%] h-[50%] rounded-full bg-primary-500/[0.06] blur-[100px] animate-float" />
@@ -10,7 +10,7 @@
 
       <div class="relative z-10 max-w-4xl mx-auto px-6 pt-24 pb-16 text-center">
         <!-- Breadcrumb pill -->
-        <div class="inline-flex items-center gap-2 bg-white/[0.06] border border-white/[0.08] rounded-full px-4 py-1.5 text-sm text-gray-400 mb-6">
+        <div class="inline-flex items-center gap-2 bg-white/[0.06] border border-white/[0.08] rounded-full px-4 py-1.5 text-sm text-white/40 mb-6">
           <LucideCalculator :size="14" class="text-primary-400" />
           {{ $t('schengen.toolsNav') }}
         </div>
@@ -18,7 +18,7 @@
         <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight leading-tight mb-4">
           {{ $t('schengen.title') }}
         </h1>
-        <p class="text-base md:text-lg text-gray-400 max-w-2xl mx-auto leading-relaxed">
+        <p class="text-base md:text-lg text-white/40 max-w-2xl mx-auto leading-relaxed">
           {{ $t('schengen.subtitle') }}
         </p>
       </div>
@@ -28,7 +28,7 @@
     <section class="max-w-4xl mx-auto px-6 -mt-2 pb-20">
 
       <!-- ═══ GAUGE + STATS CARD ═══ -->
-      <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 sm:p-8 mb-6">
+      <div class="bg-white/[0.04] rounded-2xl border border-white/[0.1] p-6 sm:p-8 mb-6">
         <div class="flex flex-col md:flex-row items-center gap-8">
 
           <!-- Arc Gauge -->
@@ -38,7 +38,7 @@
               <path
                 :d="arcPath"
                 fill="none"
-                stroke="#e5e7eb"
+                stroke="rgba(255,255,255,0.1)"
                 stroke-width="16"
                 stroke-linecap="round"
               />
@@ -87,7 +87,7 @@
               >
                 {{ daysRemaining }}
               </span>
-              <span class="text-xs text-gray-400 mt-0.5">
+              <span class="text-xs text-white/40 mt-0.5">
                 {{ $t('schengen.daysRemainingOf') }}
               </span>
             </div>
@@ -95,10 +95,10 @@
 
           <!-- Stats grid -->
           <div class="flex-1 w-full grid grid-cols-2 gap-4">
-            <div class="bg-gray-50 rounded-xl p-4">
-              <div class="text-xs text-gray-500 mb-1">{{ $t('schengen.daysUsed', { days: '' }).trim() }}</div>
-              <div class="text-2xl font-bold tabular-nums text-gray-900">{{ daysUsed }}</div>
-              <div class="mt-1.5 h-1.5 bg-gray-200 rounded-full overflow-hidden">
+            <div class="bg-white/[0.04] rounded-xl p-4">
+              <div class="text-xs text-white/50 mb-1">{{ $t('schengen.daysUsed', { days: '' }).trim() }}</div>
+              <div class="text-2xl font-bold tabular-nums text-white">{{ daysUsed }}</div>
+              <div class="mt-1.5 h-1.5 bg-white/[0.1] rounded-full overflow-hidden">
                 <div
                   class="h-full rounded-full transition-all duration-700 ease-out"
                   :class="progressBarClass"
@@ -107,8 +107,8 @@
               </div>
             </div>
 
-            <div class="bg-gray-50 rounded-xl p-4">
-              <div class="text-xs text-gray-500 mb-1">{{ $t('schengen.daysRemaining', { days: '' }).trim() }}</div>
+            <div class="bg-white/[0.04] rounded-xl p-4">
+              <div class="text-xs text-white/50 mb-1">{{ $t('schengen.daysRemaining', { days: '' }).trim() }}</div>
               <div
                 class="text-2xl font-bold tabular-nums transition-colors duration-300"
                 :class="gaugeTextClass"
@@ -120,18 +120,18 @@
               </div>
             </div>
 
-            <div class="bg-gray-50 rounded-xl p-4">
-              <div class="text-xs text-gray-500 mb-1">{{ $t('schengen.checkDate') }}</div>
-              <div class="text-sm font-semibold text-gray-900">{{ $t('schengen.today') }}</div>
-              <div class="text-xs text-gray-400 mt-0.5">{{ formattedCheckDate }}</div>
+            <div class="bg-white/[0.04] rounded-xl p-4">
+              <div class="text-xs text-white/50 mb-1">{{ $t('schengen.checkDate') }}</div>
+              <div class="text-sm font-semibold text-white">{{ $t('schengen.today') }}</div>
+              <div class="text-xs text-white/40 mt-0.5">{{ formattedCheckDate }}</div>
             </div>
 
-            <div class="bg-gray-50 rounded-xl p-4">
-              <div class="text-xs text-gray-500 mb-1">{{ $t('schengen.nextSafeEntry') }}</div>
+            <div class="bg-white/[0.04] rounded-xl p-4">
+              <div class="text-xs text-white/50 mb-1">{{ $t('schengen.nextSafeEntry') }}</div>
               <div class="text-sm font-semibold" :class="nextSafeEntry ? 'text-amber-600' : 'text-emerald-600'">
                 {{ nextSafeEntry ? formattedNextSafe : '—' }}
               </div>
-              <div v-if="nextSafeEntry" class="text-xs text-gray-400 mt-0.5">
+              <div v-if="nextSafeEntry" class="text-xs text-white/40 mt-0.5">
                 {{ daysUntilSafe }} {{ $t('schengen.days') }}
               </div>
             </div>
@@ -140,9 +140,9 @@
       </div>
 
       <!-- ═══ ENTRIES CARD ═══ -->
-      <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 sm:p-8 mb-6">
+      <div class="bg-white/[0.04] rounded-2xl border border-white/[0.1] p-6 sm:p-8 mb-6">
         <div class="flex items-center justify-between mb-5">
-          <h2 class="text-lg font-semibold text-gray-900">
+          <h2 class="text-lg font-semibold text-white">
             <LucidePlane :size="18" class="inline -mt-0.5 mr-1.5 text-primary-500" />
             {{ entries.length ? `${entries.length} trip${entries.length > 1 ? 's' : ''}` : $t('schengen.addEntry') }}
           </h2>
@@ -156,8 +156,8 @@
         </div>
 
         <!-- Empty state -->
-        <div v-if="!entries.length" class="text-center py-12 text-gray-400">
-          <LucideGlobe :size="40" class="mx-auto mb-3 text-gray-300" />
+        <div v-if="!entries.length" class="text-center py-12 text-white/40">
+          <LucideGlobe :size="40" class="mx-auto mb-3 text-white/30" />
           <p class="text-sm">{{ $t('schengen.noEntries') }}</p>
         </div>
 
@@ -166,33 +166,33 @@
           <div
             v-for="(entry, i) in entries"
             :key="entry.id"
-            class="group flex flex-wrap sm:flex-nowrap items-center gap-3 bg-gray-50 rounded-xl px-4 py-3 border border-gray-100 hover:border-primary-200 transition-colors"
+            class="group flex flex-wrap sm:flex-nowrap items-center gap-3 bg-white/[0.04] rounded-xl px-4 py-3 border border-white/[0.07] hover:border-primary-400/40 transition-colors"
           >
             <!-- Trip number -->
-            <span class="hidden sm:flex size-7 items-center justify-center rounded-full bg-primary-500/10 text-primary-600 text-xs font-bold flex-shrink-0">
+            <span class="hidden sm:flex size-7 items-center justify-center rounded-full bg-primary-500/10 text-primary-400 text-xs font-bold flex-shrink-0">
               {{ i + 1 }}
             </span>
 
             <!-- Entry date -->
             <div class="flex-1 min-w-0">
-              <label class="text-[10px] uppercase tracking-wider text-gray-400 font-medium">{{ $t('schengen.entryDate') }}</label>
+              <label class="text-[10px] uppercase tracking-wider text-white/40 font-medium">{{ $t('schengen.entryDate') }}</label>
               <input
                 type="date"
                 v-model="entry.from"
-                class="block w-full mt-0.5 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500/30 focus:border-primary-400 transition-shadow"
+                class="block w-full mt-0.5 text-sm font-medium text-white placeholder:text-white/30 bg-white/[0.06] border border-white/[0.1] rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500/30 focus:border-primary-400 transition-shadow"
               />
             </div>
 
             <!-- Arrow -->
-            <LucideArrowRight :size="16" class="text-gray-300 flex-shrink-0 hidden sm:block mt-4" />
+            <LucideArrowRight :size="16" class="text-white/30 flex-shrink-0 hidden sm:block mt-4" />
 
             <!-- Exit date -->
             <div class="flex-1 min-w-0">
-              <label class="text-[10px] uppercase tracking-wider text-gray-400 font-medium">{{ $t('schengen.exitDate') }}</label>
+              <label class="text-[10px] uppercase tracking-wider text-white/40 font-medium">{{ $t('schengen.exitDate') }}</label>
               <input
                 type="date"
                 v-model="entry.to"
-                class="block w-full mt-0.5 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500/30 focus:border-primary-400 transition-shadow"
+                class="block w-full mt-0.5 text-sm font-medium text-white placeholder:text-white/30 bg-white/[0.06] border border-white/[0.1] rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500/30 focus:border-primary-400 transition-shadow"
               />
             </div>
 
@@ -202,8 +202,8 @@
                 v-if="entry.from && entry.to && tripDays(entry) > 0"
                 class="text-xs font-semibold tabular-nums rounded-full px-2.5 py-1"
                 :class="tripDays(entry) > 30
-                  ? 'bg-amber-50 text-amber-700 border border-amber-200'
-                  : 'bg-primary-50 text-primary-700 border border-primary-200'"
+                  ? 'bg-amber-500/[0.15] text-amber-400 border border-amber-500/30'
+                  : 'bg-primary-500/[0.15] text-primary-400 border border-primary-500/30'"
               >
                 {{ $t('schengen.tripDays', { days: tripDays(entry) }) }}
               </span>
@@ -211,7 +211,7 @@
               <!-- Remove -->
               <button
                 @click="removeEntry(i)"
-                class="size-8 flex items-center justify-center rounded-lg text-gray-300 hover:text-red-500 hover:bg-red-50 transition-colors cursor-pointer"
+                class="size-8 flex items-center justify-center rounded-lg text-white/30 hover:text-red-400 hover:bg-red-500/[0.12] transition-colors cursor-pointer"
                 :aria-label="$t('schengen.removeEntry')"
               >
                 <LucideTrash2 :size="15" />
@@ -222,26 +222,26 @@
       </div>
 
       <!-- ═══ HOW IT WORKS ═══ -->
-      <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 sm:p-8 mb-6">
-        <h2 class="text-lg font-semibold text-gray-900 mb-3">
-          <LucideInfo :size="18" class="inline -mt-0.5 mr-1.5 text-gray-400" />
+      <div class="bg-white/[0.04] rounded-2xl border border-white/[0.1] p-6 sm:p-8 mb-6">
+        <h2 class="text-lg font-semibold text-white mb-3">
+          <LucideInfo :size="18" class="inline -mt-0.5 mr-1.5 text-white/40" />
           {{ $t('schengen.howItWorks') }}
         </h2>
-        <p class="text-sm text-gray-500 leading-relaxed">
+        <p class="text-sm text-white/50 leading-relaxed">
           {{ $t('schengen.howItWorksDesc') }}
         </p>
 
         <!-- Visual explanation -->
         <div class="mt-5 flex items-center gap-3 overflow-hidden">
-          <div class="flex-1 h-2.5 rounded-full bg-gray-100 relative overflow-hidden">
+          <div class="flex-1 h-2.5 rounded-full bg-white/[0.08] relative overflow-hidden">
             <div class="absolute left-0 top-0 h-full rounded-full bg-primary-400/30" style="width: 50%" />
             <div class="absolute left-0 top-0 h-full rounded-full bg-primary-500" style="width: 25%" />
           </div>
-          <div class="flex-shrink-0 text-[10px] text-gray-400 font-medium whitespace-nowrap">
+          <div class="flex-shrink-0 text-[10px] text-white/40 font-medium whitespace-nowrap">
             180 {{ $t('schengen.days') }}
           </div>
         </div>
-        <div class="flex justify-between mt-1.5 text-[10px] text-gray-400">
+        <div class="flex justify-between mt-1.5 text-[10px] text-white/40">
           <span>90 {{ $t('schengen.days') }} max</span>
           <span>Rolling window</span>
         </div>
@@ -250,9 +250,9 @@
       <!-- ═══ NON-SCHENGEN RECOMMENDATIONS ═══ -->
       <div
         v-if="daysRemaining <= 20 && entries.length > 0"
-        class="bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl border border-amber-200 p-6 sm:p-8"
+        class="bg-gradient-to-br from-amber-500/[0.08] to-orange-500/[0.06] rounded-2xl border border-amber-500/30 p-6 sm:p-8"
       >
-        <h2 class="text-lg font-semibold text-gray-900 mb-2">
+        <h2 class="text-lg font-semibold text-white mb-2">
           <LucideMapPin :size="18" class="inline -mt-0.5 mr-1.5 text-amber-500" />
           {{ $t('schengen.nonSchengenTitle') }}
         </h2>
@@ -261,12 +261,12 @@
             v-for="city in nonSchengenSuggestions"
             :key="city.slug"
             :to="localePath({ name: 'cities-slug', params: { slug: city.slug } })"
-            class="bg-white/80 backdrop-blur-sm rounded-xl p-3 border border-amber-100 hover:border-primary-300 hover:shadow-sm transition-all group"
+            class="bg-white/[0.04] backdrop-blur-sm rounded-xl p-3 border border-amber-500/20 hover:border-primary-400/40 transition-all group"
           >
-            <div class="text-sm font-semibold text-gray-900 group-hover:text-primary-600 transition-colors truncate">
+            <div class="text-sm font-semibold text-white group-hover:text-primary-400 transition-colors truncate">
               {{ city.name }}
             </div>
-            <div class="text-xs text-gray-400 mt-0.5">{{ city.country }}</div>
+            <div class="text-xs text-white/40 mt-0.5">{{ city.country }}</div>
             <div class="text-xs font-medium text-emerald-600 mt-1 tabular-nums">
               {{ formatCost(city.cost) }}/mo
             </div>
@@ -410,7 +410,7 @@ const gaugeColor = computed(() => {
 const gaugeTextClass = computed(() => {
   if (isOverLimit.value) return 'text-red-500'
   if (daysRemaining.value <= 20) return 'text-amber-500'
-  return 'text-gray-900'
+  return 'text-white'
 })
 
 const progressBarClass = computed(() => {

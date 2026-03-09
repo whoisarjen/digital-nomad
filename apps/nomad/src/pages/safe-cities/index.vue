@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-[#060E1B] text-white">
+  <div class="min-h-screen text-white">
     <!-- Background texture -->
     <div
       class="pointer-events-none fixed inset-0 opacity-30"

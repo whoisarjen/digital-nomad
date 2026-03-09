@@ -1,8 +1,8 @@
 <template>
   <div class="flex flex-col gap-3">
     <div class="flex items-center justify-between">
-      <span class="text-sm font-medium text-gray-700">{{ $t('budget.filterLabel') }}</span>
-      <span class="text-sm font-semibold text-gray-900 tabular-nums">{{ formatCost(budget) }}/mo</span>
+      <span class="text-sm font-medium text-white/60">{{ $t('budget.filterLabel') }}</span>
+      <span class="text-sm font-semibold text-white tabular-nums">{{ formatCost(budget) }}/mo</span>
     </div>
 
     <input
@@ -15,7 +15,7 @@
       @input="onSliderInput"
     />
 
-    <div class="flex items-center justify-between text-xs text-gray-400">
+    <div class="flex items-center justify-between text-xs text-white/30">
       <span>{{ formatCost(300) }}</span>
       <span>{{ formatCost(15000) }}</span>
     </div>
@@ -27,7 +27,7 @@
         class="size-4 rounded accent-primary-600 cursor-pointer"
         @change="onToggleFilter"
       />
-      <span class="text-sm text-gray-700">{{ $t('budget.onlyAffordable') }}</span>
+      <span class="text-sm text-white/60">{{ $t('budget.onlyAffordable') }}</span>
     </label>
   </div>
 </template>

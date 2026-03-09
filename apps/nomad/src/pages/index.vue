@@ -1,11 +1,11 @@
 <template>
-  <div class="bg-gray-100">
+  <div class="">
     <!-- ══════════════════════════════════════════ -->
     <!-- PART 1 — LANDING / MARKETING              -->
     <!-- ══════════════════════════════════════════ -->
 
     <!-- Hero + Features (continuous dark zone) -->
-    <div class="bg-[#060E1B] text-white">
+    <div class="text-white">
 
       <!-- Hero -->
       <section class="relative min-h-screen flex flex-col justify-center items-center text-center overflow-hidden px-6">
@@ -15,12 +15,6 @@
           <div class="absolute -bottom-[10%] -right-[10%] w-[45%] h-[45%] rounded-full bg-accent-500/[0.05] blur-[100px] animate-float-reverse" />
           <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[30%] h-[30%] rounded-full bg-cyan-400/[0.04] blur-[80px] animate-float-slow" />
         </div>
-
-        <!-- Dot grid -->
-        <div
-          class="absolute inset-0 opacity-30"
-          style="background-image: url(&quot;data:image/svg+xml,%3Csvg width='24' height='24' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='12' cy='12' r='1' fill='rgba(255,255,255,0.035)'/%3E%3C/svg%3E&quot;);"
-        />
 
         <!-- Content -->
         <div class="relative z-10 max-w-4xl mx-auto flex flex-col items-center gap-7 py-12">
@@ -339,11 +333,11 @@
     <!-- PART 2 — APP FUNCTIONALITY                -->
     <!-- ══════════════════════════════════════════ -->
 
-    <section class="bg-gray-100 px-6 pt-16 pb-10" id="explore">
+    <section class="px-6 pt-16 pb-10" id="explore">
       <!-- Section header -->
       <div class="text-center mb-10 max-w-2xl mx-auto">
-        <h2 class="text-3xl font-bold text-gray-900 mb-2">{{ $t('landing.exploreAllTitle') }}</h2>
-        <p class="text-gray-500">{{ $t('landing.exploreAllSubtitle') }}</p>
+        <h2 class="text-3xl font-bold text-white mb-2">{{ $t('landing.exploreAllTitle') }}</h2>
+        <p class="text-white/50">{{ $t('landing.exploreAllSubtitle') }}</p>
       </div>
 
       <div class="flex flex-col gap-6 max-w-[1600px] mx-auto w-full">
@@ -369,8 +363,8 @@
                 @click="filtersOpen = true"
                 class="flex items-center gap-2 px-4 py-2 rounded-lg border text-sm font-medium transition-colors cursor-pointer max-md:flex-1"
                 :class="activeFilterCount
-                  ? 'bg-primary-50 text-primary-800 border-primary-300 hover:bg-primary-100'
-                  : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100'"
+                  ? 'bg-primary-500/[0.15] text-primary-300 border-primary-500/40 hover:bg-primary-500/[0.22]'
+                  : 'bg-white/[0.06] text-white/70 border-white/[0.1] hover:bg-white/[0.09]'"
               >
                 <LucideSlidersHorizontal :size="15" />
                 <span>{{ $t('filters.title') }}</span>
@@ -391,10 +385,10 @@
                   :disabled="isLocked"
                   class="px-4 py-2.5 flex items-center justify-center rounded-lg border transition-all duration-200"
                   :class="isLocked
-                    ? 'bg-gray-50 border-gray-200 text-gray-300 cursor-not-allowed'
+                    ? 'bg-white/[0.03] border-white/[0.06] text-white/20 cursor-not-allowed'
                     : isFavoritesFilterActive
-                      ? 'bg-rose-50 border-rose-300 text-rose-500 hover:bg-rose-100 cursor-pointer shadow-sm shadow-rose-200/50'
-                      : 'bg-white border-gray-300 text-gray-400 hover:text-rose-400 hover:border-rose-200 hover:bg-rose-50/50 cursor-pointer'"
+                      ? 'bg-rose-500/[0.15] border-rose-500/40 text-rose-400 hover:bg-rose-500/[0.22] cursor-pointer'
+                      : 'bg-white/[0.06] border-white/[0.1] text-white/40 hover:text-rose-400 hover:border-rose-400/30 hover:bg-rose-500/[0.08] cursor-pointer'"
                   :aria-label="$t('favorites.onlyFavorites')"
                 >
                   <LucideHeart
@@ -413,8 +407,8 @@
                 :disabled="!activeFilterCount"
                 class="px-3 py-2.5 flex items-center justify-center rounded-lg border transition-colors"
                 :class="activeFilterCount
-                  ? 'bg-white border-gray-300 text-gray-500 hover:text-red-500 hover:border-red-300 hover:bg-red-50 cursor-pointer'
-                  : 'bg-white border-gray-200 text-gray-300 cursor-not-allowed'"
+                  ? 'bg-white/[0.06] border-white/[0.1] text-white/50 hover:text-red-400 hover:border-red-400/30 hover:bg-red-500/[0.08] cursor-pointer'
+                  : 'bg-white/[0.03] border-white/[0.06] text-white/20 cursor-not-allowed'"
                 :aria-label="$t('tooltip.resetFilters')"
               >
                 <LucideRotateCcw :size="15" />
@@ -425,7 +419,7 @@
 
         <!-- Active month indicator -->
         <div v-if="!isMonthDefault" class="flex items-center gap-2">
-          <div class="flex items-center gap-1.5 bg-primary-50 border border-primary-200 text-primary-700 rounded-full px-3 py-1.5 text-sm font-medium">
+          <div class="flex items-center gap-1.5 bg-primary-500/[0.12] border border-primary-500/30 text-primary-300 rounded-full px-3 py-1.5 text-sm font-medium">
             <LucideCalendar :size="13" />
             {{ $t('explore.showingForMonth', { month: activeMonthName }) }}
             <button @click="clearMonthFilter" class="ml-1 text-primary-400 hover:text-primary-700 cursor-pointer transition-colors">
@@ -579,7 +573,7 @@
       >
         <button
           @click="filtersOpen = true"
-          class="pointer-events-auto flex items-center gap-2 px-5 py-3 rounded-full bg-[#060E1B] text-white shadow-xl shadow-black/20 hover:bg-[#0d1c34] transition-colors cursor-pointer"
+          class="pointer-events-auto flex items-center gap-2 px-5 py-3 rounded-full text-white shadow-xl shadow-black/20 hover:bg-[#0d1c34] transition-colors cursor-pointer"
         >
           <LucideSlidersHorizontal :size="15" />
           <span class="text-sm font-medium">{{ $t('filters.title') }}</span>

@@ -252,7 +252,10 @@
       "Bash(for f in *.json)",
       "Bash(do python3 -c \":*)",
       "Bash(/Users/kamilowczarek/Documents/GitHub/digital-nomad/apps/nomad/src/server/api/search/__tests__/cities.get.test.ts:*)",
-      "Bash(/Users/kamilowczarek/Documents/GitHub/digital-nomad/apps/nomad/src/components/__tests__/AppSearchPanel.test.ts:*)"
+      "Bash(/Users/kamilowczarek/Documents/GitHub/digital-nomad/apps/nomad/src/components/__tests__/AppSearchPanel.test.ts:*)",
+      "Bash(npm run test:run --workspace=apps/nomad -- --reporter=verbose src/pages/blog/__tests__/validFaqs.test.ts)",
+      "Bash(xargs sed -i '' 's/ bg-\\\\[#060E1B\\\\]//g')",
+      "Bash(xargs sed -i '' 's/bg-\\\\[#060E1B\\\\] //g; s/ bg-\\\\[#060E1B\\\\]//g; s/bg-\\\\[#060E1B\\\\]//g')"
     ],
     "additionalDirectories": [
       "/tmp",
@@ -265,7 +268,8 @@
       "/Users/kamilowczarek/Documents/GitHub/digital-nomad/docs",
       "/Users/kamilowczarek/Documents/GitHub/digital-nomad/TODO",
       "/Users/kamilowczarek/Documents/GitHub/digital-nomad/packages/db",
-      "/Users/kamilowczarek/Documents/GitHub/digital-nomad/apps/nomad/src/server/api/tools"
+      "/Users/kamilowczarek/Documents/GitHub/digital-nomad/apps/nomad/src/server/api/tools",
+      "/Users/kamilowczarek/Documents/GitHub/digital-nomad/apps/nomad/src/pages/blog"
     ]
   }
 }

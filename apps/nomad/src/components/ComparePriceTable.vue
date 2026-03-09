@@ -1,15 +1,15 @@
 <template>
-  <section v-if="hasAnyData" class="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+  <section v-if="hasAnyData" class="bg-white/[0.04] rounded-2xl border border-white/[0.07] overflow-hidden">
     <!-- Header -->
-    <div class="px-6 pt-6 pb-5 flex items-center justify-between gap-4 border-b border-gray-50">
+    <div class="px-6 pt-6 pb-5 flex items-center justify-between gap-4 border-b border-white/[0.05]">
       <div class="flex items-center gap-2.5">
-        <div class="size-8 rounded-xl bg-primary-50 flex items-center justify-center shrink-0">
-          <LucideBarChart2 :size="16" class="text-primary-600" />
+        <div class="size-8 rounded-xl bg-primary-500/[0.15] flex items-center justify-center shrink-0">
+          <LucideBarChart2 :size="16" class="text-primary-400" />
         </div>
-        <h2 class="text-base font-bold text-gray-900">{{ $t('comparePriceTable.title') }}</h2>
+        <h2 class="text-base font-bold text-white">{{ $t('comparePriceTable.title') }}</h2>
       </div>
       <!-- Legend -->
-      <div class="flex items-center gap-3 text-[11px] text-gray-400">
+      <div class="flex items-center gap-3 text-[11px] text-white/40">
         <span class="flex items-center gap-1.5">
           <span class="inline-block size-2 rounded-full bg-emerald-400" />
           {{ cityAName }}
@@ -22,21 +22,21 @@
     </div>
 
     <!-- Column headers (sticky) -->
-    <div class="sticky top-0 z-10 bg-white/95 backdrop-blur-sm border-b border-gray-100 px-6 py-2.5 grid grid-cols-[1fr_auto_auto_auto] gap-x-4 items-center">
-      <span class="text-[10px] font-semibold uppercase tracking-widest text-gray-400">{{ $t('comparePriceTable.item') }}</span>
-      <span class="text-[10px] font-semibold uppercase tracking-widest text-gray-500 text-right w-24">{{ cityAName }}</span>
-      <span class="text-[10px] font-semibold uppercase tracking-widest text-gray-500 text-right w-24">{{ cityBName }}</span>
-      <span class="text-[10px] font-semibold uppercase tracking-widest text-gray-400 text-right w-16">{{ $t('comparePriceTable.diff') }}</span>
+    <div class="sticky top-0 z-10 bg-[#060E1B]/95 backdrop-blur-sm border-b border-white/[0.07] px-6 py-2.5 grid grid-cols-[1fr_auto_auto_auto] gap-x-4 items-center">
+      <span class="text-[10px] font-semibold uppercase tracking-widest text-white/40">{{ $t('comparePriceTable.item') }}</span>
+      <span class="text-[10px] font-semibold uppercase tracking-widest text-white/50 text-right w-24">{{ cityAName }}</span>
+      <span class="text-[10px] font-semibold uppercase tracking-widest text-white/50 text-right w-24">{{ cityBName }}</span>
+      <span class="text-[10px] font-semibold uppercase tracking-widest text-white/40 text-right w-16">{{ $t('comparePriceTable.diff') }}</span>
     </div>
 
     <!-- Categories and rows -->
     <div>
       <template v-for="cat in visibleCategories" :key="cat.key">
         <!-- Category header -->
-        <div class="flex items-center gap-2.5 px-6 py-2.5 bg-gray-50/70 border-y border-gray-100/80">
+        <div class="flex items-center gap-2.5 px-6 py-2.5 bg-white/[0.04] border-y border-white/[0.07]">
           <span class="text-base leading-none">{{ cat.icon }}</span>
-          <span class="text-xs font-bold text-gray-600 uppercase tracking-wider">{{ $t(cat.labelKey) }}</span>
-          <span class="ml-auto text-[10px] text-gray-400 tabular-nums">{{ cat.visibleCount }} {{ $t('comparePriceTable.items') }}</span>
+          <span class="text-xs font-bold text-white/60 uppercase tracking-wider">{{ $t(cat.labelKey) }}</span>
+          <span class="ml-auto text-[10px] text-white/40 tabular-nums">{{ cat.visibleCount }} {{ $t('comparePriceTable.items') }}</span>
         </div>
 
         <!-- Price rows -->
@@ -44,31 +44,31 @@
           v-for="row in cat.rows"
           :key="row.key"
           data-testid="price-row"
-          class="grid grid-cols-[1fr_auto_auto_auto] gap-x-4 items-center px-6 py-2.5 border-b border-gray-50 last:border-b-0 transition-colors hover:bg-gray-50/50"
+          class="grid grid-cols-[1fr_auto_auto_auto] gap-x-4 items-center px-6 py-2.5 border-b border-white/[0.05] last:border-b-0 transition-colors hover:bg-white/[0.04]"
           :class="{
             'cheaper-a': row.winner === 'a',
             'cheaper-b': row.winner === 'b',
           }"
         >
           <!-- Label -->
-          <span class="text-sm text-gray-500 leading-snug pr-2">{{ $t(row.labelKey) }}</span>
+          <span class="text-sm text-white/50 leading-snug pr-2">{{ $t(row.labelKey) }}</span>
 
           <!-- City A value -->
           <span
             class="text-sm font-semibold tabular-nums text-right w-24 transition-colors"
-            :class="row.winner === 'a' ? 'text-emerald-600' : 'text-gray-700'"
+            :class="row.winner === 'a' ? 'text-emerald-400' : 'text-white/80'"
           >
             <template v-if="row.valueA !== null">{{ formatCost(row.valueA) }}</template>
-            <span v-else class="text-gray-300 font-normal">—</span>
+            <span v-else class="text-white/30 font-normal">—</span>
           </span>
 
           <!-- City B value -->
           <span
             class="text-sm font-semibold tabular-nums text-right w-24 transition-colors"
-            :class="row.winner === 'b' ? 'text-primary-600' : 'text-gray-700'"
+            :class="row.winner === 'b' ? 'text-primary-400' : 'text-white/80'"
           >
             <template v-if="row.valueB !== null">{{ formatCost(row.valueB) }}</template>
-            <span v-else class="text-gray-300 font-normal">—</span>
+            <span v-else class="text-white/30 font-normal">—</span>
           </span>
 
           <!-- % Diff pill -->
@@ -77,23 +77,23 @@
               v-if="row.diffPct !== null"
               class="inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-bold tabular-nums"
               :class="{
-                'bg-emerald-50 text-emerald-700': row.winner === 'a',
-                'bg-primary-50 text-primary-700': row.winner === 'b',
-                'bg-gray-50 text-gray-400': row.winner === null,
+                'bg-emerald-500/[0.15] text-emerald-400': row.winner === 'a',
+                'bg-primary-500/[0.15] text-primary-400': row.winner === 'b',
+                'bg-white/[0.04] text-white/40': row.winner === null,
               }"
             >
               {{ row.diffPct === 0 ? '=' : `${row.diffPct}%` }}
             </span>
-            <span v-else class="text-gray-200 text-[11px]">—</span>
+            <span v-else class="text-white/20 text-[11px]">—</span>
           </div>
         </div>
       </template>
     </div>
 
     <!-- Footer note -->
-    <div class="px-6 py-3 border-t border-gray-50 flex items-center gap-1.5">
-      <LucideInfo :size="12" class="text-gray-300 shrink-0" />
-      <p class="text-[11px] text-gray-400">{{ $t('comparePriceTable.source') }}</p>
+    <div class="px-6 py-3 border-t border-white/[0.05] flex items-center gap-1.5">
+      <LucideInfo :size="12" class="text-white/30 shrink-0" />
+      <p class="text-[11px] text-white/40">{{ $t('comparePriceTable.source') }}</p>
     </div>
   </section>
 </template>

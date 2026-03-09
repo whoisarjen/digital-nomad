@@ -1,9 +1,9 @@
 <template>
-  <div v-if="salary !== null && nomadCost !== null" data-testid="salary-power" class="mt-4 pt-4 border-t border-gray-50">
+  <div v-if="salary !== null && nomadCost !== null" data-testid="salary-power" class="mt-4 pt-4 border-t border-white/[0.05]">
     <!-- Header -->
     <div class="flex items-center gap-2 mb-3">
-      <div class="size-5 rounded-md bg-amber-50 flex items-center justify-center shrink-0">
-        <LucideTrendingUp :size="11" class="text-amber-600" />
+      <div class="size-5 rounded-md bg-amber-500/[0.15] flex items-center justify-center shrink-0">
+        <LucideTrendingUp :size="11" class="text-amber-400" />
       </div>
       <span class="text-[11px] font-semibold text-gray-400 uppercase tracking-wide">{{ $t('salaryPower.title') }}</span>
     </div>
@@ -12,36 +12,36 @@
     <div class="grid grid-cols-3 gap-3 mb-3">
       <!-- Local salary -->
       <div class="flex flex-col gap-0.5">
-        <span class="text-[10px] font-medium text-gray-400 uppercase tracking-wide leading-none">{{ $t('salaryPower.localSalary') }}</span>
-        <span class="text-sm font-bold text-gray-700 tabular-nums">{{ formatCost(salary) }}<span class="text-xs font-normal text-gray-400">/mo</span></span>
+        <span class="text-[10px] font-medium text-white/40 uppercase tracking-wide leading-none">{{ $t('salaryPower.localSalary') }}</span>
+        <span class="text-sm font-bold text-white/80 tabular-nums">{{ formatCost(salary) }}<span class="text-xs font-normal text-white/40">/mo</span></span>
       </div>
 
       <!-- Nomad cost -->
       <div class="flex flex-col gap-0.5">
-        <span class="text-[10px] font-medium text-gray-400 uppercase tracking-wide leading-none">{{ $t('salaryPower.nomadCost') }}</span>
-        <span class="text-sm font-bold text-emerald-600 tabular-nums">{{ formatCost(nomadCost) }}<span class="text-xs font-normal text-gray-400">/mo</span></span>
+        <span class="text-[10px] font-medium text-white/40 uppercase tracking-wide leading-none">{{ $t('salaryPower.nomadCost') }}</span>
+        <span class="text-sm font-bold text-emerald-400 tabular-nums">{{ formatCost(nomadCost) }}<span class="text-xs font-normal text-white/40">/mo</span></span>
       </div>
 
       <!-- Ratio -->
       <div class="flex flex-col gap-0.5">
-        <span class="text-[10px] font-medium text-gray-400 uppercase tracking-wide leading-none">{{ $t('salaryPower.ratio') }}</span>
+        <span class="text-[10px] font-medium text-white/40 uppercase tracking-wide leading-none">{{ $t('salaryPower.ratio') }}</span>
         <span class="text-sm font-bold tabular-nums" :class="ratioClass">{{ ratioDisplay }}×</span>
       </div>
     </div>
 
     <!-- Progress bar: salary fills to cover nomad cost -->
-    <div class="relative h-1.5 rounded-full bg-gray-100 overflow-hidden">
+    <div class="relative h-1.5 rounded-full bg-white/[0.08] overflow-hidden">
       <div
         class="absolute inset-y-0 left-0 rounded-full transition-all duration-500"
         :class="ratio <= 1 ? 'bg-amber-400' : 'bg-emerald-400'"
         :style="{ width: `${Math.min(salaryFillPct, 100)}%` }"
       />
       <!-- Nomad cost marker at 100% -->
-      <div class="absolute inset-y-0 right-0 w-px bg-gray-300" />
+      <div class="absolute inset-y-0 right-0 w-px bg-white/30" />
     </div>
 
     <!-- Insight sentence -->
-    <p class="text-[11px] text-gray-400 leading-relaxed mt-2">
+    <p class="text-[11px] text-white/40 leading-relaxed mt-2">
       {{ insightText }}
     </p>
   </div>
@@ -73,9 +73,9 @@ const salaryFillPct = computed(() => {
 })
 
 const ratioClass = computed(() => {
-  if (ratio.value <= 0.8) return 'text-emerald-600' // salary well covers cost
-  if (ratio.value <= 1) return 'text-amber-600'     // salary slightly covers cost
-  return 'text-red-500'                              // cost exceeds salary
+  if (ratio.value <= 0.8) return 'text-emerald-400' // salary well covers cost
+  if (ratio.value <= 1) return 'text-amber-400'     // salary slightly covers cost
+  return 'text-red-400'                              // cost exceeds salary
 })
 
 const insightText = computed(() => {

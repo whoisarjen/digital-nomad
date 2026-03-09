@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-[#060E1B] text-white">
+  <div class="min-h-screen text-white">
     <div
       class="pointer-events-none fixed inset-0 opacity-30"
       style="background-image: url(&quot;data:image/svg+xml,%3Csvg width='24' height='24' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='12' cy='12' r='1' fill='rgba(255,255,255,0.025)'/%3E%3C/svg%3E&quot;);"
