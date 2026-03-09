@@ -157,7 +157,6 @@ export default defineNuxtConfig({
     routeRules: {
       '/__sitemap__/**': { isr: 604800 },
       '/api/tools/runway': { isr: 3600 },
-      '/api/quiz/cities': { isr: 3600 },
     },
   },
   image: {

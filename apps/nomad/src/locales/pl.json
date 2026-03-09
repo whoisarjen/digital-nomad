@@ -224,7 +224,22 @@
     "soon": "wkrótce",
     "new": "nowość",
     "featureCompareTitle": "Porównanie miast",
-    "featureCompareDesc": "Porównaj dowolne dwa miasta obok siebie — koszty, pogoda, internet i więcej."
+    "featureCompareDesc": "Porównaj dowolne dwa miasta obok siebie — koszty, pogoda, internet i więcej.",
+    "featureQuizTitle": "Find Your City",
+    "featureQuizDesc": "Answer 5 quick questions about your lifestyle and budget. We'll match you with your perfect nomad cities.",
+    "featureQuizCta": "Take the quiz",
+    "featureSchengenTitle": "Schengen Calculator",
+    "featureSchengenDesc": "Track your 90/180 day Schengen limit in real time. Add trips, see days remaining.",
+    "featureRunwayTitle": "Travel Runway",
+    "featureRunwayDesc": "Enter your savings and monthly costs. See exactly how long you can keep traveling.",
+    "featureDayInLifeTitle": "Day in the Life",
+    "featureDayInLifeDesc": "Build a realistic daily budget for any city — coffee, coworking, meals, transport.",
+    "featureRankingsTitle": "Best Cities This Month",
+    "featureRankingsDesc": "Monthly curated rankings based on weather, cost, and nomad score.",
+    "featureRankingsCta": "See rankings",
+    "featureOpenCta": "Open tool",
+    "categoryTool": "Tool",
+    "categoryFeature": "Feature"
   },
   "favorites": {
     "save": "Zapisz",
@@ -651,6 +666,22 @@
     "stepRegions": {
       "question": "Any region preference?",
       "anywhere": "Anywhere in the world"
+    },
+    "stepMonth": {
+      "question": "Which month are you planning to go?",
+      "anyTime": "Any time",
+      "jan": "January",
+      "feb": "February",
+      "mar": "March",
+      "apr": "April",
+      "may": "May",
+      "jun": "June",
+      "jul": "July",
+      "aug": "August",
+      "sep": "September",
+      "oct": "October",
+      "nov": "November",
+      "dec": "December"
     }
   }
 }

@@ -106,7 +106,7 @@
         </div>
       </section>
 
-      <!-- Features + Roadmap (combined) -->
+      <!-- Features Bento Grid -->
       <section class="py-20 sm:py-28 px-6">
         <div class="max-w-5xl mx-auto">
           <div class="text-center mb-14">
@@ -114,73 +114,223 @@
             <p class="text-gray-400 max-w-xl mx-auto text-base">{{ $t('landing.featuresSubtitle') }}</p>
           </div>
 
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            <!-- Cost -->
-            <div class="bg-white/[0.04] border border-white/[0.06] rounded-2xl p-6 hover:bg-white/[0.07] transition-colors">
-              <div class="size-10 rounded-xl bg-emerald-500/10 flex items-center justify-center mb-4">
-                <LucideWallet :size="20" class="text-emerald-400" />
+          <!-- Row 1: Quiz (2/3) + Compare (1/3) -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+
+            <!-- 1. City Quiz — spans 2 cols -->
+            <NuxtLink
+              :to="localePath('tools-quiz')"
+              class="group sm:col-span-2 relative rounded-2xl overflow-hidden border border-white/[0.08] hover:border-amber-500/30 transition-all duration-300 bg-gradient-to-br from-amber-500/[0.09] via-amber-500/[0.03] to-transparent p-7 flex flex-col"
+            >
+              <div class="absolute -top-16 -right-16 w-56 h-56 bg-amber-500/15 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+              <!-- top row -->
+              <div class="flex items-start justify-between mb-6">
+                <span class="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-amber-400/70">
+                  <span class="size-1.5 rounded-full bg-amber-400 animate-pulse" />
+                  {{ $t('landing.categoryTool') }}
+                </span>
+                <div class="size-11 rounded-xl bg-amber-500/15 flex items-center justify-center flex-shrink-0">
+                  <LucideSparkles :size="22" class="text-amber-400" />
+                </div>
               </div>
-              <h3 class="font-semibold mb-1.5">{{ $t('landing.featureCostTitle') }}</h3>
-              <p class="text-sm text-gray-400 leading-relaxed">{{ $t('landing.featureCostDesc') }}</p>
-            </div>
-            <!-- 12+ Data Points -->
-            <div class="bg-white/[0.04] border border-white/[0.06] rounded-2xl p-6 hover:bg-white/[0.07] transition-colors">
-              <div class="size-10 rounded-xl bg-primary-500/10 flex items-center justify-center mb-4">
-                <LucideBarChart3 :size="20" class="text-primary-400" />
+              <!-- mock quiz preview -->
+              <div class="mb-5 space-y-2.5">
+                <div class="flex items-center gap-3">
+                  <div class="flex-1 h-1 bg-white/[0.06] rounded-full overflow-hidden">
+                    <div class="h-full w-1/5 bg-amber-400/50 rounded-full" />
+                  </div>
+                  <span class="text-[11px] text-amber-400/60 font-medium tabular-nums flex-shrink-0">1 / 5</span>
+                </div>
+                <div class="rounded-xl bg-white/[0.05] border border-white/[0.07] px-4 py-3 text-sm text-white/50 leading-relaxed">
+                  "What matters most — budget, weather, or internet speed?"
+                </div>
               </div>
-              <h3 class="font-semibold mb-1.5">{{ $t('landing.featureDataTitle') }}</h3>
-              <p class="text-sm text-gray-400 leading-relaxed">{{ $t('landing.featureDataDesc') }}</p>
-            </div>
-            <!-- Internet -->
-            <div class="bg-white/[0.04] border border-white/[0.06] rounded-2xl p-6 hover:bg-white/[0.07] transition-colors">
-              <div class="size-10 rounded-xl bg-cyan-500/10 flex items-center justify-center mb-4">
-                <LucideWifi :size="20" class="text-cyan-400" />
+              <!-- footer -->
+              <div class="mt-auto">
+                <h3 class="font-bold text-lg text-white mb-1.5">{{ $t('landing.featureQuizTitle') }}</h3>
+                <p class="text-sm text-gray-400 leading-relaxed mb-4">{{ $t('landing.featureQuizDesc') }}</p>
+                <span class="inline-flex items-center gap-1.5 text-sm font-semibold text-amber-400">
+                  {{ $t('landing.featureQuizCta') }}
+                  <LucideArrowRight :size="14" class="transition-transform group-hover:translate-x-1 duration-200" />
+                </span>
               </div>
-              <h3 class="font-semibold mb-1.5">{{ $t('landing.featureInternetTitle') }}</h3>
-              <p class="text-sm text-gray-400 leading-relaxed">{{ $t('landing.featureInternetDesc') }}</p>
-            </div>
-            <!-- City comparison -->
+            </NuxtLink>
+
+            <!-- 2. Compare Cities — 1 col -->
             <NuxtLink
               :to="localePath('compare')"
-              class="bg-white/[0.04] border border-white/[0.06] rounded-2xl p-6 hover:bg-white/[0.07] transition-colors relative block"
+              class="group relative rounded-2xl overflow-hidden border border-white/[0.08] hover:border-primary-500/30 transition-all duration-300 bg-gradient-to-br from-primary-500/[0.09] via-primary-500/[0.03] to-transparent p-7 flex flex-col"
             >
-              <span class="absolute top-4 right-4 text-[10px] font-semibold rounded-full px-2.5 py-0.5 bg-emerald-500/15 text-emerald-400">{{ $t('landing.new') }}</span>
-              <div class="size-10 rounded-xl bg-primary-500/10 flex items-center justify-center mb-4">
-                <LucideSparkles :size="20" class="text-primary-400" />
+              <div class="absolute -bottom-12 -right-12 w-40 h-40 bg-primary-500/15 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+              <div class="flex items-start justify-between mb-5">
+                <span class="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-primary-400/70">
+                  <span class="size-1.5 rounded-full bg-primary-400" />
+                  {{ $t('landing.categoryFeature') }}
+                </span>
+                <div class="size-11 rounded-xl bg-primary-500/15 flex items-center justify-center flex-shrink-0">
+                  <LucideArrowLeftRight :size="22" class="text-primary-400" />
+                </div>
               </div>
-              <h3 class="font-semibold mb-1.5">{{ $t('landing.featureCompareTitle') }}</h3>
-              <p class="text-sm text-gray-400 leading-relaxed">{{ $t('landing.featureCompareDesc') }}</p>
+              <!-- A vs B preview -->
+              <div class="mb-5 flex items-center gap-2">
+                <span class="flex-1 text-center text-xs font-bold bg-white/[0.05] rounded-lg py-2.5 text-white/60 border border-white/[0.07]">Bangkok</span>
+                <span class="text-[11px] font-black text-primary-400 flex-shrink-0">VS</span>
+                <span class="flex-1 text-center text-xs font-bold bg-white/[0.05] rounded-lg py-2.5 text-white/60 border border-white/[0.07]">Lisbon</span>
+              </div>
+              <div class="mt-auto">
+                <h3 class="font-bold text-base text-white mb-1.5">{{ $t('landing.featureCompareTitle') }}</h3>
+                <p class="text-sm text-gray-400 leading-relaxed mb-4">{{ $t('landing.featureCompareDesc') }}</p>
+                <span class="inline-flex items-center gap-1.5 text-sm font-semibold text-primary-400">
+                  {{ $t('landing.featureOpenCta') }}
+                  <LucideArrowRight :size="14" class="transition-transform group-hover:translate-x-1 duration-200" />
+                </span>
+              </div>
             </NuxtLink>
-            <!-- Updated Monthly (soon) -->
-            <div class="bg-white/[0.04] border border-white/[0.06] rounded-2xl p-6 hover:bg-white/[0.07] transition-colors relative">
-              <span class="absolute top-4 right-4 text-[10px] font-semibold rounded-full px-2.5 py-0.5 bg-accent-500/15 text-accent-400">{{ $t('landing.soon') }}</span>
-              <div class="size-10 rounded-xl bg-white/[0.06] flex items-center justify-center mb-4">
-                <LucideCalendar :size="20" class="text-gray-400" />
-              </div>
-              <h3 class="font-semibold mb-1.5">{{ $t('landing.featureUpdatedTitle') }}</h3>
-              <p class="text-sm text-gray-400 leading-relaxed">{{ $t('landing.featureUpdatedDesc') }}</p>
-            </div>
-            <!-- Monthly cost alerts (soon) -->
-            <div class="bg-white/[0.04] border border-white/[0.06] rounded-2xl p-6 hover:bg-white/[0.07] transition-colors relative">
-              <span class="absolute top-4 right-4 text-[10px] font-semibold rounded-full px-2.5 py-0.5 bg-accent-500/15 text-accent-400">{{ $t('landing.soon') }}</span>
-              <div class="size-10 rounded-xl bg-white/[0.06] flex items-center justify-center mb-4">
-                <LucideBell :size="20" class="text-gray-400" />
-              </div>
-              <h3 class="font-semibold mb-1.5">Monthly cost alerts</h3>
-              <p class="text-sm text-gray-400 leading-relaxed">Get notified when cost of living changes in your saved cities</p>
-            </div>
           </div>
 
-          <!-- Join to vote -->
-          <div v-if="!isLoggedIn" class="mt-8 text-center">
+          <!-- Row 2: Schengen + Runway + Day in Life -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+
+            <!-- 3. Schengen Calculator -->
             <NuxtLink
-              :to="localePath('join')"
-              class="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-white transition-colors"
+              :to="localePath('tools-schengen-calculator')"
+              class="group relative rounded-2xl overflow-hidden border border-white/[0.08] hover:border-violet-500/30 transition-all duration-300 bg-gradient-to-br from-violet-500/[0.09] via-violet-500/[0.03] to-transparent p-6 flex flex-col"
             >
-              {{ $t('roadmap.joinToVote') }}
-              <LucideArrowRight :size="14" />
+              <div class="absolute -top-10 -left-10 w-36 h-36 bg-violet-500/15 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+              <div class="flex items-start justify-between mb-4">
+                <span class="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-violet-400/70">
+                  <span class="size-1.5 rounded-full bg-violet-400" />
+                  {{ $t('landing.categoryTool') }}
+                </span>
+                <div class="size-10 rounded-xl bg-violet-500/15 flex items-center justify-center flex-shrink-0">
+                  <LucideCalendarDays :size="19" class="text-violet-400" />
+                </div>
+              </div>
+              <!-- days counter preview -->
+              <div class="mb-4 rounded-xl bg-white/[0.04] border border-white/[0.06] px-4 py-3 flex items-center justify-between">
+                <span class="text-xs text-white/40">Days remaining</span>
+                <span class="text-2xl font-black text-violet-300 tabular-nums">47</span>
+              </div>
+              <div class="mt-auto">
+                <h3 class="font-bold text-base text-white mb-1">{{ $t('landing.featureSchengenTitle') }}</h3>
+                <p class="text-sm text-gray-400 leading-relaxed mb-3">{{ $t('landing.featureSchengenDesc') }}</p>
+                <span class="inline-flex items-center gap-1.5 text-xs font-semibold text-violet-400">
+                  {{ $t('landing.featureOpenCta') }}
+                  <LucideArrowRight :size="13" class="transition-transform group-hover:translate-x-1 duration-200" />
+                </span>
+              </div>
+            </NuxtLink>
+
+            <!-- 4. Runway Calculator -->
+            <NuxtLink
+              :to="localePath('tools-runway-calculator')"
+              class="group relative rounded-2xl overflow-hidden border border-white/[0.08] hover:border-emerald-500/30 transition-all duration-300 bg-gradient-to-br from-emerald-500/[0.09] via-emerald-500/[0.03] to-transparent p-6 flex flex-col"
+            >
+              <div class="absolute -top-10 -right-10 w-36 h-36 bg-emerald-500/15 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+              <div class="flex items-start justify-between mb-4">
+                <span class="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-emerald-400/70">
+                  <span class="size-1.5 rounded-full bg-emerald-400" />
+                  {{ $t('landing.categoryTool') }}
+                </span>
+                <div class="size-10 rounded-xl bg-emerald-500/15 flex items-center justify-center flex-shrink-0">
+                  <LucidePiggyBank :size="19" class="text-emerald-400" />
+                </div>
+              </div>
+              <!-- runway stat preview -->
+              <div class="mb-4 rounded-xl bg-white/[0.04] border border-white/[0.06] px-4 py-3 flex items-center justify-between">
+                <div>
+                  <div class="text-[10px] text-white/35 uppercase tracking-wide mb-0.5">At $2,400/mo</div>
+                  <div class="text-xl font-black text-emerald-300 tabular-nums">8 months</div>
+                </div>
+                <LucideTrendingUp :size="22" class="text-emerald-400/40" />
+              </div>
+              <div class="mt-auto">
+                <h3 class="font-bold text-base text-white mb-1">{{ $t('landing.featureRunwayTitle') }}</h3>
+                <p class="text-sm text-gray-400 leading-relaxed mb-3">{{ $t('landing.featureRunwayDesc') }}</p>
+                <span class="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-400">
+                  {{ $t('landing.featureOpenCta') }}
+                  <LucideArrowRight :size="13" class="transition-transform group-hover:translate-x-1 duration-200" />
+                </span>
+              </div>
+            </NuxtLink>
+
+            <!-- 5. Day in the Life -->
+            <NuxtLink
+              :to="localePath('tools-day-in-the-life')"
+              class="group relative rounded-2xl overflow-hidden border border-white/[0.08] hover:border-orange-500/30 transition-all duration-300 bg-gradient-to-br from-orange-500/[0.09] via-orange-500/[0.03] to-transparent p-6 flex flex-col"
+            >
+              <div class="absolute -bottom-10 -left-10 w-36 h-36 bg-orange-500/15 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+              <div class="flex items-start justify-between mb-4">
+                <span class="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-orange-400/70">
+                  <span class="size-1.5 rounded-full bg-orange-400" />
+                  {{ $t('landing.categoryTool') }}
+                </span>
+                <div class="size-10 rounded-xl bg-orange-500/15 flex items-center justify-center flex-shrink-0">
+                  <LucideSunrise :size="19" class="text-orange-400" />
+                </div>
+              </div>
+              <!-- day items preview -->
+              <div class="mb-4 flex items-center gap-2">
+                <div class="flex-1 flex flex-col items-center gap-1.5 rounded-xl bg-white/[0.04] border border-white/[0.06] py-2.5">
+                  <LucideCoffee :size="14" class="text-orange-400/60" />
+                  <span class="text-[9px] text-white/30 uppercase tracking-wide">Coffee</span>
+                </div>
+                <div class="flex-1 flex flex-col items-center gap-1.5 rounded-xl bg-white/[0.04] border border-white/[0.06] py-2.5">
+                  <LucideMonitor :size="14" class="text-orange-400/60" />
+                  <span class="text-[9px] text-white/30 uppercase tracking-wide">Cowork</span>
+                </div>
+                <div class="flex-1 flex flex-col items-center gap-1.5 rounded-xl bg-white/[0.04] border border-white/[0.06] py-2.5">
+                  <LucideUtensilsCrossed :size="14" class="text-orange-400/60" />
+                  <span class="text-[9px] text-white/30 uppercase tracking-wide">Meals</span>
+                </div>
+              </div>
+              <div class="mt-auto">
+                <h3 class="font-bold text-base text-white mb-1">{{ $t('landing.featureDayInLifeTitle') }}</h3>
+                <p class="text-sm text-gray-400 leading-relaxed mb-3">{{ $t('landing.featureDayInLifeDesc') }}</p>
+                <span class="inline-flex items-center gap-1.5 text-xs font-semibold text-orange-400">
+                  {{ $t('landing.featureOpenCta') }}
+                  <LucideArrowRight :size="13" class="transition-transform group-hover:translate-x-1 duration-200" />
+                </span>
+              </div>
             </NuxtLink>
           </div>
+
+          <!-- Row 3: Rankings — full width -->
+          <NuxtLink
+            :to="localePath('best-cities')"
+            class="group relative rounded-2xl overflow-hidden border border-white/[0.08] hover:border-cyan-500/25 transition-all duration-300 bg-gradient-to-r from-cyan-500/[0.07] via-transparent to-primary-500/[0.05] p-7 flex flex-col sm:flex-row gap-5 items-start sm:items-center"
+          >
+            <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none bg-[radial-gradient(ellipse_at_70%_50%,rgba(6,182,212,0.05),transparent_60%)]" />
+            <!-- icon + label -->
+            <div class="flex items-center gap-4 flex-shrink-0">
+              <div class="size-14 rounded-2xl bg-cyan-500/15 flex items-center justify-center">
+                <LucideTrophy :size="26" class="text-cyan-400" />
+              </div>
+              <div>
+                <span class="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-cyan-400/70 mb-1">
+                  <span class="size-1.5 rounded-full bg-cyan-400" />
+                  {{ $t('landing.categoryFeature') }}
+                </span>
+                <h3 class="font-bold text-lg text-white">{{ $t('landing.featureRankingsTitle') }}</h3>
+              </div>
+            </div>
+            <!-- mini ranking preview -->
+            <div class="flex-1 flex flex-wrap items-center gap-2">
+              <div v-for="(city, i) in ['Bangkok', 'Chiang Mai', 'Lisbon', 'Tbilisi']" :key="city" class="flex items-center gap-1.5 bg-white/[0.04] border border-white/[0.06] rounded-full px-3 py-1.5">
+                <span class="text-xs font-black text-cyan-400/60">#{{ i + 1 }}</span>
+                <span class="text-xs text-white/60 font-medium">{{ city }}</span>
+              </div>
+              <span class="text-xs text-white/25">+ more</span>
+            </div>
+            <!-- desc + CTA -->
+            <div class="flex flex-col items-start sm:items-end gap-1 flex-shrink-0">
+              <p class="text-sm text-gray-400 sm:text-right max-w-[200px]">{{ $t('landing.featureRankingsDesc') }}</p>
+              <span class="inline-flex items-center gap-1.5 text-sm font-semibold text-cyan-400 mt-1">
+                {{ $t('landing.featureRankingsCta') }}
+                <LucideArrowRight :size="14" class="transition-transform group-hover:translate-x-1 duration-200" />
+              </span>
+            </div>
+          </NuxtLink>
         </div>
       </section>
     </div>

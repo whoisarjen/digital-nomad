@@ -99,7 +99,7 @@ const iconSparkles = resolveComponent('LucideSparkles')
 
 const tools = computed(() => [
   {
-    route: 'quiz',
+    route: 'tools-quiz',
     name: t('quiz.title'),
     description: t('quiz.subtitle'),
     badge: t('landing.new'),

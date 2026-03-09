@@ -224,7 +224,22 @@
     "soon": "pronto",
     "new": "nuevo",
     "featureCompareTitle": "Comparación de Ciudades",
-    "featureCompareDesc": "Compara dos ciudades lado a lado en costes, clima, internet y más."
+    "featureCompareDesc": "Compara dos ciudades lado a lado en costes, clima, internet y más.",
+    "featureQuizTitle": "Find Your City",
+    "featureQuizDesc": "Answer 5 quick questions about your lifestyle and budget. We'll match you with your perfect nomad cities.",
+    "featureQuizCta": "Take the quiz",
+    "featureSchengenTitle": "Schengen Calculator",
+    "featureSchengenDesc": "Track your 90/180 day Schengen limit in real time. Add trips, see days remaining.",
+    "featureRunwayTitle": "Travel Runway",
+    "featureRunwayDesc": "Enter your savings and monthly costs. See exactly how long you can keep traveling.",
+    "featureDayInLifeTitle": "Day in the Life",
+    "featureDayInLifeDesc": "Build a realistic daily budget for any city — coffee, coworking, meals, transport.",
+    "featureRankingsTitle": "Best Cities This Month",
+    "featureRankingsDesc": "Monthly curated rankings based on weather, cost, and nomad score.",
+    "featureRankingsCta": "See rankings",
+    "featureOpenCta": "Open tool",
+    "categoryTool": "Tool",
+    "categoryFeature": "Feature"
   },
   "favorites": {
     "save": "Guardar",
@@ -520,5 +535,73 @@
     "statCostRange": "Cost range",
     "statAvgInternet": "Avg. internet",
     "noResults": "No safe cities found for this filter."
+  },
+  "quiz": {
+    "metaTitle": "Which City Is Right for Me? | Digital Nomad Quiz",
+    "metaDesc": "Answer 5 quick questions to discover your ideal digital nomad city based on budget, climate, internet, safety, and region.",
+    "badge": "Quiz",
+    "title": "Which City Is Right for Me?",
+    "subtitle": "5 questions. Instant recommendations based on real data.",
+    "step": "{current} / {total}",
+    "next": "Next",
+    "back": "Back",
+    "seeResults": "See My Cities",
+    "retake": "Retake Quiz",
+    "shareResults": "Share Results",
+    "copied": "Link copied!",
+    "resultsTitle": "Your Top Matches",
+    "resultsSubtitle": "Based on your answers, these cities fit your lifestyle best.",
+    "matchScore": "{score}% match",
+    "noResults": "No cities matched your criteria. Try broadening your preferences.",
+    "loading": "Finding your cities…",
+    "perMonth": "/mo",
+    "stepBudget": {
+      "question": "What's your monthly budget?",
+      "opt0": "Under $1,000",
+      "opt1": "$1,000 – $1,500",
+      "opt2": "$1,500 – $2,500",
+      "opt3": "$2,500+"
+    },
+    "stepClimate": {
+      "question": "What climate do you prefer?",
+      "opt0": "Cold — under 12°C",
+      "opt1": "Mild — 12 to 22°C",
+      "opt2": "Warm — 22 to 28°C",
+      "opt3": "Hot — above 28°C",
+      "opt4": "Doesn't matter"
+    },
+    "stepInternet": {
+      "question": "How fast does your internet need to be?",
+      "opt0": "Basic — 20+ Mbps",
+      "opt1": "Good — 50+ Mbps",
+      "opt2": "Fast — 100+ Mbps",
+      "opt3": "Doesn't matter"
+    },
+    "stepSafety": {
+      "question": "What's your safety preference?",
+      "opt0": "Safe — I want peace of mind",
+      "opt1": "Moderate — normal precautions are fine",
+      "opt2": "Adventurous — safety isn't a dealbreaker"
+    },
+    "stepRegions": {
+      "question": "Any region preference?",
+      "anywhere": "Anywhere in the world"
+    },
+    "stepMonth": {
+      "question": "Which month are you planning to go?",
+      "anyTime": "Any time",
+      "jan": "January",
+      "feb": "February",
+      "mar": "March",
+      "apr": "April",
+      "may": "May",
+      "jun": "June",
+      "jul": "July",
+      "aug": "August",
+      "sep": "September",
+      "oct": "October",
+      "nov": "November",
+      "dec": "December"
+    }
   }
 }
