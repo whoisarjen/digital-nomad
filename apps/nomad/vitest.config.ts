@@ -43,8 +43,30 @@ export default defineConfig({
     },
   },
   test: {
-    environment: 'node',
-    include: ['src/**/__tests__/**/*.{test,spec}.ts'],
+    projects: [
+      {
+        extends: true,
+        test: {
+          name: 'composables',
+          include: ['src/composables/**/__tests__/**/*.{test,spec}.ts'],
+          environment: 'happy-dom',
+        },
+      },
+      {
+        extends: true,
+        test: {
+          name: 'other',
+          include: [
+            'src/__tests__/**/*.{test,spec}.ts',
+            'src/components/**/__tests__/**/*.{test,spec}.ts',
+            'src/server/**/__tests__/**/*.{test,spec}.ts',
+            'src/shared/**/__tests__/**/*.{test,spec}.ts',
+            'src/utils/**/__tests__/**/*.{test,spec}.ts',
+          ],
+          environment: 'node',
+        },
+      },
+    ],
     setupFiles: ['./test/setup.ts'],
     coverage: {
       provider: 'v8',
