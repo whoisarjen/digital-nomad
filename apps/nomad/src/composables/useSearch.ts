@@ -1,4 +1,4 @@
-import { ref, watch, type Ref } from 'vue'
+import { ref, watch, onUnmounted, type Ref } from 'vue'
 
 export interface SearchResult {
   slug: string
@@ -13,7 +13,7 @@ export const useSearch = (query: Ref<string>) => {
 
   let timer: ReturnType<typeof setTimeout> | null = null
 
-  watch(query, (q) => {
+  const stopWatch = watch(query, (q) => {
     if (timer) clearTimeout(timer)
 
     if (!q.trim()) {
@@ -30,6 +30,11 @@ export const useSearch = (query: Ref<string>) => {
         isLoading.value = false
       }
     }, 300)
+  })
+
+  onUnmounted(() => {
+    stopWatch()
+    if (timer) clearTimeout(timer)
   })
 
   return { results, isLoading }

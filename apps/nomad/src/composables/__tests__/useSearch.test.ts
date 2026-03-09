@@ -1,7 +1,8 @@
+// @vitest-environment happy-dom
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { ref, nextTick } from 'vue'
-
-type SearchResult = { slug: string; name: string; country: string; costForNomadInUsd: number | null }
+import type { SearchResult } from '~/composables/useSearch'
+import { withSetup } from '../../../test/utils/withSetup'
 
 const fetchMock = vi.fn<(url: string, opts?: unknown) => Promise<SearchResult[]>>()
 
@@ -134,5 +135,24 @@ describe('useSearch', () => {
 
     expect(results.value).toEqual([])
     expect(isLoading.value).toBe(false)
+  })
+
+  it('does not call $fetch when component unmounts before debounce fires', async () => {
+    const { useSearch } = await import('~/composables/useSearch')
+    const query = ref('')
+
+    const [, app] = withSetup(() => useSearch(query))
+
+    query.value = 'bangkok'
+    await nextTick()
+
+    // Unmount before the 300ms debounce fires
+    app.unmount()
+
+    vi.advanceTimersByTime(300)
+    await vi.runAllTimersAsync()
+    await nextTick()
+
+    expect(fetchMock).not.toHaveBeenCalled()
   })
 })
