@@ -55,10 +55,17 @@ export default defineConfig({
       {
         extends: true,
         test: {
+          name: 'components',
+          include: ['src/components/**/__tests__/**/*.{test,spec}.ts'],
+          environment: 'happy-dom',
+        },
+      },
+      {
+        extends: true,
+        test: {
           name: 'other',
           include: [
             'src/__tests__/**/*.{test,spec}.ts',
-            'src/components/**/__tests__/**/*.{test,spec}.ts',
             'src/server/**/__tests__/**/*.{test,spec}.ts',
             'src/shared/**/__tests__/**/*.{test,spec}.ts',
             'src/utils/**/__tests__/**/*.{test,spec}.ts',
