@@ -18,7 +18,12 @@
     "bestCitiesDesc": "Top rated for nomads overall",
     "safeCitiesDesc": "Low crime, stable infrastructure",
     "compareDesc": "Side-by-side cost breakdown",
-    "toolsDesc": "Schengen calculator, budget builder…"
+    "toolsDesc": "Schengen calculator, budget builder…",
+    "seeAllTools": "See all tools",
+    "schengenNavDesc": "Track your 90/180-day limit",
+    "runwayNavDesc": "How long will your savings last?",
+    "dayInLifeNavDesc": "Build a day, see what it costs",
+    "quizNavDesc": "Find your ideal city in 5 questions"
   },
   "hero": {
     "titleLine1": "كل مدينة، مفكّكة.",
@@ -146,7 +151,9 @@
   },
   "search": {
     "placeholder": "البحث عن",
-    "noResults": "No cities found"
+    "noResults": "لا توجد نتائج",
+    "cities": "المدن",
+    "articles": "المقالات"
   },
   "blog": {
     "title": "المدونة",

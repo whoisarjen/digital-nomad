@@ -57,13 +57,17 @@
               <path d="M2 4l4 4 4-4"/>
             </svg>
           </button>
-          <div class="absolute top-full left-0 mt-2 w-60 bg-[#0d1b2e] border border-white/10 rounded-2xl p-2 shadow-2xl opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-150 -translate-y-1 group-hover:translate-y-0">
+          <div class="absolute top-full left-0 mt-2 w-72 bg-[#0d1b2e] border border-white/10 rounded-2xl p-2 shadow-2xl opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-150 -translate-y-1 group-hover:translate-y-0">
             <NuxtLink v-for="link in toolsLinks" :key="link.to" :to="link.to" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/[0.06] transition-colors">
               <div class="w-8 h-8 rounded-lg bg-purple-500/10 flex items-center justify-center text-sm flex-shrink-0">{{ link.icon }}</div>
               <div>
                 <div class="text-sm font-medium text-white">{{ link.label }}</div>
                 <div class="text-xs text-white/40">{{ link.desc }}</div>
               </div>
+            </NuxtLink>
+            <div class="h-px bg-white/10 mx-2 my-1" />
+            <NuxtLink :to="localePath('tools')" class="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-white/[0.06] transition-colors">
+              <div class="text-xs font-medium text-white/50">{{ $t('nav.seeAllTools') }} &rarr;</div>
             </NuxtLink>
           </div>
         </div>
@@ -208,7 +212,10 @@ const rankingsLinks = computed(() => [
 
 const toolsLinks = computed(() => [
   { to: localePath('compare'), icon: '\u2696\uFE0F', label: t('nav.compare'), desc: t('nav.compareDesc') },
-  { to: localePath('tools'), icon: '\u{1F6E0}\uFE0F', label: t('schengen.toolsNav'), desc: t('nav.toolsDesc') },
+  { to: localePath('tools-schengen-calculator'), icon: '\u{1F4C5}', label: t('tools.schengenName'), desc: t('nav.schengenNavDesc') },
+  { to: localePath('tools-runway-calculator'), icon: '\u{1F4B0}', label: t('tools.runwayName'), desc: t('nav.runwayNavDesc') },
+  { to: localePath('tools-day-in-the-life'), icon: '\u2615', label: t('tools.dayInLifeName'), desc: t('nav.dayInLifeNavDesc') },
+  { to: localePath('tools-quiz'), icon: '\u{1F9ED}', label: t('quiz.title'), desc: t('nav.quizNavDesc') },
 ])
 
 const allMobileLinks = computed(() => [

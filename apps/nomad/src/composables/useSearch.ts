@@ -1,14 +1,25 @@
 import { ref, watch, onUnmounted, type Ref } from 'vue'
 
-export interface SearchResult {
+export interface CityResult {
   slug: string
   name: string
   country: string
   costForNomadInUsd: number | null
 }
 
+export interface ArticleResult {
+  slug: string
+  title: string | null
+  readingTimeMinutes: number | null
+}
+
+export interface SearchResults {
+  cities: CityResult[]
+  articles: ArticleResult[]
+}
+
 export const useSearch = (query: Ref<string>) => {
-  const results = ref<SearchResult[]>([])
+  const results = ref<SearchResults>({ cities: [], articles: [] })
   const isLoading = ref(false)
 
   let timer: ReturnType<typeof setTimeout> | null = null
@@ -17,7 +28,7 @@ export const useSearch = (query: Ref<string>) => {
     if (timer) clearTimeout(timer)
 
     if (!q.trim()) {
-      results.value = []
+      results.value = { cities: [], articles: [] }
       isLoading.value = false
       return
     }
@@ -25,7 +36,7 @@ export const useSearch = (query: Ref<string>) => {
     isLoading.value = true
     timer = setTimeout(async () => {
       try {
-        results.value = await $fetch<SearchResult[]>('/api/search/cities', { query: { q } })
+        results.value = await $fetch<SearchResults>('/api/search', { query: { q } })
       } finally {
         isLoading.value = false
       }

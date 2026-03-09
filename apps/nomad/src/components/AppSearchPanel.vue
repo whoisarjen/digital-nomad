@@ -19,11 +19,11 @@
             class="flex-1 bg-transparent outline-none text-white placeholder-white/30 text-sm"
             @keydown.esc="$emit('close')"
           />
-          <span class="text-xs text-white/25 flex-shrink-0 hidden sm:block">Esc to close</span>
+          <span class="text-xs text-white/25 flex-shrink-0 hidden sm:block">Esc</span>
         </div>
 
-        <!-- Quick chips -->
-        <div class="flex items-center gap-2 flex-wrap mb-4">
+        <!-- Quick chips (shown when no query) -->
+        <div v-if="!query.trim()" class="flex items-center gap-2 flex-wrap">
           <NuxtLink
             v-for="chip in quickChips"
             :key="chip.label"
@@ -36,27 +36,55 @@
         </div>
 
         <!-- Results -->
-        <div v-if="query.trim()" class="flex flex-col gap-0.5">
+        <div v-if="query.trim()">
           <template v-if="isLoading">
-            <div v-for="n in 3" :key="n" class="h-12 rounded-xl bg-white/5 animate-pulse" />
+            <div v-for="n in 3" :key="n" class="h-12 rounded-xl bg-white/5 animate-pulse mb-1" />
           </template>
-          <template v-else-if="results.length">
-            <NuxtLink
-              v-for="city in results"
-              :key="city.slug"
-              :to="localePath(`/cities/${city.slug}`)"
-              class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/[0.06] transition-colors group"
-              @click="$emit('close')"
-            >
-              <span class="text-lg flex-shrink-0">🏙️</span>
-              <div class="flex-1 min-w-0">
-                <div class="text-sm font-medium text-white group-hover:text-white/90">{{ city.name }}</div>
-                <div class="text-xs text-white/40">{{ city.country }}</div>
+          <template v-else-if="hasResults">
+            <!-- Cities section -->
+            <div v-if="results.cities.length">
+              <div class="text-[10px] font-bold tracking-wider uppercase text-white/30 px-3 pt-1 pb-2">
+                {{ $t('search.cities') }}
               </div>
-              <div v-if="city.costForNomadInUsd" class="text-xs font-semibold text-blue-400 flex-shrink-0">
-                ${{ city.costForNomadInUsd.toLocaleString() }}/mo
+              <NuxtLink
+                v-for="city in results.cities"
+                :key="city.slug"
+                :to="localePath(`/cities/${city.slug}`)"
+                class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/[0.06] transition-colors group"
+                @click="$emit('close')"
+              >
+                <span class="text-lg flex-shrink-0">🏙️</span>
+                <div class="flex-1 min-w-0">
+                  <div class="text-sm font-medium text-white group-hover:text-white/90">{{ city.name }}</div>
+                  <div class="text-xs text-white/40">{{ city.country }}</div>
+                </div>
+                <div v-if="city.costForNomadInUsd" class="text-xs font-semibold text-blue-400 flex-shrink-0">
+                  ${{ city.costForNomadInUsd.toLocaleString() }}/mo
+                </div>
+              </NuxtLink>
+            </div>
+
+            <!-- Articles section -->
+            <div v-if="results.articles.length">
+              <div class="text-[10px] font-bold tracking-wider uppercase text-white/30 px-3 pt-3 pb-2">
+                {{ $t('search.articles') }}
               </div>
-            </NuxtLink>
+              <NuxtLink
+                v-for="article in results.articles"
+                :key="article.slug"
+                :to="localePath(`/blog/${article.slug}`)"
+                class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/[0.06] transition-colors group"
+                @click="$emit('close')"
+              >
+                <span class="text-lg flex-shrink-0">📝</span>
+                <div class="flex-1 min-w-0">
+                  <div class="text-sm font-medium text-white group-hover:text-white/90">{{ article.title }}</div>
+                </div>
+                <div v-if="article.readingTimeMinutes" class="text-xs text-white/40 flex-shrink-0">
+                  {{ article.readingTimeMinutes }} min
+                </div>
+              </NuxtLink>
+            </div>
           </template>
           <p v-else class="text-sm text-white/40 px-3 py-4">
             {{ $t('search.noResults') }}
@@ -78,6 +106,10 @@ const query = ref('')
 const inputRef = ref<HTMLInputElement | null>(null)
 
 const { results, isLoading } = useSearch(query)
+
+const hasResults = computed(() =>
+  results.value.cities.length > 0 || results.value.articles.length > 0,
+)
 
 watch(() => props.open, (isOpen) => {
   if (isOpen) {

@@ -1,16 +1,18 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { ref, nextTick } from 'vue'
-import type { SearchResult } from '~/composables/useSearch'
+import type { SearchResults } from '~/composables/useSearch'
 import { withSetup } from '../../../test/utils/withSetup'
 
-const fetchMock = vi.fn<(url: string, opts?: unknown) => Promise<SearchResult[]>>()
+const fetchMock = vi.fn<(url: string, opts?: unknown) => Promise<SearchResults>>()
 
 vi.stubGlobal('$fetch', fetchMock)
+
+const emptyResults: SearchResults = { cities: [], articles: [] }
 
 describe('useSearch', () => {
   beforeEach(() => {
     vi.useFakeTimers()
-    fetchMock.mockResolvedValue([])
+    fetchMock.mockResolvedValue(emptyResults)
   })
 
   afterEach(() => {
@@ -23,7 +25,7 @@ describe('useSearch', () => {
     const query = ref('')
     const { results, isLoading } = useSearch(query)
 
-    expect(results.value).toEqual([])
+    expect(results.value).toEqual(emptyResults)
     expect(isLoading.value).toBe(false)
   })
 
@@ -61,9 +63,10 @@ describe('useSearch', () => {
   })
 
   it('fetches with query after 300ms debounce', async () => {
-    const mockResults: SearchResult[] = [
-      { slug: 'bangkok', name: 'Bangkok', country: 'Thailand', costForNomadInUsd: 1200 },
-    ]
+    const mockResults: SearchResults = {
+      cities: [{ slug: 'bangkok', name: 'Bangkok', country: 'Thailand', costForNomadInUsd: 1200 }],
+      articles: [],
+    }
     fetchMock.mockResolvedValue(mockResults)
 
     const { useSearch } = await import('~/composables/useSearch')
@@ -82,7 +85,7 @@ describe('useSearch', () => {
     await vi.runAllTimersAsync()
     await nextTick()
 
-    expect(fetchMock).toHaveBeenCalledWith('/api/search/cities', { query: { q: 'bangkok' } })
+    expect(fetchMock).toHaveBeenCalledWith('/api/search', { query: { q: 'bangkok' } })
     expect(results.value).toEqual(mockResults)
     expect(isLoading.value).toBe(false)
   })
@@ -108,13 +111,14 @@ describe('useSearch', () => {
     await nextTick()
 
     expect(fetchMock).toHaveBeenCalledTimes(1)
-    expect(fetchMock).toHaveBeenCalledWith('/api/search/cities', { query: { q: 'bangkok' } })
+    expect(fetchMock).toHaveBeenCalledWith('/api/search', { query: { q: 'bangkok' } })
   })
 
   it('resets results and isLoading when query is cleared', async () => {
-    const mockResults: SearchResult[] = [
-      { slug: 'bangkok', name: 'Bangkok', country: 'Thailand', costForNomadInUsd: 1200 },
-    ]
+    const mockResults: SearchResults = {
+      cities: [{ slug: 'bangkok', name: 'Bangkok', country: 'Thailand', costForNomadInUsd: 1200 }],
+      articles: [],
+    }
     fetchMock.mockResolvedValue(mockResults)
 
     const { useSearch } = await import('~/composables/useSearch')
@@ -132,7 +136,7 @@ describe('useSearch', () => {
     query.value = ''
     await nextTick()
 
-    expect(results.value).toEqual([])
+    expect(results.value).toEqual(emptyResults)
     expect(isLoading.value).toBe(false)
   })
 

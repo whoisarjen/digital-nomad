@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest'
 import { ref, computed, watch, nextTick, onMounted, onUnmounted, type Ref } from 'vue'
 import { mount } from '@vue/test-utils'
-import type { SearchResult } from '~/composables/useSearch'
+import type { SearchResults } from '~/composables/useSearch'
 
 vi.stubGlobal('ref', ref)
 vi.stubGlobal('computed', computed)
@@ -11,13 +11,20 @@ vi.stubGlobal('onMounted', onMounted)
 vi.stubGlobal('onUnmounted', onUnmounted)
 vi.stubGlobal('useLocalePath', () => (path: string) => path)
 
-const mockResults: SearchResult[] = [
+const mockCities = [
   { slug: 'barcelona', name: 'Barcelona', country: 'Spain', costForNomadInUsd: 2100 },
+]
+const mockArticles = [
+  { slug: 'nomad-guide', title: 'Nomad Guide', readingTimeMinutes: 5 },
 ]
 
 vi.mock('~/composables/useSearch', () => ({
   useSearch: (_query: Ref<string>) => ({
-    results: computed(() => _query.value.trim() ? mockResults : []),
+    results: computed((): SearchResults =>
+      _query.value.trim()
+        ? { cities: mockCities, articles: mockArticles }
+        : { cities: [], articles: [] },
+    ),
     isLoading: ref(false),
   }),
 }))
@@ -47,6 +54,17 @@ describe('AppSearchPanel', () => {
     await nextTick()
     expect(wrapper.text()).toContain('Barcelona')
     expect(wrapper.text()).toContain('Spain')
+  })
+
+  it('renders article results when query has text', async () => {
+    const wrapper = mount(AppSearchPanel, {
+      props: { open: true },
+      global: { mocks: { $t: (k: string) => k }, stubs },
+    })
+    await wrapper.find('input[type="text"]').setValue('nomad')
+    await nextTick()
+    expect(wrapper.text()).toContain('Nomad Guide')
+    expect(wrapper.text()).toContain('5 min')
   })
 
   it('emits close when Escape is pressed on the input', async () => {

@@ -18,7 +18,12 @@
     "bestCitiesDesc": "Top rated for nomads overall",
     "safeCitiesDesc": "Low crime, stable infrastructure",
     "compareDesc": "Side-by-side cost breakdown",
-    "toolsDesc": "Schengen calculator, budget builder…"
+    "toolsDesc": "Schengen calculator, budget builder…",
+    "seeAllTools": "See all tools",
+    "schengenNavDesc": "Track your 90/180-day limit",
+    "runwayNavDesc": "How long will your savings last?",
+    "dayInLifeNavDesc": "Build a day, see what it costs",
+    "quizNavDesc": "Find your ideal city in 5 questions"
   },
   "hero": {
     "titleLine1": "모든 도시, 분석 완료.",
@@ -146,7 +151,9 @@
   },
   "search": {
     "placeholder": "검색",
-    "noResults": "No cities found"
+    "noResults": "결과 없음",
+    "cities": "도시",
+    "articles": "기사"
   },
   "blog": {
     "title": "블로그",
