@@ -34,7 +34,7 @@ LIMIT 10;
 - Regenerate them first, consuming slots from the N requested (e.g. if 5 requested and 2 thin articles found → regenerate 2, create 3 new)
 - Use the same pipeline agent prompt (Step 3) but with mode: **regenerate** — the agent receives the existing slug and must:
   1. Query all DB data fresh (City, MonthSummary, QualityIndex)
-  2. Write a full new article (2000-2500 words EN, minimum 10,000 characters — see length requirements in Step 2)
+  2. Write a full new article (2000-2500 words EN, minimum 8,000 characters — see length requirements in Step 2)
   3. Translate to all 10 languages
   4. **UPDATE** (not INSERT) the existing row:
      ```sql
@@ -180,14 +180,28 @@ For filtered articles: query top 10-15 by the filter metric.
 
 Use the data to write a **2000-2500 word** article. Every number MUST come from the query results.
 
-**CRITICAL LENGTH REQUIREMENT:** The final `contentEn` HTML must be at least **8,000 characters** (not words — characters including HTML tags). Articles under 8000 chars are flagged as "thin" and will be regenerated, wasting the entire pipeline run. Aim for 9,000-12,000 chars to have comfortable margin. After writing, count the characters — if under 8,000, expand sections before proceeding.
+**CRITICAL LENGTH REQUIREMENT:** The final `contentEn` HTML must be at least **8,000 characters** (not words — characters including HTML tags). Articles under 8000 chars are flagged as "thin" and will be regenerated, wasting the entire pipeline run. Aim for 10,000-15,000 chars to have comfortable margin.
+
+**How to hit 8,000+ chars reliably:**
+- Write 7-10 H2/H3 sections (not 3-4 short ones)
+- Each section should be 2-4 substantial paragraphs (not 1-2 sentences)
+- Include data tables in HTML (costs, weather, comparisons) — these add chars AND value
+- Add a "How [City] Compares" section with a comparison table of 3-4 similar cities
+- Include a month-by-month weather/climate breakdown if data is available
+- Write detailed FAQ answers (3-5 sentences each, not one-liners)
+
+**Self-check (MANDATORY before proceeding to Step 3):** After writing contentEn, use Bash to count characters:
+```bash
+echo -n 'YOUR_CONTENT_HERE' | wc -c
+```
+If under 8,000 → STOP, expand the weakest sections, and re-count. Do NOT proceed to translation with thin content.
 
 [Include the relevant template from the strategy doc based on article type]
 
 Output these English fields:
 - titleEn (under 70 chars)
 - excerptEn (1-2 sentences with key data point)
-- contentEn (full markdown, **2000-2500 words, minimum 8,000 characters**)
+- contentEn (full HTML, **2000-2500 words, minimum 8,000 characters** — verified via self-check above)
 - metaTitleEn (under 60 chars)
 - metaDescEn (120-155 chars, include key number)
 - FAQ pairs: 4-6 pairs — **both `questionEn` and `answerEn` must be non-empty strings for every pair** (never null, never empty string). Omit a pair entirely rather than including one with a missing answer.
