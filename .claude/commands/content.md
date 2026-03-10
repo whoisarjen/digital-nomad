@@ -235,8 +235,8 @@ Collect all 10 translations.
 - Never guess or hallucinate a photo ID — only use IDs you have verified return HTTP 200
 
 **Process:**
-1. Get recently used images: `SELECT "featuredImageUrl" FROM "Article" WHERE "featuredImageUrl" IS NOT NULL ORDER BY "publishedAt" DESC LIMIT 50`
-2. Choose a candidate Unsplash photo ID relevant to the city/topic — **must NOT match any of the 50 most recent images**
+1. Get recently used images: `SELECT "featuredImageUrl" FROM "Article" WHERE "featuredImageUrl" IS NOT NULL ORDER BY "publishedAt" DESC LIMIT 100`
+2. Choose a candidate Unsplash photo ID relevant to the city/topic — **must NOT match any of the 100 most recent images**
 3. **Immediately verify with curl:**
    ```bash
    curl -sL -o /dev/null -w "%{http_code}" "https://images.unsplash.com/photo-[ID]?w=1200&h=630&fit=crop" --max-time 10
