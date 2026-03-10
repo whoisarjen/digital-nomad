@@ -19,7 +19,7 @@
         <!-- Content -->
         <div class="relative z-10 max-w-4xl mx-auto flex flex-col items-center gap-7 py-12">
           <!-- Tagline pill -->
-          <div class="inline-flex items-center gap-2 bg-white/[0.06] border border-white/[0.08] rounded-full px-4 py-1.5 text-sm text-gray-400">
+          <div class="inline-flex items-center gap-2 bg-white/[0.06] border border-white/[0.08] rounded-full px-4 py-1.5 text-sm text-white/50">
             <span class="size-1.5 rounded-full bg-emerald-400 animate-pulse" />
             {{ $t('landing.tagline') }}
           </div>
@@ -33,25 +33,25 @@
           </h1>
 
           <!-- Subtitle -->
-          <p class="text-lg md:text-xl text-gray-400 max-w-2xl leading-relaxed">
+          <p class="text-lg md:text-xl text-white/50 max-w-2xl leading-relaxed">
             {{ $t('hero.subtitle') }}
           </p>
 
           <!-- Feature badges -->
           <div class="flex flex-wrap justify-center gap-3">
-            <span class="flex items-center gap-2 bg-white/[0.06] border border-white/[0.08] rounded-full px-4 py-2 text-sm text-gray-300">
+            <span class="flex items-center gap-2 bg-white/[0.06] border border-white/[0.08] rounded-full px-4 py-2 text-sm text-white/60">
               <LucideWallet :size="15" class="text-emerald-400" />
               {{ $t('hero.badgeCost') }}
             </span>
-            <span class="flex items-center gap-2 bg-white/[0.06] border border-white/[0.08] rounded-full px-4 py-2 text-sm text-gray-300">
+            <span class="flex items-center gap-2 bg-white/[0.06] border border-white/[0.08] rounded-full px-4 py-2 text-sm text-white/60">
               <LucideThermometer :size="15" class="text-amber-400" />
               {{ $t('hero.badgeWeather') }}
             </span>
-            <span class="flex items-center gap-2 bg-white/[0.06] border border-white/[0.08] rounded-full px-4 py-2 text-sm text-gray-300">
+            <span class="flex items-center gap-2 bg-white/[0.06] border border-white/[0.08] rounded-full px-4 py-2 text-sm text-white/60">
               <LucideWifi :size="15" class="text-cyan-400" />
               {{ $t('hero.badgeInternet') }}
             </span>
-            <span class="flex items-center gap-2 bg-white/[0.06] border border-white/[0.08] rounded-full px-4 py-2 text-sm text-gray-300">
+            <span class="flex items-center gap-2 bg-white/[0.06] border border-white/[0.08] rounded-full px-4 py-2 text-sm text-white/60">
               <LucideShieldCheck :size="15" class="text-emerald-400" />
               {{ $t('hero.badgeSafety') }}
             </span>
@@ -105,7 +105,7 @@
         <div class="max-w-5xl mx-auto">
           <div class="text-center mb-14">
             <h2 class="text-3xl md:text-4xl font-bold mb-3">{{ $t('landing.featuresTitle') }}</h2>
-            <p class="text-gray-400 max-w-xl mx-auto text-base">{{ $t('landing.featuresSubtitle') }}</p>
+            <p class="text-white/50 max-w-xl mx-auto text-base">{{ $t('landing.featuresSubtitle') }}</p>
           </div>
 
           <!-- Row 1: Quiz (2/3) + Compare (1/3) -->
@@ -142,7 +142,7 @@
               <!-- footer -->
               <div class="mt-auto">
                 <h3 class="font-bold text-lg text-white mb-1.5">{{ $t('landing.featureQuizTitle') }}</h3>
-                <p class="text-sm text-gray-400 leading-relaxed mb-4">{{ $t('landing.featureQuizDesc') }}</p>
+                <p class="text-sm text-white/50 leading-relaxed mb-4">{{ $t('landing.featureQuizDesc') }}</p>
                 <span class="inline-flex items-center gap-1.5 text-sm font-semibold text-amber-400">
                   {{ $t('landing.featureQuizCta') }}
                   <LucideArrowRight :size="14" class="transition-transform group-hover:translate-x-1 duration-200" />
@@ -173,7 +173,7 @@
               </div>
               <div class="mt-auto">
                 <h3 class="font-bold text-base text-white mb-1.5">{{ $t('landing.featureCompareTitle') }}</h3>
-                <p class="text-sm text-gray-400 leading-relaxed mb-4">{{ $t('landing.featureCompareDesc') }}</p>
+                <p class="text-sm text-white/50 leading-relaxed mb-4">{{ $t('landing.featureCompareDesc') }}</p>
                 <span class="inline-flex items-center gap-1.5 text-sm font-semibold text-primary-400">
                   {{ $t('landing.featureOpenCta') }}
                   <LucideArrowRight :size="14" class="transition-transform group-hover:translate-x-1 duration-200" />
@@ -207,7 +207,7 @@
               </div>
               <div class="mt-auto">
                 <h3 class="font-bold text-base text-white mb-1">{{ $t('landing.featureSchengenTitle') }}</h3>
-                <p class="text-sm text-gray-400 leading-relaxed mb-3">{{ $t('landing.featureSchengenDesc') }}</p>
+                <p class="text-sm text-white/50 leading-relaxed mb-3">{{ $t('landing.featureSchengenDesc') }}</p>
                 <span class="inline-flex items-center gap-1.5 text-xs font-semibold text-violet-400">
                   {{ $t('landing.featureOpenCta') }}
                   <LucideArrowRight :size="13" class="transition-transform group-hover:translate-x-1 duration-200" />
@@ -240,7 +240,7 @@
               </div>
               <div class="mt-auto">
                 <h3 class="font-bold text-base text-white mb-1">{{ $t('landing.featureRunwayTitle') }}</h3>
-                <p class="text-sm text-gray-400 leading-relaxed mb-3">{{ $t('landing.featureRunwayDesc') }}</p>
+                <p class="text-sm text-white/50 leading-relaxed mb-3">{{ $t('landing.featureRunwayDesc') }}</p>
                 <span class="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-400">
                   {{ $t('landing.featureOpenCta') }}
                   <LucideArrowRight :size="13" class="transition-transform group-hover:translate-x-1 duration-200" />
@@ -280,7 +280,7 @@
               </div>
               <div class="mt-auto">
                 <h3 class="font-bold text-base text-white mb-1">{{ $t('landing.featureDayInLifeTitle') }}</h3>
-                <p class="text-sm text-gray-400 leading-relaxed mb-3">{{ $t('landing.featureDayInLifeDesc') }}</p>
+                <p class="text-sm text-white/50 leading-relaxed mb-3">{{ $t('landing.featureDayInLifeDesc') }}</p>
                 <span class="inline-flex items-center gap-1.5 text-xs font-semibold text-orange-400">
                   {{ $t('landing.featureOpenCta') }}
                   <LucideArrowRight :size="13" class="transition-transform group-hover:translate-x-1 duration-200" />
@@ -318,7 +318,7 @@
             </div>
             <!-- desc + CTA -->
             <div class="flex flex-col items-start sm:items-end gap-1 flex-shrink-0">
-              <p class="text-sm text-gray-400 sm:text-right max-w-[200px]">{{ $t('landing.featureRankingsDesc') }}</p>
+              <p class="text-sm text-white/50 sm:text-right max-w-[200px]">{{ $t('landing.featureRankingsDesc') }}</p>
               <span class="inline-flex items-center gap-1.5 text-sm font-semibold text-cyan-400 mt-1">
                 {{ $t('landing.featureRankingsCta') }}
                 <LucideArrowRight :size="14" class="transition-transform group-hover:translate-x-1 duration-200" />
@@ -666,7 +666,7 @@ watch(() => queryParams.value.page, () => {
 }, { immediate: true })
 
 const getSafetyDotColor = (level: Level | undefined | null) => {
-  if (!level) return 'bg-gray-300'
+  if (!level) return 'bg-white/40'
   if (level === 'HIGH') return 'bg-emerald-500'
   if (level === 'MIDDLE') return 'bg-amber-400'
   return 'bg-red-400'

@@ -8,7 +8,7 @@
       </div>
 
       <div class="relative z-10 max-w-5xl mx-auto px-6 pt-24 pb-16 text-center">
-        <div class="inline-flex items-center gap-2 bg-white/[0.06] border border-white/[0.08] rounded-full px-4 py-1.5 text-sm text-gray-400 mb-6">
+        <div class="inline-flex items-center gap-2 bg-white/[0.06] border border-white/[0.08] rounded-full px-4 py-1.5 text-sm text-white/50 mb-6">
           <LucideWrench :size="14" class="text-primary-400" />
           {{ $t('tools.badge') }}
         </div>
@@ -16,7 +16,7 @@
         <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-white leading-tight mb-4">
           {{ $t('tools.title') }}
         </h1>
-        <p class="text-base md:text-lg text-gray-400 max-w-2xl mx-auto leading-relaxed">
+        <p class="text-base md:text-lg text-white/50 max-w-2xl mx-auto leading-relaxed">
           {{ $t('tools.subtitle') }}
         </p>
       </div>
@@ -57,7 +57,7 @@
                   {{ tool.badge }}
                 </span>
               </div>
-              <p class="text-sm text-gray-400 leading-relaxed mb-6">
+              <p class="text-sm text-white/50 leading-relaxed mb-6">
                 {{ tool.description }}
               </p>
             </div>

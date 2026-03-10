@@ -38,7 +38,7 @@
                   type="number"
                   min="0"
                   step="1000"
-                  class="w-full pl-8 pr-4 py-3 rounded-xl bg-white/[0.08] border border-white/[0.12] text-white placeholder-gray-500 focus:outline-none focus:border-accent-400/60 focus:bg-white/[0.10] transition-all text-lg font-semibold tabular-nums"
+                  class="w-full pl-8 pr-4 py-3 rounded-xl bg-white/[0.08] border border-white/[0.12] text-white placeholder-white/30 focus:outline-none focus:border-accent-400/60 focus:bg-white/[0.10] transition-all text-lg font-semibold tabular-nums"
                   :placeholder="$t('runway.savingsPlaceholder')"
                 />
               </div>
@@ -57,7 +57,7 @@
                   type="number"
                   min="0"
                   step="100"
-                  class="w-full pl-8 pr-4 py-3 rounded-xl bg-white/[0.08] border border-white/[0.12] text-white placeholder-gray-500 focus:outline-none focus:border-accent-400/60 focus:bg-white/[0.10] transition-all text-lg font-semibold tabular-nums"
+                  class="w-full pl-8 pr-4 py-3 rounded-xl bg-white/[0.08] border border-white/[0.12] text-white placeholder-white/30 focus:outline-none focus:border-accent-400/60 focus:bg-white/[0.10] transition-all text-lg font-semibold tabular-nums"
                   :placeholder="$t('runway.incomePlaceholder')"
                 />
               </div>
@@ -66,7 +66,7 @@
 
           <!-- Tier toggle -->
           <div>
-            <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">
+            <label class="block text-xs font-semibold uppercase tracking-wider text-white/50 mb-2">
               {{ $t('runway.tierLabel') }}
             </label>
             <div class="grid grid-cols-4 gap-1.5 bg-white/[0.06] rounded-xl p-1">

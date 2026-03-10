@@ -972,7 +972,7 @@ const formatLevel = (level: Level | undefined | null) => {
 }
 
 const getLevelDotClass = (level: Level | undefined | null) => {
-  if (!level) return 'bg-gray-400'
+  if (!level) return 'bg-white/40'
   if (level === 'HIGH') return 'bg-emerald-500'
   if (level === 'MIDDLE') return 'bg-yellow-500'
   return 'bg-red-500'
@@ -982,9 +982,9 @@ const getLevelTextClass = (level: Level | undefined | null, inverted = false) =>
   if (!level) return 'text-white/50'
   const isGood = inverted ? level === 'LOW' : level === 'HIGH'
   const isMid = level === 'MIDDLE'
-  if (isGood) return 'text-emerald-600'
-  if (isMid) return 'text-yellow-600'
-  return 'text-red-600'
+  if (isGood) return 'text-emerald-400'
+  if (isMid) return 'text-yellow-400'
+  return 'text-red-400'
 }
 
 const getAirQualityClass = (score: number | null) => {

@@ -5,7 +5,7 @@
       <div class="size-5 rounded-md bg-amber-500/[0.15] flex items-center justify-center shrink-0">
         <LucideTrendingUp :size="11" class="text-amber-400" />
       </div>
-      <span class="text-[11px] font-semibold text-gray-400 uppercase tracking-wide">{{ $t('salaryPower.title') }}</span>
+      <span class="text-[11px] font-semibold text-white/50 uppercase tracking-wide">{{ $t('salaryPower.title') }}</span>
     </div>
 
     <!-- Three stat columns -->

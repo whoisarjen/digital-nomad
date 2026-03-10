@@ -196,7 +196,7 @@ const currentYear = new Date().getFullYear()
 
 
 const getSafetyDotColor = (level: Level | undefined | null) => {
-  if (!level) return 'bg-gray-300'
+  if (!level) return 'bg-white/40'
   if (level === 'HIGH') return 'bg-emerald-500'
   if (level === 'MIDDLE') return 'bg-amber-400'
   return 'bg-red-400'
