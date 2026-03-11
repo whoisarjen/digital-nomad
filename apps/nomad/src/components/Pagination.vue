@@ -63,6 +63,7 @@ const visiblePages = computed(() => {
       :class="{
         'custom-button size-11 !p-0 flex justify-center items-center': page !== PAGINATION_DOTS,
         'custom-button-active': Number(route.query.page) === page || (!route.query.page && page === 1),
+        'size-11 flex justify-center items-center text-white/50 text-sm': page === PAGINATION_DOTS,
       }"
     >
       {{ page }}
