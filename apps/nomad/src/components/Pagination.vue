@@ -43,7 +43,7 @@ const visiblePages = computed(() => {
         params: route.params,
         query: { ...route.query, page: currentPage - 1  === 1 ? undefined : currentPage - 1 },
       }"
-      class='custom-button size-11 !p-0 flex justify-center items-center'
+      class='custom-button size-11 !p-0 flex justify-center items-center text-white/70'
     >
       <
     </NuxtLink>
@@ -61,8 +61,8 @@ const visiblePages = computed(() => {
             }
       "
       :class="{
-        'custom-button size-11 !p-0 flex justify-center items-center': page !== PAGINATION_DOTS,
-        'custom-button-active': Number(route.query.page) === page || (!route.query.page && page === 1),
+        'custom-button size-11 !p-0 flex justify-center items-center text-white/70': page !== PAGINATION_DOTS,
+        'custom-button-active !text-white': Number(route.query.page) === page || (!route.query.page && page === 1),
         'size-11 flex justify-center items-center text-white/50 text-sm': page === PAGINATION_DOTS,
       }"
     >
@@ -76,7 +76,7 @@ const visiblePages = computed(() => {
         params: route.params,
         query: { ...route.query, page: currentPage + 1 },
       }"
-      class='custom-button size-11 !p-0 flex justify-center items-center'
+      class='custom-button size-11 !p-0 flex justify-center items-center text-white/70'
     >
       >
     </NuxtLink>
