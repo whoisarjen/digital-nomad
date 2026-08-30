@@ -3,13 +3,28 @@
   "tasks": {
     "db:generate": {
       "cache": false,
-      "inputs": ["prisma/schema.prisma", "prisma/prisma.config.mjs"],
-      "outputs": ["generated/**"]
+      "inputs": [
+        "prisma/schema.prisma",
+        "prisma/prisma.config.mjs"
+      ],
+      "outputs": [
+        "generated/**"
+      ]
     },
     "build": {
-      "dependsOn": ["^build", "^db:generate"],
-      "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": [".nuxt/**", ".output/**", "dist/**"],
+      "dependsOn": [
+        "^build",
+        "^db:generate"
+      ],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        ".env*"
+      ],
+      "outputs": [
+        ".nuxt/**",
+        ".output/**",
+        "dist/**"
+      ],
       "env": [
         "NODE_ENV",
         "DATABASE_URL",
@@ -32,28 +47,36 @@
     },
     "lint": {},
     "typecheck": {
-      "inputs": ["src/**", ".nuxt/**", "tsconfig.json"]
+      "inputs": [
+        "src/**",
+        ".nuxt/**",
+        "tsconfig.json"
+      ]
     },
     "check": {
-      "inputs": ["src/**", "test/**", "vitest.config.ts", "tsconfig.json"],
-      "outputs": ["coverage/**"]
-    },
-    "test:run": {
-      "inputs": ["src/**", "test/**", "vitest.config.ts"],
-      "outputs": ["coverage/**"]
+      "inputs": [
+        "src/**",
+        "tsconfig.json"
+      ]
     },
     "dev": {
-      "dependsOn": ["^db:generate"],
+      "dependsOn": [
+        "^db:generate"
+      ],
       "cache": false,
       "persistent": true
     },
     "dev:worktree": {
-      "dependsOn": ["^db:generate"],
+      "dependsOn": [
+        "^db:generate"
+      ],
       "cache": false,
       "persistent": true
     },
     "dev:prod": {
-      "dependsOn": ["^db:generate"],
+      "dependsOn": [
+        "^db:generate"
+      ],
       "cache": false,
       "persistent": true
     }

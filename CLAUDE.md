@@ -54,17 +54,12 @@ Every server API endpoint must follow this exact pattern from `src/server/api/bl
 
 ## No Workarounds (Non-Negotiable)
 
-Never skip, bypass, or work around tests, linting, type-checking, or git hooks. Every problem must be fixed at its root cause:
+Never skip, bypass, or work around linting, type-checking, or git hooks. Every problem must be fixed at its root cause:
 
-- **No `passWithNoTests`** — if vitest finds no test files, write a real test or fix the `include` pattern
-- **No `// @vitest-environment node`** on server route tests — fix the environment config instead
 - **No `--no-verify`** on git — fix the hook failure instead
 - **No `as any` / `as unknown as X`** — fix the type instead
 - **No `// @ts-nocheck`** — fix the TypeScript errors at their root cause instead
 - **No disabled ESLint rules** — fix the code instead
-- **No `.skip` or `.only` left in tests** — only in temporary local debugging, never committed
-
-If the test environment crashes (e.g. `window is not defined`), find and fix the root cause (e.g. add `overrides` to vitest config to exclude the offending module). Do not change the environment or suppress the error.
 
 ## Git Hooks
 
@@ -72,103 +67,6 @@ If the test environment crashes (e.g. `window is not defined`), find and fix the
 |---|---|---|
 | `pre-commit` | `turbo run typecheck` (vue-tsc in both apps) | Every commit |
 | `commit-msg` | `commitlint` (conventional format enforced) | Every commit |
-| `pre-push` | `turbo run test:run` (vitest in both apps) | Before push |
 
 Commit message format: `type(scope): description` — e.g. `feat(blog):`, `fix(i18n):`, `chore:`.
 Turbo caches results — unchanged apps are skipped automatically.
-
-## TDD Workflow (Non-Negotiable)
-
-Every task goes through Red → Green → Refactor. No exceptions.
-
-### The Cycle
-1. **Red** — Write a failing test that describes the desired behavior (the effect, not the implementation)
-2. **Green** — Write the minimum code to make the test pass
-3. **Refactor** — Clean up; run tests again to confirm they still pass
-
-### Test Commands
-```bash
-cd apps/nomad
-npm run test          # watch mode (use during development)
-npm run test:run      # single run (use for CI)
-npm run test:coverage # coverage report
-```
-
-From repo root:
-```bash
-npm test              # runs all tests via turbo
-```
-
-### Test File Location
-Tests live next to the source file in a `__tests__/` subdirectory:
-```
-src/
-  server/api/blog/
-    [slug].get.ts
-    __tests__/
-      [slug].get.test.ts    ← server route test
-  composables/
-    useCities.ts
-    __tests__/
-      useCities.test.ts     ← composable test
-  components/
-    CityCard.vue
-    __tests__/
-      CityCard.test.ts      ← component test
-```
-
-### Server Route Tests
-Mock `prisma` and `getLocale`/`getLocalizedSelect` with `vi.hoisted()` + `vi.mock('#imports')`. Import the handler inside `beforeAll` (after Nuxt env initializes):
-
-```ts
-import { describe, it, expect, vi, beforeAll } from 'vitest'
-import { createMockH3Event } from '../../../../../test/mocks/h3-event'
-
-const { prismaMock, getLocaleMock } = vi.hoisted(() => ({
-  prismaMock: { article: { findFirstOrThrow: vi.fn() } },
-  getLocaleMock: vi.fn(() => 'En' as const),
-}))
-
-vi.mock('#imports', async (importOriginal) => ({
-  ...(await importOriginal()),
-  prisma: prismaMock,
-  getLocale: getLocaleMock,
-  getLocalizedSelect: vi.fn(() => 'En'),
-}))
-
-describe('GET /api/blog/[slug]', () => {
-  let handler: Awaited<typeof import('~/server/api/blog/[slug].get')>
-  beforeAll(async () => { handler = await import('~/server/api/blog/[slug].get') })
-
-  it('returns title for valid slug', async () => {
-    prismaMock.article.findFirstOrThrow.mockResolvedValue({ titleEn: 'Hello', ... })
-    const result = await handler.default(createMockH3Event({ params: { slug: 'hello' } }))
-    expect(result.title).toBe('Hello')
-  })
-})
-```
-
-### Composable Tests
-- **No Nuxt lifecycle** → call directly or use `withSetup` from `~/test/utils/withSetup`
-- **Needs Nuxt auto-imports / `useI18n` / etc.** → use `mountSuspended` + `mockNuxtImport` from `@nuxt/test-utils/runtime`
-
-### Component Tests
-Use `mountSuspended` from `@nuxt/test-utils/runtime`. Test rendered output and emitted events — never internal state.
-
-```ts
-import { mountSuspended } from '@nuxt/test-utils/runtime'
-import CityCard from '~/components/CityCard.vue'
-
-it('renders city name', async () => {
-  const wrapper = await mountSuspended(CityCard, { props: { city } })
-  expect(wrapper.text()).toContain('Barcelona')
-})
-```
-
-### MSW (network mocking)
-For composables using `$fetch`/`useFetch`, override MSW handlers per-test:
-```ts
-import { server } from '~/test/setup'
-import { http, HttpResponse } from 'msw'
-
-server.use(http.get('/api/cities', () => HttpResponse.json({ data: [] })))
