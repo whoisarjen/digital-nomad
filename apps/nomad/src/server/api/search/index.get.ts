@@ -1,10 +1,11 @@
 import { z } from 'zod'
+import { CACHE_TAGS } from '~/constants/cache.constant';
 
 const searchSchema = z.object({
   q: z.string().default(''),
 })
 
-export default defineEventHandler(async (event) => {
+export default defineCustomCacheEventHandler(async (event) => {
   const language = getLocale(event)
   const select = getLocalizedSelect(language)
 
@@ -55,4 +56,4 @@ export default defineEventHandler(async (event) => {
       readingTimeMinutes: a.readingTimeMinutes,
     })),
   }
-})
+}, { tags: [CACHE_TAGS.CITIES, CACHE_TAGS.ARTICLES] })

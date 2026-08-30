@@ -42,6 +42,7 @@
     "@nuxtjs/tailwindcss": "^6.13.2",
     "@sidebase/nuxt-auth": "^1.2.0",
     "@tanstack/vue-query": "^5.92.9",
+    "@vercel/functions": "^3.3.4",
     "next-auth": "^4.21.1",
     "nuxt": "^4.3.1",
     "nuxt-lucide-icons": "^1.0.5",

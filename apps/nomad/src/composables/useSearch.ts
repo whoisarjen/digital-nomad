@@ -19,6 +19,7 @@ export interface SearchResults {
 }
 
 export const useSearch = (query: Ref<string>) => {
+  const { locale } = useCustomI18n()
   const results = ref<SearchResults>({ cities: [], articles: [] })
   const isLoading = ref(false)
 
@@ -36,7 +37,7 @@ export const useSearch = (query: Ref<string>) => {
     isLoading.value = true
     timer = setTimeout(async () => {
       try {
-        results.value = await $fetch<SearchResults>('/api/search', { query: { q } })
+        results.value = await $fetch<SearchResults>('/api/search', { query: { q, lang: locale.value } })
       } finally {
         isLoading.value = false
       }

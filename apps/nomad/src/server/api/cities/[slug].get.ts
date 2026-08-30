@@ -1,6 +1,7 @@
 import { getCitiesBySlugSchema } from "~/shared/global.schema"
+import { CACHE_TAGS } from '~/constants/cache.constant';
 
-export default defineEventHandler(async (event) => {
+export default defineCustomCacheEventHandler(async (event) => {
   const { slug } = await getValidatedRouterParams(event, getCitiesBySlugSchema.parse)
 
   const city = await prisma.city.findFirstOrThrow({
@@ -139,4 +140,4 @@ export default defineEventHandler(async (event) => {
     voltage: countryData.voltage ?? null,
     frequency: countryData.frequency ?? null,
   }
-})
+}, { tags: [CACHE_TAGS.CITIES] })

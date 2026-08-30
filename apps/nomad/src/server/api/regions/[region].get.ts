@@ -1,7 +1,8 @@
 import { getRegionSchema } from '~/shared/global.schema'
 import { REGION_SLUG_MAP, getUserCurrentMonthString } from '~/shared/global.utils'
+import { CACHE_TAGS } from '~/constants/cache.constant';
 
-export default defineEventHandler(async (event) => {
+export default defineCustomCacheEventHandler(async (event) => {
   const { region: regionSlug } = await getValidatedRouterParams(event, (params) => getRegionSchema.parse(params))
 
   if (!(regionSlug in REGION_SLUG_MAP)) {
@@ -66,4 +67,4 @@ export default defineEventHandler(async (event) => {
       safetyHighCount: cities.filter((c) => c.safety === 'HIGH').length,
     },
   }
-})
+}, { tags: [CACHE_TAGS.COUNTRIES] })

@@ -1,8 +1,9 @@
 import { MONTH_SLUG_MAP } from '~/shared/months.constant'
+import { CACHE_TAGS } from '~/constants/cache.constant';
 
 const ALL_MONTHS = Object.values(MONTH_SLUG_MAP)
 
-export default defineEventHandler(async () => {
+export default defineCustomCacheEventHandler(async () => {
   const summaries = await prisma.monthSummary.findMany({
     where: { month: { in: ALL_MONTHS } },
     orderBy: [{ month: 'asc' }, { totalScore: 'desc' }],
@@ -40,4 +41,4 @@ export default defineEventHandler(async () => {
       image: s.city.image,
     },
   }))
-})
+}, { tags: [CACHE_TAGS.CITIES] })

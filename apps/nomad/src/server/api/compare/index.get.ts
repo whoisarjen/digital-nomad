@@ -1,6 +1,7 @@
 import { getUserCurrentMonthString } from '~/shared/global.utils'
+import { CACHE_TAGS } from '~/constants/cache.constant';
 
-export default defineEventHandler(async () => {
+export default defineCustomCacheEventHandler(async () => {
   const currentMonth = getUserCurrentMonthString()
 
   const topCities = await prisma.monthSummary.findMany({
@@ -71,4 +72,4 @@ export default defineEventHandler(async () => {
   }
 
   return { cities, popularPairs: pairs }
-})
+}, { tags: [CACHE_TAGS.CITIES] })

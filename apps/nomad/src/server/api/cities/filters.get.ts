@@ -1,4 +1,5 @@
 import { formatNumber, OPTIONS_LEVEL_GTE, OPTIONS_LEVEL_LTE, OPTIONS_RANKS } from '~/shared/global.utils';
+import { CACHE_TAGS } from '~/constants/cache.constant';
 
 const getOptions = (array: number[], numOptionsRaw: number) => {
     const numOptions = numOptionsRaw + 2 // we need one more to drop 0 later (we already have 0 as all options)
@@ -29,7 +30,7 @@ const getSingleOptions = (array: number[], numOptionsRaw: number, transformLabel
     }))
 }
 
-export default defineEventHandler(async () => {
+export default defineCustomCacheEventHandler(async () => {
     const allCities = await prisma.city.findMany({
         select: {
             population: true,
@@ -91,4 +92,4 @@ export default defineEventHandler(async () => {
             },
         },
     } as const
-})
+}, { tags: [CACHE_TAGS.CITIES] })

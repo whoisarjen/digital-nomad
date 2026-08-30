@@ -204,7 +204,7 @@ defineI18nRoute({
   },
 })
 
-const { t } = useCustomI18n()
+const { t, locale } = useCustomI18n()
 const localePath = useLocalePath()
 const route = useRoute()
 const router = useRouter()
@@ -219,7 +219,7 @@ interface RunwayCityItem {
 }
 
 const { data: allCities } = await useAsyncData('day-in-life-cities', () =>
-  $fetch<RunwayCityItem[]>('/api/tools/runway'),
+  $fetch<RunwayCityItem[]>('/api/tools/runway', { query: { lang: locale.value } }),
   { lazy: true, default: () => [] as RunwayCityItem[] }
 )
 
@@ -273,7 +273,7 @@ const { data: priceData, pending } = await useAsyncData(
   () => {
     if (!selectedCity.value) return Promise.resolve(null)
     return $fetch<DayCostResponse>('/api/tools/day-cost', {
-      query: { citySlug: selectedCity.value.slug },
+      query: { citySlug: selectedCity.value.slug, lang: locale.value },
     })
   },
   { watch: [selectedCity], lazy: true },
@@ -360,7 +360,7 @@ const COMPARISON_CITY: RunwayCityItem = { slug: 'london', name: 'London', countr
 
 const { data: comparisonPriceData } = await useAsyncData(
   'day-cost-comparison-london',
-  () => $fetch<DayCostResponse>('/api/tools/day-cost', { query: { citySlug: 'london' } }),
+  () => $fetch<DayCostResponse>('/api/tools/day-cost', { query: { citySlug: 'london', lang: locale.value } }),
   { lazy: true },
 )
 

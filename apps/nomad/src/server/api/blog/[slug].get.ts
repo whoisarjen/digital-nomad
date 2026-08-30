@@ -1,9 +1,10 @@
 import { getArticleBySlugSchema } from '~/shared/global.schema';
 import type { Suffix } from '~/constants/global.constant';
+import { CACHE_TAGS } from '~/constants/cache.constant';
 
 type FaqJson = Record<`${'question' | 'answer'}${Suffix}`, string | null>;
 
-export default defineEventHandler(async (event) => {
+export default defineCustomCacheEventHandler(async (event) => {
   const language = getLocale(event);
   const select = getLocalizedSelect(language);
 
@@ -77,4 +78,4 @@ export default defineEventHandler(async (event) => {
     })),
     faqs,
   };
-});
+}, { tags: [CACHE_TAGS.ARTICLES] });

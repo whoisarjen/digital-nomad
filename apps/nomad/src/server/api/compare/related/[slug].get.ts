@@ -1,7 +1,8 @@
 import { z } from 'zod'
 import { buildCompareSlug } from '~/shared/global.utils'
+import { CACHE_TAGS } from '~/constants/cache.constant';
 
-export default defineEventHandler(async (event) => {
+export default defineCustomCacheEventHandler(async (event) => {
   const { slug } = await getValidatedRouterParams(event, z.object({ slug: z.string() }).parse)
 
   const city = await prisma.city.findFirstOrThrow({
@@ -50,4 +51,4 @@ export default defineEventHandler(async (event) => {
       cityBName,
     }
   })
-})
+}, { tags: [CACHE_TAGS.CITIES] })

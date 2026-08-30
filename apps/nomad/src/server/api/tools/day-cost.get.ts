@@ -1,6 +1,7 @@
 import { getDayCostSchema } from '~/shared/global.schema'
+import { CACHE_TAGS } from '~/constants/cache.constant';
 
-export default defineEventHandler(async (event) => {
+export default defineCustomCacheEventHandler(async (event) => {
   const language = getLocale(event)
   const _select = getLocalizedSelect(language)
 
@@ -32,4 +33,4 @@ export default defineEventHandler(async (event) => {
     taxi1km: toNum(city.taxi1km),
     oneWayTicket: toNum(city.oneWayTicket),
   }
-})
+}, { tags: [CACHE_TAGS.CITIES] })

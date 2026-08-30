@@ -1,4 +1,6 @@
-export default defineEventHandler(async () => {
+import { CACHE_TAGS } from '~/constants/cache.constant';
+
+export default defineCustomCacheEventHandler(async () => {
   const [stats, countries] = await Promise.all([
     prisma.city.groupBy({
       by: ['countrySlug'],
@@ -24,4 +26,4 @@ export default defineEventHandler(async () => {
     avgCost: c._avg.costForNomadInUsd ? Number(c._avg.costForNomadInUsd) : null,
     avgInternet: c._avg.internetSpeedCity ? Math.round(c._avg.internetSpeedCity) : null,
   }))
-})
+}, { tags: [CACHE_TAGS.COUNTRIES] })

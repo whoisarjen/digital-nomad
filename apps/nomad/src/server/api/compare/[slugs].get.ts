@@ -1,5 +1,6 @@
 import { getCompareSchema } from '~/shared/global.schema'
 import { buildCompareSlug } from '~/shared/global.utils'
+import { CACHE_TAGS } from '~/constants/cache.constant';
 
 const CITY_SELECT = {
   slug: true,
@@ -112,7 +113,7 @@ const CITY_SELECT = {
   mortgageInterestRate: true,
 } as const
 
-export default defineEventHandler(async (event) => {
+export default defineCustomCacheEventHandler(async (event) => {
   const { slugs } = await getValidatedRouterParams(event, getCompareSchema.parse)
 
   // Enforce canonical alphabetical ordering
@@ -152,4 +153,4 @@ export default defineEventHandler(async (event) => {
       internetSpeedCountryRanking: countryB.internetSpeedRanking,
     },
   }
-})
+}, { tags: [CACHE_TAGS.CITIES] })

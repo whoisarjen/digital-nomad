@@ -1,9 +1,10 @@
 import { z } from 'zod'
 import { getUserCurrentMonthString } from '~/shared/global.utils'
+import { CACHE_TAGS } from '~/constants/cache.constant';
 
 const schema = z.object({ countrySlug: z.string().min(1).max(100) })
 
-export default defineEventHandler(async (event) => {
+export default defineCustomCacheEventHandler(async (event) => {
   const { countrySlug } = await getValidatedRouterParams(event, (params) => schema.parse(params))
   const currentMonth = getUserCurrentMonthString()
 
@@ -75,4 +76,4 @@ export default defineEventHandler(async (event) => {
       safetyHighCount: cities.filter((c) => c.safety === 'HIGH').length,
     },
   }
-})
+}, { tags: [CACHE_TAGS.COUNTRIES] })

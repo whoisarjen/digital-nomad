@@ -1,7 +1,8 @@
 import { SAFE_CITIES_SLUG_MAP, getUserCurrentMonthString } from '~/shared/global.utils'
 import { getSafeCitiesSchema } from '~/shared/global.schema'
+import { CACHE_TAGS } from '~/constants/cache.constant';
 
-export default defineEventHandler(async (event) => {
+export default defineCustomCacheEventHandler(async (event) => {
   const { context } = await getValidatedRouterParams(event, (params) => getSafeCitiesSchema.parse(params))
 
   const regionEnum = SAFE_CITIES_SLUG_MAP[context as keyof typeof SAFE_CITIES_SLUG_MAP]
@@ -63,4 +64,4 @@ export default defineEventHandler(async (event) => {
       avgSpeed: speeds.length ? Math.round(speeds.reduce((a, b) => a + b, 0) / speeds.length) : null,
     },
   }
-})
+}, { tags: [CACHE_TAGS.CITIES] })

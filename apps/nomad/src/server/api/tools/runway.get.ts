@@ -1,4 +1,6 @@
-export default defineEventHandler(async () => {
+import { CACHE_TAGS } from '~/constants/cache.constant';
+
+export default defineCustomCacheEventHandler(async () => {
   const cities = await prisma.city.findMany({
     select: {
       slug: true,
@@ -22,4 +24,4 @@ export default defineEventHandler(async () => {
     costForFamilyInUsd: Number(city.costForFamilyInUsd ?? 0),
     imageUrl: city.image?.url ?? null,
   }))
-})
+}, { tags: [CACHE_TAGS.CITIES] })

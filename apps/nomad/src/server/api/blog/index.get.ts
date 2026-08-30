@@ -1,7 +1,8 @@
 import { type Prisma } from '@prisma/client';
 import { getArticlesSchema } from '~/shared/global.schema';
+import { CACHE_TAGS } from '~/constants/cache.constant';
 
-export default defineEventHandler(async (event) => {
+export default defineCustomCacheEventHandler(async (event) => {
   const language = getLocale(event);
   const select = getLocalizedSelect(language);
 
@@ -69,4 +70,4 @@ export default defineEventHandler(async (event) => {
     count,
     pagesCount,
   };
-});
+}, { tags: [CACHE_TAGS.ARTICLES] });

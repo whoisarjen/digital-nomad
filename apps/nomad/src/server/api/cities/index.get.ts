@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { getCitiesSchema } from '~/shared/global.schema';
 import { formatNumber } from '~/shared/global.utils';
 import { getServerSession } from '#auth';
+import { CACHE_TAGS } from '~/constants/cache.constant';
 
 const getCityPrismaQuery = (query: z.infer<typeof getCitiesSchema>) => {
     const AND: Prisma.CityWhereInput[] = []
@@ -164,7 +165,7 @@ const getCityPrismaQuery = (query: z.infer<typeof getCitiesSchema>) => {
     return undefined
 }
 
-export default defineEventHandler(async (event) => {
+export default defineCustomCacheEventHandler(async (event) => {
     const validatedQuery = await getValidatedQuery(event, (body) => getCitiesSchema.parse(body));
     let where = getCityPrismaQuery(validatedQuery)
 
@@ -268,4 +269,4 @@ export default defineEventHandler(async (event) => {
         count,
         pagesCount: Math.ceil(count / limit),
     }
-})
+}, { tags: [CACHE_TAGS.CITIES] })

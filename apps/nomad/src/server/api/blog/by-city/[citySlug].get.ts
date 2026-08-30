@@ -1,6 +1,7 @@
 import { getArticlesByCitySchema } from '~/shared/global.schema';
+import { CACHE_TAGS } from '~/constants/cache.constant';
 
-export default defineEventHandler(async (event) => {
+export default defineCustomCacheEventHandler(async (event) => {
   const language = getLocale(event);
   const select = getLocalizedSelect(language);
 
@@ -48,4 +49,4 @@ export default defineEventHandler(async (event) => {
   return {
     data,
   };
-});
+}, { tags: [CACHE_TAGS.ARTICLES] });

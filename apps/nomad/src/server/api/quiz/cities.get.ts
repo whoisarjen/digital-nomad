@@ -1,4 +1,6 @@
-export default defineEventHandler(async (event) => {
+import { CACHE_TAGS } from '~/constants/cache.constant';
+
+export default defineCustomCacheEventHandler(async (event) => {
   const query = getQuery(event)
   const month = typeof query.month === 'string' && /^\d{2}$/.test(query.month) ? query.month : null
 
@@ -40,4 +42,4 @@ export default defineEventHandler(async (event) => {
     country: country.name,
     region: country.region,
   }))
-})
+}, { tags: [CACHE_TAGS.CITIES] })

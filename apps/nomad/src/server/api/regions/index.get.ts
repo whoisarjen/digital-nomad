@@ -1,6 +1,7 @@
 import { REGION_SLUG_MAP, REGION_SLUGS, getUserCurrentMonthString } from '~/shared/global.utils'
+import { CACHE_TAGS } from '~/constants/cache.constant';
 
-export default defineEventHandler(async () => {
+export default defineCustomCacheEventHandler(async () => {
   const currentMonth = getUserCurrentMonthString()
 
   const regions = await Promise.all(
@@ -43,4 +44,4 @@ export default defineEventHandler(async () => {
   )
 
   return regions
-})
+}, { tags: [CACHE_TAGS.COUNTRIES] })
